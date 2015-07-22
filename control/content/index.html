@@ -10,14 +10,14 @@
     <script src="../../../../scripts/buildfire.js"></script>
     <script src="../../../../scripts/angular/angular.min.js"></script>
 </head>
-<body ng-controller="peoplePluginCtrl">
+<body ng-controller="peoplePluginCtrl as PeoplePlugin">
 
 	<div class="item clearfix row">
 		<div class="labels col-md-3 padding-right-zero pull-left">
 			<span>Description</span>
 		</div>
 		<div class="main col-md-9 pull-right">
-			<textarea class="form-control" placeholder="WYSIWYG"></textarea>
+			<textarea class="form-control" ng-model="PeoplePlugin.data.description" placeholder="WYSIWYG"></textarea>
 		</div>
 	</div>
 	<hr>
@@ -26,7 +26,7 @@
 			<span>Bulk Actions</span>
 		</div>
 		<div class="main col-md-9 pull-right">
-			<a class="btn btn-primary" onclick="window.openDialog('importCSV.html', null, 'sm', null)">Import CSV</a>
+			<a class="btn btn-primary" ng-click="PeoplePlugin.openImportCSVDialog()">Import CSV</a>
 			<a class="btn btn-primary margin-left-ten">Export CSV</a>
 			<a class="btn btn-primary margin-left-ten">Get Template</a>
 		</div>
@@ -41,7 +41,7 @@
 				<button class="btn btn-default text-left dropdown-toggle" data-toggle="dropdown" dropdown-toggle aria-expanded="true">
 					<span class="pull-left">Sort By</span>
 			  		<span class="chevron icon-chevron-down pull-right"></span>
-				</button>					
+				</button>
 				<ul class="dropdown-menu extended" role="menu">
                     <li>
 						<a tabindex="-1" class="transition-third">Newest</a>
@@ -76,115 +76,141 @@
 	<hr>
 	<div class="item clearfix">
 		<div class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four">
-			<div class="d-item double-line square-icon">
+			<div class="d-item double-line square-icon" ng-repeat="item in PeoplePlugin.data.items">
 				<span class="icon icon-menu"></span>
-				<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
+				<img ng-src={{item.iconImage}} class="border-radius-four border-grey">
 				<div class="copy pull-right">
-					<a class="text-primary"><span class="title ellipsis pull-left">Item Name</span></a>
-					<span class="title ellipsis pull-left">Item Summary</span>
-					<span class="btn-icon btn-link-icon btn-primary transition-third" onclick="window.openDialog('deepLink.html', null, 'sm', null)"></span>
-					<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
-				</div>
-			</div>
-			<div class="d-item double-line square-icon">
-				<span class="icon icon-menu"></span>
-				<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
-				<div class="copy pull-right">
-					<a class="text-primary"><span class="title ellipsis pull-left">Item Name</span></a>
-					<span class="title ellipsis pull-left">Item Summary</span>
-					<span class="btn-icon btn-link-icon btn-primary transition-third" onclick="window.openDialog('deepLink.html', null, 'sm', null)"></span>
-					<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
-				</div>
-			</div>
-			<div class="d-item double-line square-icon">
-				<span class="icon icon-menu"></span>
-				<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
-				<div class="copy pull-right">
-					<a class="text-primary"><span class="title ellipsis pull-left">Item Name</span></a>
-					<span class="title ellipsis pull-left">Item Summary</span>
-					<span class="btn-icon btn-link-icon btn-primary transition-third" onclick="window.openDialog('deepLink.html', null, 'sm', null)"></span>
-					<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
-				</div>
-			</div>
-			<div class="d-item double-line square-icon">
-				<span class="icon icon-menu"></span>
-				<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
-				<div class="copy pull-right">
-					<a class="text-primary"><span class="title ellipsis pull-left">Item Name</span></a>
-					<span class="title ellipsis pull-left">Item Summary</span>
-					<span class="btn-icon btn-link-icon btn-primary transition-third" onclick="window.openDialog('deepLink.html', null, 'sm', null)"></span>
-					<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
-				</div>
-			</div>
-			<div class="d-item double-line square-icon">
-				<span class="icon icon-menu"></span>
-				<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
-				<div class="copy pull-right">
-					<a class="text-primary"><span class="title ellipsis pull-left">Item Name</span></a>
-					<span class="title ellipsis pull-left">Item Summary</span>
-					<span class="btn-icon btn-link-icon btn-primary transition-third" onclick="window.openDialog('deepLink.html', null, 'sm', null)"></span>
-					<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
-				</div>
-			</div>
-			<div class="d-item double-line square-icon">
-				<span class="icon icon-menu"></span>
-				<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
-				<div class="copy pull-right">
-					<a class="text-primary"><span class="title ellipsis pull-left">Item Name</span></a>
-					<span class="title ellipsis pull-left">Item Summary</span>
-					<span class="btn-icon btn-link-icon btn-primary transition-third" onclick="window.openDialog('deepLink.html', null, 'sm', null)"></span>
-					<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
-				</div>
-			</div>
-			<div class="d-item double-line square-icon">
-				<span class="icon icon-menu"></span>
-				<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
-				<div class="copy pull-right">
-					<a class="text-primary"><span class="title ellipsis pull-left">Item Name</span></a>
-					<span class="title ellipsis pull-left">Item Summary</span>
-					<span class="btn-icon btn-link-icon btn-primary transition-third" onclick="window.openDialog('deepLink.html', null, 'sm', null)"></span>
-					<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
-				</div>
-			</div>
-			<div class="d-item double-line square-icon">
-				<span class="icon icon-menu"></span>
-				<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
-				<div class="copy pull-right">
-					<a class="text-primary"><span class="title ellipsis pull-left">Item Name</span></a>
-					<span class="title ellipsis pull-left">Item Summary</span>
-					<span class="btn-icon btn-link-icon btn-primary transition-third" onclick="window.openDialog('deepLink.html', null, 'sm', null)"></span>
-					<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
-				</div>
-			</div>
-			<div class="d-item double-line square-icon">
-				<span class="icon icon-menu"></span>
-				<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
-				<div class="copy pull-right">
-					<a class="text-primary"><span class="title ellipsis pull-left">Item Name</span></a>
-					<span class="title ellipsis pull-left">Item Summary</span>
-					<span class="btn-icon btn-link-icon btn-primary transition-third" onclick="window.openDialog('deepLink.html', null, 'sm', null)"></span>
-					<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
-				</div>
-			</div>
-			<div class="d-item double-line square-icon">
-				<span class="icon icon-menu"></span>
-				<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
-				<div class="copy pull-right">
-					<a class="text-primary"><span class="title ellipsis pull-left">Item Name</span></a>
-					<span class="title ellipsis pull-left">Item Summary</span>
-					<span class="btn-icon btn-link-icon btn-primary transition-third" onclick="window.openDialog('deepLink.html', null, 'sm', null)"></span>
-					<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
+					<a class="text-primary"><span class="title ellipsis pull-left">{{item.firstName+' '+item.lastName}}</span></a>
+					<span class="title ellipsis pull-left">{{item.description}}</span>
+					<span class="btn-icon btn-link-icon btn-primary transition-third" ng-click="PeoplePlugin.openDeepLinkDialog()"></span>
+					<span class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="PeoplePlugin.removeListItem($index)"></span>
+				<!--<span class="btn-icon btn-link-icon btn-primary transition-third" ng-click="PeoplePlugin.openDeepLinkDialog()"></span>
+					<span class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="PeoplePlugin.openRemoveDialog()"></span>-->
 				</div>
 			</div>
 		</div>
 	</div>
-	
-<script>
-    var peoplePluginApp = angular.module('peoplePluginContent',[]);
 
-    peoplePluginApp.controller('peoplePluginCtrl',['$scope',function($scope){
-        
-    }]);
+<script>
+	(function (angular, window) {
+		angular.module('peoplePluginContent', [])
+				.controller('peoplePluginCtrl', ['$scope', function ($scope) {
+					var _self=this;
+                    var _tag='contentInfo';
+                    var _data={
+                        carouselImages:[],
+                        description:'',
+                        items:[
+                            {
+                                topImage:'',
+                                iconImage:'http://www.placehold.it/50x50',
+                                firstName:'Sandeep',
+                                lastName:'Chhapola',
+                                position:'Developer',
+                                deepLinkUrl:'apppID/45678979',
+                                description:'hot',
+                                links:[]
+                            },
+                            {
+                                topImage:'',
+                                iconImage:'http://www.placehold.it/50x50',
+                                firstName:'Mohit',
+                                lastName:'Tyagi',
+                                position:'Developer',
+                                deepLinkUrl:'apppID/45678979',
+                                description:'cool',
+                                links:[]
+                            },
+                            {
+                                topImage:'',
+                                iconImage:'http://www.placehold.it/50x50',
+                                firstName:'Dheeraj',
+                                lastName:'Sharma',
+                                position:'Developer',
+                                deepLinkUrl:'apppID/45678979',
+                                description:'cool',
+                                links:[]
+                            },
+                            {
+                                topImage:'',
+                                iconImage:'http://www.placehold.it/50x50',
+                                firstName:'Deepak',
+                                lastName:'Sharma',
+                                position:'Developer',
+                                deepLinkUrl:'apppID/45678979',
+                                description:'cool',
+                                links:[]
+                            },
+                            {
+                                topImage:'',
+                                iconImage:'http://www.placehold.it/50x50',
+                                firstName:'Vineeta',
+                                lastName:'Sharma',
+                                position:'Developer',
+                                deepLinkUrl:'apppID/45678979',
+                                description:'clever',
+                                links:[]
+                            }
+                        ]
+                    };
+					var saveData = function(newObj,tag){
+						if(newObj == undefined)return;
+						buildfire.datastore.save(newObj, tag, function (err, result) {
+							if (err || !result)
+                                console.log('------------error saveData-------',err);
+							else
+								console.log('------------data saved-------',result);
+						});
+					};
+
+					_self.openDeepLinkDialog=function(){
+						window.openDialog('deepLink.html', null, 'sm', null);
+					};
+					_self.openRemoveDialog=function(){
+						window.openDialog('remove.html', null, 'sm', null);
+					};
+					_self.openImportCSVDialog=function(){
+						window.openDialog('importCSV.html', null, 'sm', null);
+					};
+                    _self.removeListItem = function (_index) {
+                        _self.data.items.splice(_index,1);
+                    };
+                    _self.searchListItem = function (value) {
+
+                    };
+
+
+					buildfire.datastore.get(_tag,function (err, result) {
+                        if(result) {
+                            _self.data= result.data;
+                            $scope.$digest();
+							if (tmrDelay)clearTimeout(tmrDelay);
+						}else{
+                            saveData(JSON.parse(angular.toJson(_data)),_tag);
+						}
+					});
+
+                    buildfire.datastore.onUpdate(function (err, result) {
+						if(result) {
+							_self.data= result.detail.obj;
+                            if (tmrDelay)clearTimeout(tmrDelay);
+						}
+					});
+
+
+					var tmrDelay = null;
+					var saveDataWithDelay = function(newObj){
+                        if(tmrDelay)clearTimeout(tmrDelay);
+						tmrDelay = setTimeout(function(){
+                            saveData(JSON.parse(angular.toJson(newObj)),_tag);
+                        },500);
+					};
+
+                    $scope.$watch(function () {
+                        return _self.data;
+                    },saveDataWithDelay,true);
+				}]);
+	})(window.angular, window);
 </script>
 </body>
 </html>

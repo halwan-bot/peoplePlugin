@@ -8,12 +8,12 @@
                 <a class="btn btn-success pull-left">Add Image</a>
             </div>
             <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey">
-                <div class="d-item">
+                <div class="d-item" ng-repeat="image in ContentHome.data.content.images">
                     <span class="icon icon-menu"></span>
-                    <img src="http://www.placehold.it/80x50" class="border-radius-four border-grey">
+                    <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
                     <div class="copy pull-right">
-                        <span class="title ellipsis">Image Title</span>
-                        <a class="text-primary text">Link</a>
+                        <span class="title ellipsis">{{image.title}}</span>
+                        <a class="text-primary text">{{image.deepLinkUrl||'link'}}</a>
 						<span class="btn-icon btn-delete-icon btn-danger"></span>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
             <span>Description</span>
         </div>
         <div class="main col-md-9 pull-right">
-            <textarea class="form-control" ng-model="PeoplePlugin.data.description" placeholder="WYSIWYG"></textarea>
+            <textarea class="form-control" ng-model="ContentHome.data.content.description" placeholder="WYSIWYG"></textarea>
         </div>
     </div>
     <hr>
@@ -48,7 +48,7 @@
         <div class="main pull-right col-md-9 padding-left-zero row">
             <div class="dropdown pull-left col-md-8 padding-zero" dropdown>
                 <button class="btn btn-default text-left dropdown-toggle" data-toggle="dropdown" dropdown-toggle aria-expanded="true">
-                    <span class="pull-left">{{ContentHome.data.sortBy}}</span>
+                    <span class="pull-left">{{ContentHome.data.content.sortBy}}</span>
                     <span class="chevron icon-chevron-down pull-right"></span>
                 </button>
                 <ul class="dropdown-menu extended" role="menu">

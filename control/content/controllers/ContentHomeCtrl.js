@@ -13,9 +13,20 @@
             ];
 
             var _data = {
-                images: [],
-                sortBy: '',
-                description: ''
+                content:{
+                    images: [{
+                        title:'default',
+                        imageUrl:'http://www.placehold.it/80x50',
+                        deepLinkUrl:''
+                    }],
+                    description: '',
+                    sortBy: ''
+                },
+                design :{
+                    listLayout:'',
+                    itemLayout:'',
+                    backgroundImage:''
+                }
             };
 
             var saveData = function (newObj, tag) {
@@ -44,8 +55,7 @@
 
             };
             _self.sortPeoplesBy = function (value) {
-                _self.data.sortBy = value;
-                console.log('--------------------------------------', _self.data);
+                _self.data.content.sortBy = value;
             };
 
 
@@ -58,8 +68,8 @@
                 }
                 else if (result) {
                     _self.data = result.data;
-                    if (!_self.data.sortBy) {
-                        _self.data.sortBy = _self.sortingOptions[0];
+                    if (!_self.data.content.sortBy) {
+                        _self.data.content.sortBy = _self.sortingOptions[0];
                     }
                     $scope.$digest();
                     if (tmrDelay)clearTimeout(tmrDelay);

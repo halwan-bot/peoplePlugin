@@ -10,7 +10,7 @@
     <script src="../../../../scripts/buildfire.js"></script>
     <script src="../../../../scripts/angular/angular.min.js"></script>
 </head>
-<body ng-controller="peoplePluginCtrl as peoplePlugin">
+<body ng-controller="peoplePluginCtrl as PeoplePlugin">
 
 <div class="item row clearfix">
     <div class="labels col-md-3 padding-right-zero pull-left">
@@ -19,12 +19,13 @@
     <div class="main col-md-9 pull-right">
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
-                <a class="border-grey border-radius-three default-background-hover">{{peoplePlugin.selectedListLayout}}</a>
+                <a class="border-grey border-radius-three default-background-hover">{{PeoplePlugin.peopleInfo.design.listLayout}}</a>
             </div>
             <div class="layoutgrid pull-right border-grey border-radius-three">
                 <ul>
-                    <li ng-repeat="layout in peoplePlugin.layouts">
-                        <a class="layouticon border-grey border-radius-three default-background-hover"  ng-click="peoplePlugin.changeListLayout(layout)">{{layout.name}}</a>
+                    <li ng-repeat="layout in PeoplePlugin.layouts">
+                        <a class="layouticon border-grey border-radius-three default-background-hover"
+                           ng-click="PeoplePlugin.changeListLayout(layout.name)">{{layout.name}}</a>
                     </li>
                 </ul>
 
@@ -49,12 +50,13 @@
     <div class="main col-md-9 pull-right">
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
-                <a class="border-grey border-radius-three default-background-hover">{{peoplePlugin.selectedItemLayout}}</a>
+                <a class="border-grey border-radius-three default-background-hover">{{PeoplePlugin.peopleInfo.design.itemLayout}}</a>
             </div>
             <div class="layoutgrid pull-right border-grey border-radius-three">
                 <ul>
-                    <li ng-repeat="layout in peoplePlugin.layouts">
-                        <a class="layouticon border-grey border-radius-three default-background-hover" ng-click="peoplePlugin.changeItemLayout(layout)">{{layout.name}}</a>
+                    <li ng-repeat="layout in PeoplePlugin.layouts">
+                        <a class="layouticon border-grey border-radius-three default-background-hover"
+                           ng-click="PeoplePlugin.changeItemLayout(layout.name)">{{layout.name}}</a>
                     </li>
                 </ul>
                 <!--<a class="layouticon border-grey border-radius-three default-background-hover"></a>
@@ -86,82 +88,99 @@
 </div>
 
 <script>
-    var peoplePluginApp = angular.module('peoplePluginDesign',[]);
+    var peoplePluginApp = angular.module('peoplePluginDesign', []);
 
-    peoplePluginApp.controller('peoplePluginCtrl',['$scope',function($scope){
-        var peoplePlugin=this;
-        peoplePlugin.selectedItemLayout=null;
-        peoplePlugin.selectedListLayout=null;
+    peoplePluginApp.controller('peoplePluginCtrl', ['$scope', function ($scope) {
+        var PeoplePlugin = this;
+        var peoplePluginData;
 
-
-        var design = {
-            listLayout:"",
-            itemLayout:"",
-            backgroundImage:""
+        PeoplePlugin.changeListLayout = function (layoutName) {
+            if (layoutName) {
+                //PeoplePlugin.peopleInfo.design.$$hashKey="123445";
+                PeoplePlugin.peopleInfo.design.listLayout = layoutName;
+                saveData(function (err, data) {
+                            if (err) {
+                                PeoplePlugin.peopleInfo = angular.copy(peoplePluginData);
+                            }
+                            else {
+                                if (data && data.obj) {
+                                    peoplePluginData = data.obj;
+                                }
+                            }
+                            $scope.$digest();
+                        }
+                )
+                ;
+            }
+        };
+        PeoplePlugin.changeItemLayout = function (layoutName) {
+            if (layoutName) {
+                PeoplePlugin.peopleInfo.design.itemLayout = layoutName;
+                saveData(function (err, data) {
+                    if (err) {
+                        PeoplePlugin.peopleInfo = angular.copy(peoplePluginData);
+                    }
+                    else {
+                        if (data && data.obj) {
+                            peoplePluginData = data.obj;
+                        }
+                    }
+                    $scope.$digest();
+                });
+            }
+        };
+        function saveData(callback) {
+            callback = callback || function () {
+            };
+            buildfire.datastore.save(PeoplePlugin.peopleInfo, 'peopleInfo', callback);
         }
 
-        buildfire.datastore.get('design',function(err,data){
-            if(data && data.data)
-            {
-                if(data.data)
-                {
-                    design=data.data;
-                    peoplePlugin.selectedItemLayout=data.data.itemLayout ? data.data.itemLayout: null;
-                    peoplePlugin.selectedListLayout=data.data.listLayout ? data.data.listLayout: null;
-                    $scope.$digest();
-                    console.log(peoplePlugin.selectedItemLayout,peoplePlugin.selectedListLayout);
+        function init() {
+            PeoplePlugin.layouts = [
+                {name: 'Layout1'},
+                {name: 'Layout2'},
+                {name: 'Layout3'},
+                {name: 'Layout4'},
+                {name: 'Layout5'},
+                {name: 'Layout6'},
+                {name: 'Layout7'},
+                {name: 'Layout8'},
+                {name: 'Layout9'},
+                {name: 'Layout10'}
+            ];
+            PeoplePlugin.peopleInfo = {
+                design: {
+                    listLayout: "",
+                    itemLayout: "",
+                    backgroundImage: ""
+                },
+                content: {
+                    images: [
+                        {
+                            imageUrl: "",
+                            links: ""
+                        }
+                    ],
+                    description: ""
                 }
-
-                console.log("Data in get Design----------------------------------------------",data);
-            }
-
-        });
-        peoplePlugin.layouts=[
-            {name:'Layout1'},
-            {name:'Layout2'},
-            {name:'Layout3'},
-            {name:'Layout4'},
-            {name:'Layout5'},
-            {name:'Layout6'},
-            {name:'Layout7'},
-            {name:'Layout8'},
-            {name:'Layout9'},
-            {name:'Layout10'}
-        ];
-        console.log('Layouts>>>>>>>>>>>>>>>>>',this.layouts);
-        peoplePlugin.changeListLayout=function(layout){
-            if(layout){
-
-                //peoplePlugin.selectedItemLayout=null;
-                buildfire.datastore.save(design,'design',function(err,data){
-                    if(!err)
-                    {
-                        peoplePlugin.selectedListLayout=layout.name;
-                        design.listLayout=layout.name;
+            };
+            buildfire.datastore.get('peopleInfo', function (err, data) {
+                if (err) {
+                    return;
+                }
+                else {
+                    if (data && data.data) {
+                        PeoplePlugin.peopleInfo = angular.copy(data.data);
+                        peoplePluginData = angular.copy(data.data);
                         $scope.$digest();
                     }
-                    console.log('Error in save method>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',err);
-                    console.log('data in save method>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',data);
-                });
-            }
-        };
-        peoplePlugin.changeItemLayout=function(layout){
-            if(layout){
-                // peoplePlugin.selectedListLayout=null;
-                buildfire.datastore.save(design,'design',function(err,data){
-                    if(!err){
-                        peoplePlugin.selectedItemLayout=layout.name;
-                        design.itemLayout=layout.name;
-                        $scope.$digest();
-                    }
-                    console.log('Error in save method>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',err);
-                    console.log('data in save method>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',data);
-                });
-            }
-        };
+                }
+            });
+        }
 
-
-    }]);
+        init();
+    }])
+    ;
 </script>
 </body>
 </html>

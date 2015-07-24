@@ -87,10 +87,10 @@
             });
             Buildfire.datastore.onUpdate(function (err, result) {
                 if (result && result.detail.tag === TAG_NAMES.PEOPLE_INFO) {
-                    _self.data = result.detail.obj;
+                   console.error('-----------Data Updated Successfully-------------', result.detail.obj);
                     if (tmrDelay)clearTimeout(tmrDelay);
                 } else if (result && result.detail.tag === TAG_NAMES.PEOPLES) {
-                    _self.items = result.detail.obj;
+                    console.error('-----------Data Updated Successfully-------------', result.detail.obj);
                     if (tmrDelay)clearTimeout(tmrDelay);
                 }
 

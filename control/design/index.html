@@ -98,6 +98,7 @@
             if (layoutName) {
                 //PeoplePlugin.peopleInfo.design.$$hashKey="123445";
                 PeoplePlugin.peopleInfo.design.listLayout = layoutName;
+                console.log('INFO------------------------------',PeoplePlugin.peopleInfo);
                 saveData(function (err, data) {
                             if (err) {
                                 PeoplePlugin.peopleInfo = angular.copy(peoplePluginData);

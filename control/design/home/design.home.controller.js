@@ -1,30 +1,33 @@
 (function (angular) {
-    angular.module('peoplePluginDesign')
-        .controller('DesignHomeCtrl', ['$scope', 'Buildfire','TAG_NAMES', function ($scope, Buildfire, TAG_NAMES) {
+    angular
+        .module('peoplePluginDesign')
+        .controller('DesignHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', function ($scope, Buildfire, TAG_NAMES) {
             var DesignHome = this;
             var DesignHomeMaster;
-            DesignHome.appId =134;
             DesignHome.changeListLayout = function (layoutName) {
                 if (layoutName) {
                     //DesignHome.peopleInfo.design.$$hashKey="123445";
+                    if (!DesignHome.peopleInfo.design) {
+                        DesignHome.peopleInfo.design = {};
+                    }
                     DesignHome.peopleInfo.design.listLayout = layoutName;
                     saveData(function (err, data) {
                             if (err) {
-                                DesignHome.peopleInfo = angular.copy(DesignHomeMaster);
+                                return DesignHome.peopleInfo = angular.copy(DesignHomeMaster);
                             }
-                            else {
-                                if (data && data.obj) {
-                                    DesignHomeMaster = data.obj;
-                                }
+                            else if (data && data.obj) {
+                                return DesignHomeMaster = data.obj;
                             }
                             $scope.$digest();
                         }
                     )
-                    ;
                 }
             };
             DesignHome.changeItemLayout = function (layoutName) {
                 if (layoutName) {
+                    if (!DesignHome.peopleInfo.design) {
+                        DesignHome.peopleInfo.design = {};
+                    }
                     DesignHome.peopleInfo.design.itemLayout = layoutName;
                     saveData(function (err, data) {
                         if (err) {
@@ -40,40 +43,39 @@
                 }
             };
             function saveData(callback) {
-                callback = callback || function () {};
+                callback = callback || function () {
+                };
                 Buildfire.datastore.save(DesignHome.peopleInfo, TAG_NAMES.PEOPLE_INFO, callback);
             }
-            DesignHome.layouts = [
-                {name: 'Layout1'},
-                {name: 'Layout2'},
-                {name: 'Layout3'},
-                {name: 'Layout4'},
-                {name: 'Layout5'},
-                {name: 'Layout6'},
-                {name: 'Layout7'},
-                {name: 'Layout8'},
-                {name: 'Layout9'},
-                {name: 'Layout10'}
-            ];
-            DesignHome.peopleInfo = {
-                design: {
-                    listLayout: "",
-                    itemLayout: "",
-                    backgroundImage: ""
-                },
-                content: {
-                    images: [
-                        {
-                            imageUrl: "",
-                            links: ""
-                        }
-                    ],
-                    description: ""
-                }
-            };
-
             function init() {
-
+                DesignHome.layouts = [
+                    {name: 'Layout1'},
+                    {name: 'Layout2'},
+                    {name: 'Layout3'},
+                    {name: 'Layout4'},
+                    {name: 'Layout5'},
+                    {name: 'Layout6'},
+                    {name: 'Layout7'},
+                    {name: 'Layout8'},
+                    {name: 'Layout9'},
+                    {name: 'Layout10'}
+                ];
+                DesignHome.peopleInfo = {
+                    design: {
+                        listLayout: "",
+                        itemLayout: "",
+                        backgroundImage: ""
+                    },
+                    content: {
+                        images: [
+                            {
+                                imageUrl: "",
+                                links: ""
+                            }
+                        ],
+                        description: ""
+                    }
+                };
                 Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, data) {
                     if (err) {
                         return;
@@ -86,7 +88,6 @@
                     }
                 });
             }
-
             init();
         }]);
 })(window.angular);

@@ -1,7 +1,8 @@
 'use strict';
 
 (function (angular, window) {
-    angular.module('peoplePluginContent')
+    angular
+        .module('peoplePluginContent')
         .controller('ContentHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, Buildfire, TAG_NAMES, ERROR_CODE) {
             var _self = this;
             _self.items = null;
@@ -58,7 +59,6 @@
                 _self.data.content.sortBy = value;
             };
 
-
             Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                 if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                     console.error('-----------err-------------', err);
@@ -95,7 +95,6 @@
                 }
 
             });
-
 
             var tmrDelay = null;
             var saveDataWithDelay = function (newObj) {

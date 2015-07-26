@@ -1,6 +1,5 @@
 'use strict';
 (function (angular, buildfire) {
-
     angular
         .module('peoplePluginContent', ['ngAnimate', 'ngRoute'])
         .constant('TAG_NAMES', {
@@ -14,12 +13,10 @@
             $routeProvider
                 .when('/', {
                     templateUrl: '/home.html',
-                    controllerAs: 'ContentHome',
                     controller: 'ContentHomeCtrl'
                 })
                 .when('/peoples', {
                     templateUrl: '/peoples.html',
-                    controllerAs: 'ContentPeoples',
                     controller: 'ContentPeoplesCtrl'
                 })
                 .otherwise('/');

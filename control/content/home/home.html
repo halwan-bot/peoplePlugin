@@ -7,13 +7,13 @@
             <div class="clearfix">
                 <a class="btn btn-success pull-left">Add Image</a>
             </div>
-            <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey">
-                <div class="d-item" ng-repeat="image in ContentHome.carouselImages">
+            <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey" ui-sortable="sortableOptions" ng-model="ContentHome.data.content.images">
+                <div class="d-item" ng-repeat="image in ContentHome.data.content.images" >
                     <span class="icon icon-menu"></span>
                     <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
 
                     <div class="copy pull-right">
-                        <span class="title ellipsis">{{image.title}}</span>
+                        <span class="title ellipsis" class="myHandle">{{image.title}}</span>
                         <a class="text-primary text">{{image.deepLinkUrl||'link'}}</a>
                         <span class="btn-icon btn-delete-icon btn-danger"></span>
                     </div>

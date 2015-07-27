@@ -6,26 +6,9 @@
         .controller('ContentHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, Buildfire, TAG_NAMES, ERROR_CODE) {
             var _self = this;
             _self.items = null;
-            _self.carouselImages=[
-                {title: 'pic1',
-                    imageUrl: 'http://www.placehold.it/80x50',
-                    deepLinkUrl: ''
-                },
-                {
-                    title: 'pic2',
-                    imageUrl: 'http://www.placehold.it/80x50',
-                    deepLinkUrl: ''
-                },
-                {
-                    title: 'pic3',
-                    imageUrl: 'http://www.placehold.it/80x50',
-                    deepLinkUrl: ''
-                },
-                {
-                    title: 'pic4',
-                    imageUrl: 'http://www.placehold.it/80x50',
-                    deepLinkUrl: ''
-                }];
+            $scope.sortableOptions = {
+            };
+
             _self.sortingOptions = [
                 'Newest',
                 'Oldest',
@@ -53,9 +36,9 @@
                 if (newObj == undefined)return;
                 Buildfire.datastore.save(newObj, tag, function (err, result) {
                     if (err || !result)
-                        console.log('------------error saveData-------', err);
+                        console.error('------------error saveData-------', err);
                     else
-                        console.error('------------data saved-------', result);
+                        console.log('------------data saved-------', result);
                 });
             };
 
@@ -107,10 +90,10 @@
             Buildfire.datastore.onUpdate(function (result) {
                 console.log('Onupdate------------------------------',result);
                 if (result && result.tag === TAG_NAMES.PEOPLE_INFO) {
-                    console.error('-----------Data Updated Successfully-------------', result.obj);
+                    console.log('-----------Data Updated Successfully-------------', result.obj);
                     if (tmrDelay)clearTimeout(tmrDelay);
                 } else if (result && result.tag === TAG_NAMES.PEOPLES) {
-                    console.error('-----------Data Updated Successfully-------------', result.obj);
+                    console.log('-----------Data Updated Successfully-------------', result.obj);
                     if (tmrDelay)clearTimeout(tmrDelay);
                 }
 

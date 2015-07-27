@@ -1,15 +1,15 @@
 'use strict';
-(function (angular, buildfire) {
-    angular
-        .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap'])
-        .constant('TAG_NAMES', {
-            PEOPLE_INFO: 'peopleInfo',
-            PEOPLES: 'peoples'
+
+(function (angular,buildfire) {
+    angular.module('peoplePluginContent', ['ngAnimate','ngRoute','ui.sortable'])
+        .constant('TAG_NAMES',{
+            PEOPLE_INFO : 'peopleInfo',
+            PEOPLES : 'peoples'
         })
-        .constant('ERROR_CODE', {
-            NOT_FOUND: 'NOTFOUND'
+        .constant('ERROR_CODE',{
+            NOT_FOUND:'NOTFOUND'
         })
-        .config(['$routeProvider', function ($routeProvider) {
+        .config(['$routeProvider',function ($routeProvider) {
             $routeProvider
                 .when('/', {
                     templateUrl: 'home/home.html',
@@ -18,25 +18,12 @@
                 })
                 .when('/peoples', {
                     templateUrl: 'peoples/peoples.html',
-                    controllerAs: "ContentPeoples",
+                    controllerAs: 'ContentPeoples',
                     controller: 'ContentPeoplesCtrl'
                 })
                 .otherwise('/');
         }])
         .factory('Buildfire', [function () {
             return buildfire;
-        }])
-        .directive('agInclude', function ($sce) {
-            return {
-                restrict: 'AE',
-                replace: true,
-                template: "<div ng-include='parsedUrl'></div>",
-                scope: {
-                    agInclude: "@"
-                },
-                link: function (scope, element, attrs) {
-                    scope.parsedUrl = $sce.trustAsResourceUrl(attrs.agInclude);
-                }
-            }
-        });
-})(window.angular, window.buildfire);
+        }]);
+})(window.angular,buildfire);

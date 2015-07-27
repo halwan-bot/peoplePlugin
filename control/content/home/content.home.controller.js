@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, Buildfire, TAG_NAMES, ERROR_CODE) {
+        .controller('ContentHomeCtrl', ['$scope','$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope,$modal, Buildfire, TAG_NAMES, ERROR_CODE) {
             var _self = this;
             _self.items = null;
             $scope.sortableOptions = {
@@ -61,7 +61,22 @@
                 _self.data.content.sortBy = value;
             };
             _self.removeCarouselImage=function($index){
-                _self.data.content.images.splice($index,1);
+                var modalInstance = $modal
+                    .open({
+                        templateUrl : 'home/RemoveImagePopup.html',
+                        controller : 'RemoveImagePopupCtrl',
+                        size : 'sm',
+                        backdrop : false
+                    });
+                modalInstance.result.then(function(data) {
+                    if(data)
+                    _self.data.content.images.splice($index,1);
+                }, function(data) {
+                   if(data){
+                       console.error('Error----------while removing image----',data)
+                   }
+                });
+
             };
 
             Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
@@ -124,5 +139,15 @@
             $scope.$watch(function () {
                 return _self.items;
             }, saveItemsWithDelay, true);
+        }])
+        .controller('RemoveImagePopupCtrl',['$scope','$modalInstance',function($scope,$modalInstance){
+            $scope.ok=function(){
+
+                $modalInstance.close('yes');
+            };
+            $scope.cancel=function(){
+                $modalInstance.dismiss('No');
+            };
+
         }])
 })(window.angular, window);

@@ -7,6 +7,9 @@
             var _self = this;
             _self.items = null;
             _self.data = null;
+            $scope.sortableOptions = {
+            };
+
             _self.sortingOptions = [
                 'Manually',
                 'Oldest to Newest',
@@ -63,6 +66,9 @@
             _self.sortPeoplesBy = function (value) {
                 _self.data.content.sortBy = value;
             };
+            _self.removeCarouselImage=function($index){
+                _self.data.content.images.splice($index,1);
+            };
 
             Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                 if (err && err.code !== ERROR_CODE.NOT_FOUND) {
@@ -91,7 +97,16 @@
                     if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                 }
             });
-
+            Buildfire.datastore.onUpdate(function (result) {
+                if (result && result.tag === TAG_NAMES.PEOPLE_INFO) {
+                    console.log('-----------Data Updated Successfully-------------', result.obj);
+                    if (tmrDelay)clearTimeout(tmrDelay);
+                } else if (result && result.tag === TAG_NAMES.PEOPLES) {
+                    console.log('-----------Data Updated Successfully-------------', result.obj);
+                    if (tmrDelay)clearTimeout(tmrDelay);
+                }
+            });
+            
             Buildfire.datastore.onUpdate(function (event) {
                 if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
                     _self.data = event.obj;

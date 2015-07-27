@@ -78,15 +78,16 @@
                 };
                 Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, data) {
                     if (err) {
-                        return;
+                        Console.log('------------Error in Design of People Plugin------------',err);
                     }
-                    else {
-                        if (data && data.data) {
+                    else if (data && data.data) {
                             DesignHome.peopleInfo = angular.copy(data.data);
                             DesignHomeMaster = angular.copy(data.data);
                             $scope.$digest();
-                        }
+
                     }
+                    else
+                    console.log('------------------unable to load data---------------');
                 });
             }
             init();

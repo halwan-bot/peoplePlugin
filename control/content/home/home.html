@@ -15,7 +15,7 @@
                     <div class="copy pull-right">
                         <span class="title ellipsis" class="myHandle">{{image.title}}</span>
                         <a class="text-primary text">{{image.deepLinkUrl||'link'}}</a>
-                        <span class="btn-icon btn-delete-icon btn-danger"></span>
+                        <span class="btn-icon btn-delete-icon btn-danger" ng-click="ContentHome.removeCarouselImage($index)"></span>
                     </div>
                 </div>
             </div>

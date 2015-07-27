@@ -60,6 +60,9 @@
             _self.sortPeoplesBy = function (value) {
                 _self.data.content.sortBy = value;
             };
+            _self.removeCarouselImage=function($index){
+                _self.data.content.images.splice($index,1);
+            };
 
             Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                 if (err && err.code !== ERROR_CODE.NOT_FOUND) {

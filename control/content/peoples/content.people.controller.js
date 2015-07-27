@@ -81,12 +81,9 @@
                 }
             });
 
-            Buildfire.datastore.onUpdate(function (err, result) {
-                if (err) {
-                    console.error('------------Err in peoples-------', err);
-                }
-                else if (result && result.detail.tag === TAG_NAMES.PEOPLES) {
-                    _self.items = result.detail.obj;
+            Buildfire.datastore.onUpdate(function (result) {
+                if (result && result.tag === TAG_NAMES.PEOPLES) {
+                    _self.items = result.obj;
                     if (tmrDelay)clearTimeout(tmrDelay);
                 }
             });

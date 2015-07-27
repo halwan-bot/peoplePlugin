@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope','$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope,$modal, Buildfire, TAG_NAMES, ERROR_CODE) {
+        .controller('ContentHomeCtrl', ['$scope', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, $modal, Buildfire, TAG_NAMES, ERROR_CODE) {
             var _self = this;
             _self.items = null;
             _self.data = null;
@@ -63,21 +63,27 @@
                 _self.data.content.sortBy = value;
             };
 
-            _self.removeCarouselImage=function($index){
+            _self.removeCarouselImage = function ($index) {
+                console.log(_self.data.content.images[$index])
                 var modalInstance = $modal
                     .open({
-                        templateUrl : 'home/RemoveImagePopup.html',
-                        controller : 'RemoveImagePopupCtrl',
-                        size : 'sm',
-                        backdrop : false
+                        templateUrl: 'home/modals/remove-image-link.html',
+                        controller: 'RemoveImagePopupCtrl',
+                        controllerAs: 'RemoveImagePopup',
+                        size: 'sm',
+                        resolve: {
+                            imageInfo: function () {
+                                return _self.data.content.images[$index]
+                            }
+                        }
                     });
-                modalInstance.result.then(function(data) {
-                    if(data)
-                    _self.data.content.images.splice($index,1);
-                }, function(data) {
-                   if(data){
-                       console.error('Error----------while removing image----',data)
-                   }
+                modalInstance.result.then(function (data) {
+                    if (data)
+                        _self.data.content.images.splice($index, 1);
+                }, function (data) {
+                    if (data) {
+                        console.error('Error----------while removing image----', data)
+                    }
                 });
             };
             Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
@@ -157,15 +163,5 @@
             $scope.$watch(function () {
                 return _self.items;
             }, saveItemsWithDelay, true);
-        }])
-        .controller('RemoveImagePopupCtrl',['$scope','$modalInstance',function($scope,$modalInstance){
-            $scope.ok=function(){
-
-                $modalInstance.close('yes');
-            };
-            $scope.cancel=function(){
-                $modalInstance.dismiss('No');
-            };
-
         }])
 })(window.angular, window);

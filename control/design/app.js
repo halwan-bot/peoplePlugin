@@ -1,7 +1,7 @@
 'use strict';
 (function (angular, buildfire) {
     angular
-        .module('peoplePluginDesign', ['ngAnimate', 'ngRoute'])
+        .module('peoplePluginDesign', ['ngAnimate', 'ngRoute',  'ui.bootstrap'])
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
             PEOPLES: 'peoples'

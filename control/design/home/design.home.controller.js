@@ -84,6 +84,7 @@
                         if (data && data.data) {
                             DesignHome.peopleInfo = angular.copy(data.data);
                             DesignHomeMaster = angular.copy(data.data);
+                            $scope.$digest();
                         }
                     }
                 });

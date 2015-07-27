@@ -12,7 +12,6 @@
                 'Most Items',
                 'Least Items'
             ];
-
             var _data = {
                 content: {
                     images: [{
@@ -36,7 +35,7 @@
                     if (err || !result)
                         console.log('------------error saveData-------', err);
                     else
-                        console.log('------------data saved-------', result);
+                        console.error('------------data saved-------', result);
                 });
             };
 

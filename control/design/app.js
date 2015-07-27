@@ -9,7 +9,8 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/', {
-                    templateUrl: '/home.html',
+                    templateUrl: 'home/home.html',
+                    controllerAs: 'DesignHome',
                     controller: 'DesignHomeCtrl'
                 })
                 .otherwise('/');

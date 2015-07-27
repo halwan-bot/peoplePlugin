@@ -1,4 +1,4 @@
-<div data-ng-controller="ContentHomeCtrl as ContentHome">
+<div>
     <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Image Carousel</span>
@@ -48,8 +48,8 @@
             <span>Sort Items</span>
         </div>
         <div class="main pull-right col-md-9 padding-left-zero row">
-            <div class="dropdown pull-left col-md-8 padding-zero" dropdown>
-                <button class="btn btn-default text-left dropdown-toggle" data-toggle="dropdown" dropdown-toggle
+            <div class="dropdown pull-left col-md-8 padding-zero" dropdown is-open="status.isopen">
+                <button class="btn btn-default text-left dropdown-toggle" dropdown-toggle ng-disabled="disabled"
                         aria-expanded="true">
                     <span class="pull-left">{{ContentHome.data.content.sortBy}}</span>
                     <span class="chevron icon-chevron-down pull-right"></span>

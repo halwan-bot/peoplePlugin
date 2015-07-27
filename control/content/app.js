@@ -1,7 +1,7 @@
 'use strict';
 (function (angular, buildfire) {
     angular
-        .module('peoplePluginContent', ['ngAnimate', 'ngRoute'])
+        .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap'])
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
             PEOPLES: 'peoples'
@@ -12,11 +12,13 @@
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/', {
-                    templateUrl: '/home.html',
+                    templateUrl: 'home/home.html',
+                    controllerAs: 'ContentHome',
                     controller: 'ContentHomeCtrl'
                 })
                 .when('/peoples', {
-                    templateUrl: '/peoples.html',
+                    templateUrl: 'peoples/peoples.html',
+                    controllerAs: "ContentPeoples",
                     controller: 'ContentPeoplesCtrl'
                 })
                 .otherwise('/');

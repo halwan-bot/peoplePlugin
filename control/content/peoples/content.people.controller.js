@@ -1,7 +1,7 @@
 'use strict';
-
 (function (angular) {
-    angular.module('peoplePluginContent')
+    angular
+        .module('peoplePluginContent')
         .controller('ContentPeoplesCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, Buildfire, TAG_NAMES, ERROR_CODE) {
             var _self = this;
             var _items = [

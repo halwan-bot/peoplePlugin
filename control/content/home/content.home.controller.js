@@ -1,7 +1,8 @@
 'use strict';
 
 (function (angular, window) {
-    angular.module('peoplePluginContent')
+    angular
+        .module('peoplePluginContent')
         .controller('ContentHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, Buildfire, TAG_NAMES, ERROR_CODE) {
             var _self = this;
             _self.items = null;
@@ -11,21 +12,20 @@
                 'Most Items',
                 'Least Items'
             ];
-
             var _data = {
-                content:{
+                content: {
                     images: [{
-                        title:'default',
-                        imageUrl:'http://www.placehold.it/80x50',
-                        deepLinkUrl:''
+                        title: 'default',
+                        imageUrl: 'http://www.placehold.it/80x50',
+                        deepLinkUrl: ''
                     }],
                     description: '',
                     sortBy: ''
                 },
-                design :{
-                    listLayout:'',
-                    itemLayout:'',
-                    backgroundImage:''
+                design: {
+                    listLayout: '',
+                    itemLayout: '',
+                    backgroundImage: ''
                 }
             };
 
@@ -35,7 +35,7 @@
                     if (err || !result)
                         console.log('------------error saveData-------', err);
                     else
-                        console.log('------------data saved-------', result);
+                        console.error('------------data saved-------', result);
                 });
             };
 
@@ -57,7 +57,6 @@
             _self.sortPeoplesBy = function (value) {
                 _self.data.content.sortBy = value;
             };
-
 
             Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                 if (err && err.code !== ERROR_CODE.NOT_FOUND) {
@@ -87,7 +86,7 @@
             });
             Buildfire.datastore.onUpdate(function (err, result) {
                 if (result && result.detail.tag === TAG_NAMES.PEOPLE_INFO) {
-                   console.error('-----------Data Updated Successfully-------------', result.detail.obj);
+                    console.error('-----------Data Updated Successfully-------------', result.detail.obj);
                     if (tmrDelay)clearTimeout(tmrDelay);
                 } else if (result && result.detail.tag === TAG_NAMES.PEOPLES) {
                     console.error('-----------Data Updated Successfully-------------', result.detail.obj);
@@ -95,7 +94,6 @@
                 }
 
             });
-
 
             var tmrDelay = null;
             var saveDataWithDelay = function (newObj) {

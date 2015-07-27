@@ -6,12 +6,18 @@
         .controller('ContentHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, Buildfire, TAG_NAMES, ERROR_CODE) {
             var _self = this;
             _self.items = null;
+            _self.data = null;
             _self.sortingOptions = [
-                'Newest',
-                'Oldest',
-                'Most Items',
-                'Least Items'
+                'Manually',
+                'Oldest to Newest',
+                'Newest to Oldest',
+                'First Name A-Z',
+                'First Name Z-A',
+                'Last Name A-Z',
+                'Last Name Z-A'
             ];
+            var tmrDelayForPeopleInfo = null;
+            var tmrDelayForPeoples = null;
             var _data = {
                 content: {
                     images: [{
@@ -33,9 +39,9 @@
                 if (newObj == undefined)return;
                 Buildfire.datastore.save(newObj, tag, function (err, result) {
                     if (err || !result)
-                        console.log('------------error saveData-------', err);
+                        console.error('------------error saveData-------', err);
                     else
-                        console.error('------------data saved-------', result);
+                        console.log('------------data saved-------', result);
                 });
             };
 
@@ -71,9 +77,10 @@
                         _self.data.content.sortBy = _self.sortingOptions[0];
                     }
                     $scope.$digest();
-                    if (tmrDelay)clearTimeout(tmrDelay);
+                    if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                 }
             });
+
             Buildfire.datastore.get(TAG_NAMES.PEOPLES, function (err, result) {
                 if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                     console.error('-----------err in getting list-------------', err);
@@ -81,33 +88,37 @@
                 else if (result) {
                     _self.items = result.data;
                     $scope.$digest();
-                    if (tmrDelay)clearTimeout(tmrDelay);
+                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                 }
             });
-            Buildfire.datastore.onUpdate(function (err, result) {
-                if (result && result.detail.tag === TAG_NAMES.PEOPLE_INFO) {
-                    console.error('-----------Data Updated Successfully-------------', result.detail.obj);
-                    if (tmrDelay)clearTimeout(tmrDelay);
-                } else if (result && result.detail.tag === TAG_NAMES.PEOPLES) {
-                    console.error('-----------Data Updated Successfully-------------', result.detail.obj);
-                    if (tmrDelay)clearTimeout(tmrDelay);
-                }
 
+            Buildfire.datastore.onUpdate(function (event) {
+                if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
+                    _self.data = event.obj;
+                    if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
+                } else if (event && event.tag === TAG_NAMES.PEOPLES) {
+                    _self.items = event.obj;
+                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+                }
             });
 
-            var tmrDelay = null;
+
             var saveDataWithDelay = function (newObj) {
-                if (tmrDelay)clearTimeout(tmrDelay);
-                tmrDelay = setTimeout(function () {
-                    saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE_INFO);
-                }, 500);
+                if (newObj) {
+                    if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
+                    tmrDelayForPeopleInfo = setTimeout(function () {
+                        saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE_INFO);
+                    }, 500);
+                }
             };
 
-            var saveItemsWithDelay = function (newObj) {
-                if (tmrDelay)clearTimeout(tmrDelay);
-                tmrDelay = setTimeout(function () {
-                    saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLES);
-                }, 500);
+            var saveItemsWithDelay = function (newItems) {
+                if (newItems) {
+                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+                    tmrDelayForPeoples = setTimeout(function () {
+                        saveData(JSON.parse(angular.toJson(newItems)), TAG_NAMES.PEOPLES);
+                    }, 500);
+                }
             };
 
             $scope.$watch(function () {
@@ -117,5 +128,6 @@
             $scope.$watch(function () {
                 return _self.items;
             }, saveItemsWithDelay, true);
+
         }])
 })(window.angular, window);

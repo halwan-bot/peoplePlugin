@@ -40,7 +40,7 @@
          Listen in if an update occurred on the control panel
          */
         buildfire.datastore.onUpdate(function (e) {
-            $scope.data = e.detail.obj;
+            $scope.data = e.obj;
             $scope.$digest();
         });
 

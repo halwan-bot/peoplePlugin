@@ -6,15 +6,18 @@
         .controller('ContentHomeCtrl', ['$scope','$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope,$modal, Buildfire, TAG_NAMES, ERROR_CODE) {
             var _self = this;
             _self.items = null;
-            $scope.sortableOptions = {
-            };
-
+            _self.data = null;
             _self.sortingOptions = [
-                'Newest',
-                'Oldest',
-                'Most Items',
-                'Least Items'
+                'Manually',
+                'Oldest to Newest',
+                'Newest to Oldest',
+                'First Name A-Z',
+                'First Name Z-A',
+                'Last Name A-Z',
+                'Last Name Z-A'
             ];
+            var tmrDelayForPeopleInfo = null;
+            var tmrDelayForPeoples = null;
             var _data = {
                 content: {
                     images: [{
@@ -31,7 +34,6 @@
                     backgroundImage: ''
                 }
             };
-
             var saveData = function (newObj, tag) {
                 if (newObj == undefined)return;
                 Buildfire.datastore.save(newObj, tag, function (err, result) {
@@ -60,6 +62,7 @@
             _self.sortPeoplesBy = function (value) {
                 _self.data.content.sortBy = value;
             };
+
             _self.removeCarouselImage=function($index){
                 var modalInstance = $modal
                     .open({
@@ -76,9 +79,7 @@
                        console.error('Error----------while removing image----',data)
                    }
                 });
-
             };
-
             Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                 if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                     console.error('-----------err-------------', err);
@@ -91,8 +92,27 @@
                     if (!_self.data.content.sortBy) {
                         _self.data.content.sortBy = _self.sortingOptions[0];
                     }
+                    //TODO: for testing purpose remove this after implementation
+                    //_self.data.content.images = [
+                    //
+                    //    {
+                    //        title: 'deepak',
+                    //        imageUrl: 'http://www.placehold.it/80x50',
+                    //        deepLinkUrl: ''
+                    //    },
+                    //    {
+                    //        title: 'sandeep',
+                    //        imageUrl: 'http://www.placehold.it/80x50',
+                    //        deepLinkUrl: ''
+                    //    },
+                    //    {
+                    //        title: 'vineeta',
+                    //        imageUrl: 'http://www.placehold.it/80x50',
+                    //        deepLinkUrl: ''
+                    //    }
+                    //]
                     $scope.$digest();
-                    if (tmrDelay)clearTimeout(tmrDelay);
+                    if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                 }
             });
             Buildfire.datastore.get(TAG_NAMES.PEOPLES, function (err, result) {
@@ -102,36 +122,34 @@
                 else if (result) {
                     _self.items = result.data;
                     $scope.$digest();
-                    if (tmrDelay)clearTimeout(tmrDelay);
+                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                 }
             });
-            Buildfire.datastore.onUpdate(function (result) {
-                console.log('Onupdate------------------------------',result);
-                if (result && result.tag === TAG_NAMES.PEOPLE_INFO) {
-                    console.log('-----------Data Updated Successfully-------------', result.obj);
-                    if (tmrDelay)clearTimeout(tmrDelay);
-                } else if (result && result.tag === TAG_NAMES.PEOPLES) {
-                    console.log('-----------Data Updated Successfully-------------', result.obj);
-                    if (tmrDelay)clearTimeout(tmrDelay);
+            Buildfire.datastore.onUpdate(function (event) {
+                if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
+                    _self.data = event.obj;
+                    if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
+                } else if (event && event.tag === TAG_NAMES.PEOPLES) {
+                    _self.items = event.obj;
+                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                 }
-
             });
-
-            var tmrDelay = null;
             var saveDataWithDelay = function (newObj) {
-                if (tmrDelay)clearTimeout(tmrDelay);
-                tmrDelay = setTimeout(function () {
-                    saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE_INFO);
-                }, 500);
+                if (newObj) {
+                    if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
+                    tmrDelayForPeopleInfo = setTimeout(function () {
+                        saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE_INFO);
+                    }, 500);
+                }
             };
-
-            var saveItemsWithDelay = function (newObj) {
-                if (tmrDelay)clearTimeout(tmrDelay);
-                tmrDelay = setTimeout(function () {
-                    saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLES);
-                }, 500);
+            var saveItemsWithDelay = function (newItems) {
+                if (newItems) {
+                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+                    tmrDelayForPeoples = setTimeout(function () {
+                        saveData(JSON.parse(angular.toJson(newItems)), TAG_NAMES.PEOPLES);
+                    }, 500);
+                }
             };
-
             $scope.$watch(function () {
                 return _self.data;
             }, saveDataWithDelay, true);

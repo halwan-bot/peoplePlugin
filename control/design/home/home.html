@@ -9,7 +9,7 @@
             </div>
             <div class="layoutgrid pull-right border-grey border-radius-three">
                 <ul>
-                    <li ng-repeat="layout in DesignHome.layouts">
+                    <li ng-repeat="layout in DesignHome.layouts.listLayouts">
                         <a class="layouticon border-grey border-radius-three default-background-hover"
                            ng-click="DesignHome.changeListLayout(layout.name)">{{layout.name}}</a>
                     </li>
@@ -40,7 +40,7 @@
             </div>
             <div class="layoutgrid pull-right border-grey border-radius-three">
                 <ul>
-                    <li ng-repeat="layout in DesignHome.layouts">
+                    <li ng-repeat="layout in DesignHome.layouts.itemLayouts">
                         <a class="layouticon border-grey border-radius-three default-background-hover"
                            ng-click="DesignHome.changeItemLayout(layout.name)">{{layout.name}}</a>
                     </li>

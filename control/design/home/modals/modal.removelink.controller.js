@@ -5,7 +5,6 @@
         .module('peoplePluginContent')
         .controller('RemoveImagePopupCtrl', ['$scope', '$modalInstance', 'imageInfo', function ($scope, $modalInstance, imageInfo) {
             var RemoveImagePopup = this;
-            console.log(imageInfo)
             if(imageInfo){
                 RemoveImagePopup.imageInfo = imageInfo;
             }

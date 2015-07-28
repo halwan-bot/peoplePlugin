@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, $modal, Buildfire, TAG_NAMES, ERROR_CODE) {
+        .controller('ContentHomeCtrl', ['$scope','$window', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope,$window, $modal, Buildfire, TAG_NAMES, ERROR_CODE) {
             var _self = this;
             _self.items = null;
             _self.data = null;
@@ -16,6 +16,7 @@
                 'Last Name A-Z',
                 'Last Name Z-A'
             ];
+            _self.DeepLinkCopyUrl=false;
             var tmrDelayForPeopleInfo = null;
             var tmrDelayForPeoples = null;
             var _data = {
@@ -44,9 +45,14 @@
                 });
             };
 
-            _self.openDeepLinkDialog = function () {
-                window.openDialog('deepLink.html', null, 'sm', null);
+            _self.openDeepLinkDialog = function ($event) {
+                _self.DeepLinkCopyUrl=true;
+                setTimeout(function () {
+                    _self.DeepLinkCopyUrl=false;
+                    $scope.$apply();
+                }, 1500);
             };
+
             _self.openRemoveDialog = function () {
                 window.openDialog('remove.html', null, 'sm', null);
             };
@@ -54,7 +60,26 @@
                 window.openDialog('importCSV.html', null, 'sm', null);
             };
             _self.removeListItem = function (_index) {
-                _self.items.splice(_index, 1);
+                var modalInstance = $modal
+                    .open({
+                        templateUrl: 'home/modals/remove-people.html',
+                        controller: 'RemovePeoplePopupCtrl',
+                        controllerAs: 'RemovePeoplePopup',
+                        size: 'sm',
+                        resolve: {
+                            peopleInfo: function () {
+                                return _self.items[_index];
+                            }
+                        }
+                    });
+                modalInstance.result.then(function (data) {
+                    if (data)
+                        _self.items.splice(_index, 1);
+                }, function (data) {
+                    if (data) {
+                        console.error('Error----------while removing people----', data)
+                    }
+                });
             };
             _self.searchListItem = function (value) {
 

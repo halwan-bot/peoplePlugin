@@ -11,7 +11,6 @@
                 deepLinkUrl: ''
             };
             _self.ok = function (imageInfo) {
-                console.error('---------------imageInfo------------------',imageInfo);
                 imageInfo.iconImageUrl = imageInfo.iconImageUrl ? imageInfo.iconImageUrl : 'http://www.placehold.it/80x50';
                 $modalInstance.close(imageInfo);
             };

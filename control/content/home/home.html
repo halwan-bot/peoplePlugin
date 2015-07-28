@@ -79,6 +79,7 @@
     </div>
     <hr>
     <div class="item clearfix">
+        <div ng-if="ContentHome.DeepLinkCopyUrl" class="alert alert-success transition-half deep-link"><span class="text-center">DeepLink URL copied to clipboard.</span></div>
         <div class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four">
             <div class="d-item double-line square-icon" ng-repeat="item in ContentHome.items">
                 <span class="icon icon-menu"></span>
@@ -89,7 +90,7 @@
                             class="title ellipsis pull-left">{{item.fName+' '+item.lName}}</span></a>
                     <span class="title ellipsis pull-left">{{item.description}}</span>
                         <span class="btn-icon btn-link-icon btn-primary transition-third"
-                              ng-click="ContentHome.openDeepLinkDialog()"></span>
+                              ng-click="ContentHome.openDeepLinkDialog($event)"></span>
                         <span class="btn-icon btn-delete-icon btn-danger transition-third"
                               ng-click="ContentHome.removeListItem($index)"></span>
                     <!--<span class="btn-icon btn-link-icon btn-primary transition-third" ng-click="ContentHome.openDeepLinkDialog()"></span>

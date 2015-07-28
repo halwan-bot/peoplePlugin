@@ -31,3 +31,12 @@
 .content.ng-leave-active {
     left: -200%;
 }
+.alert{
+    padding: 8px !important;
+}
+.alert.deep-link{
+    margin: 0 auto;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 70%;
+}

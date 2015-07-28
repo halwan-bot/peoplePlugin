@@ -5,7 +5,7 @@
         </div>
         <div class="main col-md-9 pull-right">
             <div class="clearfix">
-                <a class="btn btn-success pull-left">Add Image</a>
+                <a class="btn btn-success pull-left" ng-click="ContentHome.openAddCarouselImagePopup()">Add Image</a>
             </div>
             <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey" ui-sortable="sortableOptions" ng-model="ContentHome.data.content.images">
                 <div class="d-item" ng-repeat="image in ContentHome.data.content.images" >

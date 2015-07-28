@@ -60,10 +60,10 @@
     <hr class="none">
     <div class="item clearfix ">
         <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Description</span>
+            <span>Body Content</span>
         </div>
         <div class="main col-md-9 pull-right">
-            <textarea class="form-control" ng-model="ContentPeoples.item.description"
+            <textarea class="form-control" ng-model="ContentPeoples.item.bodyContent"
                       placeholder="WYSIWYG"></textarea>
         </div>
     </div>
@@ -74,7 +74,7 @@
         </div>
         <div class="main col-md-9 pull-right">
             <div class="clearfix">
-                <a class="btn btn-success pull-left">Add Links</a>
+                <a class="btn btn-success pull-left" ng-click="ContentPeoples.openAddLinkPopup()">Add Links</a>
             </div>
             <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey">
                 <div class="d-item" ng-repeat="_link in ContentPeoples.item.links">
@@ -83,8 +83,8 @@
 
                     <div class="copy pull-right">
                         <span class="title ellipsis">{{_link.title}}</span>
-                        <span class="title ellipsis">{{_link.value}}</span>
-                        <span class="btn-icon btn-delete-icon btn-danger"></span>
+                        <span class="title ellipsis">{{_link.url}}</span>
+                        <span class="btn-icon btn-delete-icon btn-danger" ng-click="ContentPeoples.removeLink($index)"></span>
                     </div>
                 </div>
             </div>

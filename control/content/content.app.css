@@ -31,3 +31,46 @@
 .content.ng-leave-active {
     left: -200%;
 }
+
+.item-link-header{
+    margin: 0;
+    padding: 0;
+}
+
+.widget-icon {
+    height: 47px;
+    width: 48px;
+    display: inline-block;
+    float: left;
+}
+
+.icon_upload_placeholder {
+    background: #f9f9f9 no-repeat center center;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,.1);
+    background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    float: left;
+}
+.icon_upload_placeholder:hover {
+    background-color: #e9e9e9;
+}
+
+.imgPlHolderSquare, .listImg {
+    width: 40px;
+    height: 40px;
+}
+
+.link-title{
+    border: 0 !important;
+    margin-top: 3px;
+}
+
+.align-right{
+    text-align: right;
+}

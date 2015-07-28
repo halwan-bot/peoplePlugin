@@ -86,13 +86,6 @@
                     }, 500);
                 };
 
-      var options = {showIcons: false, multiSelection: false};
-      var callback = function (error, result) {
-        console.log(error,result);
-        _self.selectedTopImage = result.selectedFiles && result.selectedFiles[0] || null;
-        _self.item.topImage =  _self.selectedTopImage;
-        $scope.$digest();
-      };
                 var options = {showIcons: false, multiSelection: false};
                 var callback = function (error, result) {
                     if (error) {

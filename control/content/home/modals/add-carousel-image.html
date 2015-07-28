@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h5 class="item-link-header"> Add Image</h5>
+</div>
+<div class="modal-body">
+    <div class="item clearfix">
+        <div class="labels col-md-3 padding-right-zero pull-left">
+            <span>Icon</span>
+        </div>
+        <div class="main col-md-9 pull-right">
+            <div class="screens clearfix">
+                <div class="screen layouticon pull-left">
+                    <a class="border-grey border-radius-three default-background-hover"></a>
+                    <span style="float: right; top: -130px; content: '-';" class="btn-icon btn-delete-icon btn-danger transition-third"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="item clearfix ">
+        <div class="labels col-md-3 padding-right-zero pull-left">
+            <span>Title</span>
+        </div>
+        <div class="main col-md-9 pull-right">
+            <input type="text" class="form-control" ng-model="AddCarouselImagePopup.imageInfo.title" placeholder="">
+        </div>
+    </div>
+    <div class="item clearfix ">
+        <div class="labels col-md-3 padding-right-zero pull-left">
+            <span>Deep Link URL</span>
+        </div>
+        <div class="main col-md-9 pull-right">
+            <span>{{AddCarouselImagePopup.imageInfo.deepLinkUrl}}</span>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" ng-click="AddCarouselImagePopup.ok(AddCarouselImagePopup.imageInfo)">Ok</button>
+    <button type="button" class="btn btn-danger" ng-click="AddCarouselImagePopup.cancel()">Cancel</button>
+</div>

@@ -64,7 +64,7 @@
             };
 
             _self.removeCarouselImage = function ($index) {
-                console.log(_self.data.content.images[$index])
+                console.log(_self.data.content.images[$index]);
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/remove-image-link.html',

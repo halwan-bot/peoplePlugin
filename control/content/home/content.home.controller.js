@@ -217,5 +217,6 @@
             $scope.$watch(function () {
                 return _self.items;
             }, saveItemsWithDelay, true);
+
         }])
 })(window.angular, window);

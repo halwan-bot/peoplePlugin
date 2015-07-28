@@ -47,15 +47,20 @@
                 });
 
                 Buildfire.datastore.onUpdate(function (event) {
-                    if (event && event.tag === TAG_NAMES.PEOPLES) {
-                        _self.items = event.obj;
-                        if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
-                    }
-                    else if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
-                        console.error('-----------PeopleInfo Data Updated Successfully-------------', event.obj);
+                    if (event && event.tag) {
+                        switch (event.tag) {
+                            case TAG_NAMES.PEOPLES:
+                                //update the People/Item info template in emulator
+                                _self.items = event.obj;
+                                if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+                                break;
+                            case TAG_NAMES.PEOPLE_INFO:
+                                //update the People list template in emulator
+                                console.error('-----------PeopleInfo Data Updated Successfully-------------', event.obj);
+                                break;
+                        }
                     }
                 });
-
                 _self.openAddLinkPopup = function () {
                     var modalInstance = $modal
                         .open({
@@ -86,13 +91,13 @@
                     }, 500);
                 };
 
-      var options = {showIcons: false, multiSelection: false};
-      var callback = function (error, result) {
-        console.log(error,result);
-        _self.selectedTopImage = result.selectedFiles && result.selectedFiles[0] || null;
-        _self.item.topImage =  _self.selectedTopImage;
-        $scope.$digest();
-      };
+                var options = {showIcons: false, multiSelection: false};
+                var callback = function (error, result) {
+                    console.log(error, result);
+                    _self.selectedTopImage = result.selectedFiles && result.selectedFiles[0] || null;
+                    _self.item.topImage = _self.selectedTopImage;
+                    $scope.$digest();
+                };
                 var options = {showIcons: false, multiSelection: false};
                 var callback = function (error, result) {
                     if (error) {

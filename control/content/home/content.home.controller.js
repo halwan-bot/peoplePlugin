@@ -99,24 +99,24 @@
                         _self.data.content.sortBy = _self.sortingOptions[0];
                     }
                     //TODO: for testing purpose remove this after implementation
-                    //_self.data.content.images = [
-                    //
-                    //    {
-                    //        title: 'deepak',
-                    //        imageUrl: 'http://www.placehold.it/80x50',
-                    //        deepLinkUrl: ''
-                    //    },
-                    //    {
-                    //        title: 'sandeep',
-                    //        imageUrl: 'http://www.placehold.it/80x50',
-                    //        deepLinkUrl: ''
-                    //    },
-                    //    {
-                    //        title: 'vineeta',
-                    //        imageUrl: 'http://www.placehold.it/80x50',
-                    //        deepLinkUrl: ''
-                    //    }
-                    //]
+                    _self.data.content.images = [
+
+                        {
+                            title: 'deepak',
+                            imageUrl: 'http://www.placehold.it/80x50',
+                            deepLinkUrl: ''
+                        },
+                        {
+                            title: 'sandeep',
+                            imageUrl: 'http://www.placehold.it/80x50',
+                            deepLinkUrl: ''
+                        },
+                        {
+                            title: 'vineeta',
+                            imageUrl: 'http://www.placehold.it/80x50',
+                            deepLinkUrl: ''
+                        }
+                    ]
                     $scope.$digest();
                     if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                 }

@@ -4,12 +4,25 @@
         .controller('DesignHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', function ($scope, Buildfire, TAG_NAMES) {
             var DesignHome = this;
             var DesignHomeMaster;
+            DesignHome.layouts = {
+                listLayouts: [{
+                    name: "list-layout-1"
+                }, {
+                    name: "list-layout-2"
+                }],
+                itemLayouts: [{
+                    name: "item-layout-1"
+                }, {
+                    name: "item-layout-2"
+                }, {
+                    name: "item-layout-3"
+                }, {
+                    name: "item-layout-4"
+                }]
+            }
             DesignHome.changeListLayout = function (layoutName) {
                 if (layoutName) {
                     //DesignHome.peopleInfo.design.$$hashKey="123445";
-                    if (!DesignHome.peopleInfo.design) {
-                        DesignHome.peopleInfo.design = {};
-                    }
                     DesignHome.peopleInfo.design.listLayout = layoutName;
                     saveData(function (err, data) {
                             if (err) {
@@ -25,9 +38,6 @@
             };
             DesignHome.changeItemLayout = function (layoutName) {
                 if (layoutName) {
-                    if (!DesignHome.peopleInfo.design) {
-                        DesignHome.peopleInfo.design = {};
-                    }
                     DesignHome.peopleInfo.design.itemLayout = layoutName;
                     saveData(function (err, data) {
                         if (err) {
@@ -48,18 +58,6 @@
                 Buildfire.datastore.save(DesignHome.peopleInfo, TAG_NAMES.PEOPLE_INFO, callback);
             }
             function init() {
-                DesignHome.layouts = [
-                    {name: 'Layout1'},
-                    {name: 'Layout2'},
-                    {name: 'Layout3'},
-                    {name: 'Layout4'},
-                    {name: 'Layout5'},
-                    {name: 'Layout6'},
-                    {name: 'Layout7'},
-                    {name: 'Layout8'},
-                    {name: 'Layout9'},
-                    {name: 'Layout10'}
-                ];
                 DesignHome.peopleInfo = {
                     design: {
                         listLayout: "",
@@ -78,16 +76,16 @@
                 };
                 Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, data) {
                     if (err) {
-                        Console.log('------------Error in Design of People Plugin------------',err);
+                        Console.log('------------Error in Design of People Plugin------------', err);
                     }
                     else if (data && data.data) {
-                            DesignHome.peopleInfo = angular.copy(data.data);
-                            DesignHomeMaster = angular.copy(data.data);
-                            $scope.$digest();
+                        DesignHome.peopleInfo = angular.copy(data.data);
+                        DesignHomeMaster = angular.copy(data.data);
+                        $scope.$digest();
 
                     }
                     else
-                    console.log('------------------unable to load data---------------');
+                        console.log('------------------unable to load data---------------');
                 });
             }
             init();

@@ -5,7 +5,6 @@
         .module('peoplePluginContent')
         .controller('RemovePeoplePopupCtrl', ['$scope', '$modalInstance', 'peopleInfo', function ($scope, $modalInstance, peopleInfo) {
             var RemovePeoplePopup = this;
-            console.log(peopleInfo)
             if(peopleInfo){
                 RemovePeoplePopup.peopleInfo = peopleInfo;
             }

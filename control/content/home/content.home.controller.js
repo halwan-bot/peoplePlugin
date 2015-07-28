@@ -7,6 +7,9 @@
             var _self = this;
             _self.items = null;
             _self.data = null;
+            _self.imageSortableOptions={
+                handle: '> .cursor-grab'
+            };
             _self.sortingOptions = [
                 'Manually',
                 'Oldest to Newest',

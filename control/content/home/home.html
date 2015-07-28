@@ -80,14 +80,14 @@
     <hr>
     <div class="item clearfix">
         <div ng-if="ContentHome.DeepLinkCopyUrl" class="alert alert-success transition-half deep-link"><span class="text-center">DeepLink URL copied to clipboard.</span></div>
-        <div class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four">
+        <div class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four" ui-sortable="sortableOptions" ng-model="ContentHome.items">
             <div class="d-item double-line square-icon" ng-repeat="item in ContentHome.items">
                 <span class="icon icon-menu"></span>
                 <img ng-src={{item.topImage}} class="border-radius-four border-grey">
 
                 <div class="copy pull-right">
                     <a class="text-primary"><span
-                            class="title ellipsis pull-left">{{item.fName+' '+item.lName}}</span></a>
+                            class="title ellipsis pull-left myHandle">{{item.fName+' '+item.lName}}</span></a>
                     <span class="title ellipsis pull-left">{{item.description}}</span>
                         <span class="btn-icon btn-link-icon btn-primary transition-third"
                               ng-click="ContentHome.openDeepLinkDialog($event)"></span>

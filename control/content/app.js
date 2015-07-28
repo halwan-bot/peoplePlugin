@@ -1,4 +1,5 @@
 'use strict';
+
 (function (angular, buildfire) {
     angular
         .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap'])
@@ -18,7 +19,7 @@
                 })
                 .when('/peoples', {
                     templateUrl: 'peoples/peoples.html',
-                    controllerAs: "ContentPeoples",
+                    controllerAs: 'ContentPeoples',
                     controller: 'ContentPeoplesCtrl'
                 })
                 .otherwise('/');

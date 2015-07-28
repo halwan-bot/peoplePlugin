@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, Buildfire, TAG_NAMES, ERROR_CODE) {
+        .controller('ContentHomeCtrl', ['$scope','$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope,$modal, Buildfire, TAG_NAMES, ERROR_CODE) {
             var _self = this;
             _self.items = null;
             _self.data = null;
@@ -67,9 +67,22 @@
                 _self.data.content.sortBy = value;
             };
             _self.removeCarouselImage=function($index){
-                _self.data.content.images.splice($index,1);
+                var modalInstance = $modal
+                    .open({
+                        templateUrl : 'home/RemoveImagePopup.html',
+                        controller : 'RemoveImagePopupCtrl',
+                        size : 'sm',
+                        backdrop : false
+                    });
+                modalInstance.result.then(function(data) {
+                    if(data)
+                    _self.data.content.images.splice($index,1);
+                }, function(data) {
+                   if(data){
+                       console.error('Error----------while removing image----',data)
+                   }
+                });
             };
-
             Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                 if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                     console.error('-----------err-------------', err);
@@ -86,7 +99,6 @@
                     if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                 }
             });
-
             Buildfire.datastore.get(TAG_NAMES.PEOPLES, function (err, result) {
                 if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                     console.error('-----------err in getting list-------------', err);
@@ -97,16 +109,6 @@
                     if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                 }
             });
-            Buildfire.datastore.onUpdate(function (result) {
-                if (result && result.tag === TAG_NAMES.PEOPLE_INFO) {
-                    console.log('-----------Data Updated Successfully-------------', result.obj);
-                    if (tmrDelay)clearTimeout(tmrDelay);
-                } else if (result && result.tag === TAG_NAMES.PEOPLES) {
-                    console.log('-----------Data Updated Successfully-------------', result.obj);
-                    if (tmrDelay)clearTimeout(tmrDelay);
-                }
-            });
-            
             Buildfire.datastore.onUpdate(function (event) {
                 if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
                     _self.data = event.obj;
@@ -116,8 +118,6 @@
                     if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                 }
             });
-
-
             var saveDataWithDelay = function (newObj) {
                 if (newObj) {
                     if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
@@ -143,6 +143,13 @@
             $scope.$watch(function () {
                 return _self.items;
             }, saveItemsWithDelay, true);
-
+        }])
+        .controller('RemoveImagePopupCtrl',['$scope','$modalInstance',function($scope,$modalInstance){
+            $scope.ok=function(){
+                $modalInstance.close('yes');
+            };
+            $scope.cancel=function(){
+                $modalInstance.dismiss('No');
+            };
         }])
 })(window.angular, window);

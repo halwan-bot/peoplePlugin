@@ -60,11 +60,15 @@
                                 break;
                         }
                     }
+                    else if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
+                        console.error('-----------PeopleInfo Data Updated Successfully-------------', event.obj);
+                    }
                 });
+
                 _self.openAddLinkPopup = function () {
                     var modalInstance = $modal
                         .open({
-                            templateUrl: 'home/modals/add-item-link.html',
+                            templateUrl: 'peoples/modals/add-item-link.html',
                             controller: 'AddItemLinkPopupCtrl',
                             controllerAs: 'AddItemLinkPopup',
                             size: 'sm'
@@ -91,13 +95,6 @@
                     }, 500);
                 };
 
-                var options = {showIcons: false, multiSelection: false};
-                var callback = function (error, result) {
-                    console.log(error, result);
-                    _self.selectedTopImage = result.selectedFiles && result.selectedFiles[0] || null;
-                    _self.item.topImage = _self.selectedTopImage;
-                    $scope.$digest();
-                };
                 var options = {showIcons: false, multiSelection: false};
                 var callback = function (error, result) {
                     if (error) {

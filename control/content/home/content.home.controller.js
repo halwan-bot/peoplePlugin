@@ -123,7 +123,7 @@
                     if (!_self.data.content.sortBy) {
                         _self.data.content.sortBy = _self.sortingOptions[0];
                     }
-                    //TODO: for testing purpose remove this after implementation
+                   /* //TODO: for testing purpose remove this after implementation
                     _self.data.content.images = [
 
                         {
@@ -141,7 +141,7 @@
                             imageUrl: 'http://www.placehold.it/80x50',
                             deepLinkUrl: ''
                         }
-                    ]
+                    ]*/
                     $scope.$digest();
                     if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                 }

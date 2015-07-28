@@ -5,8 +5,14 @@
     <div class="item clearfix ">
         <div class="labels col-md-1 padding-right-zero pull-left">
             <div class="widget-icon">
-                <div class="icon_upload_placeholder listImg"></div>
+                <div class="icon_upload_placeholder listImg"
+                     ng-click="AddItemLinkPopup.selectIcon()"
+                     ng-hide="AddItemLinkPopup.itemlink.iconImageUrl">+</div>
+              <div ng-show="AddItemLinkPopup.itemlink.iconImageUrl">
+                <img src="{{AddItemLinkPopup.itemlink.iconImageUrl}}">
+              </div>
             </div>
+
         </div>
         <div class="pull-left col-md-11">
             <input type="text" class="form-control link-title" ng-model="AddItemLinkPopup.itemlink.title" placeholder="Title">

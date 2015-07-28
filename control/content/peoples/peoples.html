@@ -14,9 +14,15 @@
         <div class="main col-md-9 pull-right">
             <div class="screens clearfix">
                 <div class="screen layouticon pull-left">
-                    <a class="border-grey border-radius-three default-background-hover">
-                        <span style="float: right; top: -20px; right: -20px; content: '-';" class="btn-icon btn-delete-icon btn-danger transition-third"></span>
+                    <a
+                        class="border-grey border-radius-three default-background-hover" ng-hide="ContentPeoples.selectedTopImage" ng-click="selectTopImage()">
                     </a>
+                  <span  ng-show="ContentPeoples.selectedTopImage">
+                    <img src="{{ContentPeoples.selectedTopImage}}">
+                    <span style="float: right; top: -80px;
+                    content: '-';"
+                          class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="removeTopImage()"></span>
+                  </span>
                 </div>
             </div>
         </div>

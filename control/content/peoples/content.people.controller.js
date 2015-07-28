@@ -18,20 +18,20 @@
                     links: []
                 };
 
-                var saveData = function (newObj, tag) {
-                    if (newObj == undefined)return;
-                    Buildfire.datastore.save(newObj, tag, function (err, result) {
-                        if (err || !result)
-                            console.log('------------error saveData-------', err);
-                        else
-                            console.log('------------data saved-------', result);
-                    });
-                };
+      var saveData = function (newObj, tag) {
+        if (newObj == undefined)return;
+        Buildfire.datastore.save(newObj, tag, function (err, result) {
+          if (err || !result)
+            console.log('------------error saveData-------', err);
+          else
+            console.log('------------data saved-------', result);
+        });
+      };
 
-                _self.addNewItem = function (path) {
-                    _self.items.push(_self.item);
-                    $location.path(path)
-                };
+      _self.addNewItem = function (path) {
+        _self.items.push(_self.item);
+        $location.path(path)
+      };
 
                 Buildfire.datastore.get(TAG_NAMES.PEOPLES, function (err, result) {
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {
@@ -79,17 +79,31 @@
                 _self.removeLink = function (_index) {
                     _self.item.links.splice(_index, 1);
                 };
+      var tmrDelayForPeoples = null;
+      var saveItemsWithDelay = function (newObj) {
+        if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+        tmrDelayForPeoples = setTimeout(function () {
+          saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLES);
+        }, 500);
+      };
 
-                var tmrDelayForPeoples = null;
-                var saveItemsWithDelay = function (newObj) {
-                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
-                    tmrDelayForPeoples = setTimeout(function () {
-                        saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLES);
-                    }, 500);
-                };
+      var options = {showIcons: false, multiSelection: false};
+      var callback = function (error, result) {
+        console.log(error,result);
+        _self.selectedTopImage = result.selectedFiles && result.selectedFiles[0] || null;
+        $scope.$digest();
+      };
 
-                $scope.$watch(function () {
-                    return _self.items;
-                }, saveItemsWithDelay, true);
-            }]);
+      $scope.selectTopImage = function () {
+        Buildfire.imageLib.showDialog(options, callback);
+      };
+
+      $scope.removeTopImage = function(){
+        _self.selectedTopImage = null;
+      };
+
+      $scope.$watch(function () {
+        return _self.items;
+      }, saveItemsWithDelay, true);
+    }]);
 })(window.angular);

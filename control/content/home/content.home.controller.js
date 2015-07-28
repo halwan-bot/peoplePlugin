@@ -54,7 +54,26 @@
                 window.openDialog('importCSV.html', null, 'sm', null);
             };
             _self.removeListItem = function (_index) {
-                _self.items.splice(_index, 1);
+                var modalInstance = $modal
+                    .open({
+                        templateUrl: 'home/modals/remove-people.html',
+                        controller: 'RemovePeoplePopupCtrl',
+                        controllerAs: 'RemovePeoplePopup',
+                        size: 'sm',
+                        resolve: {
+                            peopleInfo: function () {
+                                return _self.items[_index];
+                            }
+                        }
+                    });
+                modalInstance.result.then(function (data) {
+                    if (data)
+                        _self.items.splice(_index, 1);
+                }, function (data) {
+                    if (data) {
+                        console.error('Error----------while removing people----', data)
+                    }
+                });
             };
             _self.searchListItem = function (value) {
 
@@ -99,24 +118,24 @@
                         _self.data.content.sortBy = _self.sortingOptions[0];
                     }
                     //TODO: for testing purpose remove this after implementation
-                    //_self.data.content.images = [
-                    //
-                    //    {
-                    //        title: 'deepak',
-                    //        imageUrl: 'http://www.placehold.it/80x50',
-                    //        deepLinkUrl: ''
-                    //    },
-                    //    {
-                    //        title: 'sandeep',
-                    //        imageUrl: 'http://www.placehold.it/80x50',
-                    //        deepLinkUrl: ''
-                    //    },
-                    //    {
-                    //        title: 'vineeta',
-                    //        imageUrl: 'http://www.placehold.it/80x50',
-                    //        deepLinkUrl: ''
-                    //    }
-                    //]
+                    _self.data.content.images = [
+
+                        {
+                            title: 'deepak',
+                            imageUrl: 'http://www.placehold.it/80x50',
+                            deepLinkUrl: ''
+                        },
+                        {
+                            title: 'sandeep',
+                            imageUrl: 'http://www.placehold.it/80x50',
+                            deepLinkUrl: ''
+                        },
+                        {
+                            title: 'vineeta',
+                            imageUrl: 'http://www.placehold.it/80x50',
+                            deepLinkUrl: ''
+                        }
+                    ]
                     $scope.$digest();
                     if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                 }

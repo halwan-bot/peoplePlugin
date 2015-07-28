@@ -1,15 +1,16 @@
 'use strict';
 
-(function (angular,buildfire) {
-    angular.module('peoplePluginContent', ['ngAnimate','ngRoute','ui.bootstrap','ui.sortable'])
-        .constant('TAG_NAMES',{
-            PEOPLE_INFO : 'peopleInfo',
-            PEOPLES : 'peoples'
+(function (angular, buildfire) {
+    angular
+        .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap'])
+        .constant('TAG_NAMES', {
+            PEOPLE_INFO: 'peopleInfo',
+            PEOPLES: 'peoples'
         })
-        .constant('ERROR_CODE',{
-            NOT_FOUND:'NOTFOUND'
+        .constant('ERROR_CODE', {
+            NOT_FOUND: 'NOTFOUND'
         })
-        .config(['$routeProvider',function ($routeProvider) {
+        .config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/', {
                     templateUrl: 'home/home.html',
@@ -26,4 +27,4 @@
         .factory('Buildfire', [function () {
             return buildfire;
         }]);
-})(window.angular,buildfire);
+})(window.angular, window.buildfire);

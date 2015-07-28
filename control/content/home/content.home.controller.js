@@ -188,5 +188,42 @@
             $scope.$watch(function () {
                 return _self.items;
             }, saveItemsWithDelay, true);
+
+            //This is for testing purpose
+            function addContactRecord(contact) {
+                Buildfire.datastore.insert(contact, TAG_NAMES.PEOPLES, function (err, data) {
+                    if (err) {
+                        console.error('#################insert################');
+                        console.error(err)
+                        console.error('#################insert################');
+                    }
+                    else {
+                        console.info('#################insert-data################');
+                        console.info(data);
+                        console.info('#################insert-data################');
+                        var searchReq={
+                            "filter":{"$json.name": "Jane Doe"},
+                            "sort":{"field":"tel","desc":true},
+                            "page":"0",
+                            "pageSize":"10"
+                        };
+
+                        Buildfire.datastore.search( searchReq , TAG_NAMES.PEOPLES,function(err,records){
+                            if (err) {
+                                console.error('#################search err################');
+                                console.error(err);
+                                console.error('#################search err################');
+                            }
+                            else {
+                                console.info('#################search- search################');
+                                console.info(records);
+                                console.info('#################search- search################');
+                            }
+                        });
+                    }
+                });
+            };
+            addContactRecord({name: "John Doe", tel: "555-111-1111"});
+
         }])
 })(window.angular, window);

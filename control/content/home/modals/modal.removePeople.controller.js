@@ -3,11 +3,10 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('RemoveImagePopupCtrl', ['$scope', '$modalInstance', 'imageInfo', function ($scope, $modalInstance, imageInfo) {
-            var RemoveImagePopup = this;
-            console.log(imageInfo)
-            if(imageInfo){
-                RemoveImagePopup.imageInfo = imageInfo;
+        .controller('RemovePeoplePopupCtrl', ['$scope', '$modalInstance', 'peopleInfo', function ($scope, $modalInstance, peopleInfo) {
+            var RemovePeoplePopup = this;
+            if(peopleInfo){
+                RemovePeoplePopup.peopleInfo = peopleInfo;
             }
             $scope.ok = function () {
                 $modalInstance.close('yes');

@@ -14,7 +14,8 @@
                     <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
                     <span class="title ellipsis" class="myHandle">{{image.title}}</span>
                     <div class="copy pull-right list-view">
-                        <a class="btn btn-primary margin-left-ten">Link</a>
+                        <a ng-hide="image.deepLinkUrl" ng-click="ContentHome.openAddImageDeeplinkUrlPopup($index)" class="btn btn-primary margin-left-ten">Link</a>
+                        <a ng-show="image.deepLinkUrl" class="btn btn-success margin-left-ten">Linked</a>
                         <span class="btn-icon btn-delete-icon btn-danger" ng-click="ContentHome.removeCarouselImage($index)"></span>
                     </div>
                 </div>

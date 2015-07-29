@@ -4,21 +4,34 @@
     angular
         .module('peoplePluginContent')
         .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, $window, $modal, Buildfire, TAG_NAMES, ERROR_CODE) {
+            var MANUALLY = 'Manually',
+                OLDEST_TO_NEWEST = 'Oldest to Newest',
+                NEWEST_TO_OLDEST = 'Newest to Oldest',
+                FIRST_NAME_A_TO_Z = 'First Name A-Z',
+                FIRST_NAME_Z_TO_A = 'First Name Z-A',
+                LAST_NAME_A_TO_Z = 'Last Name A-Z',
+                LAST_NAME_Z_TO_A = 'Last Name Z-A';
             var _self = this;
             _self.items = null;
             _self.data = null;
-            _self.imageSortableOptions={
+            _self.sortingOptions = [
+                MANUALLY,
+                OLDEST_TO_NEWEST,
+                NEWEST_TO_OLDEST,
+                FIRST_NAME_A_TO_Z,
+                FIRST_NAME_Z_TO_A,
+                LAST_NAME_A_TO_Z,
+                LAST_NAME_Z_TO_A
+            ];
+            _self.imageSortableOptions = {
                 handle: '> .cursor-grab'
             };
-            _self.sortingOptions = [
-                'Manually',
-                'Oldest to Newest',
-                'Newest to Oldest',
-                'First Name A-Z',
-                'First Name Z-A',
-                'Last Name A-Z',
-                'Last Name Z-A'
-            ];
+            _self.itemSortableOptions = {
+                handle: '> .cursor-grab',
+                stop: function (e, ui) {
+                    _self.data.content.sortBy = _self.sortingOptions[0];
+                }
+            };
             _self.DeepLinkCopyUrl = false;
             var tmrDelayForPeopleInfo = null;
             var tmrDelayForPeoples = null;
@@ -116,7 +129,49 @@
 
             };
             _self.sortPeoplesBy = function (value) {
-                _self.data.content.sortBy = value;
+                var searchOptions =null;
+                switch (value){
+                    case MANUALLY:
+                        break;
+                    case OLDEST_TO_NEWEST:
+                        break;
+                    case NEWEST_TO_OLDEST:
+                        break;
+                    case FIRST_NAME_A_TO_Z:
+                        searchOptions = {
+                            "sort": {"field": "fName", "desc": false}
+                        };
+                        break;
+                    case FIRST_NAME_Z_TO_A:
+                        searchOptions = {
+                            "sort": {"field": "fName", "desc": true}
+                        };
+                        break;
+                    case LAST_NAME_A_TO_Z:
+                        searchOptions = {
+                            "sort": {"field": "lName", "desc": false}
+                        };
+                        break;
+                    case LAST_NAME_Z_TO_A:
+                        searchOptions = {
+                            "sort": {"field": "lName", "desc": true}
+                        };
+                        break;
+                }
+                if(searchOptions) {
+                    _self.data.content.sortBy = value;
+                    /*Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLES, function (err, records) {
+                        if (err)
+                            console.error('There was a problem retrieving your data');
+                        else {
+                            console.error('Sorted Elements: ' + records);
+                        }
+                    });*/
+                }else if(value && !searchOptions){
+                    _self.data.content.sortBy = value;
+                } else{
+                    console.error('There was a problem sorting your data');
+                }
             };
 
             _self.openAddCarouselImagePopup = function () {
@@ -130,7 +185,7 @@
                 modalInstance.result.then(function (imageInfo) {
                     if (imageInfo && _self.data) {
                         _self.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
-                    }else{
+                    } else {
                         console.error('Unable to load data.')
                     }
                 }, function (err) {
@@ -150,8 +205,8 @@
                     });
                 modalInstance.result.then(function (deeplink) {
                     if (deeplink && _self.data) {
-                        _self.data.content.images[_index].deepLinkUrl=deeplink;
-                    }else{
+                        _self.data.content.images[_index].deepLinkUrl = deeplink;
+                    } else {
                         console.error('Unable to load data.')
                     }
                 }, function (err) {

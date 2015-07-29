@@ -1,12 +1,11 @@
 <div>
-    <div class="item clearfix ">
-        <div class="labels padding-right-zero pull-left">
-            <a href="javaScript:void(0);">Breadcrumb</a>>
-            <a href="javaScript:void(0);">Breadcrumb</a>>
-            <a href="javaScript:void(0);">Breadcrumb</a>
-        </div>
+    <div class="item clearfix">
+		<ol class="breadcrumb">
+		  <li><a href="javaScript:void(0);">Breadcrumb</a></li>
+		  <li><a href="javaScript:void(0);">Breadcrumb</a></li>
+		  <li class="active">Breadcrumb</li>
+		</ol>
     </div>
-    <hr>
     <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Top Image</span>
@@ -24,7 +23,7 @@
         </div>
     </div>
     <hr class="none">
-    <div class="item clearfix ">
+    <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>First Name</span>
         </div>
@@ -33,7 +32,7 @@
         </div>
     </div>
     <hr class="none">
-    <div class="item clearfix ">
+    <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Last Name</span>
         </div>
@@ -42,7 +41,7 @@
         </div>
     </div>
     <hr class="none">
-    <div class="item clearfix ">
+    <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Position</span>
         </div>
@@ -51,7 +50,7 @@
         </div>
     </div>
     <hr class="none">
-    <div class="item clearfix ">
+    <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Deep Link URL</span>
         </div>
@@ -60,17 +59,16 @@
         </div>
     </div>
     <hr class="none">
-    <div class="item clearfix ">
+    <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Body Content</span>
         </div>
         <div class="main col-md-9 pull-right">
-            <textarea class="form-control" ng-model="ContentPeoples.item.bodyContent"
-                      placeholder="WYSIWYG"></textarea>
+            <textarea class="form-control" ng-model="ContentPeoples.item.bodyContent" placeholder="WYSIWYG"></textarea>
         </div>
     </div>
     <hr class="none">
-    <div class="item clearfix ">
+    <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Links</span>
         </div>
@@ -93,13 +91,15 @@
         </div>
     </div>
     <hr class="none">
-    <div class="item clearfix ">
-        <div class="col-md-4 pull-right">
-            <a class="btn btn-success pull-right stretch" ng-click="ContentPeoples.addNewItem('/')" href="javaScript:void(0);">Save</a>
-        </div>
-        <div class="col-md-4 pull-right">
-            <a class="btn btn-danger pull-right stretch" href="#/">Cancel</a>
-        </div>
+    <div class="item clearfix row">
+		<div class="main col-md-9 pull-right">
+			<div class="col-md-6 pull-left">
+		       	<a class="btn btn-danger pull-right padding-left-zero stretch" href="#/">Cancel</a>
+		    </div>        
+			<div class="col-md-6 pull-right">
+            	<a class="btn btn-primary pull-right padding-right-zero stretch" ng-click="ContentPeoples.addNewItem('/')" href="javaScript:void(0);">Save</a>
+  			</div>
+		</div>
     </div>
 </div>
 

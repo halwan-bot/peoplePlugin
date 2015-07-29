@@ -89,7 +89,7 @@
             };
             getContentPeopleInfo();
 
-            _self.openDeepLinkDialog = function ($event) {
+            _self.openDeepLinkDialog = function () {
                 _self.DeepLinkCopyUrl = true;
                 setTimeout(function () {
                     _self.DeepLinkCopyUrl = false;
@@ -106,7 +106,7 @@
             _self.removeListItem = function (_index) {
                 var modalInstance = $modal
                     .open({
-                        templateUrl: 'home/modals/remove-people.html',
+                        templateUrl: 'home/modals/remove-peoples.html',
                         controller: 'RemovePeoplePopupCtrl',
                         controllerAs: 'RemovePeoplePopup',
                         size: 'sm',
@@ -167,7 +167,9 @@
                             console.error('Sorted Elements: ' + records);
                         }
                     });*/
-                }else{
+                }else if(value && !searchOptions){
+                    _self.data.content.sortBy = value;
+                } else{
                     console.error('There was a problem sorting your data');
                 }
             };

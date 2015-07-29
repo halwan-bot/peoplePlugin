@@ -1,14 +1,16 @@
-<div class="modal-header" style="padding-bottom: 0px;">
-    <strong class="pull-left">Confirmation</strong>
-
-    <div class="clearfix"></div>
+<div class="header clearfix border-bottom-grey">
+	<h4 class="margin-zero">Confirmation</h4>
 </div>
-<div class="modal-body">
-    <h3> <span>Do you want to remove {{RemoveImagePopup.imageInfo.title}}?</span></h3>
-
+<div class="padded clearfix">
+	<div class="content">
+		<p class="margin-zero">Are you sure you want to remove {{RemoveImagePopup.imageInfo.title}}?</p>
+	</div>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="ok()">Ok</button>
-    <button type="button" class="btn btn-danger" ng-click="cancel()">Cancel</button>
-</div>
+<div class="bottom border-top-grey clearfix">
+	<div class="col-md-6 pull-left text-center">
+		<a class="text-primary default-background-hover transition-third" ng-click="cancel()">Cancel</a>
+	</div>
+	<div class="col-md-6 pull-right text-center border-left-grey">
+		<a class="text-danger default-background-hover transition-third" ng-click="ok()">Remove</a>
+	</div>
 </div>

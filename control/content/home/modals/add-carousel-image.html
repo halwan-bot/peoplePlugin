@@ -2,7 +2,7 @@
     <h5 class="item-link-header"> Add Image</h5>
 </div>
 <div class="modal-body">
-    <div class="item clearfix">
+    <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Image</span>
         </div>
@@ -18,7 +18,8 @@
             </div>
         </div>
     </div>
-    <div class="item clearfix ">
+	<hr class="none">
+    <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Title</span>
         </div>
@@ -26,7 +27,8 @@
             <input type="text" class="form-control" ng-model="AddCarouselImagePopup.imageInfo.title" placeholder="">
         </div>
     </div>
-    <div class="item clearfix ">
+	<hr class="none">
+    <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Deep Link URL</span>
         </div>
@@ -35,7 +37,11 @@
         </div>
     </div>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="AddCarouselImagePopup.ok(AddCarouselImagePopup.imageInfo)">Ok</button>
-    <button type="button" class="btn btn-danger" ng-click="AddCarouselImagePopup.cancel()">Cancel</button>
+<div class="bottom border-top-grey clearfix">
+	<div class="col-md-6 pull-left text-center">
+		<a class="text-danger default-background-hover transition-third" ng-click="AddCarouselImagePopup.cancel()">Cancel</a>
+	</div>
+	<div class="col-md-6 pull-right text-center border-left-grey">
+		<a class="text-success default-background-hover transition-third" ng-click="AddCarouselImagePopup.ok(AddCarouselImagePopup.imageInfo)">Save</a>
+	</div>
 </div>

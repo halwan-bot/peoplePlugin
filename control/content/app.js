@@ -2,7 +2,7 @@
 
 (function (angular, buildfire) {
     angular
-        .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap','ui.sortable'])
+        .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap','ui.sortable','ngClipboard'])
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
             PEOPLES: 'peoples'
@@ -10,7 +10,12 @@
         .constant('ERROR_CODE', {
             NOT_FOUND: 'NOTFOUND'
         })
-        .config(['$routeProvider', function ($routeProvider) {
+        .constant('STATUS_CODE', {
+            INSERTED: 'inserted',
+            UPDATED: 'updated'
+        })
+        .config(['$routeProvider','ngClipProvider', function ($routeProvider,ngClipProvider) {
+            ngClipProvider.setPath("//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.swf");
             $routeProvider
                 .when('/', {
                     templateUrl: 'home/home.html',

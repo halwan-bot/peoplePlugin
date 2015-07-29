@@ -2,11 +2,13 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentPeoplesCtrl', ['$scope', '$location', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE',
-            function ($scope, $location, $modal, Buildfire, TAG_NAMES, ERROR_CODE) {
+        .controller('ContentPeoplesCtrl', ['$scope', '$location', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', 'STATUS_CODE',
+            function ($scope, $location, $modal, Buildfire, TAG_NAMES, ERROR_CODE, STATUS_CODE) {
                 var _self = this;
                 _self.items = [];
-
+                _self.linksSortableOptions = {
+                    handle: '> .cursor-grab'
+                };
                 _self.item = {
                     topImage: '',
                     fName: '',

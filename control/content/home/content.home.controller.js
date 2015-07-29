@@ -76,7 +76,7 @@
             };
             getContentPeopleInfo();
 
-            _self.openDeepLinkDialog = function ($event) {
+            _self.openDeepLinkDialog = function () {
                 _self.DeepLinkCopyUrl = true;
                 setTimeout(function () {
                     _self.DeepLinkCopyUrl = false;
@@ -130,6 +130,27 @@
                 modalInstance.result.then(function (imageInfo) {
                     if (imageInfo && _self.data) {
                         _self.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
+                    }else{
+                        console.error('Unable to load data.')
+                    }
+                }, function (err) {
+                    if (err) {
+                        console.error('Error:', err)
+                    }
+                });
+            };
+
+            _self.openAddImageDeeplinkUrlPopup = function (_index) {
+                var modalInstance = $modal
+                    .open({
+                        templateUrl: 'home/modals/add-image-deeplinkurl.html',
+                        controller: 'AddImageDeeplinkUrlPopupCtrl',
+                        controllerAs: 'AddImageDeeplinkUrlPopup',
+                        size: 'sm'
+                    });
+                modalInstance.result.then(function (deeplink) {
+                    if (deeplink && _self.data) {
+                        _self.data.content.images[_index].deepLinkUrl=deeplink;
                     }else{
                         console.error('Unable to load data.')
                     }

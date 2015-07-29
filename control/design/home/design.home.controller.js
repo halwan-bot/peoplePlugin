@@ -19,10 +19,22 @@
                 }, {
                     name: "item-layout-4"
                 }]
-            }
+            };
+            var options = {showIcons: false, multiSelection: false};
+            var callback = function (error, result) {
+                if (error) {
+                    console.error('Error:', error);
+                } else {
+                    DesignHome.peopleInfo.design.backgroundImage = result.selectedFiles && result.selectedFiles[0] || null;
+                    $scope.$digest();
+
+                }
+            };
+            DesignHome.addBackgroundImage=function(){
+                Buildfire.imageLib.showDialog(options,callback);
+            };
             DesignHome.changeListLayout = function (layoutName) {
                 if (layoutName) {
-                    //DesignHome.peopleInfo.design.$$hashKey="123445";
                     DesignHome.peopleInfo.design.listLayout = layoutName;
                     saveData(function (err, data) {
                             if (err) {
@@ -89,5 +101,20 @@
                 });
             }
             init();
+            $scope.$watch(function () {
+                return DesignHome.peopleInfo;
+            },function (newObj) {
+                if(newObj)
+                Buildfire.datastore.save(DesignHome.peopleInfo, TAG_NAMES.PEOPLE_INFO, function (err, data) {
+                    if (err) {
+                        return DesignHome.peopleInfo = angular.copy(DesignHomeMaster);
+                    }
+                    else if (data && data.obj) {
+                        return DesignHomeMaster = data.obj;
+                    }
+                    $scope.$digest();
+                });
+            },true);
+
         }]);
 })(window.angular);

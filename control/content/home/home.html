@@ -85,10 +85,10 @@
                 <span class="glyphicon glyphicon-menu-hamburger cursor-grab"
                       aria-hidden="true" style="margin-top: 10px"></span>
                 <img ng-src={{item.topImage}} class="border-radius-four border-grey">
-
+              <a class="text-primary"><span
+                  class="title ellipsis myHandle">{{item.fName+' '+item.lName}}</span></a>
                 <div class="copy pull-right">
-                    <a class="text-primary"><span
-                            class="title ellipsis pull-left myHandle">{{item.fName+' '+item.lName}}</span></a>
+
                     <span class="title ellipsis pull-left">{{item.description}}</span>
                         <span class="btn-icon btn-link-icon btn-primary transition-third"
                               ng-click="ContentHome.openDeepLinkDialog($event)"></span>

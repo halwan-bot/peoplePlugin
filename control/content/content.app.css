@@ -82,6 +82,10 @@
 .align-right{
     text-align: right;
 }
+
+/*
+To align action buttons in image carousel listing and people listing on home page
+*/
 .list-view {
     width : 35% !important;
     position: static !important;
@@ -93,4 +97,12 @@
 
 .cursor-grab{
     cursor: -webkit-grab;
+}
+
+html[buildfire] .draggable-list-view .d-item span.title {
+    width: inherit !important;
+}
+
+html[buildfire] .draggable-list-view.wide-list .d-item .copy {
+    width: inherit !important;
 }

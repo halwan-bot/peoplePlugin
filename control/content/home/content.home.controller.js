@@ -93,7 +93,7 @@
             _self.removeListItem = function (_index) {
                 var modalInstance = $modal
                     .open({
-                        templateUrl: 'home/modals/remove-people.html',
+                        templateUrl: 'home/modals/remove-peoples.html',
                         controller: 'RemovePeoplePopupCtrl',
                         controllerAs: 'RemovePeoplePopup',
                         size: 'sm',

@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h5 class="item-link-header"> Add Image Deeplink Url</h5>
+</div>
+<div class="modal-body">
+    <div class="item clearfix ">
+        <div class="labels col-md-3 padding-right-zero pull-left">
+            <span>Link</span>
+        </div>
+        <div class="main col-md-9 pull-right">
+            <input type="text" class="form-control" ng-model="AddImageDeeplinkUrlPopup.deeplinkurl" placeholder="">
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-disabled="!AddImageDeeplinkUrlPopup.deeplinkurl" ng-click="AddImageDeeplinkUrlPopup.ok(AddImageDeeplinkUrlPopup.deeplinkurl)">save</button>
+    <button type="button" class="btn btn-danger" ng-click="AddImageDeeplinkUrlPopup.cancel()">Cancel</button>
+</div>

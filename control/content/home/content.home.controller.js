@@ -76,7 +76,7 @@
             };
             getContentPeopleInfo();
 
-            _self.openDeepLinkDialog = function ($event) {
+            _self.openDeepLinkDialog = function () {
                 _self.DeepLinkCopyUrl = true;
                 setTimeout(function () {
                     _self.DeepLinkCopyUrl = false;

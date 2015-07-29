@@ -64,8 +64,8 @@
             <div class="col-md-4 pull-right">
                 <a class="btn btn-success pull-right stretch" href="#/peoples">Add New Item</a>
             </div>
+            </div>
         </div>
-    </div>
     <hr>
     <div class="item clearfix row">
         <div class="main col-md-9 pull-right padding-left-zero row">
@@ -91,7 +91,7 @@
 
                     <span class="title ellipsis pull-left">{{item.description}}</span>
                         <span class="btn-icon btn-link-icon btn-primary transition-third"
-                              ng-click="ContentHome.openDeepLinkDialog($event)"></span>
+                              ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.deepLinkUrl"></span>
                         <span class="btn-icon btn-delete-icon btn-danger transition-third"
                               ng-click="ContentHome.removeListItem($index)"></span>
                     <!--<span class="btn-icon btn-link-icon btn-primary transition-third" ng-click="ContentHome.openDeepLinkDialog()"></span>

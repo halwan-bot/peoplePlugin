@@ -6,7 +6,9 @@
             function ($scope, $location, $modal, Buildfire, TAG_NAMES, ERROR_CODE) {
                 var _self = this;
                 _self.items = [];
-
+                _self.linksSortableOptions={
+                    handle: '> .cursor-grab'
+                };
                 _self.item = {
                     topImage: '',
                     fName: '',

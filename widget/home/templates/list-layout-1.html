@@ -20,12 +20,12 @@
 				<div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
 					<div class="media pull-left">
 						<img class="border-grey border-radius-four"
-                 ng-src="{{item.topImage || 'http://www.placehold.it/100x60'}}">
+                 ng-src="{{item.data.topImage || 'http://www.placehold.it/100x60'}}">
 					</div>
 					<div class="content margin-top-ten">
 						<p class="text-primary ellipsis margin-zero"><a
-                href="#/people">{{item.fName}} {{item.lName}}</a></p>
-						<p class="margin-bottom-zero ellipsis">{{item.position}}</p>
+                href="#/people">{{item.data.fName}} {{item.data.lName}}</a></p>
+						<p class="margin-bottom-zero ellipsis">{{item.data.bodyContent}}</p>
 					</div>
 				</div>
 			</div>

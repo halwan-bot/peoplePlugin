@@ -19,12 +19,12 @@
     <span ng-repeat="item in WidgetHome.items">
       <div class="plugin-banner clearfix border-bottom-grey">
         <div class="plugin-slide text-center">
-          <img ng-src="{{item.topImage || 'http://www.placehold.it/1280x720.jpg'}}">
+          <img ng-src="{{item.data.topImage || 'http://www.placehold.it/1280x720.jpg'}}">
         </div>
       </div>
 		<div class="padded text-left">
-      <a class="text-primary"  href="#/people">{{item.fName}} {{item.lName}}</a>
-      <p class="margin-bottom-zero">{{item.position}}</p>
+      <a class="text-primary"  href="#/people">{{item.data.fName}} {{item.data.lName}}</a>
+      <p class="margin-bottom-zero">{{item.data.bodyContent}}</p>
     </div>
     </span>
 	</div>

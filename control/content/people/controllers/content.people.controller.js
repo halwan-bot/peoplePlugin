@@ -2,10 +2,10 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentPeopleCtrl', ['$scope', '$location', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', 'STATUS_CODE',
-            function ($scope, $location, $modal, Buildfire, TAG_NAMES, ERROR_CODE, STATUS_CODE) {
+        .controller('ContentPeopleCtrl', ['$scope', '$location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE',
+            function ($scope, $location, $modal, Buildfire, TAG_NAMES, STATUS_CODE) {
                 var _self = this;
-                _self.items = [];
+                var currentInsertedItemId = null;
                 _self.linksSortableOptions = {
                     handle: '> .cursor-grab'
                 };
@@ -19,58 +19,60 @@
                     links: []
                 };
 
-                var saveData = function (newObj, tag) {
-                    if (newObj == undefined)return;
-                    Buildfire.datastore.save(newObj, tag, function (err, result) {
-                        if (err || !result)
-                            console.log('------------error saveData-------', err);
-                        else
-                            console.log('------------data saved-------', result);
+                _self.done = function () {
+                    $location.path("/");
+                };
+
+/*                Buildfire.datastore.save(_self.item, TAG_NAMES.PEOPLE, function (err, data) {
+                    if (err) {
+                        console.error('There was a problem saving your data');
+                    }
+                    else {
+                        console.error('Data inserted successfully', data);
+                    }
+                });*/
+
+                _self.addNewItem = function () {
+                    _self.item = JSON.parse(angular.toJson(_self.item));
+                    Buildfire.datastore.insert(_self.item, TAG_NAMES.PEOPLE, false, function (err, data) {
+                        if (err) {
+                            console.error('There was a problem saving your data');
+                        }
+                        else {
+                            currentInsertedItemId = data.id;
+                        }
                     });
                 };
 
-                _self.addNewItem = function (path) {
-                    _self.items.push(_self.item);
-                    $location.path(path)
+                _self.updateItemData = function (_id, data) {
+                    if (_id) {
+                        Buildfire.datastore.update(_id, data, TAG_NAMES.PEOPLE, function (err) {
+                            if (err)
+                                console.error('There was a problem saving your data');
+                        })
+                    } else {
+                        _self.addNewItem();
+                    }
                 };
 
-                Buildfire.datastore.get(TAG_NAMES.PEOPLE, function (err, result) {
-                    if (err && err.code !== ERROR_CODE.NOT_FOUND) {
-                        console.error('-----------err-------------', err);
-                    }
-                    else if (err && err.code === ERROR_CODE.NOT_FOUND) {
-                        saveData(JSON.parse(angular.toJson(_self.items)), TAG_NAMES.PEOPLE);
-                    }
-                    else if (result) {
-                        _self.items = result.data;
-                        $scope.$digest();
-                        if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
-                    }
-                });
-
                 Buildfire.datastore.onUpdate(function (event) {
-                    if (event && event.tag) {
-                        switch (event.tag) {
-                            case TAG_NAMES.PEOPLE:
-                                //update the People/Item info template in emulator
-                                _self.items = event.obj;
-                                if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
+                    if (event && event.status) {
+                        switch (event.status) {
+                            case STATUS_CODE.INSERTED:
+                                currentInsertedItemId = event.id;
+                                console.log('Data inserted Successfully');
                                 break;
-                            case TAG_NAMES.PEOPLE_INFO:
-                                //update the People list template in emulator
-                                console.error('-----------PeopleInfo Data Updated Successfully-------------', event.obj);
+                            case STATUS_CODE.UPDATED:
+                                console.log('Data updated Successfully');
                                 break;
                         }
-                    }
-                    else if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
-                        console.error('-----------PeopleInfo Data Updated Successfully-------------', event.obj);
                     }
                 });
 
                 _self.openAddLinkPopup = function () {
                     var modalInstance = $modal
                         .open({
-                            templateUrl: 'people/modals/add-item-link.html',
+                            templateUrl: 'peoples/modals/add-item-link.html',
                             controller: 'AddItemLinkPopupCtrl',
                             controllerAs: 'AddItemLinkPopup',
                             size: 'sm'
@@ -89,11 +91,12 @@
                 _self.removeLink = function (_index) {
                     _self.item.links.splice(_index, 1);
                 };
-                var tmrDelayForPeople = null;
-                var saveItemsWithDelay = function (newObj) {
-                    if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
-                    tmrDelayForPeople = setTimeout(function () {
-                        saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
+
+                var tmrDelayForPeoples = null;
+                var updateItemsWithDelay = function (newObj) {
+                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+                    tmrDelayForPeoples = setTimeout(function () {
+                        _self.updateItemData(currentInsertedItemId, JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
                     }, 500);
                 };
 
@@ -116,7 +119,7 @@
                 };
 
                 $scope.$watch(function () {
-                    return _self.items;
-                }, saveItemsWithDelay, true);
+                    return _self.item;
+                }, updateItemsWithDelay, true);
             }]);
 })(window.angular);

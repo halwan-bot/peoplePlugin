@@ -118,7 +118,21 @@
             };
 
             _self.openImportCSVDialog = function () {
-                window.openDialog('importCSV.html', null, 'sm', null);
+                var modalInstance = $modal
+                    .open({
+                        templateUrl: 'home/modals/import-csv.html',
+                        controller: 'ImportCSVPopupCtrl',
+                        controllerAs: 'ImportCSVPopup',
+                        size: 'sm'
+                    });
+                modalInstance.result.then(function (data) {
+                    console.log('Data----------',data);
+                }, function (data) {
+                    if (data) {
+                        console.log('Data----------',data);
+
+                    }
+                });
             };
 
             _self.removeListItem = function (_index) {

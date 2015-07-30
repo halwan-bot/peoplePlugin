@@ -10,7 +10,15 @@
                 FIRST_NAME_A_TO_Z = 'First Name A-Z',
                 FIRST_NAME_Z_TO_A = 'First Name Z-A',
                 LAST_NAME_A_TO_Z = 'Last Name A-Z',
-                LAST_NAME_Z_TO_A = 'Last Name Z-A';
+                LAST_NAME_Z_TO_A = 'Last Name Z-A',
+                _pageSize = 10,
+                _page = 0,
+                searchOptions = {
+                    filter: {"$json.firstName": {"$regex": '/*'}}
+                    , page: _page
+                    , pageSize: _pageSize + 1 // the plus one is to check if there are any more
+                };
+
             var _self = this;
             _self.items = null;
             _self.data = null;
@@ -56,18 +64,25 @@
                         console.log('------------data saved-------', result);
                 });
             };
-            var getContentItems = function () {
-                Buildfire.datastore.get(TAG_NAMES.PEOPLE, function (err, result) {
-                    if (err && err.code !== ERROR_CODE.NOT_FOUND) {
+
+            var getContentItems = function (_searchOptions) {
+                console.error('----------- _searchOptions-------------', _searchOptions);
+                Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                    if (err) {
                         console.error('-----------err in getting list-------------', err);
                     }
-                    else if (result) {
-                        _self.items = result.data;
+                    else {
+                        _self.items = result;
+                        console.error('-------Data--------',result);
+                        if (result.length > _pageSize) {// to indicate there are more
+                            console.error('-------More Data available--------');
+                        }
                         $scope.$digest();
                         if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
                     }
                 });
             };
+
             var getContentPeopleInfo = function () {
                 Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {
@@ -84,9 +99,10 @@
                         $scope.$digest();
                         if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                     }
-                    getContentItems();
+                    getContentItems(searchOptions);
                 });
             };
+
             getContentPeopleInfo();
 
             _self.openDeepLinkDialog = function () {
@@ -100,9 +116,11 @@
             _self.openRemoveDialog = function () {
                 window.openDialog('remove.html', null, 'sm', null);
             };
+
             _self.openImportCSVDialog = function () {
                 window.openDialog('importCSV.html', null, 'sm', null);
             };
+
             _self.removeListItem = function (_index) {
                 var modalInstance = $modal
                     .open({
@@ -125,51 +143,47 @@
                     }
                 });
             };
+
             _self.searchListItem = function (value) {
 
             };
+
             _self.sortPeopleBy = function (value) {
-                var searchOptions =null;
-                switch (value){
+                switch (value) {
                     case MANUALLY:
+                        delete searchOptions.sort;
                         break;
                     case OLDEST_TO_NEWEST:
+                        delete searchOptions.sort
                         break;
                     case NEWEST_TO_OLDEST:
+                        delete  searchOptions.sort;
                         break;
                     case FIRST_NAME_A_TO_Z:
-                        searchOptions = {
-                            "sort": {"field": "fName", "desc": false}
-                        };
+                        searchOptions.sort = {"field": "fName", "desc": false};
                         break;
                     case FIRST_NAME_Z_TO_A:
-                        searchOptions = {
-                            "sort": {"field": "fName", "desc": true}
-                        };
+                        searchOptions.sort = {"field": "fName", "desc": true};
                         break;
                     case LAST_NAME_A_TO_Z:
-                        searchOptions = {
-                            "sort": {"field": "lName", "desc": false}
-                        };
+                        searchOptions.sort = {"field": "lName", "desc": false};
                         break;
                     case LAST_NAME_Z_TO_A:
-                        searchOptions = {
-                            "sort": {"field": "lName", "desc": true}
-                        };
+                        searchOptions.sort = {"field": "lName", "desc": true};
                         break;
                 }
-                if(searchOptions) {
+                if (searchOptions) {
                     _self.data.content.sortBy = value;
-                    /*Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
+                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
                         if (err)
                             console.error('There was a problem retrieving your data');
                         else {
                             console.error('Sorted Elements: ' + records);
                         }
-                    });*/
-                }else if(value && !searchOptions){
+                    });
+                } else if (value && !searchOptions) {
                     _self.data.content.sortBy = value;
-                } else{
+                } else {
                     console.error('There was a problem sorting your data');
                 }
             };
@@ -266,6 +280,7 @@
                     }, 500);
                 }
             };
+
             $scope.$watch(function () {
                 return _self.data;
             }, saveDataWithDelay, true);

@@ -40,6 +40,7 @@
 
             Buildfire.datastore.onUpdate(function (event) {
                 if (event && event.tag) {
+                  WidgetHome.data = event.obj;
                     switch (event.tag) {
                         case TAG_NAMES.PEOPLE:
                             //update the People/Item info template in emulator
@@ -49,7 +50,7 @@
                                 Location.goTo("#/people");
                             }
                             else if (event.obj.design.listLayout && currentListLayout != event.obj.design.listLayout) {
-                                WidgetHome.data.design.listLayout = event.obj.design.listLayout;
+
                                 currentListLayout = event.obj.design.listLayout
                             }
                             break;

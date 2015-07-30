@@ -14,7 +14,7 @@
                 _pageSize = 10,
                 _page = 0,
                 searchOptions = {
-                    filter: {"$json.firstName": {"$regex": '/*'}}
+                    filter: {"$json.fName": {"$regex": '/*'}}
                     , page: _page
                     , pageSize: _pageSize + 1 // the plus one is to check if there are any more
                 };
@@ -42,7 +42,6 @@
             };
             _self.DeepLinkCopyUrl = false;
             var tmrDelayForPeopleInfo = null;
-            var tmrDelayForPeople = null;
             var _data = {
                 content: {
                     images: [],
@@ -55,6 +54,7 @@
                     backgroundImage: ''
                 }
             };
+
             var saveData = function (newObj, tag) {
                 if (newObj == undefined)return;
                 Buildfire.datastore.save(newObj, tag, function (err, result) {
@@ -66,19 +66,16 @@
             };
 
             var getContentItems = function (_searchOptions) {
-                console.error('----------- _searchOptions-------------', _searchOptions);
                 Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                     if (err) {
                         console.error('-----------err in getting list-------------', err);
                     }
                     else {
                         _self.items = result;
-                        console.error('-------Data--------',result);
                         if (result.length > _pageSize) {// to indicate there are more
                             console.error('-------More Data available--------');
                         }
                         $scope.$digest();
-                        if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
                     }
                 });
             };
@@ -261,7 +258,6 @@
                 } else if (event && event.tag === TAG_NAMES.PEOPLE) {
                     _self.items = event.obj;
                     $scope.$digest();
-                    if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
                 }
             });
             var saveDataWithDelay = function (newObj) {
@@ -272,22 +268,10 @@
                     }, 500);
                 }
             };
-            var saveItemsWithDelay = function (newItems) {
-                if (newItems) {
-                    if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
-                    tmrDelayForPeople = setTimeout(function () {
-                        saveData(JSON.parse(angular.toJson(newItems)), TAG_NAMES.people);
-                    }, 500);
-                }
-            };
 
             $scope.$watch(function () {
                 return _self.data;
             }, saveDataWithDelay, true);
-
-            $scope.$watch(function () {
-                return _self.items;
-            }, saveItemsWithDelay, true);
 
         }])
 })(window.angular, window);

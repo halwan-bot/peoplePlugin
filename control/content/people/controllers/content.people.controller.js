@@ -11,26 +11,20 @@
                 };
                 _self.item = {
                     topImage: '',
+                    iconImage: '',
                     fName: '',
                     lName: '',
                     position: '',
                     deepLinkUrl: '',
-                    bodyContent: '',
-                    links: []
+                    dateCrated: +new Date(),
+                    socailLinks: [],
+                    bodyContent: ''
                 };
 
+                /*On click button done it redirects to home*/
                 _self.done = function () {
                     $location.path("/");
                 };
-
-/*                Buildfire.datastore.save(_self.item, TAG_NAMES.PEOPLE, function (err, data) {
-                    if (err) {
-                        console.error('There was a problem saving your data');
-                    }
-                    else {
-                        console.error('Data inserted successfully', data);
-                    }
-                });*/
 
                 _self.addNewItem = function () {
                     _self.item = JSON.parse(angular.toJson(_self.item));
@@ -72,14 +66,14 @@
                 _self.openAddLinkPopup = function () {
                     var modalInstance = $modal
                         .open({
-                            templateUrl: 'peoples/modals/add-item-link.html',
+                            templateUrl: 'people/modals/add-item-link.html',
                             controller: 'AddItemLinkPopupCtrl',
                             controllerAs: 'AddItemLinkPopup',
                             size: 'sm'
                         });
                     modalInstance.result.then(function (_link) {
                         if (_link) {
-                            _self.item.links.push(JSON.parse(angular.toJson(_link)));
+                            _self.item.socailLinks.push(JSON.parse(angular.toJson(_link)));
                         }
                     }, function (err) {
                         if (err) {
@@ -89,7 +83,7 @@
                 };
 
                 _self.removeLink = function (_index) {
-                    _self.item.links.splice(_index, 1);
+                    _self.item.socailLinks.splice(_index, 1);
                 };
 
                 var tmrDelayForPeoples = null;

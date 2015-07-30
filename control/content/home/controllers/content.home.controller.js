@@ -195,17 +195,17 @@
                 });
             };
 
-            _self.openAddImageDeeplinkUrlPopup = function (_index) {
+            _self.openAddImageLinkPopup = function (_index) {
                 var modalInstance = $modal
                     .open({
-                        templateUrl: 'home/modals/add-image-deeplinkurl.html',
-                        controller: 'AddImageDeeplinkUrlPopupCtrl',
-                        controllerAs: 'AddImageDeeplinkUrlPopup',
+                        templateUrl: 'home/modals/add-image-link.html',
+                        controller: 'AddImageLinkPopupCtrl',
+                        controllerAs: 'AddImageLinkPopup',
                         size: 'sm'
                     });
-                modalInstance.result.then(function (deeplink) {
-                    if (deeplink && _self.data) {
-                        _self.data.content.images[_index].deepLinkUrl = deeplink;
+                modalInstance.result.then(function (_link) {
+                    if (_link && _self.data) {
+                        _self.data.content.images[_index].link = _link;
                     } else {
                         console.error('Unable to load data.')
                     }

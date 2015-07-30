@@ -3,9 +3,9 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('AddImageDeeplinkUrlPopupCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+        .controller('AddImageLinkPopupCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
             var _self=this;
-            _self.deeplinkurl='';
+            _self.link='';
             _self.ok = function (linkUrl) {
                 $modalInstance.close(linkUrl);
             };

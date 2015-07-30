@@ -19,7 +19,7 @@
                 }, {
                     name: "item-layout-4"
                 }]
-            }
+            };
             DesignHome.changeListLayout = function (layoutName) {
                 if (layoutName) {
                     //DesignHome.peopleInfo.design.$$hashKey="123445";

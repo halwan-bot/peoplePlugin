@@ -34,6 +34,8 @@
       };
       getContentPeopleInfo();
 
+      // Update the People list layout according to the change in design section
+
       Buildfire.datastore.onUpdate(function (event) {
         if (event && event.tag) {
           switch (event.tag) {

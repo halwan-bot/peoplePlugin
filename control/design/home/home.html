@@ -8,23 +8,17 @@
                 <a class="border-grey border-radius-three default-background-hover">{{DesignHome.peopleInfo.design.listLayout}}</a>
             </div>
             <div class="layoutgrid pull-right border-grey border-radius-three">
-                <ul>
+				<a ng-repeat="layout in DesignHome.layouts.listLayouts" class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeListLayout(layout.name)">{{layout.name}}</a>
+           
+				<!--
+				<ul>
                     <li ng-repeat="layout in DesignHome.layouts.listLayouts">
                         <a class="layouticon border-grey border-radius-three default-background-hover"
                            ng-click="DesignHome.changeListLayout(layout.name)">{{layout.name}}</a>
                     </li>
                 </ul>
-
-                <!--<a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>-->
-            </div>
+				-->
+ 			</div>
         </div>
     </div>
 </div>
@@ -39,22 +33,17 @@
                 <a class="border-grey border-radius-three default-background-hover">{{DesignHome.peopleInfo.design.itemLayout}}</a>
             </div>
             <div class="layoutgrid pull-right border-grey border-radius-three">
-                <ul>
+                <a ng-repeat="layout in DesignHome.layouts.itemLayouts" class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeItemLayout(layout.name)">{{layout.name}}</a>
+        	
+				<!--
+				<ul>
                     <li ng-repeat="layout in DesignHome.layouts.itemLayouts">
                         <a class="layouticon border-grey border-radius-three default-background-hover"
                            ng-click="DesignHome.changeItemLayout(layout.name)">{{layout.name}}</a>
                     </li>
                 </ul>
-                <!--<a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>
-                <a class="layouticon border-grey border-radius-three default-background-hover"></a>-->
-            </div>
+				-->
+    		</div>
         </div>
     </div>
 </div>

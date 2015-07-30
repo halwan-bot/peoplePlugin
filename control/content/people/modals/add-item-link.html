@@ -2,7 +2,7 @@
     <h5 class="item-link-header"> Link URL</h5>
 </div>
 <div class="modal-body">
-    <div class="item clearfix ">
+    <div class="item clearfix row">
         <div class="labels col-md-1 padding-right-zero pull-left">
             <div class="widget-icon">
                 <div class="icon_upload_placeholder listImg"
@@ -18,17 +18,21 @@
             <input type="text" class="form-control link-title" ng-model="AddItemLinkPopup.itemlink.title" placeholder="Title">
         </div>
     </div>
-    <div class="item clearfix ">
-        <div class="labels col-md-1 padding-right-zero pull-left align-right">
+	<hr class="none">
+    <div class="item clearfix row">
+        <div class="labels col-md-1 padding-right-zero pull-left text-left">
             <span>Url</span>
         </div>
         <div class="main col-md-11 pull-right">
             <input type="text" class="form-control" ng-model="AddItemLinkPopup.itemlink.url" placeholder="">
         </div>
     </div>
-
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="AddItemLinkPopup.ok(AddItemLinkPopup.itemlink)">Ok</button>
-    <button type="button" class="btn btn-danger" ng-click="AddItemLinkPopup.cancel()">Cancel</button>
+<div class="bottom border-top-grey clearfix">
+	<div class="col-md-6 pull-left text-center">
+		<a class="text-danger default-background-hover transition-third" ng-click="AddItemLinkPopup.cancel()">Cancel</a>
+	</div>
+	<div class="col-md-6 pull-right text-center border-left-grey">
+		<a class="text-success default-background-hover transition-third" ng-click="AddItemLinkPopup.ok(AddItemLinkPopup.itemlink)">Save</a>
+	</div>
 </div>

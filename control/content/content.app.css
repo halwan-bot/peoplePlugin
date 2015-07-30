@@ -80,11 +80,13 @@
 .imgPlHolderSquare, .listImg {
     width: 40px;
     height: 40px;
+	line-height:37px;
 }
 
 .link-title {
     border: 0 !important;
     margin-top: 3px;
+	padding-left:0;
 }
 
 .align-right {

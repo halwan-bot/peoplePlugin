@@ -86,14 +86,13 @@
             <div class="d-item double-line square-icon" ng-repeat="item in ContentHome.items">
                 <span class="icon icon-menu cursor-grab"
                       aria-hidden="true" style="margin-top: 10px"></span>
-                <img ng-src={{item.topImage}} class="border-radius-four border-grey">
+                <img ng-src={{item.data.topImage}} class="border-radius-four border-grey">
               <a class="text-primary"><span
-                  class="title ellipsis width-inherit">{{item.fName+' '+item.lName}}</span></a>
-                <div class="copy pull-right width-inherit">
-
-                    <span class="title ellipsis pull-left width-inherit">{{item.description}}</span>
+                  class="title ellipsis width34">{{item.data.fName+' '+item.data.lName}}</span></a>
+                <div class="copy pull-right width34">
+                    <span class="title ellipsis pull-left width34 item-body-content">{{item.data.bodyContent}}</span>
                         <span class="btn-icon btn-link-icon btn-primary transition-third"
-                              ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.deepLinkUrl"></span>
+                              ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.data.deepLinkUrl"></span>
                         <span class="btn-icon btn-delete-icon btn-danger transition-third"
                               ng-click="ContentHome.removeListItem($index)"></span>
                     <!--<span class="btn-icon btn-link-icon btn-primary transition-third" ng-click="ContentHome.openDeepLinkDialog()"></span>

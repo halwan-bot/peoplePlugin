@@ -5,7 +5,6 @@
         .controller('ContentPeopleCtrl', ['$scope', '$location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE',
             function ($scope, $location, $modal, Buildfire, TAG_NAMES, STATUS_CODE) {
                 var _self = this;
-                var currentInsertedItemId = null;
                 _self.linksSortableOptions = {
                     handle: '> .cursor-grab'
                 };
@@ -21,24 +20,26 @@
                     bodyContent: ''
                 };
 
+//              var currentInsertedItemId = null;
+
                 /*On click button done it redirects to home*/
-                _self.done = function () {
+                /*_self.done = function () {
                     $location.path("/");
-                };
+                };*/
 
                 _self.addNewItem = function () {
-                    _self.item = JSON.parse(angular.toJson(_self.item));
-                    Buildfire.datastore.insert(_self.item, TAG_NAMES.PEOPLE, false, function (err, data) {
+                    Buildfire.datastore.insert(JSON.parse(angular.toJson(_self.item)), TAG_NAMES.PEOPLE, false, function (err, data) {
                         if (err) {
                             console.error('There was a problem saving your data');
                         }
                         else {
-                            currentInsertedItemId = data.id;
+                         //   currentInsertedItemId = data.id;
                         }
                     });
+                    $location.path("/");
                 };
 
-                _self.updateItemData = function (_id, data) {
+               /* _self.updateItemData = function (_id, data) {
                     if (_id) {
                         Buildfire.datastore.update(_id, data, TAG_NAMES.PEOPLE, function (err) {
                             if (err)
@@ -48,12 +49,12 @@
                         _self.addNewItem();
                     }
                 };
-
+*/
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.status) {
                         switch (event.status) {
                             case STATUS_CODE.INSERTED:
-                                currentInsertedItemId = event.id;
+                                //currentInsertedItemId = event.id;
                                 console.log('Data inserted Successfully');
                                 break;
                             case STATUS_CODE.UPDATED:
@@ -86,14 +87,6 @@
                     _self.item.socailLinks.splice(_index, 1);
                 };
 
-                var tmrDelayForPeoples = null;
-                var updateItemsWithDelay = function (newObj) {
-                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
-                    tmrDelayForPeoples = setTimeout(function () {
-                        _self.updateItemData(currentInsertedItemId, JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
-                    }, 500);
-                };
-
                 var options = {showIcons: false, multiSelection: false};
                 var callback = function (error, result) {
                     if (error) {
@@ -112,8 +105,18 @@
                     _self.item.topImage = null;
                 };
 
+/*
+                var tmrDelayForPeoples = null;
+                var updateItemsWithDelay = function (newObj) {
+                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+                    tmrDelayForPeoples = setTimeout(function () {
+                        _self.updateItemData(currentInsertedItemId, JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
+                    }, 500);
+                };
+
                 $scope.$watch(function () {
                     return _self.item;
                 }, updateItemsWithDelay, true);
+*/
             }]);
 })(window.angular);

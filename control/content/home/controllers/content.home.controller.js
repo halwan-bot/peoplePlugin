@@ -11,8 +11,8 @@
                 FIRST_NAME_Z_TO_A = 'First Name Z-A',
                 LAST_NAME_A_TO_Z = 'Last Name A-Z',
                 LAST_NAME_Z_TO_A = 'Last Name Z-A',
-                _pageSize = 10,
-                _page = 0,
+                _pageSize = 11,
+                _page = 1,
                 searchOptions = {
                     filter: {"$json.fName": {"$regex": '/*'}}
                     , page: _page

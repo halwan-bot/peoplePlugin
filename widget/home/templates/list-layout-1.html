@@ -17,125 +17,15 @@
 			<p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
 			<hr class="small">
 			<div class="list-items">
-				<div class="list-item clearfix">
+				<div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
 					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
+						<img class="border-grey border-radius-four"
+                 ng-src="{{item.topImage || 'http://www.placehold.it/100x60'}}">
 					</div>
 					<div class="content margin-top-ten">
 						<p class="text-primary ellipsis margin-zero"><a
-                href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
-					</div>
-				</div>
-				<div class="list-item clearfix">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four" src="http://www.placehold.it/100x60">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a href="#/people">This is a title.
-              This is a title. This is a title.</a></p>
-						<p class="margin-bottom-zero ellipsis">This is a summary that goes too long.</p>
+                href="#/people">{{item.fName}} {{item.lName}}</a></p>
+						<p class="margin-bottom-zero ellipsis">{{item.position}}</p>
 					</div>
 				</div>
 			</div>

@@ -16,32 +16,16 @@
 		<div class="padded text-left">
 			<p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
 		</div>
-		<div class="plugin-banner clearfix border-bottom-grey">
-			<div class="plugin-slide text-center">
-				<img src="http://www.placehold.it/1280x720.jpg">
-			</div>
-		</div>
+    <span ng-repeat="item in WidgetHome.items">
+      <div class="plugin-banner clearfix border-bottom-grey">
+        <div class="plugin-slide text-center">
+          <img ng-src="{{item.topImage || 'http://www.placehold.it/1280x720.jpg'}}">
+        </div>
+      </div>
 		<div class="padded text-left">
-			<a class="text-primary"  href="#/people">This is a title</a>
-			<p class="margin-bottom-zero">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-		</div>
-		<div class="plugin-banner clearfix border-bottom-grey">
-			<div class="plugin-slide text-center">
-				<img src="http://www.placehold.it/1280x720.jpg">
-			</div>
-		</div>
-		<div class="padded text-left">
-			<a class="text-primary"  href="#/people">This is a title</a>
-			<p class="margin-bottom-zero">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-		</div>
-		<div class="plugin-banner clearfix border-bottom-grey">
-			<div class="plugin-slide text-center">
-				<img src="http://www.placehold.it/1280x720.jpg">
-			</div>
-		</div>
-		<div class="padded text-left">
-			<a class="text-primary"  href="#/people">This is a title</a>
-			<p class="margin-bottom-zero">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-		</div>
+      <a class="text-primary"  href="#/people">{{item.fName}} {{item.lName}}</a>
+      <p class="margin-bottom-zero">{{item.position}}</p>
+    </div>
+    </span>
 	</div>
 </div>

@@ -11,7 +11,7 @@
               <div class="screen layouticon pull-left">
                 <a class="border-grey border-radius-three default-background-hover" ng-hide="AddCarouselImagePopup.imageInfo.imageUrl" ng-click="AddCarouselImagePopup.selectImage()"></a>
                   <span  ng-show="AddCarouselImagePopup.imageInfo.imageUrl">
-                    <img src="{{AddCarouselImagePopup.imageInfo.imageUrl}}">
+                    <img ng-src="{{AddCarouselImagePopup.imageInfo.imageUrl}}">
                     <span style="float: right; top: -50px; content: '-';" class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="AddCarouselImagePopup.removeImage()"></span>
                   </span>
               </div>

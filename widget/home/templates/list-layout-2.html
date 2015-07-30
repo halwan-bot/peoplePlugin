@@ -1,47 +1,31 @@
 <div class="holder padding-zero">
 	<div class="people-plugin listlayout1">
 		<div class="plugin-banner clearfix border-bottom-grey">
-			<div class="plugin-slider text-center">
-				<div class="plugin-slide">
-					<img src="http://www.placehold.it/1280x720.jpg">
-				</div>
-				<div class="plugin-slide hidden">
-					<img src="http://www.placehold.it/1280x720.jpg">
-				</div>
-				<div class="plugin-slide hidden">
-					<img src="http://www.placehold.it/1280x720.jpg">
-				</div>
-			</div>
+      <div class="plugin-slider text-center" image-carousel>
+        <div class="plugin-slide item">
+          <img src="http://www.placehold.it/1280x720.jpg">
+        </div>
+        <div class="plugin-slide item">
+          <img src="http://www.placehold.it/1280x720.jpg">
+        </div>
+        <div class="plugin-slide item">
+          <img src="http://www.placehold.it/1280x720.jpg">
+        </div>
+      </div>
 		</div>
 		<div class="padded text-left">
-			<p class="margin-bottom-zero">WYSIWYG Editor.</p>
+			<p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
 		</div>
-		<div class="plugin-banner clearfix border-bottom-grey">
-			<div class="plugin-slide text-center">
-				<img src="http://www.placehold.it/1280x720.jpg">
-			</div>
-		</div>
+    <span ng-repeat="item in WidgetHome.items">
+      <div class="plugin-banner clearfix border-bottom-grey">
+        <div class="plugin-slide text-center">
+          <img ng-src="{{item.data.topImage || 'http://www.placehold.it/1280x720.jpg'}}">
+        </div>
+      </div>
 		<div class="padded text-left">
-			<a class="text-primary">This is a title</a>
-			<p class="margin-bottom-zero">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-		</div>
-		<div class="plugin-banner clearfix border-bottom-grey">
-			<div class="plugin-slide text-center">
-				<img src="http://www.placehold.it/1280x720.jpg">
-			</div>
-		</div>
-		<div class="padded text-left">
-			<a class="text-primary">This is a title</a>
-			<p class="margin-bottom-zero">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-		</div>
-		<div class="plugin-banner clearfix border-bottom-grey">
-			<div class="plugin-slide text-center">
-				<img src="http://www.placehold.it/1280x720.jpg">
-			</div>
-		</div>
-		<div class="padded text-left">
-			<a class="text-primary">This is a title</a>
-			<p class="margin-bottom-zero">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-		</div>
+      <a class="text-primary"  href="#/people">{{item.data.fName}} {{item.data.lName}}</a>
+      <p class="margin-bottom-zero">{{item.data.bodyContent}}</p>
+    </div>
+    </span>
 	</div>
 </div>

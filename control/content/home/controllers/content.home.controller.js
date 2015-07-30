@@ -10,7 +10,15 @@
                 FIRST_NAME_A_TO_Z = 'First Name A-Z',
                 FIRST_NAME_Z_TO_A = 'First Name Z-A',
                 LAST_NAME_A_TO_Z = 'Last Name A-Z',
-                LAST_NAME_Z_TO_A = 'Last Name Z-A';
+                LAST_NAME_Z_TO_A = 'Last Name Z-A',
+                _pageSize = 20,
+                _page = 0,
+                searchOptions = {
+                    filter: {"$json.fName": {"$regex": '/*'}}
+                    , page: _page
+                    , pageSize: _pageSize + 1 // the plus one is to check if there are any more
+                };
+
             var _self = this;
             _self.items = null;
             _self.data = null;
@@ -34,7 +42,6 @@
             };
             _self.DeepLinkCopyUrl = false;
             var tmrDelayForPeopleInfo = null;
-            var tmrDelayForPeoples = null;
             var _data = {
                 content: {
                     images: [],
@@ -47,6 +54,7 @@
                     backgroundImage: ''
                 }
             };
+
             var saveData = function (newObj, tag) {
                 if (newObj == undefined)return;
                 Buildfire.datastore.save(newObj, tag, function (err, result) {
@@ -56,18 +64,22 @@
                         console.log('------------data saved-------', result);
                 });
             };
-            var getContentItems = function () {
-                Buildfire.datastore.get(TAG_NAMES.PEOPLES, function (err, result) {
-                    if (err && err.code !== ERROR_CODE.NOT_FOUND) {
+
+            var getContentItems = function (_searchOptions) {
+                Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                    if (err) {
                         console.error('-----------err in getting list-------------', err);
                     }
-                    else if (result) {
-                        _self.items = result.data;
+                    else {
+                        _self.items = result;
+                        if (result.length > _pageSize) {// to indicate there are more
+                            console.log('-------More Data available--------');
+                        }
                         $scope.$digest();
-                        if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                     }
                 });
             };
+
             var getContentPeopleInfo = function () {
                 Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {
@@ -84,9 +96,10 @@
                         $scope.$digest();
                         if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                     }
-                    getContentItems();
+                    getContentItems(searchOptions);
                 });
             };
+
             getContentPeopleInfo();
 
             _self.openDeepLinkDialog = function () {
@@ -100,13 +113,29 @@
             _self.openRemoveDialog = function () {
                 window.openDialog('remove.html', null, 'sm', null);
             };
+
             _self.openImportCSVDialog = function () {
-                window.openDialog('importCSV.html', null, 'sm', null);
+                var modalInstance = $modal
+                    .open({
+                        templateUrl: 'home/modals/import-csv.html',
+                        controller: 'ImportCSVPopupCtrl',
+                        controllerAs: 'ImportCSVPopup',
+                        size: 'sm'
+                    });
+                modalInstance.result.then(function (data) {
+                    console.log('Data----------',data);
+                }, function (data) {
+                    if (data) {
+                        console.log('Data----------',data);
+
+                    }
+                });
             };
+
             _self.removeListItem = function (_index) {
                 var modalInstance = $modal
                     .open({
-                        templateUrl: 'home/modals/remove-peoples.html',
+                        templateUrl: 'home/modals/remove-people.html',
                         controller: 'RemovePeoplePopupCtrl',
                         controllerAs: 'RemovePeoplePopup',
                         size: 'sm',
@@ -125,51 +154,48 @@
                     }
                 });
             };
+
             _self.searchListItem = function (value) {
 
             };
-            _self.sortPeoplesBy = function (value) {
-                var searchOptions =null;
-                switch (value){
+
+            _self.sortPeopleBy = function (value) {
+                switch (value) {
                     case MANUALLY:
+                        delete searchOptions.sort;
                         break;
                     case OLDEST_TO_NEWEST:
+                        searchOptions.sort = {"field": "dateCrated", "desc": false};
                         break;
                     case NEWEST_TO_OLDEST:
+                        searchOptions.sort = {"field": "dateCrated", "desc": true};
                         break;
                     case FIRST_NAME_A_TO_Z:
-                        searchOptions = {
-                            "sort": {"field": "fName", "desc": false}
-                        };
+                        searchOptions.sort = {"field": "fName", "desc": false};
                         break;
                     case FIRST_NAME_Z_TO_A:
-                        searchOptions = {
-                            "sort": {"field": "fName", "desc": true}
-                        };
+                        searchOptions.sort = {"field": "fName", "desc": true};
                         break;
                     case LAST_NAME_A_TO_Z:
-                        searchOptions = {
-                            "sort": {"field": "lName", "desc": false}
-                        };
+                        searchOptions.sort = {"field": "lName", "desc": false};
                         break;
                     case LAST_NAME_Z_TO_A:
-                        searchOptions = {
-                            "sort": {"field": "lName", "desc": true}
-                        };
+                        searchOptions.sort = {"field": "lName", "desc": true};
                         break;
                 }
-                if(searchOptions) {
+                if (searchOptions) {
                     _self.data.content.sortBy = value;
-                    /*Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLES, function (err, records) {
+                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
                         if (err)
                             console.error('There was a problem retrieving your data');
                         else {
-                            console.error('Sorted Elements: ' + records);
+                            _self.items=records;
+                            $scope.$digest();
                         }
-                    });*/
-                }else if(value && !searchOptions){
+                    });
+                } else if (value && !searchOptions) {
                     _self.data.content.sortBy = value;
-                } else{
+                } else {
                     console.error('There was a problem sorting your data');
                 }
             };
@@ -195,17 +221,17 @@
                 });
             };
 
-            _self.openAddImageDeeplinkUrlPopup = function (_index) {
+            _self.openAddImageLinkPopup = function (_index) {
                 var modalInstance = $modal
                     .open({
-                        templateUrl: 'home/modals/add-image-deeplinkurl.html',
-                        controller: 'AddImageDeeplinkUrlPopupCtrl',
-                        controllerAs: 'AddImageDeeplinkUrlPopup',
+                        templateUrl: 'home/modals/add-image-link.html',
+                        controller: 'AddImageLinkPopupCtrl',
+                        controllerAs: 'AddImageLinkPopup',
                         size: 'sm'
                     });
-                modalInstance.result.then(function (deeplink) {
-                    if (deeplink && _self.data) {
-                        _self.data.content.images[_index].deepLinkUrl = deeplink;
+                modalInstance.result.then(function (_link) {
+                    if (_link && _self.data) {
+                        _self.data.content.images[_index].link = _link;
                     } else {
                         console.error('Unable to load data.')
                     }
@@ -244,10 +270,9 @@
                     _self.data = event.obj;
                     $scope.$digest();
                     if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
-                } else if (event && event.tag === TAG_NAMES.PEOPLES) {
+                } else if (event && event.tag === TAG_NAMES.PEOPLE) {
                     _self.items = event.obj;
                     $scope.$digest();
-                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                 }
             });
             var saveDataWithDelay = function (newObj) {
@@ -258,21 +283,10 @@
                     }, 500);
                 }
             };
-            var saveItemsWithDelay = function (newItems) {
-                if (newItems) {
-                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
-                    tmrDelayForPeoples = setTimeout(function () {
-                        saveData(JSON.parse(angular.toJson(newItems)), TAG_NAMES.PEOPLES);
-                    }, 500);
-                }
-            };
+
             $scope.$watch(function () {
                 return _self.data;
             }, saveDataWithDelay, true);
-
-            $scope.$watch(function () {
-                return _self.items;
-            }, saveItemsWithDelay, true);
 
         }])
 })(window.angular, window);

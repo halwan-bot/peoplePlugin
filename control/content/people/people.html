@@ -13,10 +13,10 @@
         <div class="main col-md-9 pull-right">
             <div class="screens clearfix">
                 <div class="screen layouticon pull-left">
-                    <a class="border-grey border-radius-three default-background-hover" ng-hide="ContentPeoples.item.topImage" ng-click="ContentPeoples.selectTopImage()"></a>
-                  <span  ng-show="ContentPeoples.item.topImage">
-                    <img src="{{ContentPeoples.item.topImage}}">
-                    <span style="float: right; top: -50px; content: '-';" class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="ContentPeoples.removeTopImage()"></span>
+                    <a class="border-grey border-radius-three default-background-hover" ng-hide="ContentPeople.item.topImage" ng-click="ContentPeople.selectTopImage()"></a>
+                  <span  ng-show="ContentPeople.item.topImage">
+                    <img src="{{ContentPeople.item.topImage}}">
+                    <span style="float: right; top: -50px; content: '-';" class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="ContentPeople.removeTopImage()"></span>
                   </span>
                 </div>
             </div>
@@ -28,7 +28,7 @@
             <span>First Name</span>
         </div>
         <div class="main col-md-9 pull-right">
-            <input type="text" class="form-control" ng-model="ContentPeoples.item.fName" placeholder="">
+            <input type="text" class="form-control" ng-model="ContentPeople.item.fName" placeholder="">
         </div>
     </div>
     <hr class="none">
@@ -37,7 +37,7 @@
             <span>Last Name</span>
         </div>
         <div class="main col-md-9 pull-right">
-            <input type="text" class="form-control" ng-model="ContentPeoples.item.lName" placeholder="">
+            <input type="text" class="form-control" ng-model="ContentPeople.item.lName" placeholder="">
         </div>
     </div>
     <hr class="none">
@@ -46,7 +46,7 @@
             <span>Position</span>
         </div>
         <div class="main col-md-9 pull-right">
-            <input type="text" class="form-control" ng-model="ContentPeoples.item.position" placeholder="">
+            <input type="text" class="form-control" ng-model="ContentPeople.item.position" placeholder="">
         </div>
     </div>
     <hr class="none">
@@ -55,7 +55,7 @@
             <span>Deep Link URL</span>
         </div>
         <div class="main col-md-9 pull-right">
-            <span>{{ContentPeoples.item.deepLinkUrl}}</span>
+            <span>{{ContentPeople.item.deepLinkUrl}}</span>
         </div>
     </div>
     <hr class="none">
@@ -64,7 +64,8 @@
             <span>Body Content</span>
         </div>
         <div class="main col-md-9 pull-right">
-            <textarea class="form-control" ng-model="ContentPeoples.item.bodyContent" placeholder="WYSIWYG"></textarea>
+            <textarea class="form-control" ng-model="ContentPeople.item.bodyContent"
+                      placeholder="WYSIWYG"></textarea>
         </div>
     </div>
     <hr class="none">
@@ -74,17 +75,17 @@
         </div>
         <div class="main col-md-9 pull-right">
             <div class="clearfix">
-                <a class="btn btn-success pull-left" ng-click="ContentPeoples.openAddLinkPopup()">Add Links</a>
+                <a class="btn btn-success pull-left" ng-click="ContentPeople.openAddLinkPopup()">Add Links</a>
             </div>
-            <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey" ui-sortable="ContentPeoples.linksSortableOptions" ng-model="ContentPeoples.item.links">
-                <div class="d-item" ng-repeat="_link in ContentPeoples.item.links">
+            <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey" ui-sortable="ContentPeople.linksSortableOptions" ng-model="ContentPeople.item.links">
+                <div class="d-item" ng-repeat="_link in ContentPeople.item.socailLinks">
                     <span class="icon icon-menu cursor-grab"></span>
                     <img ng-src={{_link.iconImageUrl}} class="border-radius-four border-grey">
 
                     <div class="copy pull-right width66">
                         <span class="width34 title ellipsis">{{_link.title}}</span>
                         <span class="width34 title ellipsis">{{_link.url}}</span>
-                        <span class="btn-icon btn-delete-icon btn-danger btn-cross" ng-click="ContentPeoples.removeLink($index)"></span>
+                        <span class="btn-icon btn-delete-icon btn-danger btn-cross" ng-click="ContentPeople.removeLink($index)"></span>
                     </div>
                 </div>
             </div>
@@ -92,13 +93,13 @@
     </div>
     <hr class="none">
     <div class="item clearfix row">
-		<div class="main col-md-9 pull-right">
-			<div class="col-md-6 pull-left padding-left-zero padding-right-ten">
-		       	<a class="btn btn-danger pull-right stretch" href="#/">Cancel</a>
-		    </div>        
-			<div class="col-md-6 pull-right padding-right-zero padding-left-ten">
-            	<a class="btn btn-primary pull-right stretch" ng-click="ContentPeoples.addNewItem('/')" href="javaScript:void(0);">Save</a>
-  			</div>
-		</div>
+        <div class="main col-md-9 pull-right">
+            <div class="col-md-6 pull-left padding-left-zero padding-right-ten">
+                <a class="btn btn-danger pull-right stretch" href="#/">Cancel</a>
+            </div>
+            <div class="col-md-6 pull-right padding-right-zero padding-left-ten">
+                <a class="btn btn-primary pull-right stretch" ng-click="ContentPeople.addNewItem()" href="javaScript:void(0);">Save</a>
+            </div>
+        </div>
     </div>
 </div>

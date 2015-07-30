@@ -4,7 +4,7 @@
         .module('peoplePluginDesign', ['ngAnimate', 'ngRoute',  'ui.bootstrap'])
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
-            PEOPLES: 'peoples'
+            PEOPLE: 'people'
         })
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider

@@ -13,9 +13,10 @@
                         aria-hidden="true" style="margin-top: 10px"></span>
                     <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
                     <span class="title ellipsis width-inherit">{{image.title}}</span>
+                    {{image.link}}
                     <div class="copy pull-right list-view width-inherit">
-                        <a ng-hide="image.deepLinkUrl" ng-click="ContentHome.openAddImageDeeplinkUrlPopup($index)" class="btn btn-primary margin-left-ten">Link</a>
-                        <a ng-show="image.deepLinkUrl" class="btn btn-success margin-left-ten">Linked</a>
+                        <a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)" class="btn btn-primary margin-left-ten">Link</a>
+                        <a ng-show="image.link" class="btn btn-success margin-left-ten">Linked</a>
                         <span class="btn-icon btn-delete-icon btn-danger" ng-click="ContentHome.removeCarouselImage($index)"></span>
                     </div>
                 </div>
@@ -57,13 +58,13 @@
                 </button>
                 <ul class="dropdown-menu extended" role="menu">
                     <li ng-repeat="value in ContentHome.sortingOptions"
-                        ng-Click="ContentHome.sortPeoplesBy(this.value)">
+                        ng-Click="ContentHome.sortPeopleBy(this.value)">
                         <a tabindex="-1" class="transition-third">{{value}}</a>
                     </li>
                 </ul>
             </div>
             <div class="col-md-4 pull-right">
-                <a class="btn btn-success pull-right stretch" href="#/peoples">Add New Item</a>
+                <a class="btn btn-success pull-right stretch" href="#/people">Add New Item</a>
             </div>
             </div>
         </div>
@@ -85,14 +86,13 @@
             <div class="d-item double-line square-icon" ng-repeat="item in ContentHome.items">
                 <span class="icon icon-menu cursor-grab"
                       aria-hidden="true" style="margin-top: 10px"></span>
-                <img ng-src={{item.topImage}} class="border-radius-four border-grey">
+                <img ng-src={{item.data.topImage}} class="border-radius-four border-grey">
               <a class="text-primary"><span
-                  class="title ellipsis width-inherit">{{item.fName+' '+item.lName}}</span></a>
-                <div class="copy pull-right width-inherit">
-
-                    <span class="title ellipsis pull-left width-inherit">{{item.description}}</span>
+                  class="title ellipsis width34">{{item.data.fName+' '+item.data.lName}}</span></a>
+                <div class="copy pull-right width34">
+                    <span class="title ellipsis pull-left width34 item-body-content">{{item.data.bodyContent}}</span>
                         <span class="btn-icon btn-link-icon btn-primary transition-third"
-                              ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.deepLinkUrl"></span>
+                              ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.data.deepLinkUrl"></span>
                         <span class="btn-icon btn-delete-icon btn-danger transition-third"
                               ng-click="ContentHome.removeListItem($index)"></span>
                     <!--<span class="btn-icon btn-link-icon btn-primary transition-third" ng-click="ContentHome.openDeepLinkDialog()"></span>

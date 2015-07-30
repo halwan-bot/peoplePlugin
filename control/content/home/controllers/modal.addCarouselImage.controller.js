@@ -8,7 +8,8 @@
             _self.imageInfo = {
                 imageUrl: '',
                 title: '',
-                deepLinkUrl: ''
+                link:'',
+                target:''
             };
             _self.ok = function (imageInfo) {
                 imageInfo.imageUrl = imageInfo.imageUrl ? imageInfo.imageUrl : 'http://www.placehold.it/80x50';

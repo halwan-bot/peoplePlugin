@@ -7,8 +7,8 @@
             var WidgetHome = this;
             var currentItemLayout,
                 currentListLayout,
-                _pageSize = 11,
-                _page = 1,
+                _pageSize = 20,
+                _page = 0,
                 searchOptions = {
                     filter: {"$json.fName": {"$regex": '/*'}}
                     , page: _page

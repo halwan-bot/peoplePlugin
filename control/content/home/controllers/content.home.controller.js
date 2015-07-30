@@ -11,8 +11,8 @@
                 FIRST_NAME_Z_TO_A = 'First Name Z-A',
                 LAST_NAME_A_TO_Z = 'Last Name A-Z',
                 LAST_NAME_Z_TO_A = 'Last Name Z-A',
-                _pageSize = 11,
-                _page = 1,
+                _pageSize = 20,
+                _page = 0,
                 searchOptions = {
                     filter: {"$json.fName": {"$regex": '/*'}}
                     , page: _page
@@ -73,7 +73,7 @@
                     else {
                         _self.items = result;
                         if (result.length > _pageSize) {// to indicate there are more
-                            console.error('-------More Data available--------');
+                            console.log('-------More Data available--------');
                         }
                         $scope.$digest();
                     }
@@ -165,10 +165,10 @@
                         delete searchOptions.sort;
                         break;
                     case OLDEST_TO_NEWEST:
-                        delete searchOptions.sort
+                        searchOptions.sort = {"field": "dateCrated", "desc": false};
                         break;
                     case NEWEST_TO_OLDEST:
-                        delete  searchOptions.sort;
+                        searchOptions.sort = {"field": "dateCrated", "desc": true};
                         break;
                     case FIRST_NAME_A_TO_Z:
                         searchOptions.sort = {"field": "fName", "desc": false};
@@ -189,7 +189,8 @@
                         if (err)
                             console.error('There was a problem retrieving your data');
                         else {
-                            console.error('Sorted Elements: ' + records);
+                            _self.items=records;
+                            $scope.$digest();
                         }
                     });
                 } else if (value && !searchOptions) {

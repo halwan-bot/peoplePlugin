@@ -8,7 +8,7 @@
             var currentItemLayout,
                 currentListLayout;
             var getContentItems = function () {
-                Buildfire.datastore.get(TAG_NAMES.PEOPLES, function (err, result) {
+                Buildfire.datastore.get(TAG_NAMES.PEOPLE, function (err, result) {
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                         console.error('-----------err in getting list-------------', err);
                     }
@@ -41,12 +41,12 @@
             Buildfire.datastore.onUpdate(function (event) {
                 if (event && event.tag) {
                     switch (event.tag) {
-                        case TAG_NAMES.PEOPLES:
+                        case TAG_NAMES.PEOPLE:
                             //update the People/Item info template in emulator
                             break;
                         case TAG_NAMES.PEOPLE_INFO:
                             if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {
-                                Location.goTo("#/peoples");
+                                Location.goTo("#/people");
                             }
                             else if (event.obj.design.listLayout && currentListLayout != event.obj.design.listLayout) {
                                 WidgetHome.data.design.listLayout = event.obj.design.listLayout;

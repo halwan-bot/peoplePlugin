@@ -5,7 +5,7 @@
         .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap','ui.sortable','ngClipboard'])
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
-            PEOPLES: 'peoples'
+            PEOPLE: 'people'
         })
         .constant('ERROR_CODE', {
             NOT_FOUND: 'NOTFOUND'
@@ -22,10 +22,10 @@
                     controllerAs: 'ContentHome',
                     controller: 'ContentHomeCtrl'
                 })
-                .when('/peoples', {
-                    templateUrl: 'peoples/peoples.html',
-                    controllerAs: 'ContentPeoples',
-                    controller: 'ContentPeoplesCtrl'
+                .when('/people', {
+                    templateUrl: 'people/people.html',
+                    controllerAs: 'ContentPeople',
+                    controller: 'ContentPeopleCtrl'
                 })
                 .otherwise('/');
         }])

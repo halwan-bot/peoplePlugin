@@ -2,7 +2,7 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentPeoplesCtrl', ['$scope', '$location', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', 'STATUS_CODE',
+        .controller('ContentPeopleCtrl', ['$scope', '$location', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', 'STATUS_CODE',
             function ($scope, $location, $modal, Buildfire, TAG_NAMES, ERROR_CODE, STATUS_CODE) {
                 var _self = this;
                 _self.items = [];
@@ -34,27 +34,27 @@
                     $location.path(path)
                 };
 
-                Buildfire.datastore.get(TAG_NAMES.PEOPLES, function (err, result) {
+                Buildfire.datastore.get(TAG_NAMES.PEOPLE, function (err, result) {
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                         console.error('-----------err-------------', err);
                     }
                     else if (err && err.code === ERROR_CODE.NOT_FOUND) {
-                        saveData(JSON.parse(angular.toJson(_self.items)), TAG_NAMES.PEOPLES);
+                        saveData(JSON.parse(angular.toJson(_self.items)), TAG_NAMES.PEOPLE);
                     }
                     else if (result) {
                         _self.items = result.data;
                         $scope.$digest();
-                        if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+                        if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
                     }
                 });
 
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.tag) {
                         switch (event.tag) {
-                            case TAG_NAMES.PEOPLES:
+                            case TAG_NAMES.PEOPLE:
                                 //update the People/Item info template in emulator
                                 _self.items = event.obj;
-                                if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+                                if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
                                 break;
                             case TAG_NAMES.PEOPLE_INFO:
                                 //update the People list template in emulator
@@ -70,7 +70,7 @@
                 _self.openAddLinkPopup = function () {
                     var modalInstance = $modal
                         .open({
-                            templateUrl: 'peoples/modals/add-item-link.html',
+                            templateUrl: 'people/modals/add-item-link.html',
                             controller: 'AddItemLinkPopupCtrl',
                             controllerAs: 'AddItemLinkPopup',
                             size: 'sm'
@@ -89,11 +89,11 @@
                 _self.removeLink = function (_index) {
                     _self.item.links.splice(_index, 1);
                 };
-                var tmrDelayForPeoples = null;
+                var tmrDelayForPeople = null;
                 var saveItemsWithDelay = function (newObj) {
-                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
-                    tmrDelayForPeoples = setTimeout(function () {
-                        saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLES);
+                    if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
+                    tmrDelayForPeople = setTimeout(function () {
+                        saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
                     }, 500);
                 };
 

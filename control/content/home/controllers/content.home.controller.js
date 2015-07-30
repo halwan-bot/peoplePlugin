@@ -34,7 +34,7 @@
             };
             _self.DeepLinkCopyUrl = false;
             var tmrDelayForPeopleInfo = null;
-            var tmrDelayForPeoples = null;
+            var tmrDelayForPeople = null;
             var _data = {
                 content: {
                     images: [],
@@ -57,14 +57,14 @@
                 });
             };
             var getContentItems = function () {
-                Buildfire.datastore.get(TAG_NAMES.PEOPLES, function (err, result) {
+                Buildfire.datastore.get(TAG_NAMES.PEOPLE, function (err, result) {
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                         console.error('-----------err in getting list-------------', err);
                     }
                     else if (result) {
                         _self.items = result.data;
                         $scope.$digest();
-                        if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+                        if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
                     }
                 });
             };
@@ -106,7 +106,7 @@
             _self.removeListItem = function (_index) {
                 var modalInstance = $modal
                     .open({
-                        templateUrl: 'home/modals/remove-peoples.html',
+                        templateUrl: 'home/modals/remove-people.html',
                         controller: 'RemovePeoplePopupCtrl',
                         controllerAs: 'RemovePeoplePopup',
                         size: 'sm',
@@ -128,7 +128,7 @@
             _self.searchListItem = function (value) {
 
             };
-            _self.sortPeoplesBy = function (value) {
+            _self.sortPeopleBy = function (value) {
                 var searchOptions =null;
                 switch (value){
                     case MANUALLY:
@@ -160,7 +160,7 @@
                 }
                 if(searchOptions) {
                     _self.data.content.sortBy = value;
-                    /*Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLES, function (err, records) {
+                    /*Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
                         if (err)
                             console.error('There was a problem retrieving your data');
                         else {
@@ -244,10 +244,10 @@
                     _self.data = event.obj;
                     $scope.$digest();
                     if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
-                } else if (event && event.tag === TAG_NAMES.PEOPLES) {
+                } else if (event && event.tag === TAG_NAMES.PEOPLE) {
                     _self.items = event.obj;
                     $scope.$digest();
-                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
+                    if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
                 }
             });
             var saveDataWithDelay = function (newObj) {
@@ -260,9 +260,9 @@
             };
             var saveItemsWithDelay = function (newItems) {
                 if (newItems) {
-                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
-                    tmrDelayForPeoples = setTimeout(function () {
-                        saveData(JSON.parse(angular.toJson(newItems)), TAG_NAMES.PEOPLES);
+                    if (tmrDelayForPeople)clearTimeout(tmrDelayForPeople);
+                    tmrDelayForPeople = setTimeout(function () {
+                        saveData(JSON.parse(angular.toJson(newItems)), TAG_NAMES.people);
                     }, 500);
                 }
             };

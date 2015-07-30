@@ -5,7 +5,7 @@
         .module('peoplePluginWidget', ['ngAnimate', 'ngRoute', 'ui.bootstrap', 'ui.sortable'])
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
-            PEOPLES: 'peoples'
+            PEOPLE: 'people'
         })
         .constant('ERROR_CODE', {
             NOT_FOUND: 'NOTFOUND'
@@ -17,10 +17,10 @@
                     controllerAs: 'WidgetHome',
                     controller: 'WidgetHomeCtrl'
                 })
-                .when('/peoples', {
-                    templateUrl: 'peoples/peoples.html',
-                    controllerAs: 'WidgetPeoples',
-                    controller: 'WidgetPeoplesCtrl'
+                .when('/people', {
+                    templateUrl: 'people/people.html',
+                    controllerAs: 'WidgetPeople',
+                    controller: 'WidgetPeopleCtrl'
                 })
                 .otherwise('/');
         }])

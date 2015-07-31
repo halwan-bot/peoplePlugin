@@ -27,6 +27,11 @@
                     controllerAs: 'ContentPeople',
                     controller: 'ContentPeopleCtrl'
                 })
+                .when('/people/:itemId', {
+                    templateUrl: 'people/people.html',
+                    controllerAs: 'ContentPeople',
+                    controller: 'UpdateContentPeopleCtrl'
+                })
                 .otherwise('/');
         }])
         .factory('Buildfire', [function () {

@@ -13,7 +13,6 @@
                         aria-hidden="true" style="margin-top: 10px"></span>
                     <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
                     <span class="title ellipsis width-inherit">{{image.title}}</span>
-                    {{image.link}}
                     <div class="copy pull-right list-view width-inherit">
                         <a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)" class="btn btn-primary margin-left-ten">Link</a>
                         <a ng-show="image.link" class="btn btn-success margin-left-ten">Linked</a>
@@ -72,10 +71,10 @@
     <div class="item clearfix row">
         <div class="main col-md-9 pull-right padding-left-zero row">
             <div class="pull-left inner-main col-md-8 padding-zero">
-                <input type="text" class="form-control" placeholder="Plugin Name">
+                <input type="text" class="form-control" ng-model="search" placeholder="Name">
             </div>
             <div class="col-md-4 pull-right">
-                <a class="btn btn-primary pull-right stretch">Search</a>
+                <a class="btn btn-primary pull-right stretch" ng-disabled="!search" ng-click="ContentHome.searchListItem(search)">Search</a>
             </div>
         </div>
     </div>
@@ -87,7 +86,7 @@
                 <span class="icon icon-menu cursor-grab"
                       aria-hidden="true" style="margin-top: 10px"></span>
                 <img ng-src={{item.data.topImage}} class="border-radius-four border-grey">
-              <a class="text-primary"><span
+              <a class="text-primary" href="#/people/{{item.id}}"><span
                   class="title ellipsis width34">{{item.data.fName+' '+item.data.lName}}</span></a>
                 <div class="copy pull-right width34">
                     <span class="title ellipsis pull-left width34 item-body-content">{{item.data.bodyContent}}</span>

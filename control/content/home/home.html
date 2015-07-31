@@ -13,7 +13,6 @@
                         aria-hidden="true" style="margin-top: 10px"></span>
                     <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
                     <span class="title ellipsis width-inherit">{{image.title}}</span>
-                    {{image.link}}
                     <div class="copy pull-right list-view width-inherit">
                         <a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)" class="btn btn-primary margin-left-ten">Link</a>
                         <a ng-show="image.link" class="btn btn-success margin-left-ten">Linked</a>

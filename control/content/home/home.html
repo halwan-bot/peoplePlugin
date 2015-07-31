@@ -39,8 +39,8 @@
         </div>
         <div class="main col-md-9 pull-right">
             <a class="btn btn-primary" ng-click="ContentHome.openImportCSVDialog()">Import CSV</a>
-            <a class="btn btn-primary margin-left-ten">Export CSV</a>
-            <a class="btn btn-primary margin-left-ten">Get Template</a>
+            <a class="btn btn-primary margin-left-ten" ng-click="ContentHome.exportCSV()">Export CSV</a>
+            <a class="btn btn-primary margin-left-ten" ng-click="ContentHome.getTemplate()">Get Template</a>
         </div>
     </div>
     <hr class="none">
@@ -86,7 +86,7 @@
                 <span class="icon icon-menu cursor-grab"
                       aria-hidden="true" style="margin-top: 10px"></span>
                 <img ng-src={{item.data.topImage}} class="border-radius-four border-grey">
-              <a class="text-primary"><span
+              <a class="text-primary" href="#/people/{{item.id}}"><span
                   class="title ellipsis width34">{{item.data.fName+' '+item.data.lName}}</span></a>
                 <div class="copy pull-right width34">
                     <span class="title ellipsis pull-left width34 item-body-content">{{item.data.bodyContent}}</span>

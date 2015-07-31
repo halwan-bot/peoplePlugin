@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, $window, $modal, Buildfire, TAG_NAMES, ERROR_CODE) {
+        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', 'FormatConverter', 'TAG_NAMES', 'ERROR_CODE', function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE) {
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -14,15 +14,13 @@
                 _pageSize = 20,
                 _page = 0,
                 searchOptions = {
-                    filter: {"$json.fName": {"$regex": '/*'}}
-                    , page: _page
-                    , pageSize: _pageSize + 1 // the plus one is to check if there are any more
+                    filter: {"$json.fName": {"$regex": '/*'}}, page: _page, pageSize: _pageSize + 1 // the plus one is to check if there are any more
                 };
 
-            var _self = this;
-            _self.items = null;
-            _self.data = null;
-            _self.sortingOptions = [
+            var ContentHome = this;
+            ContentHome.items = null;
+            ContentHome.data = null;
+            ContentHome.sortingOptions = [
                 MANUALLY,
                 OLDEST_TO_NEWEST,
                 NEWEST_TO_OLDEST,
@@ -31,16 +29,16 @@
                 LAST_NAME_A_TO_Z,
                 LAST_NAME_Z_TO_A
             ];
-            _self.imageSortableOptions = {
+            ContentHome.imageSortableOptions = {
                 handle: '> .cursor-grab'
             };
-            _self.itemSortableOptions = {
+            ContentHome.itemSortableOptions = {
                 handle: '> .cursor-grab',
                 stop: function (e, ui) {
-                    _self.data.content.sortBy = _self.sortingOptions[0];
+                    ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
                 }
             };
-            _self.DeepLinkCopyUrl = false;
+            ContentHome.DeepLinkCopyUrl = false;
             var tmrDelayForPeopleInfo = null;
             var _data = {
                 content: {
@@ -66,18 +64,22 @@
             };
 
             var getContentItems = function (_searchOptions) {
-                Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
-                    if (err) {
-                        console.error('-----------err in getting list-------------', err);
-                    }
-                    else {
-                        _self.items = result;
-                        if (result.length > _pageSize) {// to indicate there are more
-                            console.log('-------More Data available--------');
+                if (ContentHome.data && ContentHome.data.content.sortBy) {
+                    ContentHome.sortPeopleBy(ContentHome.data.content.sortBy);
+                } else {
+                    Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                        if (err) {
+                            console.error('-----------err in getting list-------------', err);
                         }
-                        $scope.$digest();
-                    }
-                });
+                        else {
+                            ContentHome.items = result;
+                            if (result.length > _pageSize) {// to indicate there are more
+                                console.log('-------More Data available--------');
+                            }
+                            $scope.$digest();
+                        }
+                    });
+                }
             };
 
             var getContentPeopleInfo = function () {
@@ -89,9 +91,9 @@
                         saveData(JSON.parse(angular.toJson(_data)), TAG_NAMES.PEOPLE_INFO);
                     }
                     else if (result) {
-                        _self.data = result.data;
-                        if (!_self.data.content.sortBy) {
-                            _self.data.content.sortBy = _self.sortingOptions[0];
+                        ContentHome.data = result.data;
+                        if (!ContentHome.data.content.sortBy) {
+                            ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
                         }
                         $scope.$digest();
                         if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
@@ -102,19 +104,19 @@
 
             getContentPeopleInfo();
 
-            _self.openDeepLinkDialog = function () {
-                _self.DeepLinkCopyUrl = true;
+            ContentHome.openDeepLinkDialog = function () {
+                ContentHome.DeepLinkCopyUrl = true;
                 setTimeout(function () {
-                    _self.DeepLinkCopyUrl = false;
+                    ContentHome.DeepLinkCopyUrl = false;
                     $scope.$apply();
                 }, 1500);
             };
 
-            _self.openRemoveDialog = function () {
+            ContentHome.openRemoveDialog = function () {
                 window.openDialog('remove.html', null, 'sm', null);
             };
 
-            _self.openImportCSVDialog = function () {
+            ContentHome.openImportCSVDialog = function () {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/import-csv.html',
@@ -123,16 +125,57 @@
                         size: 'sm'
                     });
                 modalInstance.result.then(function (data) {
-                    console.log('Data----------',data);
+                    console.log('Data----------', data);
                 }, function (data) {
                     if (data) {
-                        console.log('Data----------',data);
+                        console.log('Data----------', data);
 
                     }
                 });
             };
 
-            _self.removeListItem = function (_index) {
+            ContentHome.exportCSV = function () {
+                if (ContentHome.items) {
+                    var tempData = [];
+                    angular.forEach(angular.copy(ContentHome.items), function (value) {
+                        delete value.data.dateCrated;
+                        tempData.push(value.data);
+                    });
+                    var json = JSON.parse(angular.toJson(tempData));
+                    var csv = FormatConverter.JSON2CSV(json);
+                    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    if (navigator.msSaveBlob) {  // IE 10+
+                     navigator.msSaveBlob(blob, "Items.csv"); }
+                    else {
+                        var link = document.createElement("a");
+                        if (link.download !== undefined) {
+                            var url = URL.createObjectURL(blob);
+                            link.setAttribute("href", url);
+                            link.setAttribute("download", "MyData.csv");
+                            link.style.visibility = 'hidden'; document.body.appendChild(link);
+                            link.click(); document.body.removeChild(link); }
+                    }
+                }
+            };
+
+            ContentHome.getTemplate = function () {
+                var tempData = [{
+                    topImage: null,
+                    iconImage: null,
+                    fName: null,
+                    lName: null,
+                    position: null,
+                    deepLinkUrl: null,
+                    socailLinks: null,
+                    bodyContent: null
+                }];
+                console.log('getTemplate method called');
+                var json = JSON.parse(angular.toJson(tempData));
+                console.log('json-------------------------------', json);
+                var csv = FormatConverter.JSON2CSV(json);
+                $window.open("data:text/csv;charset=utf-8," + escape(csv))
+            };
+            ContentHome.removeListItem = function (_index) {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/remove-people.html',
@@ -141,13 +184,13 @@
                         size: 'sm',
                         resolve: {
                             peopleInfo: function () {
-                                return _self.items[_index];
+                                return ContentHome.items[_index];
                             }
                         }
                     });
                 modalInstance.result.then(function (data) {
                     if (data)
-                        _self.items.splice(_index, 1);
+                        ContentHome.items.splice(_index, 1);
                 }, function (data) {
                     if (data) {
                         console.error('Error----------while removing people----', data)
@@ -155,11 +198,30 @@
                 });
             };
 
-            _self.searchListItem = function (value) {
-
+            ContentHome.searchListItem = function (value) {
+                var fullName = '';
+                if (value) {
+                    if (value.indexOf(' ') !== -1) {
+                        fullName = value.trim().split(' ');
+                        searchOptions.filter = {"$or": [{"$json.fName": fullName[0]}, {"$json.lName": fullName[1]}]};
+                    } else {
+                        fullName = value.trim();
+                        searchOptions.filter = {"$or": [{"$json.fName": fullName}, {"$json.lName": fullName}]};
+                    }
+                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
+                        if (err)
+                            console.error('There was a problem retrieving your data', err);
+                        else {
+                            ContentHome.items = records;
+                            $scope.$digest();
+                        }
+                    });
+                } else {
+                    console.error('Blank name provided');
+                }
             };
 
-            _self.sortPeopleBy = function (value) {
+            ContentHome.sortPeopleBy = function (value) {
                 switch (value) {
                     case MANUALLY:
                         delete searchOptions.sort;
@@ -184,23 +246,23 @@
                         break;
                 }
                 if (searchOptions) {
-                    _self.data.content.sortBy = value;
+                    ContentHome.data.content.sortBy = value;
                     Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
                         if (err)
                             console.error('There was a problem retrieving your data');
                         else {
-                            _self.items=records;
+                            ContentHome.items = records;
                             $scope.$digest();
                         }
                     });
                 } else if (value && !searchOptions) {
-                    _self.data.content.sortBy = value;
+                    ContentHome.data.content.sortBy = value;
                 } else {
                     console.error('There was a problem sorting your data');
                 }
             };
 
-            _self.openAddCarouselImagePopup = function () {
+            ContentHome.openAddCarouselImagePopup = function () {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/add-carousel-image.html',
@@ -209,8 +271,8 @@
                         size: 'sm'
                     });
                 modalInstance.result.then(function (imageInfo) {
-                    if (imageInfo && _self.data) {
-                        _self.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
+                    if (imageInfo && ContentHome.data) {
+                        ContentHome.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
                     } else {
                         console.error('Unable to load data.')
                     }
@@ -221,7 +283,7 @@
                 });
             };
 
-            _self.openAddImageLinkPopup = function (_index) {
+            ContentHome.openAddImageLinkPopup = function (_index) {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/add-image-link.html',
@@ -230,8 +292,8 @@
                         size: 'sm'
                     });
                 modalInstance.result.then(function (_link) {
-                    if (_link && _self.data) {
-                        _self.data.content.images[_index].link = _link;
+                    if (_link && ContentHome.data) {
+                        ContentHome.data.content.images[_index].link = _link;
                     } else {
                         console.error('Unable to load data.')
                     }
@@ -242,7 +304,7 @@
                 });
             };
 
-            _self.removeCarouselImage = function ($index) {
+            ContentHome.removeCarouselImage = function ($index) {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/remove-image-link.html',
@@ -251,13 +313,13 @@
                         size: 'sm',
                         resolve: {
                             imageInfo: function () {
-                                return _self.data.content.images[$index]
+                                return ContentHome.data.content.images[$index]
                             }
                         }
                     });
                 modalInstance.result.then(function (data) {
                     if (data)
-                        _self.data.content.images.splice($index, 1);
+                        ContentHome.data.content.images.splice($index, 1);
                 }, function (data) {
                     if (data) {
                         console.error('Error----------while removing image----', data)
@@ -267,11 +329,11 @@
 
             Buildfire.datastore.onUpdate(function (event) {
                 if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
-                    _self.data = event.obj;
+                    ContentHome.data = event.obj;
                     $scope.$digest();
                     if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                 } else if (event && event.tag === TAG_NAMES.PEOPLE) {
-                    _self.items = event.obj;
+                    ContentHome.items = event.obj;
                     $scope.$digest();
                 }
             });
@@ -285,7 +347,7 @@
             };
 
             $scope.$watch(function () {
-                return _self.data;
+                return ContentHome.data;
             }, saveDataWithDelay, true);
 
         }])

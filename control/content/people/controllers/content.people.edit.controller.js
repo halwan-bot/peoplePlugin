@@ -2,62 +2,56 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentPeopleCtrl', ['$scope', '$location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE',
-            function ($scope, $location, $modal, Buildfire, TAG_NAMES, STATUS_CODE) {
+        .controller('UpdateContentPeopleCtrl', ['$scope', '$location', '$routeParams', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE',
+            function ($scope, $location, $routeParams, $modal, Buildfire, TAG_NAMES, STATUS_CODE) {
+
+                var itemId = $routeParams.itemId;
+                if(!itemId){
+                    console.error('-------------Blank itemId provided-------------');
+                    $location.path("/");
+                    return;
+                }
+
                 var ContentPeople = this;
-                ContentPeople.isUpdating=false;
+                ContentPeople.isUpdating=true;
                 ContentPeople.linksSortableOptions = {
                     handle: '> .cursor-grab'
                 };
-                ContentPeople.item = {
-                    topImage: '',
-                    iconImage: '',
-                    fName: '',
-                    lName: '',
-                    position: '',
-                    deepLinkUrl: '',
-                    dateCrated: +new Date(),
-                    socailLinks: [],
-                    bodyContent: ''
-                };
+                ContentPeople.item = null;
 
-//              var currentInsertedItemId = null;
-
-                /*On click button done it redirects to home*/
-                /*ContentPeople.done = function () {
-                    $location.path("/");
-                };*/
-
-                ContentPeople.addNewItem = function () {
-                    Buildfire.datastore.insert(JSON.parse(angular.toJson(ContentPeople.item)), TAG_NAMES.PEOPLE, false, function (err, data) {
-                        if (err) {
-                            console.error('There was a problem saving your data');
+                var getPeopleDetail = function () {
+                    Buildfire.datastore.get(TAG_NAMES.PEOPLE, itemId, function (err, result) {
+                        if (err && err.code !== ERROR_CODE.NOT_FOUND) {
+                            console.error('-----------Unable to load data-------------', err);
                         }
                         else {
-                         //   currentInsertedItemId = data.id;
+                            ContentPeople.item = result.data;
+                            console.log('-----------Data to update-------------',  result);
+                            $scope.$digest();
+                            if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                         }
                     });
+                };
+
+                getPeopleDetail();
+
+//                On click button done it redirects to home
+                ContentPeople.done = function () {
                     $location.path("/");
                 };
 
-               /* ContentPeople.updateItemData = function (_id, data) {
-                    if (_id) {
+                ContentPeople.updateItemData = function (_id, data) {
+                    if (_id && ContentPeople.item) {
                         Buildfire.datastore.update(_id, data, TAG_NAMES.PEOPLE, function (err) {
                             if (err)
                                 console.error('There was a problem saving your data');
                         })
-                    } else {
-                        ContentPeople.addNewItem();
                     }
                 };
-*/
+
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.status) {
                         switch (event.status) {
-                            case STATUS_CODE.INSERTED:
-                                //currentInsertedItemId = event.id;
-                                console.log('Data inserted Successfully');
-                                break;
                             case STATUS_CODE.UPDATED:
                                 console.log('Data updated Successfully');
                                 break;
@@ -106,18 +100,16 @@
                     ContentPeople.item.topImage = null;
                 };
 
-/*
                 var tmrDelayForPeoples = null;
                 var updateItemsWithDelay = function (newObj) {
                     if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                     tmrDelayForPeoples = setTimeout(function () {
-                        ContentPeople.updateItemData(currentInsertedItemId, JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
+                        ContentPeople.updateItemData(itemId, JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
                     }, 500);
                 };
 
                 $scope.$watch(function () {
                     return ContentPeople.item;
                 }, updateItemsWithDelay, true);
-*/
             }]);
 })(window.angular);

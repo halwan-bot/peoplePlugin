@@ -5,10 +5,12 @@
     <div class="main col-md-9 pull-right">
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
-                <a class="border-grey border-radius-three default-background-hover">{{DesignHome.peopleInfo.design.listLayout}}</a>
+                <a
+                    class="border-grey border-radius-three default-background-hover"><img src="images/{{DesignHome.peopleInfo.design.listLayout}}.png"></a>
             </div>
             <div class="layoutgrid pull-right border-grey border-radius-three">
-				<a ng-repeat="layout in DesignHome.layouts.listLayouts" class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeListLayout(layout.name)">{{layout.name}}</a>
+				<a ng-repeat="layout in DesignHome.layouts.listLayouts" 
+           class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeListLayout(layout.name)"><img src="images/{{layout.name}}.png"></a>
            
 				<!--
 				<ul>
@@ -30,10 +32,11 @@
     <div class="main col-md-9 pull-right">
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
-                <a class="border-grey border-radius-three default-background-hover">{{DesignHome.peopleInfo.design.itemLayout}}</a>
+                <a class="border-grey border-radius-three default-background-hover"><img src="images/{{DesignHome.peopleInfo.design.itemLayout}}.png"></a>
             </div>
             <div class="layoutgrid pull-right border-grey border-radius-three">
-                <a ng-repeat="layout in DesignHome.layouts.itemLayouts" class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeItemLayout(layout.name)">{{layout.name}}</a>
+                <a ng-repeat="layout in DesignHome.layouts.itemLayouts"
+                   class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeItemLayout(layout.name)"><img src="images/{{layout.name}}.png"></a>
         	
 				<!--
 				<ul>

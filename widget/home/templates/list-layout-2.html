@@ -2,14 +2,10 @@
 	<div class="people-plugin listlayout1">
 		<div class="plugin-banner clearfix border-bottom-grey">
       <div class="plugin-slider text-center" image-carousel>
-        <div class="plugin-slide item">
-          <img src="http://www.placehold.it/1280x720.jpg">
-        </div>
-        <div class="plugin-slide item">
-          <img src="http://www.placehold.it/1280x720.jpg">
-        </div>
-        <div class="plugin-slide item">
-          <img src="http://www.placehold.it/1280x720.jpg">
+        <div class="plugin-slide item"
+             ng-repeat="image in WidgetHome.data.content.images">
+          <img
+              ng-src="{{image.imageUrl || 'http://www.placehold.it/1280x720.jpg'}}">
         </div>
       </div>
 		</div>

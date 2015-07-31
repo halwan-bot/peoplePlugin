@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', function ($scope, $window, $modal, Buildfire, TAG_NAMES, ERROR_CODE) {
+        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire','FormatConverter', 'TAG_NAMES', 'ERROR_CODE', function ($scope, $window, $modal, Buildfire,FormatConverter, TAG_NAMES, ERROR_CODE) {
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -132,6 +132,36 @@
                 });
             };
 
+            _self.exportCSV=function(){
+                if(_self.items){
+                    var tempData=[];
+                    angular.forEach(angular.copy(_self.items),function(value){
+                        delete value.data.dateCrated;
+                        tempData.push(value.data);
+                    });
+                    var json = JSON.parse(angular.toJson(tempData));
+                    var csv = FormatConverter.JSON2CSV(json);
+                    $window.open("data:text/csv;charset=utf-8," + escape(csv))
+                }
+            };
+
+            _self.getTemplate=function(){
+                var tempData=[{
+                    topImage: null,
+                    iconImage: null,
+                    fName: null,
+                    lName: null,
+                    position: null,
+                    deepLinkUrl: null,
+                    socailLinks: null,
+                    bodyContent: null
+                }];
+                console.log('getTemplate method called');
+                var json = JSON.parse(angular.toJson(tempData));
+                console.log('json-------------------------------',json);
+                var csv = FormatConverter.JSON2CSV(json);
+                $window.open("data:text/csv;charset=utf-8," + escape(csv))
+            };
             _self.removeListItem = function (_index) {
                 var modalInstance = $modal
                     .open({

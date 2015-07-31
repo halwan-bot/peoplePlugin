@@ -4,12 +4,12 @@
         .module('peoplePluginContent')
         .controller('ContentPeopleCtrl', ['$scope', '$location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE',
             function ($scope, $location, $modal, Buildfire, TAG_NAMES, STATUS_CODE) {
-                var _self = this;
-                _self.isUpdating=false;
-                _self.linksSortableOptions = {
+                var ContentPeople = this;
+                ContentPeople.isUpdating=false;
+                ContentPeople.linksSortableOptions = {
                     handle: '> .cursor-grab'
                 };
-                _self.item = {
+                ContentPeople.item = {
                     topImage: '',
                     iconImage: '',
                     fName: '',
@@ -24,12 +24,12 @@
 //              var currentInsertedItemId = null;
 
                 /*On click button done it redirects to home*/
-                /*_self.done = function () {
+                /*ContentPeople.done = function () {
                     $location.path("/");
                 };*/
 
-                _self.addNewItem = function () {
-                    Buildfire.datastore.insert(JSON.parse(angular.toJson(_self.item)), TAG_NAMES.PEOPLE, false, function (err, data) {
+                ContentPeople.addNewItem = function () {
+                    Buildfire.datastore.insert(JSON.parse(angular.toJson(ContentPeople.item)), TAG_NAMES.PEOPLE, false, function (err, data) {
                         if (err) {
                             console.error('There was a problem saving your data');
                         }
@@ -40,14 +40,14 @@
                     $location.path("/");
                 };
 
-               /* _self.updateItemData = function (_id, data) {
+               /* ContentPeople.updateItemData = function (_id, data) {
                     if (_id) {
                         Buildfire.datastore.update(_id, data, TAG_NAMES.PEOPLE, function (err) {
                             if (err)
                                 console.error('There was a problem saving your data');
                         })
                     } else {
-                        _self.addNewItem();
+                        ContentPeople.addNewItem();
                     }
                 };
 */
@@ -65,7 +65,7 @@
                     }
                 });
 
-                _self.openAddLinkPopup = function () {
+                ContentPeople.openAddLinkPopup = function () {
                     var modalInstance = $modal
                         .open({
                             templateUrl: 'people/modals/add-item-link.html',
@@ -75,7 +75,7 @@
                         });
                     modalInstance.result.then(function (_link) {
                         if (_link) {
-                            _self.item.socailLinks.push(JSON.parse(angular.toJson(_link)));
+                            ContentPeople.item.socailLinks.push(JSON.parse(angular.toJson(_link)));
                         }
                     }, function (err) {
                         if (err) {
@@ -84,8 +84,8 @@
                     });
                 };
 
-                _self.removeLink = function (_index) {
-                    _self.item.socailLinks.splice(_index, 1);
+                ContentPeople.removeLink = function (_index) {
+                    ContentPeople.item.socailLinks.splice(_index, 1);
                 };
 
                 var options = {showIcons: false, multiSelection: false};
@@ -93,17 +93,17 @@
                     if (error) {
                         console.error('Error:', error);
                     } else {
-                        _self.item.topImage = result.selectedFiles && result.selectedFiles[0] || null;
+                        ContentPeople.item.topImage = result.selectedFiles && result.selectedFiles[0] || null;
                         $scope.$digest();
                     }
                 };
 
-                _self.selectTopImage = function () {
+                ContentPeople.selectTopImage = function () {
                     Buildfire.imageLib.showDialog(options, callback);
                 };
 
-                _self.removeTopImage = function () {
-                    _self.item.topImage = null;
+                ContentPeople.removeTopImage = function () {
+                    ContentPeople.item.topImage = null;
                 };
 
 /*
@@ -111,12 +111,12 @@
                 var updateItemsWithDelay = function (newObj) {
                     if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
                     tmrDelayForPeoples = setTimeout(function () {
-                        _self.updateItemData(currentInsertedItemId, JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
+                        ContentPeople.updateItemData(currentInsertedItemId, JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
                     }, 500);
                 };
 
                 $scope.$watch(function () {
-                    return _self.item;
+                    return ContentPeople.item;
                 }, updateItemsWithDelay, true);
 */
             }]);

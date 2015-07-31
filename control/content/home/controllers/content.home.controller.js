@@ -19,10 +19,10 @@
                     , pageSize: _pageSize + 1 // the plus one is to check if there are any more
                 };
 
-            var _self = this;
-            _self.items = null;
-            _self.data = null;
-            _self.sortingOptions = [
+            var ContentHome = this;
+            ContentHome.items = null;
+            ContentHome.data = null;
+            ContentHome.sortingOptions = [
                 MANUALLY,
                 OLDEST_TO_NEWEST,
                 NEWEST_TO_OLDEST,
@@ -31,16 +31,16 @@
                 LAST_NAME_A_TO_Z,
                 LAST_NAME_Z_TO_A
             ];
-            _self.imageSortableOptions = {
+            ContentHome.imageSortableOptions = {
                 handle: '> .cursor-grab'
             };
-            _self.itemSortableOptions = {
+            ContentHome.itemSortableOptions = {
                 handle: '> .cursor-grab',
                 stop: function (e, ui) {
-                    _self.data.content.sortBy = _self.sortingOptions[0];
+                    ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
                 }
             };
-            _self.DeepLinkCopyUrl = false;
+            ContentHome.DeepLinkCopyUrl = false;
             var tmrDelayForPeopleInfo = null;
             var _data = {
                 content: {
@@ -71,7 +71,7 @@
                         console.error('-----------err in getting list-------------', err);
                     }
                     else {
-                        _self.items = result;
+                        ContentHome.items = result;
                         if (result.length > _pageSize) {// to indicate there are more
                             console.log('-------More Data available--------');
                         }
@@ -89,9 +89,9 @@
                         saveData(JSON.parse(angular.toJson(_data)), TAG_NAMES.PEOPLE_INFO);
                     }
                     else if (result) {
-                        _self.data = result.data;
-                        if (!_self.data.content.sortBy) {
-                            _self.data.content.sortBy = _self.sortingOptions[0];
+                        ContentHome.data = result.data;
+                        if (!ContentHome.data.content.sortBy) {
+                            ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
                         }
                         $scope.$digest();
                         if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
@@ -102,19 +102,19 @@
 
             getContentPeopleInfo();
 
-            _self.openDeepLinkDialog = function () {
-                _self.DeepLinkCopyUrl = true;
+            ContentHome.openDeepLinkDialog = function () {
+                ContentHome.DeepLinkCopyUrl = true;
                 setTimeout(function () {
-                    _self.DeepLinkCopyUrl = false;
+                    ContentHome.DeepLinkCopyUrl = false;
                     $scope.$apply();
                 }, 1500);
             };
 
-            _self.openRemoveDialog = function () {
+            ContentHome.openRemoveDialog = function () {
                 window.openDialog('remove.html', null, 'sm', null);
             };
 
-            _self.openImportCSVDialog = function () {
+            ContentHome.openImportCSVDialog = function () {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/import-csv.html',
@@ -132,10 +132,10 @@
                 });
             };
 
-            _self.exportCSV=function(){
-                if(_self.items){
+            ContentHome.exportCSV=function(){
+                if(ContentHome.items){
                     var tempData=[];
-                    angular.forEach(angular.copy(_self.items),function(value){
+                    angular.forEach(angular.copy(ContentHome.items),function(value){
                         delete value.data.dateCrated;
                         tempData.push(value.data);
                     });
@@ -145,7 +145,7 @@
                 }
             };
 
-            _self.getTemplate=function(){
+            ContentHome.getTemplate=function(){
                 var tempData=[{
                     topImage: null,
                     iconImage: null,
@@ -162,7 +162,7 @@
                 var csv = FormatConverter.JSON2CSV(json);
                 $window.open("data:text/csv;charset=utf-8," + escape(csv))
             };
-            _self.removeListItem = function (_index) {
+            ContentHome.removeListItem = function (_index) {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/remove-people.html',
@@ -171,13 +171,13 @@
                         size: 'sm',
                         resolve: {
                             peopleInfo: function () {
-                                return _self.items[_index];
+                                return ContentHome.items[_index];
                             }
                         }
                     });
                 modalInstance.result.then(function (data) {
                     if (data)
-                        _self.items.splice(_index, 1);
+                        ContentHome.items.splice(_index, 1);
                 }, function (data) {
                     if (data) {
                         console.error('Error----------while removing people----', data)
@@ -185,7 +185,7 @@
                 });
             };
 
-            _self.searchListItem = function (value) {
+            ContentHome.searchListItem = function (value) {
                 var fullName = '';
                 if(value) {
                     if (value.indexOf(' ') !== -1) {
@@ -199,7 +199,7 @@
                         if (err)
                             console.error('There was a problem retrieving your data', err);
                         else {
-                            _self.items = records;
+                            ContentHome.items = records;
                             $scope.$digest();
                         }
                     });
@@ -208,7 +208,7 @@
                 }
             };
 
-            _self.sortPeopleBy = function (value) {
+            ContentHome.sortPeopleBy = function (value) {
                 switch (value) {
                     case MANUALLY:
                         delete searchOptions.sort;
@@ -233,23 +233,23 @@
                         break;
                 }
                 if (searchOptions) {
-                    _self.data.content.sortBy = value;
+                    ContentHome.data.content.sortBy = value;
                     Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
                         if (err)
                             console.error('There was a problem retrieving your data');
                         else {
-                            _self.items = records;
+                            ContentHome.items = records;
                             $scope.$digest();
                         }
                     });
                 } else if (value && !searchOptions) {
-                    _self.data.content.sortBy = value;
+                    ContentHome.data.content.sortBy = value;
                 } else {
                     console.error('There was a problem sorting your data');
                 }
             };
 
-            _self.openAddCarouselImagePopup = function () {
+            ContentHome.openAddCarouselImagePopup = function () {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/add-carousel-image.html',
@@ -258,8 +258,8 @@
                         size: 'sm'
                     });
                 modalInstance.result.then(function (imageInfo) {
-                    if (imageInfo && _self.data) {
-                        _self.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
+                    if (imageInfo && ContentHome.data) {
+                        ContentHome.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
                     } else {
                         console.error('Unable to load data.')
                     }
@@ -270,7 +270,7 @@
                 });
             };
 
-            _self.openAddImageLinkPopup = function (_index) {
+            ContentHome.openAddImageLinkPopup = function (_index) {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/add-image-link.html',
@@ -279,8 +279,8 @@
                         size: 'sm'
                     });
                 modalInstance.result.then(function (_link) {
-                    if (_link && _self.data) {
-                        _self.data.content.images[_index].link = _link;
+                    if (_link && ContentHome.data) {
+                        ContentHome.data.content.images[_index].link = _link;
                     } else {
                         console.error('Unable to load data.')
                     }
@@ -291,7 +291,7 @@
                 });
             };
 
-            _self.removeCarouselImage = function ($index) {
+            ContentHome.removeCarouselImage = function ($index) {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/remove-image-link.html',
@@ -300,13 +300,13 @@
                         size: 'sm',
                         resolve: {
                             imageInfo: function () {
-                                return _self.data.content.images[$index]
+                                return ContentHome.data.content.images[$index]
                             }
                         }
                     });
                 modalInstance.result.then(function (data) {
                     if (data)
-                        _self.data.content.images.splice($index, 1);
+                        ContentHome.data.content.images.splice($index, 1);
                 }, function (data) {
                     if (data) {
                         console.error('Error----------while removing image----', data)
@@ -316,11 +316,11 @@
 
             Buildfire.datastore.onUpdate(function (event) {
                 if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
-                    _self.data = event.obj;
+                    ContentHome.data = event.obj;
                     $scope.$digest();
                     if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                 } else if (event && event.tag === TAG_NAMES.PEOPLE) {
-                    _self.items = event.obj;
+                    ContentHome.items = event.obj;
                     $scope.$digest();
                 }
             });
@@ -334,7 +334,7 @@
             };
 
             $scope.$watch(function () {
-                return _self.data;
+                return ContentHome.data;
             }, saveDataWithDelay, true);
 
         }])

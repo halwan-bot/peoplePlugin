@@ -1,13 +1,13 @@
 <div class="holder padding-zero">
 	<div class="people-plugin listlayout1">
 		<div class="plugin-banner clearfix border-bottom-grey">
-			<div class="plugin-slider text-center" image-carousel>
-				<div class="plugin-slide item"
-             ng-repeat="image in WidgetHome.data.content.images">
-					<img
-              ng-src="{{image.imageUrl || 'http://www.placehold.it/1280x720.jpg'}}">
-				</div>
-			</div>
+      <div class="plugin-slider text-center"
+           image-carousel="{{WidgetHome.data.content.images.length}}">
+        <div class="plugin-slide item"
+             data-ng-repeat="image in WidgetHome.data.content.images">
+          <img ng-src="{{image.imageUrl || 'http://www.placehold.it/1280x720.jpg'}}">
+        </div>
+      </div>
 		</div>
 		<div class="padded padding-bottom-zero text-left">
 			<p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>

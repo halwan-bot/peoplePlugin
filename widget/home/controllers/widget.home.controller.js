@@ -82,14 +82,17 @@
         restrict: 'A',
         link: function (scope, elem, attrs) {
           setTimeout(function () {
-
-            $(elem).owlCarousel({
+            var obj = {
               'items': 1,
               'slideSpeed': 300,
               'dots': true,
-              'autoplay': true,
-              'loop': true
-            })
+              'autoplay': true
+            };
+
+            if(parseInt(attrs.imageCarousel, 10) > 1) {
+              obj['loop'] = true;
+            }
+            $(elem).owlCarousel(obj);
           }, 100);
         }
       }

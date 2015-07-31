@@ -123,10 +123,10 @@
                         size: 'sm'
                     });
                 modalInstance.result.then(function (data) {
-                    console.log('Data----------',data);
+                    console.log('Data----------', data);
                 }, function (data) {
                     if (data) {
-                        console.log('Data----------',data);
+                        console.log('Data----------', data);
 
                     }
                 });
@@ -156,7 +156,26 @@
             };
 
             _self.searchListItem = function (value) {
-
+                var fullName = '';
+                if(value) {
+                    if (value.indexOf(' ') !== -1) {
+                        fullName = value.trim().split(' ');
+                        searchOptions.filter = {"$or": [{"$json.fName": fullName[0]}, {"$json.lName": fullName[1]}]};
+                    } else {
+                        fullName = value.trim();
+                        searchOptions.filter = {"$or": [{"$json.fName": fullName}, {"$json.lName": fullName}]};
+                    }
+                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
+                        if (err)
+                            console.error('There was a problem retrieving your data', err);
+                        else {
+                            _self.items = records;
+                            $scope.$digest();
+                        }
+                    });
+                }else{
+                    console.error('Blank name provided');
+                }
             };
 
             _self.sortPeopleBy = function (value) {
@@ -189,7 +208,7 @@
                         if (err)
                             console.error('There was a problem retrieving your data');
                         else {
-                            _self.items=records;
+                            _self.items = records;
                             $scope.$digest();
                         }
                     });

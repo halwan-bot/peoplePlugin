@@ -4,12 +4,12 @@
     angular
         .module('peoplePluginContent')
         .controller('AddImageLinkPopupCtrl', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
-            var _self=this;
-            _self.link='';
-            _self.ok = function (linkUrl) {
+            var AddImageLinkPopup = this;
+            AddImageLinkPopup.link = '';
+            AddImageLinkPopup.ok = function (linkUrl) {
                 $modalInstance.close(linkUrl);
             };
-            _self.cancel = function () {
+            AddImageLinkPopup.cancel = function () {
                 $modalInstance.dismiss('Link Url not provided.');
             };
         }])

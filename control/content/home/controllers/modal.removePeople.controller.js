@@ -8,10 +8,10 @@
             if(peopleInfo){
                 RemovePeoplePopup.peopleInfo = peopleInfo;
             }
-            $scope.ok = function () {
+            RemovePeoplePopup.ok = function () {
                 $modalInstance.close('yes');
             };
-            $scope.cancel = function () {
+            RemovePeoplePopup.cancel = function () {
                 $modalInstance.dismiss('No');
             };
         }])

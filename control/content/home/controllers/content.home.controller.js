@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire','FormatConverter', 'TAG_NAMES', 'ERROR_CODE', function ($scope, $window, $modal, Buildfire,FormatConverter, TAG_NAMES, ERROR_CODE) {
+        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', 'FormatConverter', 'TAG_NAMES', 'ERROR_CODE', function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE) {
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -66,18 +66,22 @@
             };
 
             var getContentItems = function (_searchOptions) {
-                Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
-                    if (err) {
-                        console.error('-----------err in getting list-------------', err);
-                    }
-                    else {
-                        ContentHome.items = result;
-                        if (result.length > _pageSize) {// to indicate there are more
-                            console.log('-------More Data available--------');
+                if (ContentHome.data && ContentHome.data.content.sortBy) {
+                    ContentHome.sortPeopleBy(ContentHome.data.content.sortBy);
+                } else {
+                    Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                        if (err) {
+                            console.error('-----------err in getting list-------------', err);
                         }
-                        $scope.$digest();
-                    }
-                });
+                        else {
+                            ContentHome.items = result;
+                            if (result.length > _pageSize) {// to indicate there are more
+                                console.log('-------More Data available--------');
+                            }
+                            $scope.$digest();
+                        }
+                    });
+                }
             };
 
             var getContentPeopleInfo = function () {
@@ -132,10 +136,10 @@
                 });
             };
 
-            ContentHome.exportCSV=function(){
-                if(ContentHome.items){
-                    var tempData=[];
-                    angular.forEach(angular.copy(ContentHome.items),function(value){
+            ContentHome.exportCSV = function () {
+                if (ContentHome.items) {
+                    var tempData = [];
+                    angular.forEach(angular.copy(ContentHome.items), function (value) {
                         delete value.data.dateCrated;
                         tempData.push(value.data);
                     });
@@ -145,8 +149,8 @@
                 }
             };
 
-            ContentHome.getTemplate=function(){
-                var tempData=[{
+            ContentHome.getTemplate = function () {
+                var tempData = [{
                     topImage: null,
                     iconImage: null,
                     fName: null,
@@ -158,7 +162,7 @@
                 }];
                 console.log('getTemplate method called');
                 var json = JSON.parse(angular.toJson(tempData));
-                console.log('json-------------------------------',json);
+                console.log('json-------------------------------', json);
                 var csv = FormatConverter.JSON2CSV(json);
                 $window.open("data:text/csv;charset=utf-8," + escape(csv))
             };
@@ -187,7 +191,7 @@
 
             ContentHome.searchListItem = function (value) {
                 var fullName = '';
-                if(value) {
+                if (value) {
                     if (value.indexOf(' ') !== -1) {
                         fullName = value.trim().split(' ');
                         searchOptions.filter = {"$or": [{"$json.fName": fullName[0]}, {"$json.lName": fullName[1]}]};
@@ -203,7 +207,7 @@
                             $scope.$digest();
                         }
                     });
-                }else{
+                } else {
                     console.error('Blank name provided');
                 }
             };

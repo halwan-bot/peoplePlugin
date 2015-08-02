@@ -35,7 +35,7 @@
                 .when('/people/:itemId', {
                     templateUrl: 'people/people.html',
                     controllerAs: 'ContentPeople',
-                    controller: 'UpdateContentPeopleCtrl'
+                    controller: 'ContentPeopleCtrl'
                 })
                 .otherwise('/');
         }])

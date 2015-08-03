@@ -14,9 +14,7 @@
                 _pageSize = 20,
                 _page = 0,
                 searchOptions = {
-                    filter: {"$json.fName": {"$regex": '/*'}}
-                    , page: _page
-                    , pageSize: _pageSize + 1 // the plus one is to check if there are any more
+                    filter: {"$json.fName": {"$regex": '/*'}}, page: _page, pageSize: _pageSize + 1 // the plus one is to check if there are any more
                 };
 
             var ContentHome = this;
@@ -145,7 +143,18 @@
                     });
                     var json = JSON.parse(angular.toJson(tempData));
                     var csv = FormatConverter.JSON2CSV(json);
-                    $window.open("data:text/csv;charset=utf-8," + escape(csv))
+                    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    if (navigator.msSaveBlob) {  // IE 10+
+                     navigator.msSaveBlob(blob, "Items.csv"); }
+                    else {
+                        var link = document.createElement("a");
+                        if (link.download !== undefined) {
+                            var url = URL.createObjectURL(blob);
+                            link.setAttribute("href", url);
+                            link.setAttribute("download", "MyData.csv");
+                            link.style.visibility = 'hidden'; document.body.appendChild(link);
+                            link.click(); document.body.removeChild(link); }
+                    }
                 }
             };
 

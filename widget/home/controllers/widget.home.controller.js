@@ -15,8 +15,6 @@
           , pageSize: _pageSize + 1 // the plus one is to check if there are any more
         };
 
-
-      alert("homieee");
       var getContentItems = function (_searchOptions) {
         Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
           if (err) {
@@ -62,7 +60,6 @@
               if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {
                 if(WidgetHome.items && WidgetHome.items.length){
                   var id = WidgetHome.items[0].id;
-                  alert("going to " + id);
                   Location.goTo("#/people/"+ id);
                 }
               }

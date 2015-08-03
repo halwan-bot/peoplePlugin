@@ -9,8 +9,6 @@
         currentListLayout;
       var itemId = $routeParams.id;
 
-      alert("peeps ctrl: " + itemId);
-
       var getPeopleDetail = function () {
         console.log("ItemID::::::::::: ", itemId);
         Buildfire.datastore.get(TAG_NAMES.PEOPLE, itemId, function (err, result) {

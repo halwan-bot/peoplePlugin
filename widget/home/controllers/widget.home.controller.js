@@ -16,6 +16,7 @@
         };
 
 
+      alert("homieee");
       var getContentItems = function (_searchOptions) {
         Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
           if (err) {
@@ -59,7 +60,11 @@
               break;
             case TAG_NAMES.PEOPLE_INFO:
               if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {
-                Location.goTo("#/people");
+                if(WidgetHome.items && WidgetHome.items.length){
+                  var id = WidgetHome.items[0].id;
+                  alert("going to " + id);
+                  Location.goTo("#/people/"+ id);
+                }
               }
               else if (event.obj.design.listLayout && currentListLayout != event.obj.design.listLayout) {
                 currentListLayout = event.obj.design.listLayout;
@@ -109,7 +114,7 @@
           scope.$watch("imagesUpdated", function (newVal, oldVal) {
             if(newVal) {
               $(elem).find(".owl-stage-outer").remove();
-              scope.carousel.trigger("destroy.owl.carousel");
+              scope.carousel && scope.carousel.trigger("destroy.owl.carousel");
               initCarousel();
             }
           });

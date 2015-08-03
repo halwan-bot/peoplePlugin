@@ -14,18 +14,18 @@
 			<div class="people-bg padding-top-fifteen padding-bottom-fifteen clearfix">
 				<div class="people-holder clearfix">	
 					<div class="people-media text-center">
-						<img class="border-grey img-circle" src="http://www.placehold.it/400x400.jpg">
+						<img class="border-grey img-circle"  ng-src="{{WidgetPeople.item.topImage || 'http://www.placehold.it/1280x720.jpg'}}">
 					</div>
 					<div class="people-info text-center col-md-12">
-						<h5 class="ellipsis text-primary"><a class="text-primary">Clair DeLune Clair DeLune Clair DeLune Clair DeLune</a></h5>
-						<h5 class="ellipsis">Manager of Finance Manager of Finance Manager of Finance Manager of Finance</h5>
+						<h5 class="ellipsis text-primary"><a class="text-primary">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</a></h5>
+						<h5 class="ellipsis">{{WidgetPeople.item.position}}</h5>
 						<a class="icon icon-profile" onclick="alert('Open Dynamic Links');"></a>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="padded">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<p>{{WidgetPeople.item.bodyContent}}</p>
 		</div>
 	</div>
 </div>

@@ -17,7 +17,7 @@
                     controllerAs: 'WidgetHome',
                     controller: 'WidgetHomeCtrl'
                 })
-                .when('/people', {
+                .when('/people/:id', {
                     templateUrl: 'people/people.html',
                     controllerAs: 'WidgetPeople',
                     controller: 'WidgetPeopleCtrl'

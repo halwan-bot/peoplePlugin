@@ -9,7 +9,7 @@
                 ContentPeople.linksSortableOptions = {
                     handle: '> .cursor-grab'
                 };
-                ContentPeople.item = {data: {}}
+                ContentPeople.item = {data: {}};
                 function updateMasterItem(item) {
                     ContentPeople.masterItem = angular.copy(item);
                 }
@@ -94,7 +94,7 @@
                         });
                     modalInstance.result.then(function (_link) {
                         if (_link) {
-                            ContentPeople.item.data.links.push(JSON.parse(angular.toJson(_link)));
+                            ContentPeople.item.socailLinks.push(JSON.parse(angular.toJson(_link)));
                         }
                     }, function (err) {
                         if (err) {
@@ -104,7 +104,7 @@
                 };
 
                 ContentPeople.removeLink = function (_index) {
-                    ContentPeople.item.data.links.splice(_index, 1);
+                    ContentPeople.item.socailLinks.splice(_index, 1);
                 };
 
                 var options = {showIcons: false, multiSelection: false};
@@ -124,6 +124,7 @@
                 ContentPeople.removeTopImage = function () {
                     ContentPeople.item.data.topImage = null;
                 };
+
 
                 var tmrDelayForPeoples = null;
                 var updateItemsWithDelay = function (newObj) {

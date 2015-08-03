@@ -16,7 +16,7 @@
                     lName: '',
                     position: '',
                     deepLinkUrl: '',
-                    dateCrated: +new Date(),
+                    dateCreated: +new Date(),
                     socailLinks: [],
                     bodyContent: ''
                 };

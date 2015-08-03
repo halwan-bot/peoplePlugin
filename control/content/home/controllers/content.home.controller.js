@@ -140,7 +140,7 @@
                 if (ContentHome.items) {
                     var tempData = [];
                     angular.forEach(angular.copy(ContentHome.items), function (value) {
-                        delete value.data.dateCrated;
+                        delete value.data.dateCreated;
                         tempData.push(value.data);
                     });
                     var json = JSON.parse(angular.toJson(tempData));
@@ -218,22 +218,22 @@
                         delete searchOptions.sort;
                         break;
                     case OLDEST_TO_NEWEST:
-                        searchOptions.sort = {"field": "dateCrated", "desc": false};
+                        searchOptions.sort = {"dateCreated": 1};
                         break;
                     case NEWEST_TO_OLDEST:
-                        searchOptions.sort = {"field": "dateCrated", "desc": true};
+                        searchOptions.sort = {"dateCreated": -1};
                         break;
                     case FIRST_NAME_A_TO_Z:
-                        searchOptions.sort = {"field": "fName", "desc": false};
+                        searchOptions.sort = {"fName": 1};
                         break;
                     case FIRST_NAME_Z_TO_A:
-                        searchOptions.sort = {"field": "fName", "desc": true};
+                        searchOptions.sort = {"fName": -1};
                         break;
                     case LAST_NAME_A_TO_Z:
-                        searchOptions.sort = {"field": "lName", "desc": false};
+                        searchOptions.sort = {"lName": 1};
                         break;
                     case LAST_NAME_Z_TO_A:
-                        searchOptions.sort = {"field": "lName", "desc": true};
+                        searchOptions.sort = {"lName": -1};
                         break;
                 }
                 if (searchOptions) {

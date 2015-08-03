@@ -18,6 +18,7 @@
                 };
 
             var ContentHome = this;
+            ContentHome.busy = false;
             ContentHome.items = null;
             ContentHome.data = null;
             ContentHome.sortingOptions = [
@@ -63,46 +64,62 @@
                 });
             };
 
-            ContentHome.disableInfiniteScroll=false;
-            ContentHome.checkImmediate=false;
-            ContentHome.loadMore = function() {
-                if(ContentHome.disableInfiniteScroll) return;
-                ContentHome.disableInfiniteScroll=true;
+            var getSearchOptions = function (value) {
+                switch (value) {
+                    case MANUALLY:
+                        delete searchOptions.sort;
+                        break;
+                    case OLDEST_TO_NEWEST:
+                        searchOptions.sort = {"dateCreated": 1};
+                        break;
+                    case NEWEST_TO_OLDEST:
+                        searchOptions.sort = {"dateCreated": -1};
+                        break;
+                    case FIRST_NAME_A_TO_Z:
+                        searchOptions.sort = {"fName": 1};
+                        break;
+                    case FIRST_NAME_Z_TO_A:
+                        searchOptions.sort = {"fName": -1};
+                        break;
+                    case LAST_NAME_A_TO_Z:
+                        searchOptions.sort = {"lName": 1};
+                        break;
+                    case LAST_NAME_Z_TO_A:
+                        searchOptions.sort = {"lName": -1};
+                        break;
+                }
+                return searchOptions;
+            };
+
+            ContentHome.disableInfiniteScroll = false;
+            ContentHome.loadMore = function () {
+                if (ContentHome.busy) {
+                    return;
+                }
+                ContentHome.busy = true;
                 console.log('load More data------------called');
-                searchOptions.page=searchOptions.page + 1;
+                if (ContentHome.data && ContentHome.data.content.sortBy) {
+                    searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
+                }
+
                 Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                     if (err) {
                         console.error('-----------err in getting list-------------', err);
                     }
                     else {
-                        ContentHome.checkImmediate=true;
                         if (result.length > _pageSize) {// to indicate there are more
                             result.pop();
-                        }
-                        ContentHome.items.concat(result);
-                        console.log('Items in loadMore-------------------',ContentHome.items);
-                        $scope.$digest();
-                    }
-                    ContentHome.disableInfiniteScroll=false;
-                });
-            };
-            var getContentItems = function (_searchOptions) {
-                if (ContentHome.data && ContentHome.data.content.sortBy) {
-                    ContentHome.sortPeopleBy(ContentHome.data.content.sortBy);
-                } else {
-                    Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
-                        if (err) {
-                            console.error('-----------err in getting list-------------', err);
+                            ContentHome.disableInfiniteScroll = false;
+                            searchOptions.page = searchOptions.page + 1;
+                            ContentHome.busy = false;
                         }
                         else {
-                            ContentHome.items = result;
-                            if (result.length > _pageSize) {// to indicate there are more
-                                console.log('-------More Data available--------');
-                            }
-                            $scope.$digest();
+                            ContentHome.disableInfiniteScroll = true;
                         }
-                    });
-                }
+                        ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
+                        $scope.$digest();
+                    }
+                });
             };
 
             var getContentPeopleInfo = function () {
@@ -121,7 +138,6 @@
                         $scope.$digest();
                         if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                     }
-                    getContentItems(searchOptions);
                 });
             };
 
@@ -162,17 +178,21 @@
                     });
                     var json = JSON.parse(angular.toJson(tempData));
                     var csv = FormatConverter.JSON2CSV(json);
-                    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
                     if (navigator.msSaveBlob) {  // IE 10+
-                     navigator.msSaveBlob(blob, "Items.csv"); }
+                        navigator.msSaveBlob(blob, "Items.csv");
+                    }
                     else {
                         var link = document.createElement("a");
                         if (link.download !== undefined) {
                             var url = URL.createObjectURL(blob);
                             link.setAttribute("href", url);
                             link.setAttribute("download", "MyData.csv");
-                            link.style.visibility = 'hidden'; document.body.appendChild(link);
-                            link.click(); document.body.removeChild(link); }
+                            link.style.visibility = 'hidden';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
                     }
                 }
             };
@@ -241,43 +261,14 @@
             };
 
             ContentHome.sortPeopleBy = function (value) {
-                switch (value) {
-                    case MANUALLY:
-                        delete searchOptions.sort;
-                        break;
-                    case OLDEST_TO_NEWEST:
-                        searchOptions.sort = {"dateCreated": 1};
-                        break;
-                    case NEWEST_TO_OLDEST:
-                        searchOptions.sort = {"dateCreated": -1};
-                        break;
-                    case FIRST_NAME_A_TO_Z:
-                        searchOptions.sort = {"fName": 1};
-                        break;
-                    case FIRST_NAME_Z_TO_A:
-                        searchOptions.sort = {"fName": -1};
-                        break;
-                    case LAST_NAME_A_TO_Z:
-                        searchOptions.sort = {"lName": 1};
-                        break;
-                    case LAST_NAME_Z_TO_A:
-                        searchOptions.sort = {"lName": -1};
-                        break;
-                }
-                if (searchOptions) {
-                    ContentHome.data.content.sortBy = value;
-                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
-                        if (err)
-                            console.error('There was a problem retrieving your data');
-                        else {
-                            ContentHome.items = records;
-                            $scope.$digest();
-                        }
-                    });
-                } else if (value && !searchOptions) {
-                    ContentHome.data.content.sortBy = value;
-                } else {
+                if (!value) {
                     console.error('There was a problem sorting your data');
+                } else {
+                    ContentHome.items = null;
+                    searchOptions.page = 0;
+                    ContentHome.busy=false;
+                    ContentHome.data.content.sortBy = value;
+                    ContentHome.loadMore();
                 }
             };
 

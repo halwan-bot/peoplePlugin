@@ -65,8 +65,11 @@
                 currentListLayout = event.obj.design.listLayout;
                 WidgetHome.data.design.listLayout = event.obj.design.listLayout;
               }
-              else{
-
+              if (event.obj.content) {
+                WidgetHome.data.content = event.obj.content;
+                $scope.imagesUpdated = true;
+              } else {
+                $scope.imagesUpdated = false;
               }
               break;
           }
@@ -81,19 +84,35 @@
       return {
         restrict: 'A',
         link: function (scope, elem, attrs) {
-          setTimeout(function () {
-            var obj = {
-              'items': 1,
-              'slideSpeed': 300,
-              'dots': true,
-              'autoplay': true
-            };
+          scope.carousel = null;
+          function initCarousel() {
+            scope.carousel = null;
+            setTimeout(function () {
+              var obj = {
+                'items': 1,
+                'slideSpeed': 300,
+                'dots': true,
+                'autoplay': true
+              };
 
-            if(parseInt(attrs.imageCarousel, 10) > 1) {
-              obj['loop'] = true;
+              var totalImages = parseInt(attrs.imageCarousel, 10);
+              if(totalImages) {
+                if(totalImages > 1) {
+                  obj['loop'] = true;
+                }
+                scope.carousel = $(elem).owlCarousel(obj);
+              }
+            }, 100);
+          }
+          initCarousel();
+
+          scope.$watch("imagesUpdated", function (newVal, oldVal) {
+            if(newVal) {
+              $(elem).find(".owl-stage-outer").remove();
+              scope.carousel.trigger("destroy.owl.carousel");
+              initCarousel();
             }
-            $(elem).owlCarousel(obj);
-          }, 100);
+          });
         }
       }
     })

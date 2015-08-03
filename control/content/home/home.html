@@ -7,16 +7,20 @@
             <div class="clearfix">
                 <a class="btn btn-success pull-left" ng-click="ContentHome.openAddCarouselImagePopup()">Add Image</a>
             </div>
-            <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey" ui-sortable="ContentHome.imageSortableOptions" ng-model="ContentHome.data.content.images">
-                <div class="d-item" ng-repeat="image in ContentHome.data.content.images" >
+            <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
+                 ui-sortable="ContentHome.imageSortableOptions" ng-model="ContentHome.data.content.images">
+                <div class="d-item" ng-repeat="image in ContentHome.data.content.images">
                   <span class="icon icon-menu cursor-grab"
                         aria-hidden="true" style="margin-top: 10px"></span>
                     <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
                     <span class="title ellipsis width-inherit">{{image.title}}</span>
+
                     <div class="copy pull-right list-view width-inherit">
-                        <a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)" class="btn btn-primary margin-left-ten">Link</a>
+                        <a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)"
+                           class="btn btn-primary margin-left-ten">Link</a>
                         <a ng-show="image.link" class="btn btn-success margin-left-ten">Linked</a>
-                        <span class="btn-icon btn-delete-icon btn-danger" ng-click="ContentHome.removeCarouselImage($index)"></span>
+                        <span class="btn-icon btn-delete-icon btn-danger"
+                              ng-click="ContentHome.removeCarouselImage($index)"></span>
                     </div>
                 </div>
             </div>
@@ -65,8 +69,8 @@
             <div class="col-md-4 pull-right">
                 <a class="btn btn-success pull-right stretch" href="#/people">Add New Item</a>
             </div>
-            </div>
         </div>
+    </div>
     <hr>
     <div class="item clearfix row">
         <div class="main col-md-9 pull-right padding-left-zero row">
@@ -74,28 +78,36 @@
                 <input type="text" class="form-control" ng-model="search" placeholder="Name">
             </div>
             <div class="col-md-4 pull-right">
-                <a class="btn btn-primary pull-right stretch" ng-disabled="!search" ng-click="ContentHome.searchListItem(search)">Search</a>
+                <a class="btn btn-primary pull-right stretch" ng-disabled="!search"
+                   ng-click="ContentHome.searchListItem(search)">Search</a>
             </div>
         </div>
     </div>
     <hr>
     <div class="item clearfix">
-        <div ng-if="ContentHome.DeepLinkCopyUrl" class="alert alert-success transition-half deep-link"><span class="text-center">DeepLink URL copied to clipboard.</span></div>
-        <div class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four" ui-sortable="ContentHome.itemSortableOptions" ng-model="ContentHome.items">
-            <div class="d-item double-line square-icon" ng-repeat="item in ContentHome.items">
+        <div ng-if="ContentHome.DeepLinkCopyUrl" class="alert alert-success transition-half deep-link"><span
+                class="text-center">DeepLink URL copied to clipboard.</span></div>
+        <div id="scroll-infinight"
+             class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four"
+             ui-sortable="ContentHome.itemSortableOptions" ng-model="ContentHome.items.data">
+            <div  infinite-scroll-distance="1"
+                  infinite-scroll="ContentHome.loadMore()"
+                  infinite-scroll-disabled="ContentHome.busy"
+                  infinite-scroll-container="'#scroll-infinight'">
+                <div class="d-item double-line square-icon" ng-repeat="item in ContentHome.items">
                 <span class="icon icon-menu cursor-grab"
                       aria-hidden="true" style="margin-top: 10px"></span>
-                <img ng-src={{item.data.topImage}} class="border-radius-four border-grey">
-              <a class="text-primary" href="#/people/{{item.id}}"><span
-                  class="title ellipsis width34">{{item.data.fName+' '+item.data.lName}}</span></a>
-                <div class="copy pull-right width34">
-                    <span class="title ellipsis pull-left width34 item-body-content">{{item.data.bodyContent}}</span>
+                    <img ng-src={{item.data.topImage}} class="border-radius-four border-grey">
+                    <a class="text-primary" href="#/people/{{item.id}}"><span
+                            class="title ellipsis width34">{{item.data.fName+' '+item.data.lName}}</span></a>
+
+                    <div class="copy pull-right width34">
+                        <span class="title ellipsis pull-left width34 item-body-content">{{item.data.bodyContent}}</span>
                         <span class="btn-icon btn-link-icon btn-primary transition-third"
                               ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.data.deepLinkUrl"></span>
                         <span class="btn-icon btn-delete-icon btn-danger transition-third"
                               ng-click="ContentHome.removeListItem($index)"></span>
-                    <!--<span class="btn-icon btn-link-icon btn-primary transition-third" ng-click="ContentHome.openDeepLinkDialog()"></span>
-                        <span class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="ContentHome.openRemoveDialog()"></span>-->
+                    </div>
                 </div>
             </div>
         </div>

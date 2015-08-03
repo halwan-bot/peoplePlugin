@@ -129,3 +129,8 @@ To align action buttons in image carousel listing and people listing on home pag
 .item-body-content{
     top: 12px !important;
 }
+
+#scroll-infinight{
+    overflow-y: scroll;
+    height: 300px;
+}

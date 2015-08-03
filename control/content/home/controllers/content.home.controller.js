@@ -11,13 +11,14 @@
                 FIRST_NAME_Z_TO_A = 'First Name Z-A',
                 LAST_NAME_A_TO_Z = 'Last Name A-Z',
                 LAST_NAME_Z_TO_A = 'Last Name Z-A',
-                _pageSize = 20,
+                _pageSize = 10,
                 _page = 0,
                 searchOptions = {
                     filter: {"$json.fName": {"$regex": '/*'}}, page: _page, pageSize: _pageSize + 1 // the plus one is to check if there are any more
                 };
 
             var ContentHome = this;
+            ContentHome.busy = false;
             ContentHome.items = null;
             ContentHome.data = null;
             ContentHome.sortingOptions = [
@@ -63,23 +64,62 @@
                 });
             };
 
-            var getContentItems = function (_searchOptions) {
+            var getSearchOptions = function (value) {
+                switch (value) {
+                    case MANUALLY:
+                        delete searchOptions.sort;
+                        break;
+                    case OLDEST_TO_NEWEST:
+                        searchOptions.sort = {"dateCreated": 1};
+                        break;
+                    case NEWEST_TO_OLDEST:
+                        searchOptions.sort = {"dateCreated": -1};
+                        break;
+                    case FIRST_NAME_A_TO_Z:
+                        searchOptions.sort = {"fName": 1};
+                        break;
+                    case FIRST_NAME_Z_TO_A:
+                        searchOptions.sort = {"fName": -1};
+                        break;
+                    case LAST_NAME_A_TO_Z:
+                        searchOptions.sort = {"lName": 1};
+                        break;
+                    case LAST_NAME_Z_TO_A:
+                        searchOptions.sort = {"lName": -1};
+                        break;
+                }
+                return searchOptions;
+            };
+
+            ContentHome.disableInfiniteScroll = false;
+            ContentHome.loadMore = function () {
+                if (ContentHome.busy) {
+                    return;
+                }
+                ContentHome.busy = true;
+                console.log('load More data------------called');
                 if (ContentHome.data && ContentHome.data.content.sortBy) {
-                    ContentHome.sortPeopleBy(ContentHome.data.content.sortBy);
-                } else {
-                    Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
-                        if (err) {
-                            console.error('-----------err in getting list-------------', err);
+                    searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
+                }
+
+                Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                    if (err) {
+                        console.error('-----------err in getting list-------------', err);
+                    }
+                    else {
+                        if (result.length > _pageSize) {// to indicate there are more
+                            result.pop();
+                            ContentHome.disableInfiniteScroll = false;
+                            searchOptions.page = searchOptions.page + 1;
+                            ContentHome.busy = false;
                         }
                         else {
-                            ContentHome.items = result;
-                            if (result.length > _pageSize) {// to indicate there are more
-                                console.log('-------More Data available--------');
-                            }
-                            $scope.$digest();
+                            ContentHome.disableInfiniteScroll = true;
                         }
-                    });
-                }
+                        ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
+                        $scope.$digest();
+                    }
+                });
             };
 
             var getContentPeopleInfo = function () {
@@ -98,7 +138,6 @@
                         $scope.$digest();
                         if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                     }
-                    getContentItems(searchOptions);
                 });
             };
 
@@ -110,10 +149,6 @@
                     ContentHome.DeepLinkCopyUrl = false;
                     $scope.$apply();
                 }, 1500);
-            };
-
-            ContentHome.openRemoveDialog = function () {
-                window.openDialog('remove.html', null, 'sm', null);
             };
 
             ContentHome.openImportCSVDialog = function () {
@@ -138,22 +173,26 @@
                 if (ContentHome.items) {
                     var tempData = [];
                     angular.forEach(angular.copy(ContentHome.items), function (value) {
-                        delete value.data.dateCrated;
+                        delete value.data.dateCreated;
                         tempData.push(value.data);
                     });
                     var json = JSON.parse(angular.toJson(tempData));
                     var csv = FormatConverter.JSON2CSV(json);
-                    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
                     if (navigator.msSaveBlob) {  // IE 10+
-                     navigator.msSaveBlob(blob, "Items.csv"); }
+                        navigator.msSaveBlob(blob, "Items.csv");
+                    }
                     else {
                         var link = document.createElement("a");
                         if (link.download !== undefined) {
                             var url = URL.createObjectURL(blob);
                             link.setAttribute("href", url);
                             link.setAttribute("download", "MyData.csv");
-                            link.style.visibility = 'hidden'; document.body.appendChild(link);
-                            link.click(); document.body.removeChild(link); }
+                            link.style.visibility = 'hidden';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
                     }
                 }
             };
@@ -222,43 +261,14 @@
             };
 
             ContentHome.sortPeopleBy = function (value) {
-                switch (value) {
-                    case MANUALLY:
-                        delete searchOptions.sort;
-                        break;
-                    case OLDEST_TO_NEWEST:
-                        searchOptions.sort = {"field": "dateCrated", "desc": false};
-                        break;
-                    case NEWEST_TO_OLDEST:
-                        searchOptions.sort = {"field": "dateCrated", "desc": true};
-                        break;
-                    case FIRST_NAME_A_TO_Z:
-                        searchOptions.sort = {"field": "fName", "desc": false};
-                        break;
-                    case FIRST_NAME_Z_TO_A:
-                        searchOptions.sort = {"field": "fName", "desc": true};
-                        break;
-                    case LAST_NAME_A_TO_Z:
-                        searchOptions.sort = {"field": "lName", "desc": false};
-                        break;
-                    case LAST_NAME_Z_TO_A:
-                        searchOptions.sort = {"field": "lName", "desc": true};
-                        break;
-                }
-                if (searchOptions) {
-                    ContentHome.data.content.sortBy = value;
-                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
-                        if (err)
-                            console.error('There was a problem retrieving your data');
-                        else {
-                            ContentHome.items = records;
-                            $scope.$digest();
-                        }
-                    });
-                } else if (value && !searchOptions) {
-                    ContentHome.data.content.sortBy = value;
-                } else {
+                if (!value) {
                     console.error('There was a problem sorting your data');
+                } else {
+                    ContentHome.items = null;
+                    searchOptions.page = 0;
+                    ContentHome.busy=false;
+                    ContentHome.data.content.sortBy = value;
+                    ContentHome.loadMore();
                 }
             };
 

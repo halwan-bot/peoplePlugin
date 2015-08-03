@@ -3,6 +3,9 @@ body.scrollable{
 }
 
 /* Styles for home page carousel - to align and style the slider items and navigation dots*/
+.plugin-banner {
+    overflow: hidden;
+}
 .owl-theme {
     position: relative;
     overflow: auto;
@@ -24,6 +27,7 @@ body.scrollable{
     margin: 5px 7px;
     background: rgba(255, 255, 255, 0.6);
     display: block;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
     -webkit-backface-visibility: visible;
     -webkit-transition: opacity 200ms ease;
     -moz-transition: opacity 200ms ease;
@@ -37,4 +41,5 @@ body.scrollable{
 
 .owl-dots .owl-dot.active span, .owl-dots .owl-dot:hover span {
     background: rgba(255, 255, 255, 1.0);
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }

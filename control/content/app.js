@@ -1,8 +1,13 @@
 'use strict';
 
 (function (angular, buildfire) {
+    //created peoplePluginContent module
     angular
-        .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap', 'ui.sortable', 'ngClipboard'])
+        .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap', 'ui.sortable', 'ngClipboard','infinite-scroll'])
+        //injected ngRoute for routing
+        //injected ui.bootstrap for angular bootstrap component
+        //injected ui.sortable for manual ordering of list
+        //ngClipboard to provide copytoclipboard feature
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
             PEOPLE: 'people'
@@ -30,7 +35,7 @@
                 .when('/people/:itemId', {
                     templateUrl: 'people/people.html',
                     controllerAs: 'ContentPeople',
-                    controller: 'UpdateContentPeopleCtrl'
+                    controller: 'ContentPeopleCtrl'
                 })
                 .otherwise('/');
         }])
@@ -92,7 +97,7 @@
             };
 
             return {
-                CSV2JSON: function(csv) {
+                CSV2JSON: function (csv) {
                     var array = CSVToArray(csv);
                     var objArray = [];
                     for (var i = 1; i < array.length; i++) {
@@ -107,7 +112,7 @@
 
                     return str;
                 },
-                JSON2CSV: function(objArray) {
+                JSON2CSV: function (objArray) {
                     var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
                     var str = '';
                     var line = '';
@@ -121,15 +126,15 @@
                     for (var i = 0; i < array.length; i++) {
                         var line = '';
                         for (var index in array[i]) {
-                            if( typeof array[i][index]!='object'){
-                            var value = array[i][index] + "";
-                            line += '"' + value.replace(/"/g, '""') + '",';
+                            if (typeof array[i][index] != 'object') {
+                                var value = array[i][index] + "";
+                                line += '"' + value.replace(/"/g, '""') + '",';
                             }
-                            else{
-                                var value1=JSON.parse(angular.toJson(array[i][index]));
-                                var line1='';
-                                angular.forEach(value1,function(val){
-                                    line1+=val.iconImageUrl+',';
+                            else {
+                                var value1 = JSON.parse(angular.toJson(array[i][index]));
+                                var line1 = '';
+                                angular.forEach(value1, function (val) {
+                                    line1 += val.iconImageUrl + ',';
 
                                 });
                                 line += '"' + line1.replace(/"/g, '""') + '",';

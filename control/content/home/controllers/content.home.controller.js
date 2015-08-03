@@ -66,7 +66,8 @@
             ContentHome.disableInfiniteScroll=false;
             ContentHome.checkImmediate=false;
             ContentHome.loadMore = function() {
-                ContentHome.checkImmediate=false;
+                if(ContentHome.disableInfiniteScroll) return;
+                ContentHome.disableInfiniteScroll=true;
                 console.log('load More data------------called');
                 searchOptions.page=searchOptions.page + 1;
                 Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
@@ -76,17 +77,13 @@
                     else {
                         ContentHome.checkImmediate=true;
                         if (result.length > _pageSize) {// to indicate there are more
-                            result=result.pop();
-                            ContentHome.disableInfiniteScroll=false;
+                            result.pop();
                         }
-                        else{
-                            ContentHome.disableInfiniteScroll=true;
-                        }
-                        angular.forEach(result,function(value){
-                            ContentHome.items.push(value);
-                        });
+                        ContentHome.items.concat(result);
+                        console.log('Items in loadMore-------------------',ContentHome.items);
                         $scope.$digest();
                     }
+                    ContentHome.disableInfiniteScroll=false;
                 });
             };
             var getContentItems = function (_searchOptions) {

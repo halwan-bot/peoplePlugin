@@ -9,7 +9,6 @@
                 console.log(ImportCSVPopup.fileData);
                 if(ImportCSVPopup.fileData){
                     var json = FormatConverter.CSV2JSON(ImportCSVPopup.fileData);
-                    console.log('json------------------',json);
                     Buildfire.datastore.bulkInsert(JSON.parse(angular.toJson(json)), TAG_NAMES.PEOPLE, function (err, data) {
                         if (err) {
                             console.error('There was a problem while importing the file----',err);

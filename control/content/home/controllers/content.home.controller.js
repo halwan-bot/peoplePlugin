@@ -11,7 +11,7 @@
                 FIRST_NAME_Z_TO_A = 'First Name Z-A',
                 LAST_NAME_A_TO_Z = 'Last Name A-Z',
                 LAST_NAME_Z_TO_A = 'Last Name Z-A',
-                _pageSize = 20,
+                _pageSize = 10,
                 _page = 0,
                 searchOptions = {
                     filter: {"$json.fName": {"$regex": '/*'}}, page: _page, pageSize: _pageSize + 1 // the plus one is to check if there are any more
@@ -63,6 +63,32 @@
                 });
             };
 
+            ContentHome.disableInfiniteScroll=false;
+            ContentHome.checkImmediate=false;
+            ContentHome.loadMore = function() {
+                ContentHome.checkImmediate=false;
+                console.log('load More data------------called');
+                searchOptions.page=searchOptions.page + 1;
+                Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                    if (err) {
+                        console.error('-----------err in getting list-------------', err);
+                    }
+                    else {
+                        ContentHome.checkImmediate=true;
+                        if (result.length > _pageSize) {// to indicate there are more
+                            result=result.pop();
+                            ContentHome.disableInfiniteScroll=false;
+                        }
+                        else{
+                            ContentHome.disableInfiniteScroll=true;
+                        }
+                        angular.forEach(result,function(value){
+                            ContentHome.items.push(value);
+                        });
+                        $scope.$digest();
+                    }
+                });
+            };
             var getContentItems = function (_searchOptions) {
                 if (ContentHome.data && ContentHome.data.content.sortBy) {
                     ContentHome.sortPeopleBy(ContentHome.data.content.sortBy);
@@ -110,10 +136,6 @@
                     ContentHome.DeepLinkCopyUrl = false;
                     $scope.$apply();
                 }, 1500);
-            };
-
-            ContentHome.openRemoveDialog = function () {
-                window.openDialog('remove.html', null, 'sm', null);
             };
 
             ContentHome.openImportCSVDialog = function () {

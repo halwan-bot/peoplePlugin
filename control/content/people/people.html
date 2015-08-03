@@ -97,19 +97,11 @@
         </div>
     </div>
     <hr class="none">
-    <div ng-hide="ContentPeople.isUpdating" class="item clearfix row">
+    <div class="item clearfix row">
         <div class="main col-md-9 pull-right">
             <div class="col-md-6 pull-left padding-left-zero padding-right-ten">
-                <a class="btn btn-danger pull-right stretch" href="#/">Cancel</a>
+                <a class="btn btn-danger pull-right stretch" href="ContentPeople.deleteItem()">Delete</a>
             </div>
-            <div class="col-md-6 pull-right padding-right-zero padding-left-ten">
-                <a class="btn btn-primary pull-right stretch" ng-click="ContentPeople.addNewItem()"
-                   href="javaScript:void(0);">Save</a>
-            </div>
-        </div>
-    </div>
-    <div ng-show="ContentPeople.isUpdating" class="item clearfix row">
-        <div class="main col-md-9 pull-right">
             <div class="col-md-6 pull-right padding-right-zero padding-left-ten">
                 <a class="btn btn-primary pull-right stretch" ng-click="ContentPeople.done()"
                    href="javaScript:void(0);">Done</a>

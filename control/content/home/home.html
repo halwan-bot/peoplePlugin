@@ -82,7 +82,7 @@
     <div class="item clearfix">
         <div ng-if="ContentHome.DeepLinkCopyUrl" class="alert alert-success transition-half deep-link"><span class="text-center">DeepLink URL copied to clipboard.</span></div>
         <div class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four" ui-sortable="ContentHome.itemSortableOptions" ng-model="ContentHome.items">
-            <div class="d-item double-line square-icon" ng-repeat="item in ContentHome.items">
+            <div class="d-item double-line square-icon" ng-repeat="item in ContentHome.items" infinite-scroll='ContentHome.loadMore()' infinite-scroll-distance='2' infinite-scroll-disabled="ContentHome.disableInfiniteScroll" infinite-scroll-immediate-check="ContentHome.checkImmediate">
                 <span class="icon icon-menu cursor-grab"
                       aria-hidden="true" style="margin-top: 10px"></span>
                 <img ng-src={{item.data.topImage}} class="border-radius-four border-grey">
@@ -94,8 +94,6 @@
                               ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.data.deepLinkUrl"></span>
                         <span class="btn-icon btn-delete-icon btn-danger transition-third"
                               ng-click="ContentHome.removeListItem($index)"></span>
-                    <!--<span class="btn-icon btn-link-icon btn-primary transition-third" ng-click="ContentHome.openDeepLinkDialog()"></span>
-                        <span class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="ContentHome.openRemoveDialog()"></span>-->
                 </div>
             </div>
         </div>

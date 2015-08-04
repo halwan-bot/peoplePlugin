@@ -51,6 +51,8 @@
       getContentPeopleInfo();
 
       Buildfire.datastore.onUpdate(function (event) {
+        $scope.imagesUpdated = false;
+        $scope.$digest();
         if (event && event.tag) {
           switch (event.tag) {
             case TAG_NAMES.PEOPLE:
@@ -87,6 +89,7 @@
         restrict: 'A',
         link: function (scope, elem, attrs) {
           scope.carousel = null;
+          scope.isCarouselInitiated = false;
           function initCarousel() {
             scope.carousel = null;
             setTimeout(function () {
@@ -103,15 +106,20 @@
                   obj['loop'] = true;
                 }
                 scope.carousel = $(elem).owlCarousel(obj);
+                scope.isCarouselInitiated = true;
               }
+              scope.$apply();
             }, 100);
           }
           initCarousel();
 
           scope.$watch("imagesUpdated", function (newVal, oldVal) {
             if(newVal) {
+              if(scope.isCarouselInitiated) {
+                scope.carousel.trigger("destroy.owl.carousel");
+                scope.isCarouselInitiated = false;
+              }
               $(elem).find(".owl-stage-outer").remove();
-              scope.carousel && scope.carousel.trigger("destroy.owl.carousel");
               initCarousel();
             }
           });

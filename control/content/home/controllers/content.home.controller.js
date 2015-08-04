@@ -131,6 +131,8 @@
                         saveData(JSON.parse(angular.toJson(_data)), TAG_NAMES.PEOPLE_INFO);
                     }
                     else if (result) {
+                        console.log("********************************************");
+                        console.log(result.data);
                         ContentHome.data = result.data;
                         if (!ContentHome.data.content.sortBy) {
                             ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
@@ -214,7 +216,7 @@
                 var csv = FormatConverter.JSON2CSV(json);
                 $window.open("data:text/csv;charset=utf-8," + escape(csv))
             };
-            ContentHome.removeListItem = function (_index) {
+            ContentHome.removeListItem = function (_index, itemId) {
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/remove-people.html',
@@ -227,13 +229,19 @@
                             }
                         }
                     });
-                modalInstance.result.then(function (data) {
-                    if (data)
-                        ContentHome.items.splice(_index, 1);
-                }, function (data) {
-                    if (data) {
-                        console.error('Error----------while removing people----', data)
+                modalInstance.result.then(function (message) {
+                    if (message === 'yes') {
+                        var item = ContentHome.items[_index];
+                        Buildfire.datastore.delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
+                            if (err)
+                                return;
+                            ContentHome.items.splice(_index, 1);
+                            $scope.$digest();
+                        });
                     }
+
+                }, function (data) {
+
                 });
             };
 
@@ -266,7 +274,7 @@
                 } else {
                     ContentHome.items = null;
                     searchOptions.page = 0;
-                    ContentHome.busy=false;
+                    ContentHome.busy = false;
                     ContentHome.data.content.sortBy = value;
                     ContentHome.loadMore();
                 }

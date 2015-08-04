@@ -18,7 +18,28 @@
             </div>
         </div>
     </div>
-	<hr class="none">
+    <hr class="none">
+	 <div class="item clearfix row">
+        <div class="labels col-md-3 padding-right-zero pull-left">
+            <span>Link</span>
+        </div>
+        <div class="main col-md-9 pull-right">
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="AddCarouselImagePopup.imageInfo.link" placeholder="http://www.buildfire.com" aria-label="...">
+                <div class="input-group-btn"  dropdown is-open="status.isopen" ng-class="{disabled : !AddCarouselImagePopup.imageInfo.link}">
+                    <button type="button" class="btn btn-default text-left dropdown-toggle" dropdown-toggle ng-disabled="disabled"
+                            aria-expanded="true">Action <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                        <li ng-repeat="action in AddCarouselImagePopup.actionMenus"
+                            ng-Click="AddCarouselImagePopup.setTarget(action)">
+                            <a tabindex="-1" class="transition-third">{{action.value}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="none">
     <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Title</span>
@@ -27,21 +48,14 @@
             <input type="text" class="form-control" ng-model="AddCarouselImagePopup.imageInfo.title" placeholder="">
         </div>
     </div>
-	<hr class="none">
-    <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Link</span>
-        </div>
-        <div class="main col-md-9 pull-right">
-            <input type="text" class="form-control" ng-model="AddCarouselImagePopup.imageInfo.link" placeholder="">
-        </div>
-    </div>
 </div>
 <div class="bottom border-top-grey clearfix">
 	<div class="col-md-6 pull-left text-center">
 		<a class="text-danger default-background-hover transition-third" ng-click="AddCarouselImagePopup.cancel()">Cancel</a>
 	</div>
 	<div class="col-md-6 pull-right text-center border-left-grey">
-		<a class="text-success default-background-hover transition-third" ng-click="AddCarouselImagePopup.ok(AddCarouselImagePopup.imageInfo)">Save</a>
+		<a class="text-success default-background-hover transition-third"
+       ng-click="AddCarouselImagePopup.imageInfo.imageUrl && AddCarouselImagePopup.ok(AddCarouselImagePopup.imageInfo)"
+       ng-class="{disabled : !AddCarouselImagePopup.imageInfo.imageUrl}">Save</a>
 	</div>
 </div>

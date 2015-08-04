@@ -11,14 +11,12 @@
 
       var getPeopleDetail = function () {
         console.log("ItemID::::::::::: ", itemId);
-        Buildfire.datastore.get(TAG_NAMES.PEOPLE, itemId, function (err, result) {
+        Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
           if (err && err.code !== ERROR_CODE.NOT_FOUND) {
             console.error('-----------Unable to load data-------------', err);
           }
           else {
             WidgetPeople.item = result.data;
-            console.log("???????????????????????????????????????????????????");
-            console.log(WidgetPeople.item);
             $scope.$digest();
           }
           bindOnUpdate();

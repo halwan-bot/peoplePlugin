@@ -73,14 +73,11 @@
                     });
                 };
                 ContentPeople.updateItemData = function () {
-                    if (ContentPeople.item.id) {
-                        Buildfire.datastore.update(ContentPeople.item.id, ContentPeople.item.data, TAG_NAMES.PEOPLE, function (err) {
-                            ContentPeople.isUpdating = false;
-                            if (err)
-                                console.error('There was a problem saving your data');
-                        })
-                    }
-                    ContentPeople.isUpdating = false;
+                    Buildfire.datastore.update(ContentPeople.item.id, ContentPeople.item.data, TAG_NAMES.PEOPLE, function (err) {
+                        ContentPeople.isUpdating = false;
+                        if (err)
+                            console.error('There was a problem saving your data');
+                    })
                 };
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.status) {
@@ -139,8 +136,11 @@
 
                 var tmrDelayForPeoples = null;
                 var updateItemsWithDelay = function (newObj) {
-                    if (tmrDelayForPeoples) clearTimeout(tmrDelayForPeoples);
-                    if (ContentPeople.item && ContentPeople.isUpdating && !isUnchanged(ContentPeople.item)) {
+                    if (tmrDelayForPeoples) {
+                        clearTimeout(tmrDelayForPeoples);
+                        ContentPeople.isUpdating = false;
+                    }
+                    if (ContentPeople.item && !ContentPeople.isUpdating && !isUnchanged(ContentPeople.item)) {
                         ContentPeople.isUpdating = true;
                         if (ContentPeople.item.id) {
                             tmrDelayForPeoples = setTimeout(function () {

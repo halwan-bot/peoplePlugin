@@ -47,10 +47,10 @@
 
                 ContentPeople.addNewItem = function () {
                     if ($routeParams.itemId) {
-                        Buildfire.datastore.get(TAG_NAMES.PEOPLE, $routeParams.itemId, function (err, data) {
+                        Buildfire.datastore.getById($routeParams.itemId,TAG_NAMES.PEOPLE, function (err, data) {
                             if (err)
                                 console.error('There was a problem saving your data');
-                            ContentPeople.item = data;
+                            ContentPeople.item = data.data;
                             updateMasterItem(ContentPeople.item);
                             $scope.$digest();
                         })
@@ -60,10 +60,10 @@
                                 console.error('There was a problem saving your data');
                             }
                             else {
-                                Buildfire.datastore.get(TAG_NAMES.PEOPLE, data.id, function (err, data) {
+                                Buildfire.datastore.getById(data.id,TAG_NAMES.PEOPLE, function (err, data) {
                                     if (err)
                                         console.error('There was a problem saving your data');
-                                    ContentPeople.item = data;
+                                    ContentPeople.item = data.data;
                                     updateMasterItem(ContentPeople.item);
                                     $scope.$digest();
                                 });

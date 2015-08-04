@@ -49,21 +49,31 @@
         });
       };
       getContentPeopleInfo();
-
+var i=0;
       WidgetHome.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
+        console.log("$$$$$$$$$$$$$$$$$$", i++);
+        console.log("+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=\n\n" ,event);
         $scope.imagesUpdated = false;
         $scope.$digest();
+        var flag = false;
         if (event && event.tag) {
           switch (event.tag) {
             case TAG_NAMES.PEOPLE:
               if (WidgetHome.items && WidgetHome.items.length) {
-                WidgetHome.items.forEach(function (elem, idx) {
-                  if (elem.id === event.id) {
-                    elem.data = event.obj;
-                  } else {
-                    WidgetHome.items.push({data: event.obj, id: event.id});
+                for (var i = 0; i< WidgetHome.items.length; i++) {
+                  if (WidgetHome.items[i].id === event.id) {
+                    flag = true;
+                    if(event.obj) {
+                      WidgetHome.items[i].data = event.obj;
+                    } else {
+                      WidgetHome.items.splice(i, 1);
+                    }
+                    break;
                   }
-                });
+                }
+                if (!flag) {
+                  WidgetHome.items.push({data: event.obj, id: event.id});
+                }
               }
               break;
             case TAG_NAMES.PEOPLE_INFO:

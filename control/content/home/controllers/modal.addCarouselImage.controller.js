@@ -11,8 +11,29 @@
                 link: '',
                 target: ''
             };
+            AddCarouselImagePopup.selectedAction = {name: 'same', value: "Same Window"};
+            AddCarouselImagePopup.actionMenus = [
+                {name: 'same', value: "Same Window"},
+                {name: 'new', value: "New Window"}
+            ];
+            AddCarouselImagePopup.setTarget = function (action) {
+                AddCarouselImagePopup.selectedAction = action;
+            }
             AddCarouselImagePopup.ok = function (imageInfo) {
-                imageInfo.imageUrl = imageInfo.imageUrl ? imageInfo.imageUrl : 'http://www.placehold.it/80x50';
+                if (!imageInfo.imageUrl) {
+                    return;
+                }
+                imageInfo.imageUrl = imageInfo.imageUrl;
+                if (imageInfo.link) {
+                    switch (AddCarouselImagePopup.selectedAction.name) {
+                        case "new":
+                            imageInfo.target = '_blank';
+                            break;
+                        default :
+                            imageInfo.target = '_self';
+                            break;
+                    }
+                }
                 $modalInstance.close(imageInfo);
             };
             AddCarouselImagePopup.cancel = function () {

@@ -129,8 +129,20 @@ To align action buttons in image carousel listing and people listing on home pag
 .item-body-content{
     top: 12px !important;
 }
+/*
+Styles for pagination in people listing
+*/
 
-#scroll-infinight{
+#scroll-infinite{
     overflow-y: scroll;
     height: 300px;
+}
+
+/*
+For disabling anchor buttons
+*/
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
 }

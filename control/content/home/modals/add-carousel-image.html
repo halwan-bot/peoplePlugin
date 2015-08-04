@@ -42,6 +42,8 @@
 		<a class="text-danger default-background-hover transition-third" ng-click="AddCarouselImagePopup.cancel()">Cancel</a>
 	</div>
 	<div class="col-md-6 pull-right text-center border-left-grey">
-		<a class="text-success default-background-hover transition-third" ng-click="AddCarouselImagePopup.ok(AddCarouselImagePopup.imageInfo)">Save</a>
+		<a class="text-success default-background-hover transition-third"
+       ng-click="AddCarouselImagePopup.imageInfo.imageUrl && AddCarouselImagePopup.ok(AddCarouselImagePopup.imageInfo)"
+       ng-class="{disabled : !AddCarouselImagePopup.imageInfo.imageUrl}">Save</a>
 	</div>
 </div>

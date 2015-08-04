@@ -77,12 +77,7 @@
                         backgroundImage: ""
                     },
                     content: {
-                        images: [
-                            {
-                                imageUrl: "",
-                                links: ""
-                            }
-                        ],
+                        images: [],
                         description: ""
                     }
                 };

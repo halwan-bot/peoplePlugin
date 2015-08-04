@@ -9,31 +9,29 @@
                 ContentPeople.linksSortableOptions = {
                     handle: '> .cursor-grab'
                 };
-                ContentPeople.item = {};
-                var _data = {
-                    topImage: '',
-                    iconImage: '',
-                    fName: '',
-                    lName: '',
-                    position: '',
-                    deepLinkUrl: '',
-                    dateCreated: +new Date(),
-                    socailLinks: [],
-                    bodyContent: ''
+                ContentPeople.item = {
+                    data: {
+                        topImage: '',
+                        iconImage: '',
+                        fName: '',
+                        lName: '',
+                        position: '',
+                        deepLinkUrl: '',
+                        dateCreated: +new Date(),
+                        socailLinks: [],
+                        bodyContent: ''
+                    }
                 };
-
+                updateMasterItem(ContentPeople.item);
                 function updateMasterItem(item) {
                     ContentPeople.masterItem = angular.copy(item);
                 }
-
                 function resetItem() {
                     ContentPeople.item = angular.copy(ContentPeople.masterItem);
                 }
-
                 function isUnchanged(item) {
                     return angular.equals(item, ContentPeople.masterItem);
                 }
-
                 /*On click button done it redirects to home*/
                 ContentPeople.done = function () {
                     Location.goToHome();
@@ -43,39 +41,29 @@
                 ContentPeople.deleteItem = function () {
                     Location.goToHome();
                 };
-
-
-                ContentPeople.addNewItem = function () {
-                    if ($routeParams.itemId) {
-                        Buildfire.datastore.getById($routeParams.itemId,TAG_NAMES.PEOPLE, function (err, data) {
-                            if (err)
-                                console.error('There was a problem saving your data');
-                            ContentPeople.item = data.data;
-                            updateMasterItem(ContentPeople.item);
-                            $scope.$digest();
-                        })
-                    } else {
-                        Buildfire.datastore.insert(JSON.parse(angular.toJson(_data)), TAG_NAMES.PEOPLE, false, function (err, data) {
-                            if (err) {
-                                console.error('There was a problem saving your data');
-                            }
-                            else {
-                                Buildfire.datastore.getById(data.id,TAG_NAMES.PEOPLE, function (err, data) {
-                                    if (err)
-                                        console.error('There was a problem saving your data');
-                                    ContentPeople.item = data.data;
-                                    updateMasterItem(ContentPeople.item);
-                                    $scope.$digest();
-                                });
-                            }
-                        });
-                    }
+                ContentPeople.getItem = function (itemId) {
+                    Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, data) {
+                        if (err)
+                            console.error('There was a problem saving your data');
+                        ContentPeople.item = data;
+                        updateMasterItem(ContentPeople.item);
+                        $scope.$digest();
+                    });
                 };
-                ContentPeople.addNewItem();
-
-                ContentPeople.updateItemData = function (_id, item) {
-                    if (_id) {
-                        Buildfire.datastore.update(_id, item.data, TAG_NAMES.PEOPLE, function (err) {
+                if ($routeParams.itemId) {
+                    ContentPeople.getItem($routeParams.itemId);
+                }
+                ContentPeople.addNewItem = function () {
+                    ContentPeople.item.data.dateCreated = new Date(),
+                        Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
+                            if (err)
+                                return console.error('There was a problem saving your data');
+                            ContentPeople.getItem(data.id);
+                        });
+                };
+                ContentPeople.updateItemData = function () {
+                    if (ContentPeople.item.id) {
+                        Buildfire.datastore.update(ContentPeople.item.id, ContentPeople.item.data, TAG_NAMES.PEOPLE, function (err) {
                             if (err)
                                 console.error('There was a problem saving your data');
                         })
@@ -140,12 +128,20 @@
 
                 var tmrDelayForPeoples = null;
                 var updateItemsWithDelay = function (newObj) {
-                    if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
-                    if (ContentPeople.item && ContentPeople.item.id) {
-                        tmrDelayForPeoples = setTimeout(function () {
-                            ContentPeople.updateItemData(ContentPeople.item.id, JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
-                        }, 500);
+                    if (tmrDelayForPeoples) clearTimeout(tmrDelayForPeoples);
+                    if (ContentPeople.item && !isUnchanged(ContentPeople.item)) {
+                        if (ContentPeople.item.id) {
+                            tmrDelayForPeoples = setTimeout(function () {
+                                ContentPeople.updateItemData();
+                            }, 500);
+                        }
+                        else {
+                            tmrDelayForPeoples = setTimeout(function () {
+                                ContentPeople.addNewItem();
+                            }, 500);
+                        }
                     }
+
                 };
 
                 $scope.$watch(function () {

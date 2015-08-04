@@ -53,8 +53,6 @@
                 break;
               case TAG_NAMES.PEOPLE_INFO:
                 if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {
-                  console.log("^^^^^^^^^^^^^^^^^^^^^");
-                  console.log(WidgetPeople.item);
                   WidgetPeople.data.design.itemLayout = event.obj.design.itemLayout;
                   currentItemLayout = event.obj.design.itemLayout;
                 }

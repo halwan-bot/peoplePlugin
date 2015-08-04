@@ -50,19 +50,27 @@
       };
       getContentPeopleInfo();
 
-     WidgetHome.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
+      WidgetHome.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
         $scope.imagesUpdated = false;
         $scope.$digest();
         if (event && event.tag) {
           switch (event.tag) {
             case TAG_NAMES.PEOPLE:
-              WidgetHome.items.push({data : event.obj});
+              if (WidgetHome.items && WidgetHome.items.length) {
+                WidgetHome.items.forEach(function (elem, idx) {
+                  if (elem.id === event.id) {
+                    elem.data = event.obj;
+                  } else {
+                    WidgetHome.items.push({data: event.obj, id: event.id});
+                  }
+                });
+              }
               break;
             case TAG_NAMES.PEOPLE_INFO:
               if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {
-                if(WidgetHome.items && WidgetHome.items.length){
+                if (WidgetHome.items && WidgetHome.items.length) {
                   var id = WidgetHome.items[0].id;
-                  Location.goTo("#/people/"+ id);
+                  Location.goTo("#/people/" + id);
                 }
               }
               else if (event.obj.design.listLayout && currentListLayout != event.obj.design.listLayout) {
@@ -81,7 +89,7 @@
         }
       });
 
-      $scope.$on("$destroy", function(){
+      $scope.$on("$destroy", function () {
         WidgetHome.onUpdateFn.clear();
       });
 
@@ -104,8 +112,8 @@
               };
 
               var totalImages = parseInt(attrs.imageCarousel, 10);
-              if(totalImages) {
-                if(totalImages > 1) {
+              if (totalImages) {
+                if (totalImages > 1) {
                   obj['loop'] = true;
                 }
                 scope.carousel = $(elem).owlCarousel(obj);
@@ -114,11 +122,12 @@
               scope.$apply();
             }, 100);
           }
+
           initCarousel();
 
           scope.$watch("imagesUpdated", function (newVal, oldVal) {
-            if(newVal) {
-              if(scope.isCarouselInitiated) {
+            if (newVal) {
+              if (scope.isCarouselInitiated) {
                 scope.carousel.trigger("destroy.owl.carousel");
                 scope.isCarouselInitiated = false;
               }

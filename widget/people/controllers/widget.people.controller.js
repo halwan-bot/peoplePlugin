@@ -45,7 +45,7 @@
       getContentPeopleInfo();
 
       function bindOnUpdate() {
-        Buildfire.datastore.onUpdate(function (event) {
+       WidgetPeople.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
           if (event && event.tag) {
             switch (event.tag) {
               case TAG_NAMES.PEOPLE:
@@ -59,7 +59,7 @@
                   currentItemLayout = event.obj.design.itemLayout;
                 }
                 else if (event.obj.design.listLayout && currentListLayout != event.obj.design.listLayout) {
-                  //Location.goToHome();
+                  Location.goToHome();
                 }
                 break;
             }
@@ -67,6 +67,10 @@
           }
         });
       }
+
+      $scope.$on("$destroy", function(){
+        WidgetPeople.onUpdateFn.clear();
+      });
 
     }])
 })(window.angular, window);

@@ -50,11 +50,9 @@
       };
       getContentPeopleInfo();
 
-      Buildfire.datastore.onUpdate(function (event) {
+     WidgetHome.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
         $scope.imagesUpdated = false;
         $scope.$digest();
-        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-        console.log(event.obj);
         if (event && event.tag) {
           switch (event.tag) {
             case TAG_NAMES.PEOPLE:
@@ -83,6 +81,9 @@
         }
       });
 
+      $scope.$on("$destroy", function(){
+        WidgetHome.onUpdateFn.clear();
+      });
 
     }])
     // Directive for adding  Image carousel on widget home page

@@ -26,12 +26,15 @@
                 function updateMasterItem(item) {
                     ContentPeople.masterItem = angular.copy(item);
                 }
+
                 function resetItem() {
                     ContentPeople.item = angular.copy(ContentPeople.masterItem);
                 }
+
                 function isUnchanged(item) {
                     return angular.equals(item, ContentPeople.masterItem);
                 }
+
                 /*On click button done it redirects to home*/
                 ContentPeople.done = function () {
                     Location.goToHome();
@@ -61,22 +64,23 @@
                     ContentPeople.getItem($routeParams.itemId);
                 }
                 ContentPeople.addNewItem = function () {
-                    ContentPeople.item.data.dateCreated = new Date(),
-                        Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
-                            if (err)
-                                return console.error('There was a problem saving your data');
-                            ContentPeople.getItem(data.id);
-                        });
+                    ContentPeople.item.data.dateCreated = new Date();
+                    Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
+                        ContentPeople.isUpdating = false;
+                        if (err)
+                            return console.error('There was a problem saving your data');
+                        ContentPeople.getItem(data.id);
+                    });
                 };
                 ContentPeople.updateItemData = function () {
                     if (ContentPeople.item.id) {
                         Buildfire.datastore.update(ContentPeople.item.id, ContentPeople.item.data, TAG_NAMES.PEOPLE, function (err) {
+                            ContentPeople.isUpdating = false;
                             if (err)
                                 console.error('There was a problem saving your data');
                         })
-                    } else {
-                        console.error('Blank id Provided');
                     }
+                    ContentPeople.isUpdating = false;
                 };
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.status) {
@@ -136,7 +140,8 @@
                 var tmrDelayForPeoples = null;
                 var updateItemsWithDelay = function (newObj) {
                     if (tmrDelayForPeoples) clearTimeout(tmrDelayForPeoples);
-                    if (ContentPeople.item && !isUnchanged(ContentPeople.item)) {
+                    if (ContentPeople.item && ContentPeople.isUpdating && !isUnchanged(ContentPeople.item)) {
+                        ContentPeople.isUpdating = true;
                         if (ContentPeople.item.id) {
                             tmrDelayForPeoples = setTimeout(function () {
                                 ContentPeople.updateItemData();

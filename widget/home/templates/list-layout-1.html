@@ -1,30 +1,32 @@
 <div class="holder padding-zero">
-	<div class="people-plugin listlayout1">
-		<div class="plugin-banner clearfix border-bottom-grey">
-      <div class="plugin-slider text-center"
-           image-carousel="{{WidgetHome.data.content.images.length}}">
-        <div class="plugin-slide item"
-             data-ng-repeat="image in WidgetHome.data.content.images">
-          <img ng-src="{{image.imageUrl || 'http://www.placehold.it/1280x720.jpg'}}">
+    <div class="people-plugin listlayout1">
+        <div class="plugin-banner clearfix border-bottom-grey">
+            <div class="plugin-slider text-center"
+                 image-carousel="{{WidgetHome.data.content.images.length}}">
+                <div class="plugin-slide item"
+                     data-ng-repeat="image in WidgetHome.data.content.images | filter:isDefined">
+                    <a href="{{image.link}}" data-ng-if="image.link" target="{{image.target}}" title="Login"><img
+                            ng-src="{{image.imageUrl}}"></a>
+                    <img data-ng-if="!image.link" ng-src="{{image.imageUrl}}">
+                </div>
+            </div>
         </div>
-      </div>
-		</div>
-		<div class="padded padding-bottom-zero text-left">
-			<p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
-			<hr class="small">
-			<div class="list-items">
-				<div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
-					<div class="media pull-left">
-						<img class="border-grey border-radius-four"
-                 ng-src="{{item.data.topImage || 'http://www.placehold.it/100x60'}}">
-					</div>
-					<div class="content margin-top-ten">
-						<p class="text-primary ellipsis margin-zero"><a
-                href="#/people/{{item.id}}">{{item.data.fName}} {{item.data.lName}}</a></p>
-						<p class="margin-bottom-zero ellipsis">{{item.data.bodyContent}}</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="padded padding-bottom-zero text-left">
+            <p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
+            <hr class="small">
+            <div class="list-items">
+                <div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
+                    <div class="media pull-left">
+                        <img class="border-grey border-radius-four"
+                             ng-src="{{item.data.topImage || 'http://www.placehold.it/100x60'}}">
+                    </div>
+                    <div class="content margin-top-ten">
+                        <p class="text-primary ellipsis margin-zero"><a
+                                href="#/people/{{item.id}}">{{item.data.fName}} {{item.data.lName}}</a></p>
+                        <p class="margin-bottom-zero ellipsis">{{item.data.bodyContent}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

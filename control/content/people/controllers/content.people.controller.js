@@ -73,14 +73,30 @@
                 };
                 ContentPeople.addNewItem();
 
-                ContentPeople.updateItemData = function (_id, item) {
-                    if (_id) {
-                        Buildfire.datastore.update(_id, item.data, TAG_NAMES.PEOPLE, function (err) {
-                            if (err)
-                                console.error('There was a problem saving your data');
-                        })
-                    } else {
-                        console.error('Blank id Provided');
+                ContentPeople.updateItemData = function (item) {
+                    if (!isUnchanged(item)) {
+                        if (item && item.id) {
+                            Buildfire.datastore.update(item.id, item, TAG_NAMES.PEOPLE, function (err) {
+                                if (err)
+                                    console.error('There was a problem saving your data');
+                            })
+                        } else {
+                            Buildfire.datastore.insert(JSON.parse(angular.toJson(item.data)), TAG_NAMES.PEOPLE, false, function (err, data) {
+                                if (err) {
+                                    console.error('There was a problem saving your data');
+                                }
+                                else {
+                                    Buildfire.datastore.getById(data.id,TAG_NAMES.PEOPLE, function (err, data) {
+                                        if (err)
+                                            console.error('There was a problem saving your data');
+                                        ContentPeople.item = data;
+                                        updateMasterItem(ContentPeople.item);
+                                        $scope.$digest();
+                                    });
+                                }
+                            });
+                            console.error('Blank id Provided');
+                        }
                     }
                 };
                 Buildfire.datastore.onUpdate(function (event) {
@@ -141,10 +157,10 @@
                 var tmrDelayForPeoples = null;
                 var updateItemsWithDelay = function (newObj) {
                     if (tmrDelayForPeoples)clearTimeout(tmrDelayForPeoples);
-                    if (ContentPeople.item && ContentPeople.item.id) {
+                    if (ContentPeople.item) {
                         tmrDelayForPeoples = setTimeout(function () {
-                            ContentPeople.updateItemData(ContentPeople.item.id, JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
-                        }, 500);
+                            ContentPeople.updateItemData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE);
+                        }, 1000);
                     }
                 };
 

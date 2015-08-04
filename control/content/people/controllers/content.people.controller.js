@@ -2,8 +2,8 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentPeopleCtrl', ['$scope', '$location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams',
-            function ($scope, $location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams) {
+        .controller('ContentPeopleCtrl', ['$scope', 'Location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams',
+            function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams) {
                 var ContentPeople = this;
                 ContentPeople.isUpdating = false;
                 ContentPeople.linksSortableOptions = {
@@ -36,12 +36,12 @@
 
                 /*On click button done it redirects to home*/
                 ContentPeople.done = function () {
-                    $location.path("/");
+                    Location.goToHome();
                 };
 
                 /*On click button delete it removes current item from datastore*/
                 ContentPeople.deleteItem = function () {
-                    $location.path("/");
+                    Location.goToHome();
                 };
 
 

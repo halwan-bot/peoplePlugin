@@ -134,8 +134,8 @@ Styles for pagination in people listing
 */
 
 #scroll-infinite{
-    overflow-y: scroll;
-    height: 300px;
+    overflow-y: auto;
+    max-height: 300px;
 }
 
 /*

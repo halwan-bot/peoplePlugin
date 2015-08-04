@@ -11,14 +11,12 @@
 
       var getPeopleDetail = function () {
         console.log("ItemID::::::::::: ", itemId);
-        Buildfire.datastore.get(TAG_NAMES.PEOPLE, itemId, function (err, result) {
+        Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
           if (err && err.code !== ERROR_CODE.NOT_FOUND) {
             console.error('-----------Unable to load data-------------', err);
           }
           else {
             WidgetPeople.item = result.data;
-            console.log("???????????????????????????????????????????????????");
-            console.log(WidgetPeople.item);
             $scope.$digest();
           }
           bindOnUpdate();
@@ -47,7 +45,7 @@
       getContentPeopleInfo();
 
       function bindOnUpdate() {
-        Buildfire.datastore.onUpdate(function (event) {
+       WidgetPeople.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
           if (event && event.tag) {
             switch (event.tag) {
               case TAG_NAMES.PEOPLE:
@@ -61,7 +59,7 @@
                   currentItemLayout = event.obj.design.itemLayout;
                 }
                 else if (event.obj.design.listLayout && currentListLayout != event.obj.design.listLayout) {
-                  //Location.goToHome();
+                  Location.goToHome();
                 }
                 break;
             }
@@ -69,6 +67,10 @@
           }
         });
       }
+
+      $scope.$on("$destroy", function(){
+        WidgetPeople.onUpdateFn.clear();
+      });
 
     }])
 })(window.angular, window);

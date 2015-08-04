@@ -1,7 +1,7 @@
 <div class="holder padding-zero">
 	<div class="people-plugin listlayout1">
 		<div class="plugin-banner clearfix border-bottom-grey">
-      <div class="plugin-slider text-center" image-carousel>
+      <div class="plugin-slider text-center" image-carousel="{{WidgetHome.data.content.images.length}}">
         <div class="plugin-slide item"
              ng-repeat="image in WidgetHome.data.content.images">
           <img
@@ -13,8 +13,8 @@
 			<p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
 		</div>
     <span ng-repeat="item in WidgetHome.items">
-      <div class="plugin-banner clearfix border-bottom-grey">
-        <div class="plugin-slide text-center">
+      <div class="clearfix border-bottom-grey">
+        <div class="text-center">
           <img ng-src="{{item.data.topImage || 'http://www.placehold.it/1280x720.jpg'}}">
         </div>
       </div>

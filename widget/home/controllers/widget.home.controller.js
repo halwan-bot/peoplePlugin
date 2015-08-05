@@ -15,7 +15,9 @@
         _pageSize = 10,
         _page = 0,
         searchOptions = {
-          filter: {"$json.fName": {"$regex": '/*'}}, page: _page, pageSize: _pageSize + 1 // the plus one is to check if there are any more
+          filter: {"$json.fName": {"$regex": '/*'}},
+          page: _page,
+          pageSize: _pageSize + 1 // the plus one is to check if there are any more
         };
 
       var WidgetHome = this;
@@ -30,7 +32,7 @@
         LAST_NAME_Z_TO_A
       ];
       var currentItemLayout,
-        currentListLayout,currentSortOrder;
+        currentListLayout, currentSortOrder;
 
       var getContentPeopleInfo = function () {
         Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
@@ -88,24 +90,18 @@
         if (event && event.tag) {
           switch (event.tag) {
             case TAG_NAMES.PEOPLE:
-             /* if (WidgetHome.items && WidgetHome.items.length) {
-                for (var i = 0; i < WidgetHome.items.length; i++) {
-                  if (WidgetHome.items[i].id === event.id) {
-                    flag = true;
-                    if (event.obj) {
-                      WidgetHome.items[i].data = event.obj;
-                    } else {
-                      WidgetHome.items.splice(i, 1);
-                    }
-                    break;
-                  }
-                }
-                if (!flag) {
-                  WidgetHome.items.push({data: event.obj, id: event.id});
-                }
-              }*/
+              /*var currentPage = _page;
+              if (_page) {
+                _pageSize = _pageSize * (_page + 1);
+                _page = 0;
+              }
+              WidgetHome.busy = false;
+              WidgetHome.loadMore(function () {
+                _page = currentPage;
+                _pageSize = 5;
+              });
 
-              WidgetHome.loadMore();
+              WidgetHome.loadMore();*/
               break;
             case TAG_NAMES.PEOPLE_INFO:
               if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {
@@ -124,10 +120,11 @@
               } else {
                 $scope.imagesUpdated = false;
               }
-              if(event.obj.content.sortBy && currentSortOrder!=event.obj.content.sortBy){
+              if (event.obj.content.sortBy && currentSortOrder != event.obj.content.sortBy) {
                 WidgetHome.data.content.sortBy = event.obj.content.sortBy;
-                console.log("(((((((((((((((((((((((((((((",  WidgetHome.data.content.sortBy);
                 WidgetHome.items = [];
+                _page = 0;
+                searchOptions.page = 0;
                 WidgetHome.busy = false;
                 WidgetHome.loadMore();
               }

@@ -3,7 +3,7 @@
 (function (angular, buildfire) {
     //created peoplePluginContent module
     angular
-        .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap', 'ui.sortable', 'ngClipboard','infinite-scroll'])
+        .module('peoplePluginContent', ['ngAnimate', 'ngRoute', 'ui.bootstrap', 'ui.sortable', 'ngClipboard', 'infinite-scroll'])
         //injected ngRoute for routing
         //injected ui.bootstrap for angular bootstrap component
         //injected ui.sortable for manual ordering of list
@@ -44,18 +44,18 @@
         }])
         .factory('FormatConverter', [function () {
 
-            var CSVToArray=function(strData, strDelimiter) {
+            var CSVToArray = function (strData, strDelimiter) {
                 // Check to see if the delimiter is defined. If not,
                 // then default to comma.
                 strDelimiter = (strDelimiter || ",");
                 // Create a regular expression to parse the CSV values.
                 var objPattern = new RegExp((
                     // Delimiters.
-                    "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
-                        // Quoted fields.
-                        "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
-                        // Standard fields.
-                        "([^\"\\" + strDelimiter + "\\r\\n]*))"), "gi");
+                "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+                    // Quoted fields.
+                "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+                    // Standard fields.
+                "([^\"\\" + strDelimiter + "\\r\\n]*))"), "gi");
                 // Create an array to hold our data. Give the array
                 // a default empty first row.
                 var arrData = [[]];
@@ -147,20 +147,20 @@
                 }
             };
         }])
-        .directive('fileReader',[function () {
+        .directive('fileReader', [function () {
             return {
-                restrict:'A',
-                link:function(scope,element,attrs){
-                    element.context.onchange=function(event){
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    element.context.onchange = function (event) {
 
                         var files = event.target.files; //FileList object
                         for (var i = 0; i < files.length; i++) {
                             var file = files[i];
                             var picReader = new FileReader();
 
-                            picReader.addEventListener("load", function(event) {
+                            picReader.addEventListener("load", function (event) {
                                 var textFile = event.target;
-                                scope.ImportCSVPopup[attrs.fileReader]=textFile.result;
+                                scope.ImportCSVPopup[attrs.fileReader] = textFile.result;
                             });
 
                             //Read the text file
@@ -180,6 +180,21 @@
                 },
                 goToHome: function () {
                     _location.href = _location.href.substr(0, _location.href.indexOf('#'));
+                }
+            };
+        }])
+        .factory('RankOfLastItem', [function () {
+            var _rankOfLastItem;
+            return {
+                getRank: function () {
+                    return  _rankOfLastItem;
+                },
+                setRank: function (value) {
+                    if (!value) {
+                        console.error('Blank id and value provided');
+                    } else {
+                        _rankOfLastItem = value;
+                    }
                 }
             };
         }]);

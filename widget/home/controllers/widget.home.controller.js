@@ -12,7 +12,7 @@
         FIRST_NAME_Z_TO_A = 'First Name Z-A',
         LAST_NAME_A_TO_Z = 'Last Name A-Z',
         LAST_NAME_Z_TO_A = 'Last Name Z-A',
-        _pageSize = 5,
+        _pageSize = 10,
         _page = 0,
         searchOptions = {
           filter: {"$json.fName": {"$regex": '/*'}}, page: _page, pageSize: _pageSize + 1 // the plus one is to check if there are any more
@@ -30,23 +30,8 @@
         LAST_NAME_Z_TO_A
       ];
       var currentItemLayout,
-        currentListLayout;
+        currentListLayout,currentSortOrder;
 
-      var getContentItems = function (_searchOptions) {
-        Buildfire.datastore.search(_searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
-          if (err) {
-            console.error('-----------err in getting list-------------', err);
-          }
-          else {
-
-            WidgetHome.items = result;
-            if (result.length > _pageSize) {// to indicate there are more
-              console.log('-------More Data available--------');
-            }
-            $scope.$digest();
-          }
-        });
-      };
       var getContentPeopleInfo = function () {
         Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
 
@@ -56,13 +41,13 @@
           else {
             WidgetHome.data = result.data;
             if (!WidgetHome.data.content.sortBy) {
-              //WidgetHome.data.content.sortBy = WidgetHome.sortingOptions[0];
+              WidgetHome.data.content.sortBy = WidgetHome.sortingOptions[0];
             }
+            currentSortOrder = WidgetHome.data.content.sortBy;
             currentItemLayout = WidgetHome.data.design.itemLayout;
             currentListLayout = WidgetHome.data.design.listLayout;
             $scope.$digest();
           }
-         // getContentItems(searchOptions);
         });
       };
       var getSearchOptions = function (value) {
@@ -97,14 +82,13 @@
         return item.imageUrl !== undefined && item.imageUrl !== '';
       };
       WidgetHome.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
-        console.log("+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=\n\n", event);
         $scope.imagesUpdated = false;
         $scope.$digest();
         var flag = false;
         if (event && event.tag) {
           switch (event.tag) {
             case TAG_NAMES.PEOPLE:
-              if (WidgetHome.items && WidgetHome.items.length) {
+             /* if (WidgetHome.items && WidgetHome.items.length) {
                 for (var i = 0; i < WidgetHome.items.length; i++) {
                   if (WidgetHome.items[i].id === event.id) {
                     flag = true;
@@ -119,7 +103,9 @@
                 if (!flag) {
                   WidgetHome.items.push({data: event.obj, id: event.id});
                 }
-              }
+              }*/
+
+              WidgetHome.loadMore();
               break;
             case TAG_NAMES.PEOPLE_INFO:
               if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {
@@ -138,6 +124,13 @@
               } else {
                 $scope.imagesUpdated = false;
               }
+              if(event.obj.content.sortBy && currentSortOrder!=event.obj.content.sortBy){
+                WidgetHome.data.content.sortBy = event.obj.content.sortBy;
+                console.log("(((((((((((((((((((((((((((((",  WidgetHome.data.content.sortBy);
+                WidgetHome.items = [];
+                WidgetHome.busy = false;
+                WidgetHome.loadMore();
+              }
               break;
           }
           $scope.$digest();
@@ -148,7 +141,7 @@
           return;
         }
         WidgetHome.busy = true;
-        console.log('Widget ----------------------------------- load More data------------called');
+
         if (WidgetHome.data && WidgetHome.data.content.sortBy) {
           searchOptions = getSearchOptions(WidgetHome.data.content.sortBy);
         }
@@ -158,14 +151,12 @@
             console.error('-----------err in getting list-------------', err);
           }
           else {
+            console.log('Widget ----------------------------------- load More data------------called');
+            console.log(result);
             if (result.length > _pageSize) {// to indicate there are more
               result.pop();
-              WidgetHome.disableInfiniteScroll = false;
               searchOptions.page = searchOptions.page + 1;
               WidgetHome.busy = false;
-            }
-            else {
-              WidgetHome.disableInfiniteScroll = true;
             }
             WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
             $scope.$digest();

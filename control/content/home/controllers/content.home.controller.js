@@ -214,7 +214,30 @@
                         }
                     });
                 };
+                ContentHome.loadMore = function () {
+                    if (ContentHome.busy) {
+                        return;
+                    }
+                    ContentHome.busy = true;
+                    if (ContentHome.data && ContentHome.data.content.sortBy) {
+                        searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
+                    }
 
+                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                        if (err) {
+                            console.error('-----------err in getting list-------------', err);
+                        }
+                        else {
+                            if (result.length > _pageSize) {// to indicate there are more
+                                result.pop();
+                                searchOptions.page = searchOptions.page + 1;
+                                ContentHome.busy = false;
+                            }
+                            ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
+                            $scope.$digest();
+                        }
+                    });
+                };
                 var getContentPeopleInfo = function () {
                     Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                         if (err && err.code !== ERROR_CODE.NOT_FOUND) {

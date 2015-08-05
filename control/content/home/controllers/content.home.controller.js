@@ -159,11 +159,6 @@
                 return searchOptions;
             };
 
-            /**
-             * ContentHome.disableInfiniteScroll used to disable infiniteScroll
-             * @type {boolean}
-             */
-            ContentHome.disableInfiniteScroll = false;
 
             /**
              * ContentHome.loadMore() called by infiniteScroll to implement lazy loading
@@ -184,12 +179,8 @@
                     else {
                         if (result.length > _pageSize) {// to indicate there are more
                             result.pop();
-                            ContentHome.disableInfiniteScroll = false;
                             searchOptions.page = searchOptions.page + 1;
                             ContentHome.busy = false;
-                        }
-                        else {
-                            ContentHome.disableInfiniteScroll = true;
                         }
                         ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
                         $scope.$digest();

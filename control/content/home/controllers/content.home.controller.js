@@ -178,42 +178,8 @@
                 };
 
                 /**
-                 * ContentHome.disableInfiniteScroll used to disable infiniteScroll
-                 * @type {boolean}
-                 */
-                ContentHome.disableInfiniteScroll = false;
-
-                /**
                  * ContentHome.loadMore() called by infiniteScroll to implement lazy loading
                  */
-                ContentHome.loadMore = function () {
-                    if (ContentHome.busy) {
-                        return;
-                    }
-                    ContentHome.busy = true;
-                    if (ContentHome.data && ContentHome.data.content.sortBy) {
-                        searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
-                    }
-
-                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
-                        if (err) {
-                            console.error('-----------err in getting list-------------', err);
-                        }
-                        else {
-                            if (result.length > _pageSize) {// to indicate there are more
-                                result.pop();
-                                ContentHome.disableInfiniteScroll = false;
-                                searchOptions.page = searchOptions.page + 1;
-                                ContentHome.busy = false;
-                            }
-                            else {
-                                ContentHome.disableInfiniteScroll = true;
-                            }
-                            ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
-                            $scope.$digest();
-                        }
-                    });
-                };
                 ContentHome.loadMore = function () {
                     if (ContentHome.busy) {
                         return;

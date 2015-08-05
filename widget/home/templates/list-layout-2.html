@@ -1,28 +1,40 @@
 <div class="holder padding-zero">
-    <div class="people-plugin listlayout1">
-        <div class="plugin-banner clearfix border-bottom-grey">
-            <div class="plugin-slider text-center" image-carousel="{{WidgetHome.data.content.images.length}}">
-                <div class="plugin-slide item"
-                     ng-repeat="image in WidgetHome.data.content.images | filter:isDefined">
-                    <a href="{{image.link}}" data-ng-if="image.link" target="{{image.target}}" title="Login"><img
-                            ng-src="{{image.imageUrl}}"></a>
-                    <img data-ng-if="!image.link" ng-src="{{image.imageUrl}}">
-                </div>
-            </div>
+  <div class="people-plugin listlayout1">
+    <div class="plugin-banner clearfix border-bottom-grey">
+      <div class="plugin-slider text-center"
+           image-carousel="{{WidgetHome.data.content.images.length}}">
+        <div class="plugin-slide item"
+             ng-repeat="image in WidgetHome.data.content.images | filter:isDefined">
+          <a href="{{image.link}}" data-ng-if="image.link"
+             target="{{image.target}}" title="Login"><img
+              ng-src="{{image.imageUrl}}"></a>
+          <img data-ng-if="!image.link" ng-src="{{image.imageUrl}}">
         </div>
-        <div class="padded text-left">
-            <p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
-        </div>
-    <span ng-repeat="item in WidgetHome.items">
+      </div>
+    </div>
+    <div class="padded text-left">
+      <p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
+    </div>
+    <div id="scroll-infinite">
+      <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1"
+           infinite-scroll="WidgetHome.loadMore()"
+           infinite-scroll-disabled="WidgetHome.busy"
+           infinite-scroll-container="'#scroll-infinite'">
+      <span ng-repeat="item in WidgetHome.items">
       <div class="clearfix border-bottom-grey">
-          <div class="text-center">
-              <img ng-src="{{item.data.topImage || 'http://www.placehold.it/1280x720.jpg'}}">
-          </div>
+        <div class="text-center">
+          <img
+              ng-src="{{item.data.topImage || 'http://www.placehold.it/1280x720.jpg'}}">
+        </div>
       </div>
 		<div class="padded text-left">
-            <a class="text-primary" href="#/people/{{item.id}}">{{item.data.fName}} {{item.data.lName}}</a>
-            <p class="margin-bottom-zero">{{item.data.bodyContent}}</p>
-        </div>
-    </span>
+      <a class="text-primary" href="#/people/{{item.id}}">{{item.data.fName}}
+        {{item.data.lName}}</a>
+
+      <p class="margin-bottom-zero">{{item.data.bodyContent}}</p>
     </div>
+    </span>
+      </div>
+    </div>
+  </div>
 </div>

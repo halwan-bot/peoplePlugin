@@ -2,8 +2,10 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentPeopleCtrl', ['$scope', 'Location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams',
-            function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams) {
+        .controller('ContentPeopleCtrl', ['$scope', 'Location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams', 'RankOfLastItem',
+            function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams, RankOfLastItem) {
+
+                var _rankOfLastItem = RankOfLastItem.getRank();
                 var ContentPeople = this;
                 ContentPeople.isUpdating = false;
                 ContentPeople.linksSortableOptions = {
@@ -19,7 +21,8 @@
                         deepLinkUrl: '',
                         dateCreated: +new Date(),
                         socailLinks: [],
-                        bodyContent: ''
+                        bodyContent: '',
+                        rank: 0
                     }
                 };
                 updateMasterItem(ContentPeople.item);
@@ -65,6 +68,8 @@
                 }
                 ContentPeople.addNewItem = function () {
                     ContentPeople.item.data.dateCreated = new Date();
+                    ContentPeople.item.data.rank = _rankOfLastItem + 10;
+
                     Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
                         ContentPeople.isUpdating = false;
                         if (err)
@@ -84,6 +89,17 @@
                         switch (event.status) {
                             case STATUS_CODE.INSERTED:
                                 console.log('Data inserted Successfully');
+                                Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
+                                    if (err) {
+                                        console.error('There was a problem saving your data');
+                                    } else {
+                                        result.data.content.rankOfLastItem = ContentPeople.item.data.rank;
+                                        Buildfire.datastore.save(result.data, TAG_NAMES.PEOPLE_INFO, function (err) {
+                                            if (err)
+                                                console.error('There was a problem saving last item rank');
+                                        });
+                                    }
+                                });
                                 break;
                             case STATUS_CODE.UPDATED:
                                 console.log('Data updated Successfully');

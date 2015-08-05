@@ -306,6 +306,7 @@
                     });
                 modalInstance.result.then(function (message) {
                     if (message === 'yes') {
+                      var item = ContentHome.items[_index];
                         Buildfire.datastore.delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
                             if (err)
                                 return;

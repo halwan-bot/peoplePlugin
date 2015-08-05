@@ -146,3 +146,24 @@ For disabling anchor buttons
     pointer-events: none;
     opacity: 0.5;
 }
+/*
+styles for people list
+*/
+.people-item-list{
+    min-height: 55px;
+}
+
+.people-item-list .copy{
+    width: auto;
+    max-width: inherit;
+    min-width: inherit;
+    display: block;
+    overflow: hidden;
+}
+.people-item-list img{
+    float: left;
+}
+
+.people-item-list .icon{
+    float: left;
+}

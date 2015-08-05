@@ -4,6 +4,9 @@
     angular
         .module('peoplePluginContent')
         .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', 'FormatConverter', 'TAG_NAMES', 'ERROR_CODE', function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE) {
+            /**
+             * These are the options available to sort people list.
+             * */
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -11,16 +14,49 @@
                 FIRST_NAME_Z_TO_A = 'First Name Z-A',
                 LAST_NAME_A_TO_Z = 'Last Name A-Z',
                 LAST_NAME_Z_TO_A = 'Last Name Z-A',
+
+                /**
+                 * _pageSize used to specify number of records per page.
+                 * _page used to specify nextPageToken.
+                 * @type {number}
+                 * @private
+                 */
                 _pageSize = 10,
                 _page = 0,
+
+                /**
+                 * SearchOptions are using for searching , sorting people and fetching people list
+                 * @type object
+                 */
                 searchOptions = {
                     filter: {"$json.fName": {"$regex": '/*'}}, page: _page, pageSize: _pageSize + 1 // the plus one is to check if there are any more
                 };
 
             var ContentHome = this;
+
+            /**
+             * ContentHome.busy used to enable/disable infiniteScroll. if busy true it means there is not more data.
+             * @type {boolean}
+             */
             ContentHome.busy = false;
+
+
+            /**
+             * ContentHome.items used to store the people list which fetched from server.
+             * @type {null}
+             */
             ContentHome.items = null;
+
+            /**
+             * ContentHome.data used to store PeopleInfo which fetched from server.
+             * @type {null}
+             */
             ContentHome.data = null;
+
+            /**
+             * ContentHome.sortingOptions are used to show options in Sort Items drop-down menu in home.html.
+             * @type {*[]}
+             */
             ContentHome.sortingOptions = [
                 MANUALLY,
                 OLDEST_TO_NEWEST,
@@ -30,17 +66,39 @@
                 LAST_NAME_A_TO_Z,
                 LAST_NAME_Z_TO_A
             ];
+
+            /**
+             * ContentHome.imageSortableOptions used for ui-sortable directory to drag-drop carousel images Manually.
+             * @type object
+             */
             ContentHome.imageSortableOptions = {
                 handle: '> .cursor-grab'
             };
+
+            /**
+             * ContentHome.itemSortableOptions used for ui-sortable directory to sort people listing Manually.
+             * @type object
+             */
             ContentHome.itemSortableOptions = {
                 handle: '> .cursor-grab',
                 stop: function (e, ui) {
                     ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
                 }
             };
+
             ContentHome.DeepLinkCopyUrl = false;
+
+            /**
+             * tmrDelayForPeopleInfo is used to update peopleInfo after given time in setTimeOut.
+             * @type {null}
+             */
             var tmrDelayForPeopleInfo = null;
+
+            /**
+             * Default peopleInfo data json
+             * @type object
+             * @private
+             */
             var _data = {
                 content: {
                     images: [],
@@ -54,6 +112,11 @@
                 }
             };
 
+            /**
+             * saveData(newObj, tag) used to save a new record in datastore.
+             * @param newObj is a new/modified object.
+             * @param tag is a tag name or identity given to the data json during saving the record.
+             */
             var saveData = function (newObj, tag) {
                 if (newObj == undefined)return;
                 Buildfire.datastore.save(newObj, tag, function (err, result) {
@@ -64,6 +127,11 @@
                 });
             };
 
+            /**
+             * getSearchOptions(value) is used to get searchOptions with one more key sort which decide the order of sorting.
+             * @param value is used to filter sort option.
+             * @returns object
+             */
             var getSearchOptions = function (value) {
                 switch (value) {
                     case MANUALLY:
@@ -91,13 +159,20 @@
                 return searchOptions;
             };
 
+            /**
+             * ContentHome.disableInfiniteScroll used to disable infiniteScroll
+             * @type {boolean}
+             */
             ContentHome.disableInfiniteScroll = false;
+
+            /**
+             * ContentHome.loadMore() called by infiniteScroll to implement lazy loading
+             */
             ContentHome.loadMore = function () {
                 if (ContentHome.busy) {
                     return;
                 }
                 ContentHome.busy = true;
-                console.log('load More data------------called');
                 if (ContentHome.data && ContentHome.data.content.sortBy) {
                     searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
                 }
@@ -214,7 +289,9 @@
                 var csv = FormatConverter.JSON2CSV(json);
                 $window.open("data:text/csv;charset=utf-8," + escape(csv))
             };
+
             ContentHome.removeListItem = function (_index, itemId) {
+
                 var modalInstance = $modal
                     .open({
                         templateUrl: 'home/modals/remove-people.html',
@@ -229,7 +306,6 @@
                     });
                 modalInstance.result.then(function (message) {
                     if (message === 'yes') {
-                        var item = ContentHome.items[_index];
                         Buildfire.datastore.delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
                             if (err)
                                 return;
@@ -237,7 +313,6 @@
                             $scope.$digest();
                         });
                     }
-
                 }, function (data) {
 
                 });

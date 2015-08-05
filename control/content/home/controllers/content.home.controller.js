@@ -83,8 +83,8 @@
                 ContentHome.itemSortableOptions = {
                     handle: '> .cursor-grab',
                     stop: function (e, ui) {
-                        var startIndex = ui.item.sortable.index,
-                            endIndex = ui.item.sortable.dropindex,
+                        ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
+                        var endIndex = ui.item.sortable.dropindex,
                             draggedItem = ContentHome.items[endIndex];
                         if (ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
                             draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + ContentHome.items[endIndex + 1].data.rank / 2;

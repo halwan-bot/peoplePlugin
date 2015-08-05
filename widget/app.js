@@ -2,7 +2,7 @@
 
 (function (angular, buildfire) {
     angular
-        .module('peoplePluginWidget', ['ngAnimate', 'ngRoute', 'ui.bootstrap', 'ui.sortable'])
+        .module('peoplePluginWidget', ['ngAnimate', 'ngRoute', 'ui.bootstrap', 'ui.sortable','infinite-scroll'])
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
             PEOPLE: 'people'

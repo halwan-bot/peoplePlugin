@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', 'FormatConverter', 'TAG_NAMES', 'ERROR_CODE', 'IndexTokenOfLastItem',
-            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, IndexTokenOfLastItem) {
+        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', 'FormatConverter', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem',
+            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem) {
                 /**
                  * These are the options available to sort people list.
                  * */
@@ -83,7 +83,23 @@
                 ContentHome.itemSortableOptions = {
                     handle: '> .cursor-grab',
                     stop: function (e, ui) {
-                        ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
+                        var startIndex = ui.item.sortable.index,
+                            endIndex = ui.item.sortable.dropindex,
+                            draggedItem = ContentHome.items[endIndex];
+                        if (ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
+                            draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + ContentHome.items[endIndex + 1].data.rank / 2;
+                        } else if (!ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
+                            draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + ContentHome.items[endIndex - 1].data.rank / 2;
+                        } else if (ContentHome.items[endIndex + 1] && !ContentHome.items[endIndex - 1]) {
+                            draggedItem.data.rank = ContentHome.items[endIndex + 1].data.rank / 2;
+                        }
+                        Buildfire.datastore.update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
+                            if (err) {
+                                console.error('Error during updating rank');
+                            } else {
+                                console.info('Rank field updated successfully',draggedItem.data);
+                            }
+                        })
                     }
                 };
 
@@ -105,7 +121,7 @@
                         images: [],
                         description: '',
                         sortBy: '',
-                        indexTokenOfLastItem: 0
+                        rankOfLastItem: 0
                     },
                     design: {
                         listLayout: '',
@@ -137,7 +153,7 @@
                 var getSearchOptions = function (value) {
                     switch (value) {
                         case MANUALLY:
-                            delete searchOptions.sort;
+                            searchOptions.sort = {"rank": 1};
                             break;
                         case OLDEST_TO_NEWEST:
                             searchOptions.sort = {"dateCreated": 1};
@@ -209,7 +225,7 @@
                         }
                         else if (result) {
                             ContentHome.data = result.data;
-                            IndexTokenOfLastItem.setToken(ContentHome.data.content.indexTokenOfLastItem);
+                            RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem);
                             if (!ContentHome.data.content.sortBy) {
                                 ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
                             }
@@ -424,12 +440,9 @@
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
                         ContentHome.data = event.obj;
-                        IndexTokenOfLastItem.setToken(ContentHome.data.content.indexTokenOfLastItem);
+                        RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem);
                         $scope.$digest();
                         if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
-                    } else if (event && event.tag === TAG_NAMES.PEOPLE) {
-                        ContentHome.items = event.obj;
-                        $scope.$digest();
                     }
                 });
 

@@ -183,14 +183,18 @@
                 }
             };
         }])
-        .factory('IndexTokenOfLastItem', [function () {
-            var _indexTokenOfLastItem;
+        .factory('RankOfLastItem', [function () {
+            var _rankOfLastItem;
             return {
-                getToken: function () {
-                    return _indexTokenOfLastItem;
+                getRank: function () {
+                    return  _rankOfLastItem;
                 },
-                setToken: function (value) {
-                    _indexTokenOfLastItem = value;
+                setRank: function (value) {
+                    if (!value) {
+                        console.error('Blank id and value provided');
+                    } else {
+                        _rankOfLastItem = value;
+                    }
                 }
             };
         }]);

@@ -85,11 +85,14 @@
                     stop: function (e, ui) {
                         ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
                         var endIndex = ui.item.sortable.dropindex,
+                            maxRank = 0,
                             draggedItem = ContentHome.items[endIndex];
+
                         if (ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
                             draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + ContentHome.items[endIndex + 1].data.rank / 2;
                         } else if (!ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
-                            draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + ContentHome.items[endIndex - 1].data.rank / 2;
+                            draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank * 2;
+                            maxRank = draggedItem.data.rank;
                         } else if (ContentHome.items[endIndex + 1] && !ContentHome.items[endIndex - 1]) {
                             draggedItem.data.rank = ContentHome.items[endIndex + 1].data.rank / 2;
                         }
@@ -97,7 +100,10 @@
                             if (err) {
                                 console.error('Error during updating rank');
                             } else {
-                                console.info('Rank field updated successfully',draggedItem.data);
+                                console.info('Rank field updated successfully');
+                                if (ContentHome.data.content.rankOfLastItem < maxRank) {
+                                    ContentHome.data.content.rankOfLastItem = maxRank;
+                                }
                             }
                         })
                     }

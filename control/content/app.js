@@ -187,11 +187,11 @@
             var _rankOfLastItem;
             return {
                 getRank: function () {
-                    return  _rankOfLastItem;
+                    return _rankOfLastItem;
                 },
                 setRank: function (value) {
-                    if (!value) {
-                        console.error('Blank id and value provided');
+                    if (typeof value === 'undefined') {
+                        console.error('Blank value provided');
                     } else {
                         _rankOfLastItem = value;
                     }

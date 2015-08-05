@@ -131,8 +131,6 @@
                         saveData(JSON.parse(angular.toJson(_data)), TAG_NAMES.PEOPLE_INFO);
                     }
                     else if (result) {
-                        console.log("********************************************");
-                        console.log(result.data);
                         ContentHome.data = result.data;
                         if (!ContentHome.data.content.sortBy) {
                             ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];

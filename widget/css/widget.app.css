@@ -74,3 +74,12 @@ body.scrollable {
     background: rgba(255, 255, 255, 1.0);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
+
+/*
+Styles for pagination in people listing
+*/
+
+#scroll-infinite{
+    overflow-y: auto;
+    max-height: 200px;
+}

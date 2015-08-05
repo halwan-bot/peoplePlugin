@@ -82,30 +82,32 @@
                  */
                 ContentHome.itemSortableOptions = {
                     handle: '> .cursor-grab',
+                    disabled: true,
                     stop: function (e, ui) {
-                        ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
                         var endIndex = ui.item.sortable.dropindex,
                             maxRank = 0,
                             draggedItem = ContentHome.items[endIndex];
 
-                        if (ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
-                            draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + ContentHome.items[endIndex + 1].data.rank / 2;
-                        } else if (!ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
-                            draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank * 2;
-                            maxRank = draggedItem.data.rank;
-                        } else if (ContentHome.items[endIndex + 1] && !ContentHome.items[endIndex - 1]) {
-                            draggedItem.data.rank = ContentHome.items[endIndex + 1].data.rank / 2;
-                        }
-                        Buildfire.datastore.update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
-                            if (err) {
-                                console.error('Error during updating rank');
-                            } else {
-                                console.info('Rank field updated successfully');
-                                if (ContentHome.data.content.rankOfLastItem < maxRank) {
-                                    ContentHome.data.content.rankOfLastItem = maxRank;
-                                }
+                        if (draggedItem) {
+                            if (ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
+                                draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + ContentHome.items[endIndex + 1].data.rank / 2;
+                            } else if (!ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
+                                draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + 2;
+                                maxRank = draggedItem.data.rank;
+                            } else if (ContentHome.items[endIndex + 1] && !ContentHome.items[endIndex - 1]) {
+                                draggedItem.data.rank = ContentHome.items[endIndex + 1].data.rank - 2;
                             }
-                        })
+                            Buildfire.datastore.update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
+                                if (err) {
+                                    console.error('Error during updating rank');
+                                } else {
+                                    console.info('Rank field updated successfully');
+                                    if (ContentHome.data.content.rankOfLastItem < maxRank) {
+                                        ContentHome.data.content.rankOfLastItem = maxRank;
+                                    }
+                                }
+                            })
+                        }
                     }
                 };
 
@@ -157,10 +159,8 @@
                  * @returns object
                  */
                 var getSearchOptions = function (value) {
+                    ContentHome.itemSortableOptions.disabled = true;
                     switch (value) {
-                        case MANUALLY:
-                            searchOptions.sort = {"rank": 1};
-                            break;
                         case OLDEST_TO_NEWEST:
                             searchOptions.sort = {"dateCreated": 1};
                             break;
@@ -178,6 +178,10 @@
                             break;
                         case LAST_NAME_Z_TO_A:
                             searchOptions.sort = {"lName": -1};
+                            break;
+                        default :
+                            ContentHome.itemSortableOptions.disabled = false;
+                            searchOptions.sort = {"rank": 1};
                             break;
                     }
                     return searchOptions;
@@ -222,8 +226,9 @@
                             ContentHome.data = result.data;
                             RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem);
                             if (!ContentHome.data.content.sortBy) {
-                                ContentHome.data.content.sortBy = ContentHome.sortingOptions[0];
+                                ContentHome.data.content.sortBy = MANUALLY;
                             }
+                            ContentHome.itemSortableOptions.disabled = !(ContentHome.data.content.sortBy === MANUALLY);
                             $scope.$digest();
                             if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                         }

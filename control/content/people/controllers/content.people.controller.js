@@ -2,8 +2,10 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentPeopleCtrl', ['$scope', 'Location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams',
-            function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams) {
+        .controller('ContentPeopleCtrl', ['$scope', 'Location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams', 'IndexTokenOfLastItem',
+            function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams, IndexTokenOfLastItem) {
+
+                var indexTokenOfLastItem = IndexTokenOfLastItem.getToken();
                 var ContentPeople = this;
                 ContentPeople.isUpdating = false;
                 ContentPeople.linksSortableOptions = {
@@ -19,7 +21,8 @@
                         deepLinkUrl: '',
                         dateCreated: +new Date(),
                         socailLinks: [],
-                        bodyContent: ''
+                        bodyContent: '',
+                        indexToken: ''
                     }
                 };
                 updateMasterItem(ContentPeople.item);
@@ -65,6 +68,9 @@
                 }
                 ContentPeople.addNewItem = function () {
                     ContentPeople.item.data.dateCreated = new Date();
+                    ContentPeople.item.data.indexTokenOfLastItem = indexTokenOfLastItem + 10;
+                    IndexTokenOfLastItem.setToken(ContentPeople.item.data.indexToken);
+
                     Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
                         ContentPeople.isUpdating = false;
                         if (err)

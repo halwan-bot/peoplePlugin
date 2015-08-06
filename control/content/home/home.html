@@ -10,12 +10,12 @@
             <div class="home carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
                  ui-sortable="ContentHome.imageSortableOptions" ng-model="ContentHome.data.content.images">
                 <div class="item" ng-repeat="image in ContentHome.data.content.images">
-                  <span class="icon icon-menu cursor-grab fixtop"
+                  <span class="icon icon-menu cursor-grab"
                         aria-hidden="true" ></span>
                     <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
                     <span class="title ellipsis word-wrap">{{image.title}}</span>
 
-                    <div class="copy pull-right">
+                    <div class="copy pull-right carousel-item-btns">
                         <a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)"
                            class="btn btn-primary margin-left-ten">Link</a>
                         <a ng-show="image.link" class="btn btn-success margin-left-ten">Linked</a>

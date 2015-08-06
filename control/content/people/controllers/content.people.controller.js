@@ -117,17 +117,13 @@
                     if (error) {
                       console.error('Error:', error);
                     } else {
+                      if (!ContentPeople.item.data.socialLinks)
+                        ContentPeople.item.data.socialLinks = [];
                       ContentPeople.item.data.socialLinks.push(result);
-                      console.log(ContentPeople.item.data.socialLinks);
                       $scope.$digest();
                     }
                   };
-                  if($routeParams.itemId){
-                      Buildfire.actionItems.showDialog (null, options , callback);
-                  }
-                    else{
-                      Buildfire.actionItems.showDialog (null , options , callback);
-                  }
+                  Buildfire.actionItems.showDialog (null , options , callback);
                 };
 
                 ContentPeople.removeLink = function (_index) {

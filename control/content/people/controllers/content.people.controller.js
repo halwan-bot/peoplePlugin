@@ -154,8 +154,11 @@
                     if (error) {
                         console.error('Error:', error);
                     } else {
-                        ContentPeople.item.data.topImage = result.selectedFiles && result.selectedFiles[0] || null;
+                      if(result.selectedFiles && result.selectedFiles.length){
+                        var newUrl = Buildfire.imageLib.cropImage(result.selectedFiles[0],{width: 600,height : 600});
+                        ContentPeople.item.data.topImage = newUrl && newUrl || null;
                         $scope.$digest();
+                      }
                     }
                 };
 

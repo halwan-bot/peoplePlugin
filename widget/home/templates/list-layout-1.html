@@ -21,9 +21,9 @@
              infinite-scroll-disabled="WidgetHome.busy"
              infinite-scroll-container="'#scroll-infinite'">
           <div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
-            <div class="media pull-left" ng-if="item.data.topImage">
-              <img class="border-grey border-radius-four"
-                   ng-src="{{item.data.topImage}}" style="width: 100px;height: 60px">
+            <div class="media pull-left border-grey border-radius-four people-thumbnail"
+                 ng-if="item.data.topImage">
+              <img class="people-thumbnail-img" ng-src="{{item.data.topImage}}">
             </div>
             <div class="content margin-top-ten item-position">
               <p class="text-primary ellipsis margin-zero item-position"><a

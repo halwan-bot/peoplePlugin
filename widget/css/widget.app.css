@@ -31,7 +31,7 @@ body.scrollable {
     bottom: 0;
     right: 0;
     left: 0;
-    margin: auto;
+    margin: auto !important;
     max-height: 380px;
 }
 
@@ -82,4 +82,18 @@ Styles for pagination in people listing
 #scroll-infinite{
     overflow-y: auto;
     max-height: 200px;
+}
+
+/*
+Widget header styling
+*/
+
+.holder{
+    margin-top: 0 !important;
+}
+/*
+Styles for list-layout-1*/
+
+.item-position{
+    padding-left: 10px !important;
 }

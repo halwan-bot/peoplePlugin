@@ -23,7 +23,6 @@
                 if (!imageInfo.imageUrl) {
                     return;
                 }
-                imageInfo.imageUrl = imageInfo.imageUrl;
                 if (imageInfo.link) {
                     switch (AddCarouselImagePopup.selectedAction.name) {
                         case "new":

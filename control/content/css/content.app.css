@@ -113,6 +113,10 @@ To align action buttons in image carousel listing and people listing on home pag
     width: inherit !important
 }
 
+.width65 {
+    width: 65% !important;
+}
+
 .width66 {
     width: 66% !important;
 }
@@ -196,7 +200,7 @@ top: 8px;
     line-height: 1.2em;
     top: 0 !important;
     word-wrap: break-word;
-    width: 40% !important; /* Use whatever width you want */
+    width: 44% !important; /* Use whatever width you want */
     display:  -webkit-inline-box !important;
     display:  -moz-box !important;
     white-space: normal !important;
@@ -208,4 +212,8 @@ top: 8px;
 
 .carousel-item-btns{
     padding-top: 3px;
+    width: 27%;
+}
+.clear-both{
+    clear: both;
 }

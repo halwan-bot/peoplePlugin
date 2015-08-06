@@ -22,9 +22,8 @@
            infinite-scroll-container="'#scroll-infinite'">
       <span ng-repeat="item in WidgetHome.items">
       <div class="clearfix border-bottom-grey">
-        <div class="text-center">
-          <img
-              ng-src="{{item.data.topImage || 'http://www.placehold.it/1280x720.jpg'}}">
+        <div class="text-center people-thumbnail-card">
+          <img class="people-thumbnail-img-card" ng-src="{{item.data.topImage}}">
         </div>
       </div>
 		<div class="padded text-left">

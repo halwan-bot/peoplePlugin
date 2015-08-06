@@ -81,7 +81,7 @@ Styles for pagination in people listing
 
 #scroll-infinite{
     overflow-y: auto;
-    max-height: 200px;
+    max-height: 240px;
 }
 
 /*
@@ -96,4 +96,41 @@ Styles for list-layout-1*/
 
 .item-position{
     padding-left: 10px !important;
+}
+
+
+/*
+Styles for thumbnail images of people listing
+*/
+
+.people-thumbnail{
+    height: 60px;
+    overflow: hidden;
+    position: relative;
+}
+
+.people-thumbnail-img{
+    width: 100px;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.people-thumbnail-card{
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+
+.people-thumbnail-img-card{
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    left: 0;
 }

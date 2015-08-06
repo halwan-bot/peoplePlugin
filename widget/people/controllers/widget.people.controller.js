@@ -66,13 +66,15 @@
         WidgetPeople.onUpdateFn.clear();
       });
       WidgetPeople.openLinks = function(actionItems){
-        var options = {};
-        var callback = function (error, result) {
-          if (error) {
-            console.error('Error:', error);
-          }
-        };
-        buildfire.actionItems.list(actionItems,options,callback);
+        if(actionItems && actionItems.length){
+          var options = {};
+          var callback = function (error, result) {
+            if (error) {
+              console.error('Error:', error);
+            }
+          };
+          buildfire.actionItems.list(actionItems,options,callback);
+        }
       }
 
     }])

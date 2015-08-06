@@ -6,6 +6,7 @@
             function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams, RankOfLastItem) {
 
                 var _rankOfLastItem = RankOfLastItem.getRank();
+                console.log('-----------------------_rankOfLastItem-----------------------------', _rankOfLastItem);
                 var ContentPeople = this;
                 ContentPeople.isUpdating = false;
                 ContentPeople.linksSortableOptions = {
@@ -22,7 +23,7 @@
                         dateCreated: +new Date(),
                         socailLinks: [],
                         bodyContent: '',
-                        rank: 0
+                        rank: _rankOfLastItem
                     }
                 };
                 updateMasterItem(ContentPeople.item);
@@ -67,13 +68,15 @@
                     ContentPeople.getItem($routeParams.itemId);
                 }
                 ContentPeople.addNewItem = function () {
+                    _rankOfLastItem = _rankOfLastItem + 10;
                     ContentPeople.item.data.dateCreated = new Date();
-                    ContentPeople.item.data.rank = _rankOfLastItem + 10;
+                    ContentPeople.item.data.rank = _rankOfLastItem;
 
                     Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
                         ContentPeople.isUpdating = false;
                         if (err)
                             return console.error('There was a problem saving your data');
+                        RankOfLastItem.setRank(_rankOfLastItem);
                         ContentPeople.getItem(data.id);
                     });
                 };
@@ -93,7 +96,7 @@
                                     if (err) {
                                         console.error('There was a problem saving your data');
                                     } else {
-                                        result.data.content.rankOfLastItem = ContentPeople.item.data.rank;
+                                        result.data.content.rankOfLastItem = _rankOfLastItem;
                                         Buildfire.datastore.save(result.data, TAG_NAMES.PEOPLE_INFO, function (err) {
                                             if (err)
                                                 console.error('There was a problem saving last item rank');

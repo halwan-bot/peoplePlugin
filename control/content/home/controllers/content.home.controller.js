@@ -90,7 +90,7 @@
 
                         if (draggedItem) {
                             if (ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
-                                draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + ContentHome.items[endIndex + 1].data.rank / 2;
+                                draggedItem.data.rank = (ContentHome.items[endIndex - 1].data.rank + ContentHome.items[endIndex + 1].data.rank ) / 2;
                             } else if (!ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
                                 draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + 2;
                                 maxRank = draggedItem.data.rank;
@@ -104,6 +104,7 @@
                                     console.info('Rank field updated successfully');
                                     if (ContentHome.data.content.rankOfLastItem < maxRank) {
                                         ContentHome.data.content.rankOfLastItem = maxRank;
+                                        RankOfLastItem.setRank(maxRank);
                                     }
                                 }
                             })
@@ -146,10 +147,13 @@
                 var saveData = function (newObj, tag) {
                     if (newObj == undefined)return;
                     Buildfire.datastore.save(newObj, tag, function (err, result) {
-                        if (err || !result)
+                        if (err || !result) {
                             console.error('------------error saveData-------', err);
-                        else
+                        }
+                        else {
                             console.log('------------data saved-------', result);
+                            RankOfLastItem.setRank(result.obj.content.rankOfLastItem);
+                        }
                     });
                 };
 
@@ -215,6 +219,8 @@
                     });
                 };
                 var getContentPeopleInfo = function () {
+                    //saveData(JSON.parse(angular.toJson(_data)), TAG_NAMES.PEOPLE_INFO);
+
                     Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                         if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                             console.error('-----------err-------------', err);
@@ -440,7 +446,7 @@
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
                         ContentHome.data = event.obj;
-                        RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem);
+                        console.log('------------PEOPLE_INFO Updated------------', ContentHome.data);
                         $scope.$digest();
                         if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                     }

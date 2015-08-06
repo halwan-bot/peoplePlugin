@@ -91,6 +91,21 @@
                             console.error('There was a problem saving your data');
                     })
                 };
+
+                ContentPeople.openEditLink = function (link,index) {
+                  var options = {showIcons: false};
+                  var callback = function (error, result) {
+                    if (error) {
+                      console.error('Error:', error);
+                    } else {
+                      console.log(")))))))))))))))", result);
+                      ContentPeople.item.data.socialLinks.splice(index, 1, result);
+                      $scope.$digest();
+                    }
+                  };
+                  Buildfire.actionItems.showDialog (link , options , callback);
+                };
+
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.status) {
                         switch (event.status) {
@@ -116,19 +131,18 @@
                 });
 
                 ContentPeople.openAddLinkPopup = function () {
-                    var options = {showIcons: false};
-                    var callback = function (error, result) {
-                        if (error) {
-                            console.error('Error:', error);
-                        } else {
-                            ContentPeople.item.data.socialLinks.push(result);
-                            console.log(ContentPeople.item.data.socialLinks);
-                            $scope.$digest();
-                        }
-                    };
-
-                    Buildfire.actionItems.showDialog(null, options, callback);
-
+                  var options = {showIcons: false};
+                  var callback = function (error, result) {
+                    if (error) {
+                      console.error('Error:', error);
+                    } else {
+                      if (!ContentPeople.item.data.socialLinks)
+                        ContentPeople.item.data.socialLinks = [];
+                      ContentPeople.item.data.socialLinks.push(result);
+                      $scope.$digest();
+                    }
+                  };
+                  Buildfire.actionItems.showDialog (null , options , callback);
                 };
 
                 ContentPeople.removeLink = function (_index) {

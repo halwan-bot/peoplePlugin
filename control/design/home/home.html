@@ -56,11 +56,17 @@
         <span>Item List Background Image</span>
     </div>
     <div class="main col-md-9 pull-right">
-        <div class="screens clearfix" >
-            <div class="screen text-center layouticon pull-left" style="background: url('{{DesignHome.peopleInfo.design.backgroundImage}}');background-position: center;background-size: 90%;background-repeat: no-repeat;">
-                <a class="border-grey border-radius-three default-background-hover" ng-click="DesignHome.addBackgroundImage()">
-                </a>
-                <label class="secondary">750x1334</label>
+
+        <div class="screens clearfix">
+            <div class="screen text-center layouticon pull-left">
+                <a class="border-grey border-radius-three default-background-hover"
+                   ng-hide="DesignHome.peopleInfo.design.backgroundImage" ng-click="DesignHome.addBackgroundImage()"></a>
+                  <span ng-show="DesignHome.peopleInfo.design.backgroundImage">
+                    <img src="{{DesignHome.peopleInfo.design.backgroundImage}}">
+                    <span style="float: right; top: -50px; content: '-';"
+                          class="btn-icon btn-delete-icon btn-danger transition-third"
+                          ng-click="DesignHome.removeBackgroundImage()"></span>
+                  </span>
             </div>
         </div>
     </div>

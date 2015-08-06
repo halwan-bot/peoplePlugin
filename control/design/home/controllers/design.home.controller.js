@@ -33,6 +33,9 @@
             DesignHome.addBackgroundImage=function(){
                 Buildfire.imageLib.showDialog(options,callback);
             };
+            DesignHome.removeBackgroundImage = function () {
+                DesignHome.peopleInfo.design.backgroundImage= null;
+            };
             DesignHome.changeListLayout = function (layoutName) {
                 if (layoutName) {
                     DesignHome.peopleInfo.design.listLayout = layoutName;

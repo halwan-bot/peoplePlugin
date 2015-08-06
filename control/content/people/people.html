@@ -82,13 +82,16 @@
             </div>
             <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
                  ui-sortable="ContentPeople.linksSortableOptions" ng-model="ContentPeople.item.data.links">
-                <div class="d-item" ng-repeat="_link in ContentPeople.item.data.socailLinks">
+                <div class="d-item"
+                     ng-repeat="_link in ContentPeople.item.data.socialLinks">
                     <span class="icon icon-menu cursor-grab"></span>
-                    <img ng-src={{_link.iconImageUrl}} class="border-radius-four border-grey">
-
                     <div class="copy pull-right width66">
-                        <span class="width34 title ellipsis">{{_link.title}}</span>
+                        <span class="width34 title ellipsis"><a
+                            href="javascript:void(0)"
+                            ng-click="ContentPeople.openEditLink(_link,$index)">{{_link
+                          .title}}</a></span>
                         <span class="width34 title ellipsis">{{_link.url}}</span>
+                        <span class="width34 title ellipsis">{{_link.deepLinkUrl}}</span>
                         <span class="btn-icon btn-delete-icon btn-danger btn-cross"
                               ng-click="ContentPeople.removeLink($index)"></span>
                     </div>
@@ -103,7 +106,7 @@
                 <a class="btn btn-danger pull-right stretch" data-ng-click="ContentPeople.deleteItem();" href="javascript:void(0)">Delete</a>
             </div>
             <div class="col-md-6 pull-right padding-right-zero padding-left-ten">
-                <a class="btn btn-primary pull-right stretch" ng-click="ContentPeople.done()"
+                <a class="btn btn-primary pull-right stretch" ng-click="ContentPeople.done()" ng-disabled="ContentPeople.unchangedData"
                    href="javaScript:void(0);">Done</a>
             </div>
         </div>

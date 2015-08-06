@@ -8,7 +8,6 @@
       var currentItemLayout,
         currentListLayout;
       var itemId = $routeParams.id;
-
       var getPeopleDetail = function () {
         console.log("ItemID::::::::::: ", itemId);
         Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
@@ -22,7 +21,6 @@
           bindOnUpdate();
         });
       };
-
       var getContentPeopleInfo = function () {
         Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
 
@@ -43,7 +41,6 @@
         });
       };
       getContentPeopleInfo();
-
       function bindOnUpdate() {
        WidgetPeople.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
           if (event && event.tag) {
@@ -65,10 +62,20 @@
           }
         });
       }
-
       $scope.$on("$destroy", function(){
         WidgetPeople.onUpdateFn.clear();
       });
+      WidgetPeople.openLinks = function(actionItems){
+        if(actionItems && actionItems.length){
+          var options = {};
+          var callback = function (error, result) {
+            if (error) {
+              console.error('Error:', error);
+            }
+          };
+          buildfire.actionItems.list(actionItems,options,callback);
+        }
+      }
 
     }])
 })(window.angular, window);

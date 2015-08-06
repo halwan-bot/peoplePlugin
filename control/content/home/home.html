@@ -7,18 +7,18 @@
             <div class="clearfix">
                 <a class="btn btn-success pull-left" ng-click="ContentHome.openAddCarouselImagePopup()">Add Image</a>
             </div>
-            <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
+            <div class="home carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
                  ui-sortable="ContentHome.imageSortableOptions" ng-model="ContentHome.data.content.images">
-                <div class="d-item" ng-repeat="image in ContentHome.data.content.images">
+                <div class="item" ng-repeat="image in ContentHome.data.content.images">
                   <span class="icon icon-menu cursor-grab"
-                        aria-hidden="true" style="margin-top: 10px"></span>
+                        aria-hidden="true" ></span>
                     <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
-                    <span class="title ellipsis width-inherit">{{image.title}}</span>
+                    <span class="title ellipsis word-wrap">{{image.title}}</span>
 
-                    <div class="copy pull-right list-view width-inherit">
+                    <div class="copy pull-right carousel-item-btns">
                         <a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)"
-                           class="btn btn-primary margin-left-ten">Link</a>
-                        <a ng-show="image.link" class="btn btn-success margin-left-ten">Linked</a>
+                           class="btn btn-primary margin-left-ten width65">Link</a>
+                        <a ng-show="image.link" class="btn btn-success margin-left-ten width65">Linked</a>
                         <span class="btn-icon btn-delete-icon btn-danger"
                               ng-click="ContentHome.removeCarouselImage($index)"></span>
                     </div>
@@ -88,8 +88,7 @@
         <div ng-if="ContentHome.DeepLinkCopyUrl" class="alert alert-success transition-half deep-link"><span
                 class="text-center">DeepLink URL copied to clipboard.</span></div>
         <div id="scroll-infinite"
-             class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four"
-                >
+             class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four">
             <div ng-if="ContentHome.data" infinite-scroll-distance="1"
                  infinite-scroll="ContentHome.loadMore()"
                  infinite-scroll-disabled="ContentHome.busy"
@@ -109,7 +108,7 @@
                             <a class="text-primary pull-left " href="#/people/{{item.id}}"><span
                                     class="title ellipsis ng-binding">{{item.data.fName+' '+item.data.lName}}</span></a>
                             <span
-                                class="title ellipsis pull-left ng-binding" style="width: 100%; max-width: 100%">{{item.data.bodyContent}}</span>
+                                class="title ellipsis pull-left width66 clear-both ng-binding" style="width: 100%; max-width: 100%">{{item.data.bodyContent}}</span>
                         </div>
                     </div>
                 </div>

@@ -89,24 +89,36 @@
                             draggedItem = ContentHome.items[endIndex];
 
                         if (draggedItem) {
-                            if (ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
-                                draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + ContentHome.items[endIndex + 1].data.rank / 2;
-                            } else if (!ContentHome.items[endIndex + 1] && ContentHome.items[endIndex - 1]) {
-                                draggedItem.data.rank = ContentHome.items[endIndex - 1].data.rank + 2;
-                                maxRank = draggedItem.data.rank;
-                            } else if (ContentHome.items[endIndex + 1] && !ContentHome.items[endIndex - 1]) {
-                                draggedItem.data.rank = ContentHome.items[endIndex + 1].data.rank - 2;
-                            }
-                            Buildfire.datastore.update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
-                                if (err) {
-                                    console.error('Error during updating rank');
+                            var prev = ContentHome.items[endIndex - 1],
+                                next = ContentHome.items[endIndex + 1];
+                            var isRankChanged = false;
+                            if (next) {
+                                if (prev) {
+                                    draggedItem.data.rank = ((prev.data.rank || 0) + (next.data.rank || 0)) / 2;
+                                    isRankChanged = true;
                                 } else {
-                                    console.info('Rank field updated successfully');
-                                    if (ContentHome.data.content.rankOfLastItem < maxRank) {
-                                        ContentHome.data.content.rankOfLastItem = maxRank;
-                                    }
+                                    draggedItem.data.rank = (next.data.rank || 0) / 2;
+                                    isRankChanged = true;
                                 }
-                            })
+                            } else {
+                                if (prev) {
+                                    draggedItem.data.rank = (((prev.data.rank || 0) * 2) + 10) / 2;
+                                    maxRank = draggedItem.data.rank;
+                                    isRankChanged = true;
+                                }
+                            }
+                            if (isRankChanged) {
+                                Buildfire.datastore.update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
+                                    if (err) {
+                                        console.error('Error during updating rank');
+                                    } else {
+                                        if (ContentHome.data.content.rankOfLastItem < maxRank) {
+                                            ContentHome.data.content.rankOfLastItem = maxRank;
+                                            RankOfLastItem.setRank(maxRank);
+                                        }
+                                    }
+                                })
+                            }
                         }
                     }
                 };
@@ -146,10 +158,13 @@
                 var saveData = function (newObj, tag) {
                     if (newObj == undefined)return;
                     Buildfire.datastore.save(newObj, tag, function (err, result) {
-                        if (err || !result)
+                        if (err || !result) {
                             console.error('------------error saveData-------', err);
-                        else
+                        }
+                        else {
                             console.log('------------data saved-------', result);
+                            RankOfLastItem.setRank(result.obj.content.rankOfLastItem);
+                        }
                     });
                 };
 
@@ -440,17 +455,18 @@
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
                         ContentHome.data = event.obj;
-                        RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem);
                         $scope.$digest();
                         if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
                     }
                 });
 
-                var saveDataWithDelay = function (newObj) {
-                    if (newObj) {
-                        if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
+                var saveDataWithDelay = function (infoData) {
+                    if (infoData) {
+                        if (tmrDelayForPeopleInfo) {
+                            clearTimeout(tmrDelayForPeopleInfo);
+                        }
                         tmrDelayForPeopleInfo = setTimeout(function () {
-                            saveData(JSON.parse(angular.toJson(newObj)), TAG_NAMES.PEOPLE_INFO);
+                            saveData(JSON.parse(angular.toJson(infoData)), TAG_NAMES.PEOPLE_INFO);
                         }, 500);
                     }
                 };

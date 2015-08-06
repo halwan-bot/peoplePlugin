@@ -3,15 +3,17 @@
         <span>List Layout</span>
     </div>
     <div class="main col-md-9 pull-right">
-        <div class="screens clearfix">
-            <div class="screen layouticon pull-left">
-                <a
-                    class="border-grey border-radius-three default-background-hover"><img src="images/{{DesignHome.peopleInfo.design.listLayout}}.png"></a>
-            </div>
-            <div class="layoutgrid pull-right border-grey border-radius-three">
-				<a ng-repeat="layout in DesignHome.layouts.listLayouts" 
-           class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeListLayout(layout.name)"><img src="images/{{layout.name}}.png"></a>
-           
+		<div class="screens clearfix">
+			<div class="screen layouticon pull-left">
+				<a class="border-grey border-radius-three default-background-hover text-center">
+					<span class="add-icon hidden">+</span>
+					<img src="images/{{DesignHome.peopleInfo.design.listLayout}}.png">
+				</a>
+			</div>
+			<div class="screen layoutgrid pull-right margin-left-zero border-grey border-radius-three">
+				<a ng-repeat="layout in DesignHome.layouts.listLayouts" class="layouticon border-grey border-radius-three default-background-hover text-center" ng-click="DesignHome.changeListLayout(layout.name)"><img src="images/{{layout.name}}.png"></a>
+
+
 				<!--
 				<ul>
                     <li ng-repeat="layout in DesignHome.layouts.listLayouts">
@@ -32,12 +34,14 @@
     <div class="main col-md-9 pull-right">
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
-                <a class="border-grey border-radius-three default-background-hover"><img src="images/{{DesignHome.peopleInfo.design.itemLayout}}.png"></a>
-            </div>
-            <div class="layoutgrid pull-right border-grey border-radius-three">
-                <a ng-repeat="layout in DesignHome.layouts.itemLayouts"
-                   class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeItemLayout(layout.name)"><img src="images/{{layout.name}}.png"></a>
-        	
+				<a class="border-grey border-radius-three default-background-hover text-center">
+					<span class="add-icon hidden">+</span>
+					<img src="images/{{DesignHome.peopleInfo.design.itemLayout}}.png">
+				</a>
+			</div>
+			<div class="screen layoutgrid pull-right margin-left-zero border-grey border-radius-three">
+				<a ng-repeat="layout in DesignHome.layouts.itemLayouts" class="layouticon border-grey border-radius-three default-background-hover text-center" ng-click="DesignHome.changeItemLayout(layout.name)"><img src="images/{{layout.name}}.png"></a>
+			
 				<!--
 				<ul>
                     <li ng-repeat="layout in DesignHome.layouts.itemLayouts">
@@ -59,6 +63,7 @@
         <div class="screens clearfix" >
             <div class="screen text-center layouticon pull-left" style="background: url('{{DesignHome.peopleInfo.design.backgroundImage}}');background-position: center;background-size: 90%;background-repeat: no-repeat;">
                 <a class="border-grey border-radius-three default-background-hover" ng-click="DesignHome.addBackgroundImage()">
+					<span class="add-icon">+</span>
                 </a>
                 <label class="secondary">750x1334</label>
             </div>

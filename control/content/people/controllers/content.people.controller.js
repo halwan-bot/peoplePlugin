@@ -87,6 +87,21 @@
                             console.error('There was a problem saving your data');
                     })
                 };
+
+                ContentPeople.openEditLink = function (link,index) {
+                  var options = {showIcons: false};
+                  var callback = function (error, result) {
+                    if (error) {
+                      console.error('Error:', error);
+                    } else {
+                      console.log(")))))))))))))))", result);
+                      ContentPeople.item.data.socialLinks.splice(index, 1, result);
+                      $scope.$digest();
+                    }
+                  };
+                  Buildfire.actionItems.showDialog (link , options , callback);
+                };
+
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.status) {
                         switch (event.status) {

@@ -219,8 +219,6 @@
                     });
                 };
                 var getContentPeopleInfo = function () {
-                    //saveData(JSON.parse(angular.toJson(_data)), TAG_NAMES.PEOPLE_INFO);
-
                     Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                         if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                             console.error('-----------err-------------', err);

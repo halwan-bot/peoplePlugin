@@ -83,3 +83,10 @@ Styles for pagination in people listing
     overflow-y: auto;
     max-height: 200px;
 }
+
+/*
+Styles for list-layout-1*/
+
+.item-position{
+    padding-left: 10px !important;
+}

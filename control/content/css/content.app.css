@@ -200,9 +200,12 @@ top: 8px;
     word-wrap: break-word;
     width: 30% !important; /* Use whatever width you want */
     display:  -webkit-inline-box !important;
+    display:  -moz-box !important;
     white-space: normal !important;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp:2;
+    -moz-line-clamp: 2;
     -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
 }
 .fixtop{
     top:-8px !important;

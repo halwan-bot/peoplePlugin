@@ -83,3 +83,11 @@ Styles for pagination in people listing
     overflow-y: auto;
     max-height: 200px;
 }
+
+/*
+Widget header styling
+*/
+
+.holder{
+    margin-top: 0 !important;
+}

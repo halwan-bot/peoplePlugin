@@ -91,3 +91,9 @@ Widget header styling
 .holder{
     margin-top: 0 !important;
 }
+/*
+Styles for list-layout-1*/
+
+.item-position{
+    padding-left: 10px !important;
+}

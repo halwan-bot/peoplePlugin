@@ -79,20 +79,25 @@
             <span>Links</span>
         </div>
 		<div class="main col-md-9 pull-right">
-			<a class="btn btn-success col-md-3">Add Link</a>
+			<a class="btn btn-success col-md-3" ng-click="ContentPeople.openAddLinkPopup()">Add Link</a>
 		</div>
 	</div>
 	<hr class="none">
 	<div class="item clearfix row">
 		<div class="main holder col-md-12 pull-left">
-			<div class="tab-order draggable-list-view border-grey">
-				<div class="d-item double-line square-icon">
-					<span class="icon icon-menu"></span>
+			<div class="draggable-list-view wide-list has-btn links-list" ui-sortable="ContentPeople.linksSortableOptions" ng-model="ContentPeople.item.data.links">
+				<div class="d-item double-line square-icon" ng-repeat="_link in ContentPeople.item.data.socialLinks">
+					<span class="icon icon-menu cursor-grab"></span>
 					<img src="http://www.placehold.it/50x50" class="border-radius-four border-grey">
 					<div class="copy pull-right">
-						<a class="text-primary"><span class="title ellipsis pull-left">Page Title</span></a>
-						<span class="title ellipsis pull-left">Plugin Type</span>
-						<span class="btn-icon btn-delete-icon btn-danger transition-third" onclick="window.openDialog('remove.html', null, 'sm', null)"><span>
+						<div class="col-md-4 padding-zero pull-left">
+							<a class="text-primary" ng-click="ContentPeople.openEditLink(_link,$index)"><span class="title ellipsis pull-left">{{_link.title}}</span></a>
+							<span class="title ellipsis pull-left">Item Summary Item Summary Item Summary</span>
+						</div>
+						<div class="col-md-7 padding-right-zero pull-left">
+							<span class="content ellipsis">{{_link.deepLinkUrl}}</span>
+						</div>
+						<span class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="ContentPeople.removeLink($index)"><span>
 					</div>
 				</div>
 			</div>

@@ -9,13 +9,13 @@
             </div>
             <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
                  ui-sortable="ContentHome.imageSortableOptions" ng-model="ContentHome.data.content.images">
-                <div class="d-item" ng-repeat="image in ContentHome.data.content.images">
+                <div class="item" ng-repeat="image in ContentHome.data.content.images">
                   <span class="icon icon-menu cursor-grab"
                         aria-hidden="true" style="margin-top: 10px"></span>
                     <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
                     <span class="title ellipsis width-inherit">{{image.title}}</span>
 
-                    <div class="copy pull-right list-view width-inherit">
+                    <div class="copy pull-right">
                         <a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)"
                            class="btn btn-primary margin-left-ten">Link</a>
                         <a ng-show="image.link" class="btn btn-success margin-left-ten">Linked</a>

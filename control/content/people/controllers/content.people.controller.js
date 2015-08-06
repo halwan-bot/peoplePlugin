@@ -8,22 +8,25 @@
                 var _rankOfLastItem = RankOfLastItem.getRank();
                 var ContentPeople = this;
                 ContentPeople.isUpdating = false;
+                ContentPeople.unchangedData = true;
                 ContentPeople.linksSortableOptions = {
                     handle: '> .cursor-grab'
                 };
+                var _data = {
+                    topImage: '',
+                    iconImage: '',
+                    fName: '',
+                    lName: '',
+                    position: '',
+                    deepLinkUrl: '',
+                    dateCreated: "",
+                    socialLinks: [],
+                    bodyContent: '',
+                    rank: _rankOfLastItem
+                };
+
                 ContentPeople.item = {
-                    data: {
-                        topImage: '',
-                        iconImage: '',
-                        fName: '',
-                        lName: '',
-                        position: '',
-                        deepLinkUrl: '',
-                        dateCreated: +new Date(),
-                        socailLinks: [],
-                        bodyContent: '',
-                        rank: 0
-                    }
+                    data: angular.copy(_data)
                 };
                 updateMasterItem(ContentPeople.item);
                 function updateMasterItem(item) {
@@ -55,10 +58,12 @@
                     }
                 };
                 ContentPeople.getItem = function (itemId) {
-                    Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, data) {
+                    Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, item) {
                         if (err)
                             console.error('There was a problem saving your data');
-                        ContentPeople.item = data;
+                        ContentPeople.item = item;
+                        _data.dateCreated = item.data.dateCreated;
+                        _data.rank = item.data.rank;
                         updateMasterItem(ContentPeople.item);
                         $scope.$digest();
                     });
@@ -67,13 +72,15 @@
                     ContentPeople.getItem($routeParams.itemId);
                 }
                 ContentPeople.addNewItem = function () {
-                    ContentPeople.item.data.dateCreated = new Date();
-                    ContentPeople.item.data.rank = _rankOfLastItem + 10;
+                    _rankOfLastItem = _rankOfLastItem + 10;
+                    ContentPeople.item.data.dateCreated = +new Date();
+                    ContentPeople.item.data.rank = _rankOfLastItem;
 
                     Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
                         ContentPeople.isUpdating = false;
                         if (err)
                             return console.error('There was a problem saving your data');
+                        RankOfLastItem.setRank(_rankOfLastItem);
                         ContentPeople.getItem(data.id);
                     });
                 };
@@ -84,6 +91,21 @@
                             console.error('There was a problem saving your data');
                     })
                 };
+
+                ContentPeople.openEditLink = function (link,index) {
+                  var options = {showIcons: false};
+                  var callback = function (error, result) {
+                    if (error) {
+                      console.error('Error:', error);
+                    } else {
+                      console.log(")))))))))))))))", result);
+                      ContentPeople.item.data.socialLinks.splice(index, 1, result);
+                      $scope.$digest();
+                    }
+                  };
+                  Buildfire.actionItems.showDialog (link , options , callback);
+                };
+
                 Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.status) {
                         switch (event.status) {
@@ -93,7 +115,7 @@
                                     if (err) {
                                         console.error('There was a problem saving your data');
                                     } else {
-                                        result.data.content.rankOfLastItem = ContentPeople.item.data.rank;
+                                        result.data.content.rankOfLastItem = _rankOfLastItem;
                                         Buildfire.datastore.save(result.data, TAG_NAMES.PEOPLE_INFO, function (err) {
                                             if (err)
                                                 console.error('There was a problem saving last item rank');
@@ -109,26 +131,22 @@
                 });
 
                 ContentPeople.openAddLinkPopup = function () {
-                    var modalInstance = $modal
-                        .open({
-                            templateUrl: 'people/modals/add-item-link.html',
-                            controller: 'AddItemLinkPopupCtrl',
-                            controllerAs: 'AddItemLinkPopup',
-                            size: 'sm'
-                        });
-                    modalInstance.result.then(function (_link) {
-                        if (_link) {
-                            ContentPeople.item.data.socailLinks.push(JSON.parse(angular.toJson(_link)));
-                        }
-                    }, function (err) {
-                        if (err) {
-                            console.error('Error:', err)
-                        }
-                    });
+                  var options = {showIcons: false};
+                  var callback = function (error, result) {
+                    if (error) {
+                      console.error('Error:', error);
+                    } else {
+                      if (!ContentPeople.item.data.socialLinks)
+                        ContentPeople.item.data.socialLinks = [];
+                      ContentPeople.item.data.socialLinks.push(result);
+                      $scope.$digest();
+                    }
+                  };
+                  Buildfire.actionItems.showDialog (null , options , callback);
                 };
 
                 ContentPeople.removeLink = function (_index) {
-                    ContentPeople.item.data.socailLinks.splice(_index, 1);
+                    ContentPeople.item.data.socialLinks.splice(_index, 1);
                 };
 
                 var options = {showIcons: false, multiSelection: false};
@@ -136,8 +154,11 @@
                     if (error) {
                         console.error('Error:', error);
                     } else {
-                        ContentPeople.item.data.topImage = result.selectedFiles && result.selectedFiles[0] || null;
+                      if(result.selectedFiles && result.selectedFiles.length){
+                        var newUrl = Buildfire.imageLib.cropImage(result.selectedFiles[0],{width: 600,height : 600});
+                        ContentPeople.item.data.topImage = newUrl && newUrl || null;
                         $scope.$digest();
+                      }
                     }
                 };
 
@@ -151,25 +172,22 @@
 
 
                 var tmrDelayForPeoples = null;
-                var updateItemsWithDelay = function (newObj) {
+                var updateItemsWithDelay = function (item) {
                     if (tmrDelayForPeoples) {
                         clearTimeout(tmrDelayForPeoples);
                         ContentPeople.isUpdating = false;
                     }
-                    if (ContentPeople.item && !ContentPeople.isUpdating && !isUnchanged(ContentPeople.item)) {
-                        ContentPeople.isUpdating = true;
-                        if (ContentPeople.item.id) {
-                            tmrDelayForPeoples = setTimeout(function () {
+                    ContentPeople.unchangedData = angular.equals(_data, ContentPeople.item.data);
+                    if (!ContentPeople.isUpdating && !isUnchanged(ContentPeople.item)) {
+                        tmrDelayForPeoples = setTimeout(function () {
+                            if (item.id) {
                                 ContentPeople.updateItemData();
-                            }, 500);
-                        }
-                        else {
-                            tmrDelayForPeoples = setTimeout(function () {
+                            }
+                            else {
                                 ContentPeople.addNewItem();
-                            }, 500);
-                        }
+                            }
+                        }, 1000);
                     }
-
                 };
 
                 $scope.$watch(function () {

@@ -21,7 +21,7 @@
                         position: '',
                         deepLinkUrl: '',
                         dateCreated: +new Date(),
-                        socailLinks: [],
+                        socialLinks: [],
                         bodyContent: '',
                         rank: _rankOfLastItem
                     }
@@ -112,26 +112,23 @@
                 });
 
                 ContentPeople.openAddLinkPopup = function () {
-                    var modalInstance = $modal
-                        .open({
-                            templateUrl: 'people/modals/add-item-link.html',
-                            controller: 'AddItemLinkPopupCtrl',
-                            controllerAs: 'AddItemLinkPopup',
-                            size: 'sm'
-                        });
-                    modalInstance.result.then(function (_link) {
-                        if (_link) {
-                            ContentPeople.item.data.socailLinks.push(JSON.parse(angular.toJson(_link)));
-                        }
-                    }, function (err) {
-                        if (err) {
-                            console.error('Error:', err)
-                        }
-                    });
+                  var options = {showIcons: false};
+                  var callback = function (error, result) {
+                    if (error) {
+                      console.error('Error:', error);
+                    } else {
+                      ContentPeople.item.data.socialLinks.push(result);
+                      console.log(ContentPeople.item.data.socialLinks);
+                      $scope.$digest();
+                    }
+                  };
+
+                  Buildfire.actionItems.showDialog (null , options , callback);
+
                 };
 
                 ContentPeople.removeLink = function (_index) {
-                    ContentPeople.item.data.socailLinks.splice(_index, 1);
+                    ContentPeople.item.data.socialLinks.splice(_index, 1);
                 };
 
                 var options = {showIcons: false, multiSelection: false};

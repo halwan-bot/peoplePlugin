@@ -82,10 +82,9 @@
             </div>
             <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
                  ui-sortable="ContentPeople.linksSortableOptions" ng-model="ContentPeople.item.data.links">
-                <div class="d-item" ng-repeat="_link in ContentPeople.item.data.socailLinks">
+                <div class="d-item"
+                     ng-repeat="_link in ContentPeople.item.data.socialLinks">
                     <span class="icon icon-menu cursor-grab"></span>
-                    <img ng-src={{_link.iconImageUrl}} class="border-radius-four border-grey">
-
                     <div class="copy pull-right width66">
                         <span class="width34 title ellipsis">{{_link.title}}</span>
                         <span class="width34 title ellipsis">{{_link.url}}</span>

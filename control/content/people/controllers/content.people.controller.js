@@ -122,9 +122,12 @@
                       $scope.$digest();
                     }
                   };
-
-                  Buildfire.actionItems.showDialog (null , options , callback);
-
+                  if($routeParams.itemId){
+                      Buildfire.actionItems.showDialog (null, options , callback);
+                  }
+                    else{
+                      Buildfire.actionItems.showDialog (null , options , callback);
+                  }
                 };
 
                 ContentPeople.removeLink = function (_index) {

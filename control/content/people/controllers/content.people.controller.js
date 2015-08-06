@@ -6,25 +6,27 @@
             function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams, RankOfLastItem) {
 
                 var _rankOfLastItem = RankOfLastItem.getRank();
-                console.log('-----------------------_rankOfLastItem-----------------------------', _rankOfLastItem);
                 var ContentPeople = this;
                 ContentPeople.isUpdating = false;
+                ContentPeople.unchangedData = true;
                 ContentPeople.linksSortableOptions = {
                     handle: '> .cursor-grab'
                 };
+                var _data = {
+                    topImage: '',
+                    iconImage: '',
+                    fName: '',
+                    lName: '',
+                    position: '',
+                    deepLinkUrl: '',
+                    dateCreated: "",
+                    socialLinks: [],
+                    bodyContent: '',
+                    rank: _rankOfLastItem
+                };
+
                 ContentPeople.item = {
-                    data: {
-                        topImage: '',
-                        iconImage: '',
-                        fName: '',
-                        lName: '',
-                        position: '',
-                        deepLinkUrl: '',
-                        dateCreated: +new Date(),
-                        socialLinks: [],
-                        bodyContent: '',
-                        rank: _rankOfLastItem
-                    }
+                    data: angular.copy(_data)
                 };
                 updateMasterItem(ContentPeople.item);
                 function updateMasterItem(item) {
@@ -56,10 +58,12 @@
                     }
                 };
                 ContentPeople.getItem = function (itemId) {
-                    Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, data) {
+                    Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, item) {
                         if (err)
                             console.error('There was a problem saving your data');
-                        ContentPeople.item = data;
+                        ContentPeople.item = item;
+                        _data.dateCreated = item.data.dateCreated;
+                        _data.rank = item.data.rank;
                         updateMasterItem(ContentPeople.item);
                         $scope.$digest();
                     });
@@ -69,7 +73,7 @@
                 }
                 ContentPeople.addNewItem = function () {
                     _rankOfLastItem = _rankOfLastItem + 10;
-                    ContentPeople.item.data.dateCreated = new Date();
+                    ContentPeople.item.data.dateCreated = +new Date();
                     ContentPeople.item.data.rank = _rankOfLastItem;
 
                     Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
@@ -165,25 +169,22 @@
 
 
                 var tmrDelayForPeoples = null;
-                var updateItemsWithDelay = function (newObj) {
+                var updateItemsWithDelay = function (item) {
                     if (tmrDelayForPeoples) {
                         clearTimeout(tmrDelayForPeoples);
                         ContentPeople.isUpdating = false;
                     }
-                    if (ContentPeople.item && !ContentPeople.isUpdating && !isUnchanged(ContentPeople.item)) {
-                        ContentPeople.isUpdating = true;
-                        if (ContentPeople.item.id) {
-                            tmrDelayForPeoples = setTimeout(function () {
+                    ContentPeople.unchangedData = angular.equals(_data, ContentPeople.item.data);
+                    if (!ContentPeople.isUpdating && !isUnchanged(ContentPeople.item)) {
+                        tmrDelayForPeoples = setTimeout(function () {
+                            if (item.id) {
                                 ContentPeople.updateItemData();
-                            }, 500);
-                        }
-                        else {
-                            tmrDelayForPeoples = setTimeout(function () {
+                            }
+                            else {
                                 ContentPeople.addNewItem();
-                            }, 500);
-                        }
+                            }
+                        }, 1000);
                     }
-
                 };
 
                 $scope.$watch(function () {

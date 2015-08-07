@@ -3,13 +3,20 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('ImportCSVPopupCtrl', ['$scope', '$modalInstance','FormatConverter','Buildfire','TAG_NAMES', function ($scope, $modalInstance,FormatConverter,Buildfire,TAG_NAMES) {
+        .controller('ImportCSVPopupCtrl', ['$scope', '$modalInstance','peopleInfo','FormatConverter','Buildfire','TAG_NAMES', function ($scope, $modalInstance,peopleInfo,FormatConverter,Buildfire,TAG_NAMES) {
             var ImportCSVPopup=this;
+            var rank=peopleInfo.content.rankOfLastItem || 0;
             ImportCSVPopup.ok = function (linkUrl) {
-                console.log(ImportCSVPopup.fileData);
                 if(ImportCSVPopup.fileData){
-                    var json = FormatConverter.CSV2JSON(ImportCSVPopup.fileData);
-                    Buildfire.datastore.bulkInsert(JSON.parse(angular.toJson(json)), TAG_NAMES.PEOPLE, function (err, data) {
+                    var json = JSON.parse(FormatConverter.CSV2JSON(ImportCSVPopup.fileData));
+                    var index,value;
+                    for(index=0;index<json.length;index++){
+                        rank+=10;
+                        value=json[index];
+                        value.dateCreated=+new Date();
+                        value.rank=rank;
+                    }
+                    Buildfire.datastore.bulkInsert(json, TAG_NAMES.PEOPLE, function (err, data) {
                         if (err) {
                             console.error('There was a problem while importing the file----',err);
                         }

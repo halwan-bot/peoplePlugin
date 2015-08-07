@@ -272,7 +272,7 @@
                 };
 
                 /**
-                 * ContentHome.openImportCSVDialog() used to import CSV file
+                 * method to open the importCSV Dialog
                  */
                 ContentHome.openImportCSVDialog = function () {
                     var modalInstance = $modal
@@ -280,7 +280,12 @@
                             templateUrl: 'home/modals/import-csv.html',
                             controller: 'ImportCSVPopupCtrl',
                             controllerAs: 'ImportCSVPopup',
-                            size: 'sm'
+                            size: 'sm',
+                            resolve: {
+                                peopleInfo: function () {
+                                    return ContentHome.data;
+                                }
+                            }
                         });
                     modalInstance.result.then(function (data) {
                     }, function (data) {
@@ -330,13 +335,28 @@
                         lName: null,
                         position: null,
                         deepLinkUrl: null,
-                        socailLinks: null,
                         bodyContent: null,
-                        indexToken: null
                     }];
                     var json = JSON.parse(angular.toJson(tempData));
                     var csv = FormatConverter.JSON2CSV(json);
-                    $window.open("data:text/csv;charset=utf-8," + escape(csv))
+                    var json = JSON.parse(angular.toJson(tempData));
+                    var csv = FormatConverter.JSON2CSV(json);
+                    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+                    if (navigator.msSaveBlob) {  // IE 10+
+                        navigator.msSaveBlob(blob, "Items.csv");
+                    }
+                    else {
+                        var link = document.createElement("a");
+                        if (link.download !== undefined) {
+                            var url = URL.createObjectURL(blob);
+                            link.setAttribute("href", url);
+                            link.setAttribute("download", "BuildFire.csv");
+                            link.style.visibility = 'hidden';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
+                    }
                 };
 
                 /**
@@ -393,7 +413,7 @@
                             }
                         });
                     } else {
-                        console.error('Blank name provided');
+                        console.info('Blank name provided');
                     }
                 };
 
@@ -403,7 +423,7 @@
                  */
                 ContentHome.sortPeopleBy = function (value) {
                     if (!value) {
-                        console.error('There was a problem sorting your data');
+                        console.info('There was a problem sorting your data');
                     } else {
                         ContentHome.items = null;
                         searchOptions.page = 0;
@@ -428,7 +448,7 @@
                         if (imageInfo && ContentHome.data) {
                             ContentHome.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
                         } else {
-                            console.error('Unable to load data.')
+                            console.info('Unable to load data.')
                         }
                     }, function (err) {
                         //do something on cancel
@@ -451,7 +471,7 @@
                         if (_link && ContentHome.data) {
                             ContentHome.data.content.images[_index].link = _link;
                         } else {
-                            console.error('Unable to load data.')
+                            console.info('Unable to load data.')
                         }
                     }, function (err) {
                         //do something on cancel
@@ -482,14 +502,6 @@
                         //do something on cancel
                     });
                 };
-
-                Buildfire.datastore.onUpdate(function (event) {
-                    if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
-                        ContentHome.data = event.obj;
-                        $scope.$digest();
-                        if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
-                    }
-                });
 
                 /**
                  * saveDataWithDelay(infoData) called when PEOPLE_INFO data get changed

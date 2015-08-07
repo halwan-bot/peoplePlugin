@@ -157,13 +157,12 @@
                  */
                 var saveData = function (newObj, tag) {
                     if (newObj == undefined)return;
-                    result.obj.content.rankOfLastItem = result.obj.content.rankOfLastItem || 0;
+                    newObj.content.rankOfLastItem = newObj.content.rankOfLastItem || 0;
                     Buildfire.datastore.save(newObj, tag, function (err, result) {
                         if (err || !result) {
                             console.error('------------error saveData-------', err);
                         }
                         else {
-                            console.log('------------data saved-------', result);
                             RankOfLastItem.setRank(result.obj.content.rankOfLastItem);
                         }
                     });

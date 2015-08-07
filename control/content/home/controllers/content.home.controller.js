@@ -307,6 +307,9 @@
                         }
                     }
                 };
+                /**
+                 * getTemplate download the template for CSV data
+                 */
                 ContentHome.getTemplate = function () {
                     var tempData = [{
                         topImage: null,
@@ -315,13 +318,28 @@
                         lName: null,
                         position: null,
                         deepLinkUrl: null,
-                        socailLinks: null,
                         bodyContent: null,
-                        indexToken: null
                     }];
                     var json = JSON.parse(angular.toJson(tempData));
                     var csv = FormatConverter.JSON2CSV(json);
-                    $window.open("data:text/csv;charset=utf-8," + escape(csv))
+                    var json = JSON.parse(angular.toJson(tempData));
+                    var csv = FormatConverter.JSON2CSV(json);
+                    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+                    if (navigator.msSaveBlob) {  // IE 10+
+                        navigator.msSaveBlob(blob, "Items.csv");
+                    }
+                    else {
+                        var link = document.createElement("a");
+                        if (link.download !== undefined) {
+                            var url = URL.createObjectURL(blob);
+                            link.setAttribute("href", url);
+                            link.setAttribute("download", "BuildFire.csv");
+                            link.style.visibility = 'hidden';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
+                    }
                 };
 
                 ContentHome.removeListItem = function (_index, itemId) {

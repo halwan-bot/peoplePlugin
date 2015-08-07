@@ -18,7 +18,7 @@
             ];
             AddCarouselImagePopup.setTarget = function (action) {
                 AddCarouselImagePopup.selectedAction = action;
-            }
+            };
             AddCarouselImagePopup.ok = function (imageInfo) {
                 if (!imageInfo.imageUrl) {
                     return;

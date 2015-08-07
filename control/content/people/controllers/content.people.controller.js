@@ -98,7 +98,6 @@
                     if (error) {
                       console.error('Error:', error);
                     } else {
-                      console.log(")))))))))))))))", result);
                       ContentPeople.item.data.socialLinks.splice(index, 1, result);
                       $scope.$digest();
                     }

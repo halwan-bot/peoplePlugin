@@ -98,7 +98,7 @@
               WidgetHome.busy = false;
               WidgetHome.loadMore(function () {
                 _page = currentPage;
-                _pageSize = 5;
+                _pageSize = 10;
               });
 
               WidgetHome.loadMore();*/

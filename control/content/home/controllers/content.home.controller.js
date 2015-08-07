@@ -267,12 +267,8 @@
                             size: 'sm'
                         });
                     modalInstance.result.then(function (data) {
-                        console.log('Data----------', data);
                     }, function (data) {
-                        if (data) {
-                            console.log('Data----------', data);
-
-                        }
+                        //do something on cancel
                     });
                 };
                 ContentHome.exportCSV = function () {
@@ -344,7 +340,7 @@
                             });
                         }
                     }, function (data) {
-
+                        //do something on cancel
                     });
                 };
 
@@ -398,9 +394,7 @@
                             console.error('Unable to load data.')
                         }
                     }, function (err) {
-                        if (err) {
-                            console.error('Error:', err)
-                        }
+                        //do something on cancel
                     });
                 };
 
@@ -419,9 +413,7 @@
                             console.error('Unable to load data.')
                         }
                     }, function (err) {
-                        if (err) {
-                            console.error('Error:', err)
-                        }
+                        //do something on cancel
                     });
                 };
 
@@ -442,9 +434,7 @@
                         if (data)
                             ContentHome.data.content.images.splice($index, 1);
                     }, function (data) {
-                        if (data) {
-                            console.error('Error----------while removing image----', data)
-                        }
+                        //do something on cancel
                     });
                 };
 

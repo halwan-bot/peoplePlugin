@@ -258,13 +258,22 @@
                         $scope.$apply();
                     }, 1500);
                 };
+
+                /**
+                 * method to open the importCSV Dialog
+                 */
                 ContentHome.openImportCSVDialog = function () {
                     var modalInstance = $modal
                         .open({
                             templateUrl: 'home/modals/import-csv.html',
                             controller: 'ImportCSVPopupCtrl',
                             controllerAs: 'ImportCSVPopup',
-                            size: 'sm'
+                            size: 'sm',
+                            resolve: {
+                                peopleInfo: function () {
+                                    return ContentHome.data;
+                                }
+                            }
                         });
                     modalInstance.result.then(function (data) {
                     }, function (data) {

@@ -229,6 +229,10 @@
                         }
                     });
                 };
+
+                /**
+                 * getContentPeopleInfo() method used to fetch peopleInfo data
+                 */
                 var getContentPeopleInfo = function () {
                     Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                         if (err && err.code !== ERROR_CODE.NOT_FOUND) {
@@ -250,7 +254,15 @@
                         }
                     });
                 };
+
+                /**
+                 * getContentPeopleInfo() called when controller loaded
+                 */
                 getContentPeopleInfo();
+
+                /**
+                 * Used to show/hide alert message when item's deep-link copied from people list.
+                 */
                 ContentHome.openDeepLinkDialog = function () {
                     ContentHome.DeepLinkCopyUrl = true;
                     setTimeout(function () {
@@ -258,6 +270,10 @@
                         $scope.$apply();
                     }, 1500);
                 };
+
+                /**
+                 * ContentHome.openImportCSVDialog() used to import CSV file
+                 */
                 ContentHome.openImportCSVDialog = function () {
                     var modalInstance = $modal
                         .open({
@@ -271,6 +287,10 @@
                         //do something on cancel
                     });
                 };
+
+                /**
+                 * ContentHome.exportCSV() used to export people list data to CSV
+                 */
                 ContentHome.exportCSV = function () {
                     if (ContentHome.items) {
                         var tempData = [];
@@ -298,6 +318,10 @@
                         }
                     }
                 };
+
+                /**
+                 * ContentHome.getTemplate() used to download csv template
+                 */
                 ContentHome.getTemplate = function () {
                     var tempData = [{
                         topImage: null,
@@ -315,10 +339,12 @@
                     $window.open("data:text/csv;charset=utf-8," + escape(csv))
                 };
 
-                ContentHome.removeListItem = function (_index, itemId) {
-
-                    var modalInstance = $modal
-                        .open({
+                /**
+                 * ContentHome.removeListItem() used to delete an item from people list
+                 * @param _index tells the index of item to be deleted.
+                 */
+                ContentHome.removeListItem = function (_index) {
+                    var modalInstance = $modal.open({
                             templateUrl: 'home/modals/remove-people.html',
                             controller: 'RemovePeoplePopupCtrl',
                             controllerAs: 'RemovePeoplePopup',
@@ -344,6 +370,10 @@
                     });
                 };
 
+                /**
+                 * ContentHome.searchListItem() used to search people list
+                 * @param value to be search.
+                 */
                 ContentHome.searchListItem = function (value) {
                     var fullName = '';
                     if (value) {
@@ -367,6 +397,10 @@
                     }
                 };
 
+                /**
+                 * ContentHome.sortPeopleBy(value) used to sort people list
+                 * @param value is a sorting option
+                 */
                 ContentHome.sortPeopleBy = function (value) {
                     if (!value) {
                         console.error('There was a problem sorting your data');
@@ -379,6 +413,9 @@
                     }
                 };
 
+                /**
+                 *  ContentHome.openAddCarouselImagePopup() used to add carousel images
+                 */
                 ContentHome.openAddCarouselImagePopup = function () {
                     var modalInstance = $modal
                         .open({
@@ -398,6 +435,10 @@
                     });
                 };
 
+                /**
+                 * ContentHome.openAddImageLinkPopup(_index) used to add link to carousel image
+                 * @param _index is the index of carousel image to be linked.
+                 */
                 ContentHome.openAddImageLinkPopup = function (_index) {
                     var modalInstance = $modal
                         .open({
@@ -417,6 +458,10 @@
                     });
                 };
 
+                /**
+                 * ContentHome.openAddImageLinkPopup($index) used to remove a carousel image
+                 * @param $index is the index of carousel image to be remove.
+                 */
                 ContentHome.removeCarouselImage = function ($index) {
                     var modalInstance = $modal
                         .open({
@@ -446,6 +491,10 @@
                     }
                 });
 
+                /**
+                 * saveDataWithDelay(infoData) called when PEOPLE_INFO data get changed
+                 * @param infoData is the modified object returned by $scope.$watch.
+                 */
                 var saveDataWithDelay = function (infoData) {
                     if (infoData) {
                         if (tmrDelayForPeopleInfo) {
@@ -457,6 +506,9 @@
                     }
                 };
 
+                /**
+                 * $scope.$watch used to determine that ContentHome.data has changed.
+                 */
                 $scope.$watch(function () {
                     return ContentHome.data;
                 }, saveDataWithDelay, true);

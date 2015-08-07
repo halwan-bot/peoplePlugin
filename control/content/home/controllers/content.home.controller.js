@@ -337,10 +337,8 @@
                         lName: null,
                         position: null,
                         deepLinkUrl: null,
-                        bodyContent: null,
+                        bodyContent: null
                     }];
-                    var json = JSON.parse(angular.toJson(tempData));
-                    var csv = FormatConverter.JSON2CSV(json);
                     var json = JSON.parse(angular.toJson(tempData));
                     var csv = FormatConverter.JSON2CSV(json);
                     var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});

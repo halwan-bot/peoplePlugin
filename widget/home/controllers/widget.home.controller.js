@@ -54,9 +54,6 @@
       };
       var getSearchOptions = function (value) {
         switch (value) {
-          case MANUALLY:
-            delete searchOptions.sort;
-            break;
           case OLDEST_TO_NEWEST:
             searchOptions.sort = {"dateCreated": 1};
             break;
@@ -74,6 +71,9 @@
             break;
           case LAST_NAME_Z_TO_A:
             searchOptions.sort = {"lName": -1};
+            break;
+          default :
+            searchOptions.sort = {"rank": 1};
             break;
         }
         return searchOptions;

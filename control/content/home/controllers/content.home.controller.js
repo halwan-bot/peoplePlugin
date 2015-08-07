@@ -157,12 +157,12 @@
                  */
                 var saveData = function (newObj, tag) {
                     if (newObj == undefined)return;
+                    newObj.content.rankOfLastItem = newObj.content.rankOfLastItem || 0;
                     Buildfire.datastore.save(newObj, tag, function (err, result) {
                         if (err || !result) {
                             console.error('------------error saveData-------', err);
                         }
                         else {
-                            console.log('------------data saved-------', result);
                             RankOfLastItem.setRank(result.obj.content.rankOfLastItem);
                         }
                     });
@@ -239,6 +239,7 @@
                         }
                         else if (result) {
                             ContentHome.data = result.data;
+                            ContentHome.data.content.rankOfLastItem = ContentHome.data.content.rankOfLastItem || 0;
                             RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem);
                             if (!ContentHome.data.content.sortBy) {
                                 ContentHome.data.content.sortBy = MANUALLY;
@@ -249,9 +250,7 @@
                         }
                     });
                 };
-
                 getContentPeopleInfo();
-
                 ContentHome.openDeepLinkDialog = function () {
                     ContentHome.DeepLinkCopyUrl = true;
                     setTimeout(function () {
@@ -259,7 +258,6 @@
                         $scope.$apply();
                     }, 1500);
                 };
-
                 ContentHome.openImportCSVDialog = function () {
                     var modalInstance = $modal
                         .open({
@@ -269,15 +267,10 @@
                             size: 'sm'
                         });
                     modalInstance.result.then(function (data) {
-                        console.log('Data----------', data);
                     }, function (data) {
-                        if (data) {
-                            console.log('Data----------', data);
-
-                        }
+                        //do something on cancel
                     });
                 };
-
                 ContentHome.exportCSV = function () {
                     if (ContentHome.items) {
                         var tempData = [];
@@ -305,7 +298,6 @@
                         }
                     }
                 };
-
                 ContentHome.getTemplate = function () {
                     var tempData = [{
                         topImage: null,
@@ -348,7 +340,7 @@
                             });
                         }
                     }, function (data) {
-
+                        //do something on cancel
                     });
                 };
 
@@ -402,9 +394,7 @@
                             console.error('Unable to load data.')
                         }
                     }, function (err) {
-                        if (err) {
-                            console.error('Error:', err)
-                        }
+                        //do something on cancel
                     });
                 };
 
@@ -423,9 +413,7 @@
                             console.error('Unable to load data.')
                         }
                     }, function (err) {
-                        if (err) {
-                            console.error('Error:', err)
-                        }
+                        //do something on cancel
                     });
                 };
 
@@ -446,9 +434,7 @@
                         if (data)
                             ContentHome.data.content.images.splice($index, 1);
                     }, function (data) {
-                        if (data) {
-                            console.error('Error----------while removing image----', data)
-                        }
+                        //do something on cancel
                     });
                 };
 

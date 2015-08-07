@@ -372,13 +372,13 @@
                             }
                         });
                     } else {
-                        console.error('Blank name provided');
+                        console.info('Blank name provided');
                     }
                 };
 
                 ContentHome.sortPeopleBy = function (value) {
                     if (!value) {
-                        console.error('There was a problem sorting your data');
+                        console.info('There was a problem sorting your data');
                     } else {
                         ContentHome.items = null;
                         searchOptions.page = 0;
@@ -400,7 +400,7 @@
                         if (imageInfo && ContentHome.data) {
                             ContentHome.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
                         } else {
-                            console.error('Unable to load data.')
+                            console.info('Unable to load data.')
                         }
                     }, function (err) {
                         //do something on cancel
@@ -419,7 +419,7 @@
                         if (_link && ContentHome.data) {
                             ContentHome.data.content.images[_index].link = _link;
                         } else {
-                            console.error('Unable to load data.')
+                            console.info('Unable to load data.')
                         }
                     }, function (err) {
                         //do something on cancel
@@ -446,14 +446,6 @@
                         //do something on cancel
                     });
                 };
-
-                Buildfire.datastore.onUpdate(function (event) {
-                    if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
-                        ContentHome.data = event.obj;
-                        $scope.$digest();
-                        if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
-                    }
-                });
 
                 var saveDataWithDelay = function (infoData) {
                     if (infoData) {

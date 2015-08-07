@@ -285,6 +285,8 @@
                         var tempData = [];
                         angular.forEach(angular.copy(ContentHome.items), function (value) {
                             delete value.data.dateCreated;
+                            delete value.data.socialLinks;
+                            delete value.data.rank;
                             tempData.push(value.data);
                         });
                         var json = JSON.parse(angular.toJson(tempData));
@@ -298,7 +300,7 @@
                             if (link.download !== undefined) {
                                 var url = URL.createObjectURL(blob);
                                 link.setAttribute("href", url);
-                                link.setAttribute("download", "MyData.csv");
+                                link.setAttribute("download", "MyBuildFireData.csv");
                                 link.style.visibility = 'hidden';
                                 document.body.appendChild(link);
                                 link.click();

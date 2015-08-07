@@ -14,6 +14,7 @@
                         rank+=10;
                         value=json[index];
                         value.dateCreated=+new Date();
+                        value.socialLinks=[];
                         value.rank=rank;
                     }
                     Buildfire.datastore.bulkInsert(json, TAG_NAMES.PEOPLE, function (err, data) {

@@ -61,10 +61,9 @@
             <div class="screen text-center layouticon pull-left">
                 <a class="border-grey border-radius-three default-background-hover"
                    ng-hide="DesignHome.peopleInfo.design.backgroundImage" ng-click="DesignHome.addBackgroundImage()"></a>
-                  <span ng-show="DesignHome.peopleInfo.design.backgroundImage">
+                  <span class="imgHolder" ng-show="DesignHome.peopleInfo.design.backgroundImage">
                     <img src="{{DesignHome.peopleInfo.design.backgroundImage}}">
-                    <span style="float: right; top: -50px; content: '-';"
-                          class="btn-icon btn-delete-icon btn-danger transition-third"
+                    <span class="btn-icon btn-delete-icon btn-danger btn-close transition-third"
                           ng-click="DesignHome.removeBackgroundImage()"></span>
                   </span>
             </div>

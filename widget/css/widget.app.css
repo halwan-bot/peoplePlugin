@@ -79,11 +79,14 @@ body.scrollable {
 Styles for pagination in people listing
 */
 
-#scroll-infinite{
+.item-list-container{
     overflow-y: auto;
     max-height: 240px;
 }
-
+.item-list-container-without{
+    overflow-y: auto;
+    max-height: 540px;
+}
 /*
 Widget header styling
 */

@@ -5,8 +5,10 @@
         .module('peoplePluginContent')
         .controller('ImportCSVPopupCtrl', ['$scope', '$modalInstance','peopleInfo','FormatConverter','Buildfire','TAG_NAMES', function ($scope, $modalInstance,peopleInfo,FormatConverter,Buildfire,TAG_NAMES) {
             var ImportCSVPopup=this;
+            ImportCSVPopup.loading=false;
             var rank=peopleInfo.content.rankOfLastItem || 0;
             ImportCSVPopup.ok = function (linkUrl) {
+                ImportCSVPopup.loading=true;
                 if(ImportCSVPopup.fileData){
                     var json = JSON.parse(FormatConverter.CSV2JSON(ImportCSVPopup.fileData));
                     var index,value;
@@ -24,10 +26,15 @@
                         else {
                             console.log('File has been imported----------------------------',data);
                         }
+                        $modalInstance.close(linkUrl);
+                        ImportCSVPopup.loading=false;
                     });
 
                 }
-                $modalInstance.close(linkUrl);
+                else{
+                    $modalInstance.close(linkUrl);
+                    ImportCSVPopup.loading=false;
+                }
             };
             ImportCSVPopup.cancel = function () {
                 $modalInstance.dismiss('Dismiss');

@@ -15,7 +15,7 @@
     <div class="padded padding-bottom-zero text-left">
       <p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
       <hr class="small">
-      <div id="scroll-infinite">
+      <div id="scroll-infinite" ng-class="WidgetHome.data.content.images.length ? 'item-list-container' : 'item-list-container-without'">
         <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1"
              infinite-scroll="WidgetHome.loadMore()"
              infinite-scroll-disabled="WidgetHome.busy"

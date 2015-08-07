@@ -190,11 +190,7 @@
                     return _rankOfLastItem;
                 },
                 setRank: function (value) {
-                    if (typeof value === 'undefined') {
-                        console.error('Blank value provided');
-                    } else {
-                        _rankOfLastItem = value;
-                    }
+                    _rankOfLastItem = value;
                 }
             };
         }]);

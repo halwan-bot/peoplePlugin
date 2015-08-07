@@ -6,7 +6,7 @@
         <div class="plugin-slide item"
              data-ng-repeat="image in WidgetHome.data.content.images | filter:isDefined">
           <a href="{{image.link}}" data-ng-if="image.link"
-             target="{{image.target}}" title="Login"><img
+             target="{{image.target}}"><img
               ng-src="{{image.imageUrl}}"></a>
           <img data-ng-if="!image.link" ng-src="{{image.imageUrl}}">
         </div>

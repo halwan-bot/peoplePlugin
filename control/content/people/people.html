@@ -82,19 +82,20 @@
             </div>
             <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
                  ui-sortable="ContentPeople.linksSortableOptions" ng-model="ContentPeople.item.data.socialLinks">
-                <div class="d-item"
-                     ng-repeat="_link in ContentPeople.item.data.socialLinks">
-                    <span class="icon icon-menu cursor-grab"></span>
-                    <div class="copy pull-right width66">
+                <div class="d-item" ng-repeat="_link in ContentPeople.item.data.socialLinks">
+                    <span class="icon icon-menu cursor-grab pull-left"></span>
+                    <div class="copy pull-left width66">
                         <span class="width34 title ellipsis"><a
                             href="javascript:void(0)"
                             ng-click="ContentPeople.openEditLink(_link,$index)">{{_link
                           .title}}</a></span>
                         <span class="width34 title ellipsis">{{_link.url}}</span>
-                        <span class="width34 title ellipsis">{{_link.deepLinkUrl}}</span>
-                        <span class="btn-icon btn-delete-icon btn-danger btn-cross"
-                              ng-click="ContentPeople.removeLink($index)"></span>
+                        <span class="width34 title ellipsis" data-ng-if="_link.deepLinkUrl">{{_link.deepLinkUrl}}</span>
+
                     </div>
+                  <span
+                      class="btn-icon btn-delete-icon btn-danger btn-cross link-close-btn"
+                        ng-click="ContentPeople.removeLink($index)"></span>
                 </div>
             </div>
         </div>

@@ -241,3 +241,7 @@ top: 8px;
 .img-carousel-thumb > img{
     max-height: 38px !important;
 }
+
+.link-close-btn {
+    margin-top: 10px;
+}

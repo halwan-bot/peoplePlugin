@@ -14,7 +14,9 @@
             <div class="screens clearfix">
                 <div class="screen layouticon pull-left">
                     <a class="border-grey border-radius-three default-background-hover"
-                       ng-hide="ContentPeople.item.data.topImage" ng-click="ContentPeople.selectTopImage()"></a>
+                       ng-hide="ContentPeople.item.data.topImage" ng-click="ContentPeople.selectTopImage()">
+                      <span class="add-icon">+</span>
+                    </a>
                   <span ng-show="ContentPeople.item.data.topImage">
                     <img src="{{ContentPeople.item.data.topImage}}">
                     <span

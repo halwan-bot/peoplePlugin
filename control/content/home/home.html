@@ -12,13 +12,10 @@
                 <div class="item" ng-repeat="image in ContentHome.data.content.images">
                   <span class="icon icon-menu cursor-grab"
                         aria-hidden="true" ></span>
-                  <span class="img-carousel-thumb border-radius-four border-grey">
-                    <img ng-src="{{image.imageUrl}}">
-                  </span>
-                    <span class="title ellipsis word-wrap">{{image.title |
-                      truncate:15 }}</span>
+                    <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
+                    <span class="title ellipsis word-wrap">{{image.title}}</span>
 
-                  <div class="copy pull-right carousel-item-btns">
+                    <div class="copy pull-right carousel-item-btns">
                         <a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)"
                            class="btn btn-primary margin-left-ten width65">Link</a>
                         <a ng-show="image.link" class="btn btn-success margin-left-ten width65">Linked</a>

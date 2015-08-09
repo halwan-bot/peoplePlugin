@@ -157,12 +157,12 @@
                  */
                 var saveData = function (newObj, tag) {
                     if (newObj == undefined)return;
+                    newObj.content.rankOfLastItem = newObj.content.rankOfLastItem || 0;
                     Buildfire.datastore.save(newObj, tag, function (err, result) {
                         if (err || !result) {
                             console.error('------------error saveData-------', err);
                         }
                         else {
-                            console.log('------------data saved-------', result);
                             RankOfLastItem.setRank(result.obj.content.rankOfLastItem);
                         }
                     });
@@ -229,6 +229,10 @@
                         }
                     });
                 };
+
+                /**
+                 * getContentPeopleInfo() method used to fetch peopleInfo data
+                 */
                 var getContentPeopleInfo = function () {
                     Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                         if (err && err.code !== ERROR_CODE.NOT_FOUND) {
@@ -239,6 +243,7 @@
                         }
                         else if (result) {
                             ContentHome.data = result.data;
+                            ContentHome.data.content.rankOfLastItem = ContentHome.data.content.rankOfLastItem || 0;
                             RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem);
                             if (!ContentHome.data.content.sortBy) {
                                 ContentHome.data.content.sortBy = MANUALLY;
@@ -250,8 +255,14 @@
                     });
                 };
 
+                /**
+                 * getContentPeopleInfo() called when controller loaded
+                 */
                 getContentPeopleInfo();
 
+                /**
+                 * Used to show/hide alert message when item's deep-link copied from people list.
+                 */
                 ContentHome.openDeepLinkDialog = function () {
                     ContentHome.DeepLinkCopyUrl = true;
                     setTimeout(function () {
@@ -260,43 +271,52 @@
                     }, 1500);
                 };
 
+                /**
+                 * method to open the importCSV Dialog
+                 */
                 ContentHome.openImportCSVDialog = function () {
                     var modalInstance = $modal
                         .open({
                             templateUrl: 'home/modals/import-csv.html',
                             controller: 'ImportCSVPopupCtrl',
                             controllerAs: 'ImportCSVPopup',
-                            size: 'sm'
+                            size: 'sm',
+                            resolve: {
+                                peopleInfo: function () {
+                                    return ContentHome.data;
+                                }
+                            }
                         });
                     modalInstance.result.then(function (data) {
-                        console.log('Data----------', data);
                     }, function (data) {
-                        if (data) {
-                            console.log('Data----------', data);
-
-                        }
+                        //do something on cancel
                     });
                 };
 
+                /**
+                 * ContentHome.exportCSV() used to export people list data to CSV
+                 */
                 ContentHome.exportCSV = function () {
                     if (ContentHome.items) {
                         var tempData = [];
                         angular.forEach(angular.copy(ContentHome.items), function (value) {
                             delete value.data.dateCreated;
+                            delete value.data.socialLinks;
+                            delete value.data.rank;
                             tempData.push(value.data);
                         });
                         var json = JSON.parse(angular.toJson(tempData));
                         var csv = FormatConverter.JSON2CSV(json);
                         var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
                         if (navigator.msSaveBlob) {  // IE 10+
-                            navigator.msSaveBlob(blob, "Items.csv");
+                            navigator.msSaveBlob(blob, "BuildFirePeoples.csv");
                         }
                         else {
                             var link = document.createElement("a");
                             if (link.download !== undefined) {
                                 var url = URL.createObjectURL(blob);
                                 link.setAttribute("href", url);
-                                link.setAttribute("download", "MyData.csv");
+                                link.setAttribute("download", "BuildFirePeoples.csv");
                                 link.style.visibility = 'hidden';
                                 document.body.appendChild(link);
                                 link.click();
@@ -306,6 +326,9 @@
                     }
                 };
 
+                /**
+                 * ContentHome.getTemplate() used to download csv template
+                 */
                 ContentHome.getTemplate = function () {
                     var tempData = [{
                         topImage: null,
@@ -314,19 +337,34 @@
                         lName: null,
                         position: null,
                         deepLinkUrl: null,
-                        socailLinks: null,
-                        bodyContent: null,
-                        indexToken: null
+                        bodyContent: null
                     }];
                     var json = JSON.parse(angular.toJson(tempData));
                     var csv = FormatConverter.JSON2CSV(json);
-                    $window.open("data:text/csv;charset=utf-8," + escape(csv))
+                    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+                    if (navigator.msSaveBlob) {  // IE 10+
+                        navigator.msSaveBlob(blob, "Items.csv");
+                    }
+                    else {
+                        var link = document.createElement("a");
+                        if (link.download !== undefined) {
+                            var url = URL.createObjectURL(blob);
+                            link.setAttribute("href", url);
+                            link.setAttribute("download", "BuildFire.csv");
+                            link.style.visibility = 'hidden';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
+                    }
                 };
 
-                ContentHome.removeListItem = function (_index, itemId) {
-
-                    var modalInstance = $modal
-                        .open({
+                /**
+                 * ContentHome.removeListItem() used to delete an item from people list
+                 * @param _index tells the index of item to be deleted.
+                 */
+                ContentHome.removeListItem = function (_index) {
+                    var modalInstance = $modal.open({
                             templateUrl: 'home/modals/remove-people.html',
                             controller: 'RemovePeoplePopupCtrl',
                             controllerAs: 'RemovePeoplePopup',
@@ -348,10 +386,14 @@
                             });
                         }
                     }, function (data) {
-
+                        //do something on cancel
                     });
                 };
 
+                /**
+                 * ContentHome.searchListItem() used to search people list
+                 * @param value to be search.
+                 */
                 ContentHome.searchListItem = function (value) {
                     var fullName = '';
                     if (value) {
@@ -371,13 +413,17 @@
                             }
                         });
                     } else {
-                        console.error('Blank name provided');
+                        console.info('Blank name provided');
                     }
                 };
 
+                /**
+                 * ContentHome.sortPeopleBy(value) used to sort people list
+                 * @param value is a sorting option
+                 */
                 ContentHome.sortPeopleBy = function (value) {
                     if (!value) {
-                        console.error('There was a problem sorting your data');
+                        console.info('There was a problem sorting your data');
                     } else {
                         ContentHome.items = null;
                         searchOptions.page = 0;
@@ -387,6 +433,9 @@
                     }
                 };
 
+                /**
+                 *  ContentHome.openAddCarouselImagePopup() used to add carousel images
+                 */
                 ContentHome.openAddCarouselImagePopup = function () {
                     var modalInstance = $modal
                         .open({
@@ -399,15 +448,17 @@
                         if (imageInfo && ContentHome.data) {
                             ContentHome.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
                         } else {
-                            console.error('Unable to load data.')
+                            console.info('Unable to load data.')
                         }
                     }, function (err) {
-                        if (err) {
-                            console.error('Error:', err)
-                        }
+                        //do something on cancel
                     });
                 };
 
+                /**
+                 * ContentHome.openAddImageLinkPopup(_index) used to add link to carousel image
+                 * @param _index is the index of carousel image to be linked.
+                 */
                 ContentHome.openAddImageLinkPopup = function (_index) {
                     var modalInstance = $modal
                         .open({
@@ -420,15 +471,17 @@
                         if (_link && ContentHome.data) {
                             ContentHome.data.content.images[_index].link = _link;
                         } else {
-                            console.error('Unable to load data.')
+                            console.info('Unable to load data.')
                         }
                     }, function (err) {
-                        if (err) {
-                            console.error('Error:', err)
-                        }
+                        //do something on cancel
                     });
                 };
 
+                /**
+                 * ContentHome.openAddImageLinkPopup($index) used to remove a carousel image
+                 * @param $index is the index of carousel image to be remove.
+                 */
                 ContentHome.removeCarouselImage = function ($index) {
                     var modalInstance = $modal
                         .open({
@@ -446,20 +499,14 @@
                         if (data)
                             ContentHome.data.content.images.splice($index, 1);
                     }, function (data) {
-                        if (data) {
-                            console.error('Error----------while removing image----', data)
-                        }
+                        //do something on cancel
                     });
                 };
 
-                Buildfire.datastore.onUpdate(function (event) {
-                    if (event && event.tag === TAG_NAMES.PEOPLE_INFO) {
-                        ContentHome.data = event.obj;
-                        $scope.$digest();
-                        if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
-                    }
-                });
-
+                /**
+                 * saveDataWithDelay(infoData) called when PEOPLE_INFO data get changed
+                 * @param infoData is the modified object returned by $scope.$watch.
+                 */
                 var saveDataWithDelay = function (infoData) {
                     if (infoData) {
                         if (tmrDelayForPeopleInfo) {
@@ -471,6 +518,9 @@
                     }
                 };
 
+                /**
+                 * $scope.$watch used to determine that ContentHome.data has changed.
+                 */
                 $scope.$watch(function () {
                     return ContentHome.data;
                 }, saveDataWithDelay, true);

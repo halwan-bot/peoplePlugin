@@ -54,9 +54,6 @@
       };
       var getSearchOptions = function (value) {
         switch (value) {
-          case MANUALLY:
-            delete searchOptions.sort;
-            break;
           case OLDEST_TO_NEWEST:
             searchOptions.sort = {"dateCreated": 1};
             break;
@@ -75,6 +72,9 @@
           case LAST_NAME_Z_TO_A:
             searchOptions.sort = {"lName": -1};
             break;
+          default :
+            searchOptions.sort = {"rank": 1};
+            break;
         }
         return searchOptions;
       };
@@ -90,18 +90,19 @@
         if (event && event.tag) {
           switch (event.tag) {
             case TAG_NAMES.PEOPLE:
-              /*var currentPage = _page;
+              console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+              console.log(event);
+              var currentPage = _page;
               if (_page) {
                 _pageSize = _pageSize * (_page + 1);
                 _page = 0;
               }
               WidgetHome.busy = false;
+              WidgetHome.items = [];
               WidgetHome.loadMore(function () {
                 _page = currentPage;
-                _pageSize = 5;
+                _pageSize = 10;
               });
-
-              WidgetHome.loadMore();*/
               break;
             case TAG_NAMES.PEOPLE_INFO:
               if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {

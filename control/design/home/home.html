@@ -3,26 +3,27 @@
         <span>List Layout</span>
     </div>
     <div class="main col-md-9 pull-right">
-		<div class="screens clearfix">
-			<div class="screen layouticon pull-left">
-				<a class="border-grey border-radius-three default-background-hover text-center">
-					<span class="add-icon hidden">+</span>
-					<img src="images/{{DesignHome.peopleInfo.design.listLayout}}.png">
-				</a>
-			</div>
-			<div class="screen layoutgrid pull-right margin-left-zero border-grey border-radius-three">
-				<a ng-repeat="layout in DesignHome.layouts.listLayouts" class="layouticon border-grey border-radius-three default-background-hover text-center" ng-click="DesignHome.changeListLayout(layout.name)"><img src="images/{{layout.name}}.png"></a>
+        <div class="screens clearfix">
+            <div class="screen layouticon pull-left">
+                <a
+                        class="border-grey border-radius-three default-background-hover" style="text-align: center">
+                    <img
+                            src="images/{{DesignHome.peopleInfo.design.listLayout}}.png" style="height: 100%"></a>
+            </div>
+            <div class="layoutgrid pull-right border-grey border-radius-three">
+                <a ng-repeat="layout in DesignHome.layouts.listLayouts"
+                   class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeListLayout(layout.name)" style="text-align: center">
+                    <img style="height: 100%" src="images/{{layout.name}}.png"></a>
 
-
-				<!--
-				<ul>
+                <!--
+                <ul>
                     <li ng-repeat="layout in DesignHome.layouts.listLayouts">
                         <a class="layouticon border-grey border-radius-three default-background-hover"
                            ng-click="DesignHome.changeListLayout(layout.name)">{{layout.name}}</a>
                     </li>
                 </ul>
-				-->
- 			</div>
+                -->
+            </div>
         </div>
     </div>
 </div>
@@ -34,23 +35,25 @@
     <div class="main col-md-9 pull-right">
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
-				<a class="border-grey border-radius-three default-background-hover text-center">
-					<span class="add-icon hidden">+</span>
-					<img src="images/{{DesignHome.peopleInfo.design.itemLayout}}.png">
-				</a>
-			</div>
-			<div class="screen layoutgrid pull-right margin-left-zero border-grey border-radius-three">
-				<a ng-repeat="layout in DesignHome.layouts.itemLayouts" class="layouticon border-grey border-radius-three default-background-hover text-center" ng-click="DesignHome.changeItemLayout(layout.name)"><img src="images/{{layout.name}}.png"></a>
-			
-				<!--
-				<ul>
+                <a
+                        class="border-grey border-radius-three default-background-hover" style="text-align: center">
+                    <img style="height: 100%"
+                         src="images/{{DesignHome.peopleInfo.design.itemLayout}}.png"></a>
+            </div>
+            <div class="layoutgrid pull-right border-grey border-radius-three">
+                <a ng-repeat="layout in DesignHome.layouts.itemLayouts" style="text-align: center"
+                   class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeItemLayout(layout.name)">
+                    <img style="height: 100%" src="images/{{layout.name}}.png"></a>
+
+                <!--
+                <ul>
                     <li ng-repeat="layout in DesignHome.layouts.itemLayouts">
                         <a class="layouticon border-grey border-radius-three default-background-hover"
                            ng-click="DesignHome.changeItemLayout(layout.name)">{{layout.name}}</a>
                     </li>
                 </ul>
-				-->
-    		</div>
+                -->
+            </div>
         </div>
     </div>
 </div>
@@ -60,14 +63,18 @@
         <span>Item List Background Image</span>
     </div>
     <div class="main col-md-9 pull-right">
+
         <div class="screens clearfix">
             <div class="screen text-center layouticon pull-left">
-                <a class="border-grey border-radius-three default-background-hover" ng-click="DesignHome.addBackgroundImage()">
-                	<span class="add-icon" ng-hide="DesignHome.peopleInfo.design.backgroundImage">+</span>
-					<img src="{{DesignHome.peopleInfo.design.backgroundImage}}">
+                <a class="border-grey border-radius-three default-background-hover"
+                   ng-hide="DesignHome.peopleInfo.design.backgroundImage" ng-click="DesignHome.addBackgroundImage()">
+                    <span class="add-icon">+</span>
                 </a>
-                <label class="secondary">750x1334</label>
-				<span class="icon btn-icon btn-delete-icon btn-danger transition-third" ng-click="DesignHome.removeBackgroundImage()"><span>
+                  <span class="imgHolder" ng-show="DesignHome.peopleInfo.design.backgroundImage">
+                    <img src="{{DesignHome.peopleInfo.design.backgroundImage}}">
+                    <span class="btn-icon btn-delete-icon btn-danger btn-close transition-third"
+                          ng-click="DesignHome.removeBackgroundImage()"></span>
+                  </span>
             </div>
         </div>
     </div>

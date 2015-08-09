@@ -6,7 +6,7 @@
         <div class="plugin-slide item"
              ng-repeat="image in WidgetHome.data.content.images | filter:isDefined">
           <a href="{{image.link}}" data-ng-if="image.link"
-             target="{{image.target}}" title="Login"><img
+             target="{{image.target}}"><img
               ng-src="{{image.imageUrl}}"></a>
           <img data-ng-if="!image.link" ng-src="{{image.imageUrl}}">
         </div>
@@ -22,8 +22,9 @@
            infinite-scroll-container="'#scroll-infinite'">
       <span ng-repeat="item in WidgetHome.items">
       <div class="clearfix border-bottom-grey">
-        <div class="text-center people-thumbnail-card">
-          <img class="people-thumbnail-img-card" ng-src="{{item.data.topImage}}">
+        <div class="text-center people-thumbnail-card"  ng-if="item.data.topImage">
+          <img class="people-thumbnail-img-card"
+               ng-src="{{item.data.topImage}}">
         </div>
       </div>
 		<div class="padded text-left">

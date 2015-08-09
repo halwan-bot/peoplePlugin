@@ -190,12 +190,31 @@
                     return _rankOfLastItem;
                 },
                 setRank: function (value) {
-                    if (typeof value === 'undefined') {
-                        console.error('Blank value provided');
-                    } else {
-                        _rankOfLastItem = value;
-                    }
+                    _rankOfLastItem = value;
                 }
             };
-        }]);
+        }])
+      .filter('truncate', function () {
+        return function (text, length, end) {
+          if (text) {
+            if (isNaN(length))
+              length = 10;
+
+            if (length < 0)
+              length = text.length;
+
+            if (end === undefined)
+              end = "...";
+
+            if (text.length <= length || text.length - end.length <= length) {
+              return text;
+            }
+            else {
+              return String(text).substring(0, length - end.length) + end;
+            }
+          } else {
+            return "";
+          }
+        }
+      });
 })(window.angular, window.buildfire);

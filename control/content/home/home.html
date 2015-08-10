@@ -105,7 +105,10 @@
                  infinite-scroll-disabled="ContentHome.busy"
                  infinite-scroll-container="'#scroll-infinite'">
                 <div ui-sortable="ContentHome.itemSortableOptions" ng-model="ContentHome.items">
-                    <div
+                    <div class="d-item double-line square-icon people-item-list listing-bg text-center " ng-if="!ContentHome.items.length">
+                        No item Found!
+                    </div>
+                    <div ng-if="ContentHome.items.length"
                         class="d-item double-line square-icon people-item-list listing-bg" ng-repeat="item in ContentHome.items">
                         <span class="icon icon-menu cursor-grab" aria-hidden="true" ng-if="!ContentHome.itemSortableOptions.disabled"></span>
                         <img

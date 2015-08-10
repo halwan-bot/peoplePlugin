@@ -1,5 +1,5 @@
 <div class="holder padding-zero">
-  <div class="people-plugin listlayout1">
+  <div class="people-plugin listlayout1" id="scroll-infinite">
     <div class="plugin-banner clearfix border-bottom-grey">
       <div class="plugin-slider text-center"
            image-carousel="{{WidgetHome.data.content.images.length}}">
@@ -15,7 +15,7 @@
     <div class="padded padding-bottom-zero text-left">
       <p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
       <hr class="small">
-      <div id="scroll-infinite" ng-class="WidgetHome.data.content.images.length ? 'item-list-container' : 'item-list-container-without'">
+      <div>
         <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1"
              infinite-scroll="WidgetHome.loadMore()"
              infinite-scroll-disabled="WidgetHome.busy"

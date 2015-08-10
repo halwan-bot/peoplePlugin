@@ -308,6 +308,7 @@
                                 else {
                                     console.log('File has been imported----------------------------', data);
                                 }
+                                ContentHome.data.content.rankOfLastItem = rank;
                                 ContentHome.loading = false;
                             });
                         }

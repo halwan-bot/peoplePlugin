@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', 'FormatConverter', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem',
+        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem',
             function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem) {
                 /**
                  * These are the options available to sort people list.
@@ -305,24 +305,8 @@
                             delete value.data.rank;
                             tempData.push(value.data);
                         });
-                        var json = JSON.parse(angular.toJson(tempData));
-                        var csv = FormatConverter.JSON2CSV(json);
-                        var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
-                        if (navigator.msSaveBlob) {  // IE 10+
-                            navigator.msSaveBlob(blob, "BuildFirePeoples.csv");
-                        }
-                        else {
-                            var link = document.createElement("a");
-                            if (link.download !== undefined) {
-                                var url = URL.createObjectURL(blob);
-                                link.setAttribute("href", url);
-                                link.setAttribute("download", "BuildFirePeoples.csv");
-                                link.style.visibility = 'hidden';
-                                document.body.appendChild(link);
-                                link.click();
-                                document.body.removeChild(link);
-                            }
-                        }
+                        var csv = FormatConverter.jsonToCsv(angular.toJson(tempData));
+                        FormatConverter.download(csv, "Export.csv");
                     }
                 };
 
@@ -340,23 +324,8 @@
                         bodyContent: null
                     }];
                     var json = JSON.parse(angular.toJson(tempData));
-                    var csv = FormatConverter.JSON2CSV(json);
-                    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
-                    if (navigator.msSaveBlob) {  // IE 10+
-                        navigator.msSaveBlob(blob, "Items.csv");
-                    }
-                    else {
-                        var link = document.createElement("a");
-                        if (link.download !== undefined) {
-                            var url = URL.createObjectURL(blob);
-                            link.setAttribute("href", url);
-                            link.setAttribute("download", "BuildFire.csv");
-                            link.style.visibility = 'hidden';
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                        }
-                    }
+                    var csv = FormatConverter.jsonToCsv(json);
+                    FormatConverter.download(csv, "Template.csv");
                 };
 
                 /**
@@ -365,16 +334,16 @@
                  */
                 ContentHome.removeListItem = function (_index) {
                     var modalInstance = $modal.open({
-                            templateUrl: 'home/modals/remove-people.html',
-                            controller: 'RemovePeoplePopupCtrl',
-                            controllerAs: 'RemovePeoplePopup',
-                            size: 'sm',
-                            resolve: {
-                                peopleInfo: function () {
-                                    return ContentHome.items[_index];
-                                }
+                        templateUrl: 'home/modals/remove-people.html',
+                        controller: 'RemovePeoplePopupCtrl',
+                        controllerAs: 'RemovePeoplePopup',
+                        size: 'sm',
+                        resolve: {
+                            peopleInfo: function () {
+                                return ContentHome.items[_index];
                             }
-                        });
+                        }
+                    });
                     modalInstance.result.then(function (message) {
                         if (message === 'yes') {
                             var item = ContentHome.items[_index];

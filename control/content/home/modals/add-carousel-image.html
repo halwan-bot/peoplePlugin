@@ -13,7 +13,7 @@
                   <span class="add-icon">+</span>
                 </a>
                   <span class="imgHolder"  ng-show="AddCarouselImagePopup.imageInfo.imageUrl">
-                    <img ng-src="{{AddCarouselImagePopup.imageInfo.imageUrl}}">
+                    <img ng-src="{{AddCarouselImagePopup.imageInfo.imageUrl | getImageUrl : 60 :40}}">
                     <span class="btn-icon btn-delete-icon btn-danger btn-close transition-third" ng-click="AddCarouselImagePopup.removeImage()"></span>
                   </span>
               </div>

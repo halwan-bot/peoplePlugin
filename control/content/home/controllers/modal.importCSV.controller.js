@@ -3,37 +3,37 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('ImportCSVPopupCtrl', ['$scope', '$modalInstance','peopleInfo','FormatConverter','Buildfire','TAG_NAMES', function ($scope, $modalInstance,peopleInfo,FormatConverter,Buildfire,TAG_NAMES) {
-            var ImportCSVPopup=this;
-            ImportCSVPopup.loading=false;
-            var rank=peopleInfo.content.rankOfLastItem || 0;
+        .controller('ImportCSVPopupCtrl', ['$scope', '$modalInstance', 'peopleInfo', '$csv', 'Buildfire', 'TAG_NAMES', function ($scope, $modalInstance, peopleInfo, FormatConverter, Buildfire, TAG_NAMES) {
+            var ImportCSVPopup = this;
+            ImportCSVPopup.loading = false;
+            var rank = peopleInfo.content.rankOfLastItem || 0;
             ImportCSVPopup.ok = function (linkUrl) {
-                ImportCSVPopup.loading=true;
-                if(ImportCSVPopup.fileData){
-                    var json = JSON.parse(FormatConverter.CSV2JSON(ImportCSVPopup.fileData));
-                    var index,value;
-                    for(index=0;index<json.length;index++){
-                        rank+=10;
-                        value=json[index];
-                        value.dateCreated=+new Date();
-                        value.socialLinks=[];
-                        value.rank=rank;
+                ImportCSVPopup.loading = true;
+                if (ImportCSVPopup.fileData) {
+                    var json = JSON.parse(FormatConverter.csvToJson(ImportCSVPopup.fileData));
+                    var index, value;
+                    for (index = 0; index < json.length; index++) {
+                        rank += 10;
+                        value = json[index];
+                        value.dateCreated = +new Date();
+                        value.socialLinks = [];
+                        value.rank = rank;
                     }
                     Buildfire.datastore.bulkInsert(json, TAG_NAMES.PEOPLE, function (err, data) {
                         if (err) {
-                            console.error('There was a problem while importing the file----',err);
+                            console.error('There was a problem while importing the file----', err);
                         }
                         else {
-                            console.log('File has been imported----------------------------',data);
+                            console.log('File has been imported----------------------------', data);
                         }
                         $modalInstance.close(linkUrl);
-                        ImportCSVPopup.loading=false;
+                        ImportCSVPopup.loading = false;
                     });
 
                 }
-                else{
+                else {
                     $modalInstance.close(linkUrl);
-                    ImportCSVPopup.loading=false;
+                    ImportCSVPopup.loading = false;
                 }
             };
             ImportCSVPopup.cancel = function () {

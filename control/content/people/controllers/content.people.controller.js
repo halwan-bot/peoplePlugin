@@ -28,6 +28,14 @@
                 ContentPeople.item = {
                     data: angular.copy(_data)
                 };
+
+              /*
+              Send message to widget that this page has been opened
+               */
+              /*if($routeParams.itemId){
+                Buildfire.messaging.sendMessageToWidget({id : $routeParams.itemId});
+              }*/
+
                 updateMasterItem(ContentPeople.item);
                 function updateMasterItem(item) {
                     ContentPeople.masterItem = angular.copy(item);

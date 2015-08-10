@@ -57,52 +57,80 @@
 
             this.$get = function () {
                 return {
-                    csvToJson: function (csv) {
-                        var array = CSVToArray(csv);
-                        var objArray = [];
-                        for (var i = 1; i < array.length; i++) {
-                            objArray[i - 1] = {};
-                            for (var k = 0; k < array[0].length && k < array[i].length; k++) {
-                                var key = array[0][k];
-                                objArray[i - 1][key] = array[i][k]
-                            }
+                    csvToJson: function (csv, options) {
+                        var rows = CSVToArray(csv);
+                        if (!Array.isArray(rows) || !rows.length) {
+                            return;
                         }
-                        var json = JSON.stringify(objArray);
-                        var str = json.replace(/},/g, "},\r\n");
-                        return str;
+                        var header = rows[0];
+                        if (options && options.header) {
+                            header = options.header;
+                        }
+                        if (!Array.isArray(header) || !header.length) {
+                            return;
+                        }
+                        var items = [];
+                        for (var row = 1; row < rows.length; row++) {
+                            var item = {};
+                            for (var col = 0; col < header.length && col < rows[row].length; col++) {
+                                var key = header[col];
+                                item[key] = rows[row][col]
+                            }
+                            items.push(item);
+                        }
+                        return JSON.stringify(items).replace(/},/g, "},\r\n");
                     },
                     jsonToCsv: function (objArray, options) {
-                        var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-                        var str = '';
-                        var line = '';
-                        var head = array[0];
-                        for (var index in array[0]) {
-                            var value = index + "";
-                            line += '"' + value.replace(/"/g, '""') + '",';
+                        var array;
+                        try {
+                            array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
                         }
-                        line = line.slice(0, -1);
-                        str += line + '\r\n';
-                        for (var i = 0; i < array.length; i++) {
+                        catch (error) {
+                            throw ("Error while reading csv");
+                        }
+                        if (!Array.isArray(array) || !array.length) {
+                            return;
+                        }
+                        var csvStr = '';
+                        if (options && options.header) {
+                            var header = options.header;
+                            var firstRow = array[0];
+                            for (var key in firstRow) {
+                                if (firstRow.hasOwnProperty(key)) {
+                                    csvStr += '"' + (header[String(key)] || "").replace(/"/g, '""') + '",';
+                                }
+                            }
+                        } else {
+                            var header = array[0];
+                            for (var key in header) {
+                                if (header.hasOwnProperty(key)) {
+                                    var value = key + "";
+                                    csvStr += '"' + value.replace(/"/g, '""') + '",';
+                                }
+                            }
+                        }
+                        csvStr = csvStr.slice(0, -1) + '\r\n';
+                        for (var rowNo = 0, rowLen = array.length; rowNo < rowLen; rowNo++) {
                             var line = '';
-                            for (var index in array[i]) {
-                                if (typeof array[i][index] != 'object') {
-                                    var value = array[i][index] + "";
+                            for (var index in array[rowNo]) {
+                                if (typeof array[rowNo][index] != 'object') {
+                                    var value = array[rowNo][index] + "";
                                     line += '"' + value.replace(/"/g, '""') + '",';
                                 }
                                 else {
-                                    var value1 = JSON.parse(angular.toJson(array[i][index]));
+                                    var value1 = JSON.parse(angular.toJson(array[rowNo][index]));
                                     var line1 = '';
                                     angular.forEach(value1, function (val) {
                                         line1 += val.iconImageUrl + ',';
-
                                     });
                                     line += '"' + line1.replace(/"/g, '""') + '",';
                                 }
                             }
                             line = line.slice(0, -1);
-                            str += line + '\r\n';
+                            var cReturn = (rowLen - 1 == rowNo) ? '' : '\r\n';
+                            csvStr = csvStr + line + cReturn;
                         }
-                        return str;
+                        return csvStr;
                     },
                     download: function (csv, name) {
                         var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});

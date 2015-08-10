@@ -37,5 +37,10 @@
                     _location.href = _location.href.substr(0, _location.href.indexOf('#'));
                 }
             };
-        }]);
+        }])
+      .run(function($rootScope,$location, Buildfire){
+       /* Buildfire.messaging.onReceivedMessage = function(message){
+          $location.path('/people/'+ message.id);
+        };*/
+      });
 })(window.angular, window.buildfire);

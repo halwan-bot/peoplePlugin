@@ -27,6 +27,14 @@
                 ContentPeople.item = {
                     data: angular.copy(_data)
                 };
+
+              /*
+              Send message to widget that this page has been opened
+               */
+              /*if($routeParams.itemId){
+                Buildfire.messaging.sendMessageToWidget({id : $routeParams.itemId});
+              }*/
+
                 updateMasterItem(ContentPeople.item);
                 function updateMasterItem(item) {
                     ContentPeople.masterItem = angular.copy(item);
@@ -151,12 +159,8 @@
                         return console.error('Error:', error);
                     }
                     if (result.selectedFiles && result.selectedFiles.length) {
-                        var newUrl = Buildfire.imageLib.cropImage(result.selectedFiles[0], {
-                            width: 600,
-                            height: 600
-                        });
-                        ContentPeople.item.data.topImage = newUrl && newUrl || null;
-                        $scope.$digest();
+                      ContentPeople.item.data.topImage = result.selectedFiles[0];
+                      $scope.$digest();
                     }
                 };
 

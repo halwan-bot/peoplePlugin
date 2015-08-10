@@ -224,15 +224,14 @@
                 /**
                  * ContentHome.loadMore() called by infiniteScroll to implement lazy loading
                  */
-                ContentHome.loadMore = function () {
+                ContentHome.loadMore = function (search) {
                     if (ContentHome.busy) {
                         return;
                     }
                     ContentHome.busy = true;
-                    if (ContentHome.data && ContentHome.data.content.sortBy) {
+                    if (ContentHome.data && ContentHome.data.content.sortBy && !search) {
                         searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
                     }
-
                     Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err) {
                             console.error('-----------err in getting list-------------', err);
@@ -413,6 +412,9 @@
                  */
                 ContentHome.searchListItem = function (value) {
                     var fullName = '';
+                    searchOptions.page=0;
+                    ContentHome.busy=false;
+                    ContentHome.items=null;
                     if (value) {
                         if (value.indexOf(' ') !== -1) {
                             fullName = value.trim().split(' ');
@@ -421,17 +423,10 @@
                             fullName = value.trim();
                             searchOptions.filter = {"$or": [{"$json.fName": fullName}, {"$json.lName": fullName}]};
                         }
-                        Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
-                            if (err)
-                                console.error('There was a problem retrieving your data', err);
-                            else {
-                                ContentHome.items = records;
-                                $scope.$digest();
-                            }
-                        });
                     } else {
-                        console.info('Blank name provided');
+                        searchOptions.filter={"$json.fName": {"$regex": '/*'}};
                     }
+                    ContentHome.loadMore('search');
                 };
 
                 /**

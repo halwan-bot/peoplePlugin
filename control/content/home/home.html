@@ -100,7 +100,7 @@
                 <div ui-sortable="ContentHome.itemSortableOptions" ng-model="ContentHome.items">
                     <div
                         class="d-item double-line square-icon people-item-list listing-bg" ng-repeat="item in ContentHome.items">
-                        <span class="icon icon-menu cursor-grab" aria-hidden="true"></span>
+                        <span class="icon icon-menu cursor-grab" aria-hidden="true" ng-if="!ContentHome.itemSortableOptions.disabled"></span>
                         <img ng-src={{item.data.topImage}}
                              class="border-radius-four border-grey"
                              style="height: 40px" ng-if="item.data.topImage">

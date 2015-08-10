@@ -157,6 +157,17 @@
                     }
                 });
             };
+            /**
+             * WidgetHome.resizeImage method to resize
+             * @param url
+             * @param width
+             * @param height
+             * @returns {null}
+             */
+            WidgetHome.resizeImage=function(url,width,height){
+                var resizedUrl=Buildfire.imageLib.resizeImage(url,{width:width,height:height});
+               return resizedUrl;
+            };
 
             $scope.$on("$destroy", function () {
                 WidgetHome.onUpdateFn.clear();

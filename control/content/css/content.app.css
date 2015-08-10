@@ -261,3 +261,7 @@ Style for loader
 .link-close-btn {
     margin-top: 10px;
 }
+
+.listing-bg{
+    background-color: white;
+}

@@ -9,7 +9,8 @@
             </div>
             <div class="home carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
                  ui-sortable="ContentHome.imageSortableOptions" ng-model="ContentHome.data.content.images">
-                <div class="item" ng-repeat="image in ContentHome.data.content.images">
+                <div class="item listing-bg"
+                     ng-repeat="image in ContentHome.data.content.images">
                   <span class="icon icon-menu cursor-grab"
                         aria-hidden="true" ></span>
                   <span class="img-carousel-thumb border-radius-four border-grey">
@@ -97,7 +98,8 @@
                  infinite-scroll-disabled="ContentHome.busy"
                  infinite-scroll-container="'#scroll-infinite'">
                 <div ui-sortable="ContentHome.itemSortableOptions" ng-model="ContentHome.items">
-                    <div class="d-item double-line square-icon people-item-list" ng-repeat="item in ContentHome.items">
+                    <div
+                        class="d-item double-line square-icon people-item-list listing-bg" ng-repeat="item in ContentHome.items">
                         <span class="icon icon-menu cursor-grab" aria-hidden="true"></span>
                         <img ng-src={{item.data.topImage}}
                              class="border-radius-four border-grey"

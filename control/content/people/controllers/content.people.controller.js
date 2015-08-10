@@ -14,7 +14,6 @@
                 };
                 var _data = {
                     topImage: '',
-                    iconImage: '',
                     fName: '',
                     lName: '',
                     position: '',

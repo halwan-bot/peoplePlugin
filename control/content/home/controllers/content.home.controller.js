@@ -8,6 +8,14 @@
                 /**
                  * These are the options available to sort people list.
                  * */
+                var header = {
+                    topImage: "Image URL",
+                    fName: "First Name",
+                    lName: "Last Name",
+                    position: "Position",
+                    deepLinkUrl: "Deeplink Url",
+                    bodyContent: "Information"
+                };
                 var MANUALLY = 'Manually',
                     OLDEST_TO_NEWEST = 'Oldest to Newest',
                     NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -205,15 +213,14 @@
                 /**
                  * ContentHome.loadMore() called by infiniteScroll to implement lazy loading
                  */
-                ContentHome.loadMore = function () {
+                ContentHome.loadMore = function (search) {
                     if (ContentHome.busy) {
                         return;
                     }
                     ContentHome.busy = true;
-                    if (ContentHome.data && ContentHome.data.content.sortBy) {
+                    if (ContentHome.data && ContentHome.data.content.sortBy && !search) {
                         searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
                     }
-
                     Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err) {
                             console.error('-----------err in getting list-------------', err);
@@ -280,15 +287,33 @@
                             templateUrl: 'home/modals/import-csv.html',
                             controller: 'ImportCSVPopupCtrl',
                             controllerAs: 'ImportCSVPopup',
-                            size: 'sm',
-                            resolve: {
-                                peopleInfo: function () {
-                                    return ContentHome.data;
-                                }
-                            }
+                            size: 'sm'
                         });
-                    modalInstance.result.then(function (data) {
-                    }, function (data) {
+                    modalInstance.result.then(function (rows) {
+                        ContentHome.loading = false;
+                        if (rows.length) {
+                            var rank = ContentHome.data.content.rankOfLastItem || 0;
+                            for (var index = 0; index < rows.length; index++) {
+                                rank += 10;
+                                rows[index].dateCreated = +new Date();
+                                rows[index].socialLinks = [];
+                                rows[index].rank = rank;
+                            }
+                            ContentHome.loading = true;
+                            Buildfire.datastore.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
+                                if (err) {
+                                    console.error('There was a problem while importing the file----', err);
+                                }
+                                else {
+                                    console.log('File has been imported----------------------------', data);
+                                }
+                                ContentHome.data.content.rankOfLastItem = rank;
+                                ContentHome.loading = false;
+                            });
+                        }
+
+                    }, function (error) {
+                        ContentHome.loading = false;
                         //do something on cancel
                     });
                 };
@@ -298,14 +323,18 @@
                  */
                 ContentHome.exportCSV = function () {
                     if (ContentHome.items) {
-                        var tempData = [];
+                        var persons = [];
                         angular.forEach(angular.copy(ContentHome.items), function (value) {
                             delete value.data.dateCreated;
+                            delete value.data.iconImage;
                             delete value.data.socialLinks;
                             delete value.data.rank;
-                            tempData.push(value.data);
+                            persons.push(value.data);
                         });
-                        var csv = FormatConverter.jsonToCsv(angular.toJson(tempData));
+
+                        var csv = FormatConverter.jsonToCsv(angular.toJson(persons), {
+                            header: header
+                        });
                         FormatConverter.download(csv, "Export.csv");
                     }
                 };
@@ -314,17 +343,17 @@
                  * ContentHome.getTemplate() used to download csv template
                  */
                 ContentHome.getTemplate = function () {
-                    var tempData = [{
-                        topImage: null,
-                        iconImage: null,
-                        fName: null,
-                        lName: null,
-                        position: null,
-                        deepLinkUrl: null,
-                        bodyContent: null
+                    var templateData = [{
+                        topImage: "https://imagelibserver.s3.amazonaws.com/c1f01898-341d-11e5-9d04-02f7ca55c361/42d37810-3b6c-11e5-bae1-37c8d15edaaf.JPG",
+                        fName: "Leonardo",
+                        lName: "Dicaprio",
+                        position: "",
+                        deepLinkUrl: "",
+                        bodyContent: "Leonardo Wilhelm DiCaprio[2] (/dɨˈkæpri.oʊ/; born November 11, 1974) is an American actor and film producer. He has been nominated for ten Golden Globe Awards, winning two, and five Academy Awards."
                     }];
-                    var json = JSON.parse(angular.toJson(tempData));
-                    var csv = FormatConverter.jsonToCsv(json);
+                    var csv = FormatConverter.jsonToCsv(angular.toJson(templateData), {
+                        header: header
+                    });
                     FormatConverter.download(csv, "Template.csv");
                 };
 
@@ -365,6 +394,9 @@
                  */
                 ContentHome.searchListItem = function (value) {
                     var fullName = '';
+                    searchOptions.page=0;
+                    ContentHome.busy=false;
+                    ContentHome.items=null;
                     if (value) {
                         if (value.indexOf(' ') !== -1) {
                             fullName = value.trim().split(' ');
@@ -373,17 +405,10 @@
                             fullName = value.trim();
                             searchOptions.filter = {"$or": [{"$json.fName": fullName}, {"$json.lName": fullName}]};
                         }
-                        Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, records) {
-                            if (err)
-                                console.error('There was a problem retrieving your data', err);
-                            else {
-                                ContentHome.items = records;
-                                $scope.$digest();
-                            }
-                        });
                     } else {
-                        console.info('Blank name provided');
+                        searchOptions.filter={"$json.fName": {"$regex": '/*'}};
                     }
+                    ContentHome.loadMore('search');
                 };
 
                 /**

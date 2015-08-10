@@ -37,5 +37,24 @@
                     _location.href = _location.href.substr(0, _location.href.indexOf('#'));
                 }
             };
-        }]);
+        }])
+      .filter('getImageUrl', function () {
+        return function (url, width, height, type) {
+          if (type == 'resize')
+            return buildfire.imageLib.resizeImage(url, {
+              width: width,
+              height: height
+            });
+          else
+            return buildfire.imageLib.cropImage(url, {
+              width: width,
+              height: height
+            });
+        }
+      })
+      .run(function($rootScope,$location, Buildfire){
+       /* Buildfire.messaging.onReceivedMessage = function(message){
+          $location.path('/people/'+ message.id);
+        };*/
+      });
 })(window.angular, window.buildfire);

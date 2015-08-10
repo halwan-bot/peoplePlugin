@@ -3,37 +3,20 @@
 (function (angular) {
     angular
         .module('peoplePluginContent')
-        .controller('ImportCSVPopupCtrl', ['$scope', '$modalInstance','peopleInfo','FormatConverter','Buildfire','TAG_NAMES', function ($scope, $modalInstance,peopleInfo,FormatConverter,Buildfire,TAG_NAMES) {
-            var ImportCSVPopup=this;
-            ImportCSVPopup.loading=false;
-            var rank=peopleInfo.content.rankOfLastItem || 0;
+        .controller('ImportCSVPopupCtrl', ['$scope', '$modalInstance', '$csv', function ($scope, $modalInstance, FormatConverter) {
+            var ImportCSVPopup = this;
+            var header = ["topImage", "fName", "lName", "position", "deepLinkUrl", "bodyContent"];
             ImportCSVPopup.ok = function (linkUrl) {
-                ImportCSVPopup.loading=true;
-                if(ImportCSVPopup.fileData){
-                    var json = JSON.parse(FormatConverter.CSV2JSON(ImportCSVPopup.fileData));
-                    var index,value;
-                    for(index=0;index<json.length;index++){
-                        rank+=10;
-                        value=json[index];
-                        value.dateCreated=+new Date();
-                        value.socialLinks=[];
-                        value.rank=rank;
+                if (ImportCSVPopup.fileData) {
+                    var json = JSON.parse(FormatConverter.csvToJson(ImportCSVPopup.fileData, {header: header}));
+                    var index, value;
+                    for (var index = 0; index < json.length; index++) {
+                        value = json[index];
                     }
-                    Buildfire.datastore.bulkInsert(json, TAG_NAMES.PEOPLE, function (err, data) {
-                        if (err) {
-                            console.error('There was a problem while importing the file----',err);
-                        }
-                        else {
-                            console.log('File has been imported----------------------------',data);
-                        }
-                        $modalInstance.close(linkUrl);
-                        ImportCSVPopup.loading=false;
-                    });
-
+                    $modalInstance.close(json);
                 }
-                else{
+                else {
                     $modalInstance.close(linkUrl);
-                    ImportCSVPopup.loading=false;
                 }
             };
             ImportCSVPopup.cancel = function () {

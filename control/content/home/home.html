@@ -1,4 +1,5 @@
 <div>
+    <div class="loader-pan" ng-show="ContentHome.loading"></div>
     <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Image Carousel</span>
@@ -9,10 +10,12 @@
             </div>
             <div class="home carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
                  ui-sortable="ContentHome.imageSortableOptions" ng-model="ContentHome.data.content.images">
-                <div class="item" ng-repeat="image in ContentHome.data.content.images">
+                <div class="item listing-bg"
+                     ng-repeat="image in ContentHome.data.content.images">
                   <span class="icon icon-menu cursor-grab"
                         aria-hidden="true" ></span>
-                    <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
+                    <img ng-src="{{image.imageUrl | getImageUrl : 60 :40}}"
+                         class="border-radius-four border-grey">
                     <span class="title ellipsis word-wrap">{{image.title}}</span>
 
                     <div class="copy pull-right carousel-item-btns">
@@ -37,6 +40,14 @@
         </div>
     </div>
     <hr>
+    <div class="item clearfix row margin-top-thirty" data-ng-show="ContentHome.csvDataInvalid">
+        <div class="labels col-md-12">
+            <div class="alert alert-warning">
+                <a href="javascript:void(0)" class="close" data-ng-click="ContentHome.csvDataInvalid=false">×</a>
+                <strong>Note!</strong>Uploaded CSV data is incomplete.First/Last name requires.
+            </div>
+        </div>
+    </div>
     <div class="item clearfix row margin-top-thirty">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Bulk Actions</span>
@@ -78,7 +89,7 @@
                 <input type="text" class="form-control" ng-model="search" placeholder="Name">
             </div>
             <div class="col-md-4 pull-right">
-                <a class="btn btn-primary pull-right stretch" ng-disabled="!search"
+                <a class="btn btn-primary pull-right stretch"
                    ng-click="ContentHome.searchListItem(search)">Search</a>
             </div>
         </div>
@@ -94,9 +105,16 @@
                  infinite-scroll-disabled="ContentHome.busy"
                  infinite-scroll-container="'#scroll-infinite'">
                 <div ui-sortable="ContentHome.itemSortableOptions" ng-model="ContentHome.items">
-                    <div class="d-item double-line square-icon people-item-list" ng-repeat="item in ContentHome.items">
-                        <span class="icon icon-menu cursor-grab" aria-hidden="true"></span>
-                        <img ng-src={{item.data.topImage}} class="border-radius-four border-grey">
+                    <div class="d-item double-line square-icon people-item-list listing-bg text-center " ng-if="!ContentHome.items.length">
+                        No item Found!
+                    </div>
+                    <div ng-if="ContentHome.items.length"
+                        class="d-item double-line square-icon people-item-list listing-bg" ng-repeat="item in ContentHome.items">
+                        <span class="icon icon-menu cursor-grab" aria-hidden="true" ng-if="!ContentHome.itemSortableOptions.disabled"></span>
+                        <img
+                            ng-src="{{item.data.topImage | getImageUrl : 40 :40}}"
+                             class="border-radius-four border-grey"
+                             style="height: 40px" ng-if="item.data.topImage">
                         <div class="copy" style="width: auto; display: block;height: 46px; padding-left:10px; max-width: 100%">
 
                             <span

@@ -261,3 +261,13 @@ Style for loader
 .link-close-btn {
     margin-top: 10px;
 }
+
+.listing-bg{
+    background-color: white;
+}
+
+.item .alert-warning {
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+    color: #8a6d3b;
+}

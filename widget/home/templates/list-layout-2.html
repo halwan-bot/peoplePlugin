@@ -1,5 +1,5 @@
 <div class="holder padding-zero">
-  <div class="people-plugin listlayout1">
+  <div class="people-plugin listlayout1"  id="scroll-infinite">
     <div class="plugin-banner clearfix border-bottom-grey">
       <div class="plugin-slider text-center"
            image-carousel="{{WidgetHome.data.content.images.length}}">
@@ -8,14 +8,14 @@
           <a href="{{image.link}}" data-ng-if="image.link"
              target="{{image.target}}"><img
               ng-src="{{image.imageUrl}}"></a>
-          <img data-ng-if="!image.link" ng-src="{{image.imageUrl}}">
+          <img data-ng-if="!image.link" ng-src="{{image.imageUrl | getImageUrl : 342 : 300}}">
         </div>
       </div>
     </div>
     <div class="padded text-left">
       <p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
     </div>
-    <div id="scroll-infinite">
+    <div>
       <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1"
            infinite-scroll="WidgetHome.loadMore()"
            infinite-scroll-disabled="WidgetHome.busy"
@@ -24,7 +24,7 @@
       <div class="clearfix border-bottom-grey">
         <div class="text-center people-thumbnail-card"  ng-if="item.data.topImage">
           <img class="people-thumbnail-img-card"
-               ng-src="{{item.data.topImage}}">
+               ng-src="{{item.data.topImage | getImageUrl : 342 : 200}}">
         </div>
       </div>
 		<div class="padded text-left">

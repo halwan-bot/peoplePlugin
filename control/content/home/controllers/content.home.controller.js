@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem',
-            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem) {
+        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout',
+            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout) {
                 /**
                  * These are the options available to sort people list.
                  * */
@@ -40,6 +40,17 @@
                     searchOptions = {
                         filter: {"$json.fName": {"$regex": '/*'}}, page: _page, pageSize: _pageSize + 1 // the plus one is to check if there are any more
                     };
+
+                function isValidItem(item, index, array) {
+                    return item.fName || item.lName;
+                }
+
+                function validateCsv(items) {
+                    if (!Array.isArray(items) || !items.length) {
+                        return false;
+                    }
+                    return items.every(isValidItem);
+                }
 
                 var ContentHome = this;
 
@@ -300,19 +311,26 @@
                                 rows[index].socialLinks = [];
                                 rows[index].rank = rank;
                             }
-                            ContentHome.loading = true;
-                            Buildfire.datastore.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
-                                if (err) {
-                                    console.error('There was a problem while importing the file----', err);
-                                }
-                                else {
-                                    console.log('File has been imported----------------------------', data);
-                                }
-                                ContentHome.data.content.rankOfLastItem = rank;
+                            if (validateCsv(rows)) {
+                                ContentHome.loading = true;
+                                Buildfire.datastore.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
+                                    ContentHome.loading = false;
+                                    if (err) {
+                                        console.error('There was a problem while importing the file----', err);
+                                    }
+                                    else {
+                                        console.log('File has been imported----------------------------', data);
+                                    }
+                                    ContentHome.data.content.rankOfLastItem = rank;
+                                });
+                            } else {
                                 ContentHome.loading = false;
-                            });
+                                ContentHome.csvDataInvalid = true;
+                                $timeout(function hideCsvDataError() {
+                                    ContentHome.csvDataInvalid = false;
+                                }, 2000)
+                            }
                         }
-
                     }, function (error) {
                         ContentHome.loading = false;
                         //do something on cancel

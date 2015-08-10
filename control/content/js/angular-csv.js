@@ -51,6 +51,9 @@
                     // it to the data array.
                     arrData[arrData.length - 1].push(strMatchedValue);
                 }
+                if (arrData[arrData.length - 1] && arrData[arrData.length - 1].length < 2) {
+                    arrData.pop();
+                }
                 // Return the parsed data.
                 return (arrData);
             };

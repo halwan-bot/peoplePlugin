@@ -24,7 +24,7 @@
       <div class="clearfix border-bottom-grey">
         <div class="text-center people-thumbnail-card"  ng-if="item.data.topImage">
           <img class="people-thumbnail-img-card"
-               ng-src="{{item.data.topImage}}">
+               ng-src="{{item.data.topImage | getImageUrl : 342 : 200}}">
         </div>
       </div>
 		<div class="padded text-left">

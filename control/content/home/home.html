@@ -40,6 +40,14 @@
         </div>
     </div>
     <hr>
+    <div class="item clearfix row margin-top-thirty" data-ng-show="ContentHome.csvDataInvalid">
+        <div class="labels col-md-12">
+            <div class="alert alert-warning">
+                <a href="javascript:void(0)" class="close" data-ng-click="ContentHome.csvDataInvalid=false">×</a>
+                <strong>Note!</strong>Uploaded CSV data is incomplete.First/Last name requires.
+            </div>
+        </div>
+    </div>
     <div class="item clearfix row margin-top-thirty">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Bulk Actions</span>

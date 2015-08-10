@@ -18,7 +18,8 @@
                       <span class="add-icon">+</span>
                     </a>
                   <span ng-show="ContentPeople.item.data.topImage">
-                    <img src="{{ContentPeople.item.data.topImage}}">
+                    <img
+                        ng-src="{{ContentPeople.item.data.topImage | getImageUrl : 40 :40 :'resize'}}">
                     <span
                           class="btn-icon btn-delete-icon btn-danger btn-close transition-third"
                           ng-click="ContentPeople.removeTopImage()"></span>
@@ -109,7 +110,7 @@
                 <a class="btn btn-danger pull-right stretch" data-ng-click="ContentPeople.deleteItem();" href="javascript:void(0)">Delete</a>
             </div>
             <div class="col-md-6 pull-right padding-right-zero padding-left-ten">
-                <a class="btn btn-primary pull-right stretch" ng-click="ContentPeople.done()" ng-disabled="ContentPeople.unchangedData"
+                <a class="btn btn-primary pull-right stretch" ng-click="ContentPeople.done()" ng-disabled="ContentPeople.unchangedData || !ContentPeople.isItemValid"
                    href="javaScript:void(0);">Done</a>
             </div>
         </div>

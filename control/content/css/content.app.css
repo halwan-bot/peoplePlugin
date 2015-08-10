@@ -265,3 +265,9 @@ Style for loader
 .listing-bg{
     background-color: white;
 }
+
+.item .alert-warning {
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+    color: #8a6d3b;
+}

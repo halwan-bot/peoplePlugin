@@ -8,7 +8,8 @@
           <a href="{{image.link}}" data-ng-if="image.link"
              target="{{image.target}}"><img
               ng-src="{{image.imageUrl}}"></a>
-          <img data-ng-if="!image.link" ng-src="{{image.imageUrl}}">
+          <img data-ng-if="!image.link"
+               ng-src="{{image.imageUrl | getImageUrl : 342 : 300}}">
         </div>
       </div>
     </div>
@@ -23,7 +24,8 @@
           <div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
             <div class="media pull-left border-grey border-radius-four people-thumbnail"
                  ng-if="item.data.topImage">
-              <img class="people-thumbnail-img" ng-src="{{item.data.topImage}}">
+              <img class="people-thumbnail-img"
+                   ng-src="{{item.data.topImage | getImageUrl : 100 : 60}}">
             </div>
             <div class="content margin-top-ten item-position">
               <p class="text-primary ellipsis margin-zero item-position"><a

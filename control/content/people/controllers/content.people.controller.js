@@ -28,12 +28,12 @@
                     data: angular.copy(_data)
                 };
 
-              /*
-              Send message to widget that this page has been opened
-               */
-              /*if($routeParams.itemId){
-                Buildfire.messaging.sendMessageToWidget({id : $routeParams.itemId});
-              }*/
+                /*
+                 Send message to widget that this page has been opened
+                 */
+                /*if($routeParams.itemId){
+                 Buildfire.messaging.sendMessageToWidget({id : $routeParams.itemId});
+                 }*/
 
                 updateMasterItem(ContentPeople.item);
                 function updateMasterItem(item) {
@@ -46,6 +46,10 @@
 
                 function isUnchanged(item) {
                     return angular.equals(item, ContentPeople.masterItem);
+                }
+
+                function isValidItem(item) {
+                    return item.fName || item.lName;
                 }
 
                 /*On click button done it redirects to home*/
@@ -159,8 +163,8 @@
                         return console.error('Error:', error);
                     }
                     if (result.selectedFiles && result.selectedFiles.length) {
-                      ContentPeople.item.data.topImage = result.selectedFiles[0];
-                      $scope.$digest();
+                        ContentPeople.item.data.topImage = result.selectedFiles[0];
+                        $scope.$digest();
                     }
                 };
 
@@ -180,7 +184,8 @@
                         ContentPeople.isUpdating = false;
                     }
                     ContentPeople.unchangedData = angular.equals(_data, ContentPeople.item.data);
-                    if (!ContentPeople.isUpdating && !isUnchanged(ContentPeople.item)) {
+                    ContentPeople.isItemValid = isValidItem(ContentPeople.item.data);
+                    if (!ContentPeople.isUpdating && !isUnchanged(ContentPeople.item) && ContentPeople.isItemValid) {
                         tmrDelayForPeoples = setTimeout(function () {
                             if (item.id) {
                                 ContentPeople.updateItemData();

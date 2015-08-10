@@ -99,7 +99,9 @@
                 <div ui-sortable="ContentHome.itemSortableOptions" ng-model="ContentHome.items">
                     <div class="d-item double-line square-icon people-item-list" ng-repeat="item in ContentHome.items">
                         <span class="icon icon-menu cursor-grab" aria-hidden="true"></span>
-                        <img ng-src={{item.data.topImage}} class="border-radius-four border-grey">
+                        <img ng-src={{item.data.topImage}}
+                             class="border-radius-four border-grey"
+                             style="height: 40px" ng-if="item.data.topImage">
                         <div class="copy" style="width: auto; display: block;height: 46px; padding-left:10px; max-width: 100%">
 
                             <span

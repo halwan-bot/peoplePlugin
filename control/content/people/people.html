@@ -18,7 +18,8 @@
                       <span class="add-icon">+</span>
                     </a>
                   <span ng-show="ContentPeople.item.data.topImage">
-                    <img src="{{ContentPeople.item.data.topImage}}">
+                    <img
+                        ng-src="{{ContentPeople.item.data.topImage | getImageUrl : 40 :40 :resize}}">
                     <span
                           class="btn-icon btn-delete-icon btn-danger btn-close transition-third"
                           ng-click="ContentPeople.removeTopImage()"></span>

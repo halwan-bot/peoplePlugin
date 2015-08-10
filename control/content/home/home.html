@@ -14,7 +14,8 @@
                      ng-repeat="image in ContentHome.data.content.images">
                   <span class="icon icon-menu cursor-grab"
                         aria-hidden="true" ></span>
-                    <img ng-src={{image.imageUrl}} class="border-radius-four border-grey">
+                    <img ng-src="{{image.imageUrl | getImageUrl : 60 :40}}"
+                         class="border-radius-four border-grey">
                     <span class="title ellipsis word-wrap">{{image.title}}</span>
 
                     <div class="copy pull-right carousel-item-btns">
@@ -99,7 +100,8 @@
                     <div
                         class="d-item double-line square-icon people-item-list listing-bg" ng-repeat="item in ContentHome.items">
                         <span class="icon icon-menu cursor-grab" aria-hidden="true" ng-if="!ContentHome.itemSortableOptions.disabled"></span>
-                        <img ng-src={{item.data.topImage}}
+                        <img
+                            ng-src="{{item.data.topImage | getImageUrl : 40 :40}}"
                              class="border-radius-four border-grey"
                              style="height: 40px" ng-if="item.data.topImage">
                         <div class="copy" style="width: auto; display: block;height: 46px; padding-left:10px; max-width: 100%">

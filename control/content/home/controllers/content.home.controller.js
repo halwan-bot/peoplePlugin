@@ -415,13 +415,14 @@
                     searchOptions.page=0;
                     ContentHome.busy=false;
                     ContentHome.items=null;
+                    value = value.trim();
                     if (value) {
                         if (value.indexOf(' ') !== -1) {
-                            fullName = value.trim().split(' ');
-                            searchOptions.filter = {"$or": [{"$json.fName": fullName[0]}, {"$json.lName": fullName[1]}]};
+                            fullName = value.split(' ');
+                            searchOptions.filter = {"$and": [{"$json.fName": {"$regex":fullName[0] } }, {"$json.lName": {"$regex":fullName[1]} }]};
                         } else {
-                            fullName = value.trim();
-                            searchOptions.filter = {"$or": [{"$json.fName": fullName}, {"$json.lName": fullName}]};
+                            fullName = value;
+                            searchOptions.filter = {"$or": [{"$json.fName": {"$regex":fullName }}, {"$json.lName": {"$regex":fullName }}]};
                         }
                     } else {
                         searchOptions.filter={"$json.fName": {"$regex": '/*'}};

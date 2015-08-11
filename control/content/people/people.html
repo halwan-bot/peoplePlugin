@@ -83,26 +83,38 @@
         </div>
         <div class="main col-md-9 pull-right">
             <div class="clearfix">
-                <a class="btn btn-success pull-left" ng-click="ContentPeople.openAddLinkPopup()">Add Links</a>
+                <a class="btn btn-success pull-left col-md-3" ng-click="ContentPeople.openAddLinkPopup()">Add Links</a>
             </div>
-            <div class="carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey"
-                 ui-sortable="ContentPeople.linksSortableOptions" ng-model="ContentPeople.item.data.socialLinks">
-                <div class="d-item" ng-repeat="_link in ContentPeople.item.data.socialLinks">
-                    <span class="icon icon-menu cursor-grab pull-left"></span>
-                    <div class="copy pull-left width66">
-                        <span class="width34 title ellipsis"><a
-                            href="javascript:void(0)"
-                            ng-click="ContentPeople.openEditLink(_link,$index)">{{_link
-                          .title}}</a></span>
-                        <span class="width34 title ellipsis">{{_link.url}}</span>
-                        <span class="width34 title ellipsis" data-ng-if="_link.deepLinkUrl">{{_link.deepLinkUrl}}</span>
-
-                    </div>
-                  <span
-                      class="btn-icon btn-delete-icon btn-danger btn-cross link-close-btn"
-                        ng-click="ContentPeople.removeLink($index)"></span>
-                </div>
-            </div>
+		</div>
+	</div>
+	<hr class="none">
+	<div class="item clearfix row">        
+		<div class="main col-md-12 pull-right">
+			<div class="draggable-list-view wide-list has-btn links-list" ui-sortable="ContentPeople.linksSortableOptions" ng-model="ContentPeople.item.data.socialLinks">
+				<div class="d-item double-line square-icon clearfix">
+					<span class="icon icon-menu cursor-grab pull-left"></span>
+					<div class="media-holder pull-left">
+						<img src="http://www.placehold.it/50x50">
+					</div>
+					<div class="copy pull-right">
+						<div class="col-md-4 padding-zero pull-left">
+							<a class="text-primary" ng-click="ContentPeople.openEditLink(_link,$index)"><span class="title ellipsis pull-left">{{_link.title}}</span></a>
+							<span class="title ellipsis pull-left">{{_link.url}}</span>
+						</div>
+						<div class="col-md-7 padding-right-zero pull-left">
+							<span class="content ellipsis" data-ng-if="_link.deepLinkUrl">{{_link.deepLinkUrl}}</span>
+						</div>
+						<div class="pull-right">
+							<span class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="ContentPeople.removeLink($index)"></span>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Show If No Items -->
+				<div class="well text-center margin-bottom-zero border-none" ng-hide="">
+					<p class="margin-zero">No items found.</p>
+				</div>
+			</div>
         </div>
     </div>
     <hr class="none">

@@ -97,9 +97,8 @@
                         var csvStr = '';
                         if (options && options.header) {
                             var header = options.header;
-                            var firstRow = array[0];
-                            for (var key in firstRow) {
-                                if (firstRow.hasOwnProperty(key)) {
+                            for (var key in header) {
+                                if (header.hasOwnProperty(key)) {
                                     csvStr += '"' + (header[String(key)] || "").replace(/"/g, '""') + '",';
                                 }
                             }
@@ -115,9 +114,9 @@
                         csvStr = csvStr.slice(0, -1) + '\r\n';
                         for (var rowNo = 0, rowLen = array.length; rowNo < rowLen; rowNo++) {
                             var line = '';
-                            for (var index in array[rowNo]) {
+                            for (var index in header) {
                                 if (typeof array[rowNo][index] != 'object') {
-                                    var value = array[rowNo][index] + "";
+                                    var value = (array[rowNo][index]||"") + "";
                                     line += '"' + value.replace(/"/g, '""') + '",';
                                 }
                                 else {

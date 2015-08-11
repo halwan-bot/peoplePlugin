@@ -11,6 +11,12 @@
             NOT_FOUND: 'NOTFOUND'
         })
         .config(['$routeProvider', function ($routeProvider) {
+
+            /**
+             * Disable the pull down refresh
+             */
+            buildfire.datastore.disableRefresh();
+
             $routeProvider
                 .when('/', {
                     templateUrl: 'home/home.html',

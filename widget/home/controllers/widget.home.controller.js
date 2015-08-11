@@ -5,6 +5,10 @@
     .module('peoplePluginWidget')
     .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location) {
 
+          /**
+           * Disable the pull down refresh
+           */
+          Buildfire.datastore.disableRefresh();
       var MANUALLY = 'Manually',
         OLDEST_TO_NEWEST = 'Oldest to Newest',
         NEWEST_TO_OLDEST = 'Newest to Oldest',

@@ -32,7 +32,8 @@
                 LAST_NAME_Z_TO_A
             ];
             var currentItemLayout,
-                currentListLayout, currentSortOrder;
+                currentListLayout, currentSortOrder,
+                currentBackgroundImage;
 
             var getContentPeopleInfo = function () {
                 Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
@@ -41,6 +42,9 @@
                     }
                     else {
                         WidgetHome.data = result.data;
+                        currentBackgroundImage=WidgetHome.data.design.backgroundImage;
+                        if(currentBackgroundImage)
+                        $('body').css('background','#010101 url('+Buildfire.imageLib.resizeImage(currentBackgroundImage,{width:342,height:770})+') repeat fixed top center');
                         if (!WidgetHome.data.content.sortBy) {
                             WidgetHome.data.content.sortBy = WidgetHome.sortingOptions[0];
                         }
@@ -112,6 +116,18 @@
                                 currentListLayout = event.obj.design.listLayout;
                                 WidgetHome.data.design.listLayout = event.obj.design.listLayout;
                             }
+                            /**
+                             * condition added to update the background image
+                             */
+                            if(event.obj.design.backgroundImage && currentBackgroundImage !=event.obj.design.backgroundImage)
+                            {
+                                currentBackgroundImage=event.obj.design.backgroundImage;
+                                $('body').css('background','#010101 url('+Buildfire.imageLib.resizeImage(currentBackgroundImage,{width:342,height:770})+') repeat fixed top center');
+                            }
+                            else if(!event.obj.design.backgroundImage){
+                                currentBackgroundImage=null;
+                                $('body').css('background','none');
+                            }
                             if (event.obj.content) {
                                 WidgetHome.data.content = event.obj.content;
                                 $scope.imagesUpdated = true;
@@ -157,18 +173,6 @@
                     }
                 });
             };
-            /**
-             * WidgetHome.resizeImage method to resize
-             * @param url
-             * @param width
-             * @param height
-             * @returns {null}
-             */
-            WidgetHome.resizeImage=function(url,width,height){
-                var resizedUrl=Buildfire.imageLib.resizeImage(url,{width:width,height:height});
-               return resizedUrl;
-            };
-
             $scope.$on("$destroy", function () {
                 WidgetHome.onUpdateFn.clear();
             });

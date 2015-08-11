@@ -5,6 +5,10 @@
         .module('peoplePluginWidget')
         .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location) {
 
+            buildfire.messaging.onReceivedMessage = function(msg){
+                alert(JSON.stringify(msg));
+            };
+
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -49,8 +53,11 @@
                             WidgetHome.data.content.sortBy = WidgetHome.sortingOptions[0];
                         }
                         currentSortOrder = WidgetHome.data.content.sortBy;
-                        currentItemLayout = WidgetHome.data.design.itemLayout;
-                        currentListLayout = WidgetHome.data.design.listLayout;
+                        if(WidgetHome.data.design){
+                            currentItemLayout = WidgetHome.data.design.itemLayout;
+                            currentListLayout = WidgetHome.data.design.listLayout;
+                        }
+
                         $scope.$digest();
                     }
                 });

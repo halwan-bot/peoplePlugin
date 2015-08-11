@@ -73,7 +73,7 @@
                 Buildfire.datastore.save(DesignHome.peopleInfo, TAG_NAMES.PEOPLE_INFO, callback);
             }
             function init() {
-                DesignHome.peopleInfo = {
+                var peopleInfo= {
                     design: {
                         listLayout: "",
                         itemLayout: "",
@@ -97,10 +97,10 @@
 
                         DesignHomeMaster = angular.copy(data.data);
                     }
-                    else{
-                      console.log('------------------unable to load data---------------');
+                    else {
+                        DesignHome.peopleInfo = peopleInfo;
+                        console.log('------------------unable to load data---------------');
                     }
-                  $scope.$digest();
                 });
             }
             init();

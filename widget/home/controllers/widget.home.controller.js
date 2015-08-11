@@ -35,7 +35,7 @@
         LAST_NAME_Z_TO_A
       ];
       var currentItemLayout,
-        currentListLayout, currentSortOrder;
+        currentListLayout, currentSortOrder,currentBackgroundImage;
 
       var getContentPeopleInfo = function () {
         Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
@@ -45,6 +45,9 @@
           else {
             if (result) {
               WidgetHome.data = result.data;
+              currentBackgroundImage=WidgetHome.data.design.backgroundImage;
+              if(currentBackgroundImage)
+                $('body').css('background','#010101 url('+Buildfire.imageLib.resizeImage(currentBackgroundImage,{width:342,height:770})+') repeat fixed top center');
               if (!WidgetHome.data.content.sortBy) {
                 WidgetHome.data.content.sortBy = WidgetHome.sortingOptions[0];
               }
@@ -120,6 +123,18 @@
                   currentListLayout = event.obj.design.listLayout;
                   WidgetHome.data.design.listLayout = event.obj.design.listLayout;
                 }
+                /**
+                 * condition added to update the background image
+                 */
+                if(event.obj.design.backgroundImage && currentBackgroundImage !=event.obj.design.backgroundImage)
+                {
+                  currentBackgroundImage=event.obj.design.backgroundImage;
+                  $('body').css('background','#010101 url('+Buildfire.imageLib.resizeImage(currentBackgroundImage,{width:342,height:770})+') repeat fixed top center');
+                }
+                else if(!event.obj.design.backgroundImage){
+                  currentBackgroundImage=null;
+                  $('body').css('background','none');
+                }
                 if (!WidgetHome.data.design)
                   WidgetHome.data.design = {};
                 currentListLayout = WidgetHome.data.design.listLayout = WidgetHome.data.design.listLayout || DEFAULT_LIST_LAYOUT;
@@ -152,40 +167,37 @@
         }
         WidgetHome.busy = true;
 
-        if (WidgetHome.data && WidgetHome.data.content.sortBy) {
-          searchOptions = getSearchOptions(WidgetHome.data.content.sortBy);
-        }
+                Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                    if (err) {
+                        return console.error('-----------err in getting list-------------', err);
+                    }
+                    else {
+                        console.info('Widget ----------------------------------- load More data------------called');
+                        if (result.length > _pageSize) {// to indicate there are more
+                            result.pop();
+                            searchOptions.page = searchOptions.page + 1;
+                            WidgetHome.busy = false;
+                        }
+                        WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
+                        $scope.$digest();
+                    }
+                });
+            };
+            /**
+             * WidgetHome.resizeImage method to resize
+             * @param url
+             * @param width
+             * @param height
+             * @returns {null}
+             */
+            WidgetHome.resizeImage=function(url,width,height){
+                var resizedUrl=Buildfire.imageLib.resizeImage(url,{width:width,height:height});
+               return resizedUrl;
+            };
 
-        Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
-          if (err) {
-            return console.error('-----------err in getting list-------------', err);
-          }
-          else {
-            console.info('Widget ----------------------------------- load More data------------called');
-            if (result.length > _pageSize) {// to indicate there are more
-              result.pop();
-              searchOptions.page = searchOptions.page + 1;
-              WidgetHome.busy = false;
-            }
-            WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
-            $scope.$digest();
-          }
-        });
-      };
-      /**
-       * WidgetHome.resizeImage method to resize
-       * @param url
-       * @param width
-       * @param height
-       * @returns {null}
-       */
-      WidgetHome.resizeImage = function (url, width, height) {
-        var resizedUrl = Buildfire.imageLib.resizeImage(url, {
-          width: width,
-          height: height
-        });
-        return resizedUrl;
-      };
+            $scope.$on("$destroy", function () {
+                WidgetHome.onUpdateFn.clear();
+            });
 
       $scope.$on("$destroy", function () {
         WidgetHome.onUpdateFn.clear();

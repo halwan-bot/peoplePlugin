@@ -31,8 +31,7 @@
             <span>Description</span>
         </div>
         <div class="main col-md-9 pull-right">
-            <textarea class="form-control" ng-model="ContentHome.data.content.description"
-                      placeholder="WYSIWYG"></textarea>
+            <textarea class="form-control" ng-model="ContentHome.data.content.description" placeholder="WYSIWYG"></textarea>
         </div>
     </div>
     <hr>
@@ -61,14 +60,12 @@
         </div>
         <div class="main pull-right col-md-9 padding-left-zero row">
             <div class="dropdown pull-left col-md-8 padding-zero" dropdown is-open="status.isopen">
-                <button class="btn btn-default text-left dropdown-toggle" dropdown-toggle ng-disabled="disabled"
-                        aria-expanded="true">
+                <button class="btn btn-default text-left dropdown-toggle" dropdown-toggle ng-disabled="disabled" aria-expanded="true">
                     <span class="pull-left">{{ContentHome.data.content.sortBy}}</span>
                     <span class="chevron icon-chevron-down pull-right"></span>
                 </button>
                 <ul class="dropdown-menu extended" role="menu">
-                    <li ng-repeat="value in ContentHome.sortingOptions"
-                        ng-Click="ContentHome.sortPeopleBy(this.value)">
+                    <li ng-repeat="value in ContentHome.sortingOptions" ng-Click="ContentHome.sortPeopleBy(this.value)">
                         <a tabindex="-1" class="transition-third">{{value}}</a>
                     </li>
                 </ul>

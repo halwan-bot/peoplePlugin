@@ -5,15 +5,14 @@
     <div class="main col-md-9 pull-right">
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
-                <a
-                        class="border-grey border-radius-three default-background-hover" style="text-align: center">
-                    <img
-                            src="images/{{DesignHome.peopleInfo.design.listLayout}}.png" style="height: 100%"></a>
+                <a class="border-grey border-radius-three default-background-hover text-center">
+                    <img src="images/{{DesignHome.peopleInfo.design.listLayout}}.png">
+				</a>
             </div>
-            <div class="layoutgrid pull-right border-grey border-radius-three">
-                <a ng-repeat="layout in DesignHome.layouts.listLayouts"
-                   class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeListLayout(layout.name)" style="text-align: center">
-                    <img style="height: 100%" src="images/{{layout.name}}.png"></a>
+            <div class="screen layoutgrid pull-right border-grey border-radius-three margin-left-zero">
+                <a ng-repeat="layout in DesignHome.layouts.listLayouts" class="layouticon border-grey border-radius-three default-background-hover text-center" ng-click="DesignHome.changeListLayout(layout.name)">
+                    <img src="images/{{layout.name}}.png">
+				</a>
 
                 <!--
                 <ul>
@@ -35,15 +34,14 @@
     <div class="main col-md-9 pull-right">
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
-                <a
-                        class="border-grey border-radius-three default-background-hover" style="text-align: center">
-                    <img style="height: 100%"
-                         src="images/{{DesignHome.peopleInfo.design.itemLayout}}.png"></a>
+                <a class="border-grey border-radius-three default-background-hover text-center">
+                    <img src="images/{{DesignHome.peopleInfo.design.itemLayout}}.png">
+				</a>
             </div>
-            <div class="layoutgrid pull-right border-grey border-radius-three">
-                <a ng-repeat="layout in DesignHome.layouts.itemLayouts" style="text-align: center"
-                   class="layouticon border-grey border-radius-three default-background-hover" ng-click="DesignHome.changeItemLayout(layout.name)">
-                    <img style="height: 100%" src="images/{{layout.name}}.png"></a>
+            <div class="screen layoutgrid pull-right border-grey border-radius-three margin-left-zero">
+                <a ng-repeat="layout in DesignHome.layouts.itemLayouts" class="layouticon border-grey border-radius-three default-background-hover text-center" ng-click="DesignHome.changeItemLayout(layout.name)">
+                    <img src="images/{{layout.name}}.png">
+				</a>
 
                 <!--
                 <ul>

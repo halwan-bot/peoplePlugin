@@ -16,8 +16,10 @@
 					</div>
 					<div class="copy pull-right">
 						<span class="title ellipsis">{{image.title}}</span>
-						<a ng-hide="image.link" onclick="alert('Opens Action Items, NOT DeepLink'); " class="text-primary text">Add Action</a>											
-						<span ng-click="ContentHome.removeCarouselImage($index)" class="btn-icon btn-delete-icon btn-danger"><span>
+						<div class="pull-right">
+							<a ng-hide="image.link" onclick="alert('Opens Action Items, NOT DeepLink'); " class="text-primary text">Add Action</a>											
+							<span ng-click="ContentHome.removeCarouselImage($index)" class="btn-icon btn-delete-icon btn-danger"><span>
+						</div>
 					</div>
 				</div>
             </div>
@@ -92,16 +94,12 @@
     <div class="item clearfix">
         <div ng-if="ContentHome.DeepLinkCopyUrl" class="alert alert-success transition-half deep-link"><span
                 class="text-center">DeepLink URL copied to clipboard.</span></div>
-        <div id="scroll-infinite"
-             class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four">
-            <div ng-if="ContentHome.data" infinite-scroll-distance="1"
-                 infinite-scroll="ContentHome.loadMore()"
-                 infinite-scroll-disabled="ContentHome.busy"
-                 infinite-scroll-container="'#scroll-infinite'">
+        <div id="scroll-infinite" class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four">
+            <div ng-if="ContentHome.data" infinite-scroll-distance="1" infinite-scroll="ContentHome.loadMore()" infinite-scroll-disabled="ContentHome.busy" infinite-scroll-container="'#scroll-infinite'">
                 <div ui-sortable="ContentHome.itemSortableOptions" ng-model="ContentHome.items">
-                    <div class="d-item double-line square-icon people-item-list listing-bg text-center " ng-if="!ContentHome.items.length">
-                        No item Found!
-                    </div>
+                    <div class="well text-center margin-bottom-zero border-none" ng-hide="plugins.length > 0">
+						<p class="margin-zero">No items found.</p>
+					</div>
                     <div ng-if="ContentHome.items.length" class="d-item double-line square-icon clearfix" ng-repeat="item in ContentHome.items">
 						<span class="icon icon-menu pull-left cursor-grab" aria-hidden="true" ng-if="!ContentHome.itemSortableOptions.disabled"></span>
 						<div class="media-holder pull-left">
@@ -110,8 +108,10 @@
 						<div class="copy pull-right">
 							<span class="title ellipsis pull-left">{{item.data.fName+' '+item.data.lName}}</span>
 							<span class="title ellipsis pull-left">Plugin Type</span>
-							<span class="btn-icon btn-link-icon btn-primary transition-third ng-isolate-scope zeroclipboard-is-hover" ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.data.deepLinkUrl"></span>
-							<span class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="ContentHome.removeListItem($index)"><span>
+							<div class="pull-right">
+								<span class="btn-icon btn-link-icon btn-primary transition-third ng-isolate-scope zeroclipboard-is-hover" ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.data.deepLinkUrl"></span>
+								<span class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="ContentHome.removeListItem($index)"><span>
+							</div>
 						</div>
 					</div>
                 </div>

@@ -340,7 +340,7 @@
                  * ContentHome.exportCSV() used to export people list data to CSV
                  */
                 ContentHome.exportCSV = function () {
-                    if (ContentHome.items) {
+                    if (ContentHome.items && ContentHome.items.length) {
                         var persons = [];
                         angular.forEach(angular.copy(ContentHome.items), function (value) {
                             delete value.data.dateCreated;
@@ -354,6 +354,9 @@
                             header: header
                         });
                         FormatConverter.download(csv, "Export.csv");
+                    }
+                    else{
+                        ContentHome.getTemplate();
                     }
                 };
 

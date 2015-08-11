@@ -340,7 +340,7 @@
                  * ContentHome.exportCSV() used to export people list data to CSV
                  */
                 ContentHome.exportCSV = function () {
-                    if (ContentHome.items) {
+                    if (ContentHome.items && ContentHome.items.length) {
                         var persons = [];
                         angular.forEach(angular.copy(ContentHome.items), function (value) {
                             delete value.data.dateCreated;
@@ -355,6 +355,9 @@
                         });
                         FormatConverter.download(csv, "Export.csv");
                     }
+                    else{
+                        ContentHome.getTemplate();
+                    }
                 };
 
                 /**
@@ -362,12 +365,12 @@
                  */
                 ContentHome.getTemplate = function () {
                     var templateData = [{
-                        topImage: "https://imagelibserver.s3.amazonaws.com/c1f01898-341d-11e5-9d04-02f7ca55c361/42d37810-3b6c-11e5-bae1-37c8d15edaaf.JPG",
-                        fName: "Leonardo",
-                        lName: "Dicaprio",
+                        topImage: "",
+                        fName: "",
+                        lName: "",
                         position: "",
                         deepLinkUrl: "",
-                        bodyContent: "Leonardo Wilhelm DiCaprio[2] (/dɨˈkæpri.oʊ/; born November 11, 1974) is an American actor and film producer. He has been nominated for ten Golden Globe Awards, winning two, and five Academy Awards."
+                        bodyContent: ""
                     }];
                     var csv = FormatConverter.jsonToCsv(angular.toJson(templateData), {
                         header: header
@@ -459,6 +462,8 @@
                         });
                     modalInstance.result.then(function (imageInfo) {
                         if (imageInfo && ContentHome.data) {
+                          if(!ContentHome.data.content.images)
+                            ContentHome.data.content.images = [];
                             ContentHome.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
                         } else {
                             console.info('Unable to load data.')

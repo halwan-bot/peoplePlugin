@@ -8,6 +8,7 @@
                 var _rankOfLastItem = RankOfLastItem.getRank();
                 var ContentPeople = this;
                 ContentPeople.isUpdating = false;
+                ContentPeople.isNewItemInserted = false;
                 ContentPeople.unchangedData = true;
                 ContentPeople.linksSortableOptions = {
                     handle: '> .cursor-grab'
@@ -29,13 +30,13 @@
                 };
 
                 /// tell widget that you are here
-                buildfire.messaging.sendMessageToWidget({event:'Add/Edit People',item:this});
+                buildfire.messaging.sendMessageToWidget({event: 'Add/Edit People', item: this});
 
                 /*
                  Send message to widget that this page has been opened
                  */
                 /*if($routeParams.itemId){
-                 Buildfire.messaging.sendMessageToWidget({id : $routeParams.itemId});
+                 buildfire.messaging.sendMessageToWidget({id : $routeParams.itemId});
                  }*/
 
                 updateMasterItem(ContentPeople.item);
@@ -71,6 +72,7 @@
                         });
                     }
                 };
+
                 ContentPeople.getItem = function (itemId) {
                     Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, item) {
                         if (err)
@@ -82,22 +84,32 @@
                         $scope.$digest();
                     });
                 };
+
                 if ($routeParams.itemId) {
                     ContentPeople.getItem($routeParams.itemId);
                 }
+
                 ContentPeople.addNewItem = function () {
+                    ContentPeople.isNewItemInserted = true;
                     _rankOfLastItem = _rankOfLastItem + 10;
                     ContentPeople.item.data.dateCreated = +new Date();
                     ContentPeople.item.data.rank = _rankOfLastItem;
 
                     Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
                         ContentPeople.isUpdating = false;
-                        if (err)
+                        if (err) {
+                            ContentPeople.isNewItemInserted = false;
                             return console.error('There was a problem saving your data');
+                        }
                         RankOfLastItem.setRank(_rankOfLastItem);
-                        ContentPeople.getItem(data.id);
+                        ContentPeople.item.id = data.id;
+                        _data.dateCreated = ContentPeople.item.data.dateCreated;
+                        _data.rank = ContentPeople.item.data.rank;
+                        updateMasterItem(ContentPeople.item);
+                        $scope.$digest();
                     });
                 };
+
                 ContentPeople.updateItemData = function () {
                     Buildfire.datastore.update(ContentPeople.item.id, ContentPeople.item.data, TAG_NAMES.PEOPLE, function (err) {
                         ContentPeople.isUpdating = false;
@@ -126,7 +138,7 @@
                                 console.info('Data inserted Successfully');
                                 Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                                     if (err) {
-                                        return console.error('There was a problem saving your data');
+                                        return console.error('There was a problem saving your data', err);
                                     }
                                     result.data.content.rankOfLastItem = _rankOfLastItem;
                                     Buildfire.datastore.save(result.data, TAG_NAMES.PEOPLE_INFO, function (err) {
@@ -179,7 +191,6 @@
                     ContentPeople.item.data.topImage = null;
                 };
 
-
                 var tmrDelayForPeoples = null;
                 var updateItemsWithDelay = function (item) {
                     if (tmrDelayForPeoples) {
@@ -193,7 +204,7 @@
                             if (item.id) {
                                 ContentPeople.updateItemData();
                             }
-                            else {
+                            else if (!ContentPeople.isNewItemInserted) {
                                 ContentPeople.addNewItem();
                             }
                         }, 1000);

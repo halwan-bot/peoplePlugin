@@ -30,14 +30,14 @@
 
                 }
             };
-            DesignHome.addBackgroundImage=function(){
-                Buildfire.imageLib.showDialog(options,callback);
+            DesignHome.addBackgroundImage = function () {
+                Buildfire.imageLib.showDialog(options, callback);
             };
             DesignHome.removeBackgroundImage = function () {
-                DesignHome.peopleInfo.design.backgroundImage= null;
+                DesignHome.peopleInfo.design.backgroundImage = null;
             };
             DesignHome.changeListLayout = function (layoutName) {
-                if (layoutName) {
+                if (layoutName && DesignHome.peopleInfo.design) {
                     DesignHome.peopleInfo.design.listLayout = layoutName;
                     saveData(function (err, data) {
                             if (err) {
@@ -52,7 +52,7 @@
                 }
             };
             DesignHome.changeItemLayout = function (layoutName) {
-                if (layoutName) {
+                if (layoutName && DesignHome.peopleInfo.design) {
                     DesignHome.peopleInfo.design.itemLayout = layoutName;
                     saveData(function (err, data) {
                         if (err) {
@@ -72,8 +72,9 @@
                 };
                 Buildfire.datastore.save(DesignHome.peopleInfo, TAG_NAMES.PEOPLE_INFO, callback);
             }
+
             function init() {
-                DesignHome.peopleInfo = {
+                var peopleInfo = {
                     design: {
                         listLayout: "",
                         itemLayout: "",
@@ -90,29 +91,37 @@
                     }
                     else if (data && data.data) {
                         DesignHome.peopleInfo = angular.copy(data.data);
-                        DesignHomeMaster = angular.copy(data.data);
-                        $scope.$digest();
+                        if (!DesignHome.peopleInfo.design)
+                            DesignHome.peopleInfo.design = {};
+                        if (!DesignHome.peopleInfo.design.listLayout)
+                            DesignHome.peopleInfo.design.listLayout = DesignHome.layouts.listLayouts[0].name;
+                        if (!DesignHome.peopleInfo.design.itemLayout)
+                            DesignHome.peopleInfo.design.itemLayout = DesignHome.layouts.itemLayouts[0].name;
 
+                        DesignHomeMaster = angular.copy(data.data);
                     }
-                    else
+                    else {
+                        DesignHome.peopleInfo = peopleInfo;
                         console.log('------------------unable to load data---------------');
+                    }
                 });
             }
+
             init();
             $scope.$watch(function () {
                 return DesignHome.peopleInfo;
-            },function (newObj) {
-                if(newObj)
-                Buildfire.datastore.save(DesignHome.peopleInfo, TAG_NAMES.PEOPLE_INFO, function (err, data) {
-                    if (err) {
-                        return DesignHome.peopleInfo = angular.copy(DesignHomeMaster);
-                    }
-                    else if (data && data.obj) {
-                        return DesignHomeMaster = data.obj;
-                    }
-                    $scope.$digest();
-                });
-            },true);
+            }, function (newObj) {
+                if (newObj)
+                    Buildfire.datastore.save(DesignHome.peopleInfo, TAG_NAMES.PEOPLE_INFO, function (err, data) {
+                        if (err) {
+                            return DesignHome.peopleInfo = angular.copy(DesignHomeMaster);
+                        }
+                        else if (data && data.obj) {
+                            return DesignHomeMaster = data.obj;
+                        }
+                        $scope.$digest();
+                    });
+            }, true);
 
         }]);
 })(window.angular);

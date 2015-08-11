@@ -44,9 +44,6 @@
           else {
             if (result) {
               WidgetHome.data = result.data;
-              currentBackgroundImage=WidgetHome.data.design.backgroundImage;
-              if(currentBackgroundImage)
-                $('body').css('background','#010101 url('+Buildfire.imageLib.resizeImage(currentBackgroundImage,{width:342,height:770})+') repeat fixed top center');
               if (!WidgetHome.data.content.sortBy) {
                 WidgetHome.data.content.sortBy = WidgetHome.sortingOptions[0];
               }
@@ -55,6 +52,9 @@
                 WidgetHome.data.design = {};
               currentListLayout = WidgetHome.data.design.listLayout = WidgetHome.data.design.listLayout || DEFAULT_LIST_LAYOUT;
               currentItemLayout = WidgetHome.data.design.itemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
+              currentBackgroundImage=WidgetHome.data.design.backgroundImage;
+              if(currentBackgroundImage)
+                $('body').css('background','#010101 url('+Buildfire.imageLib.resizeImage(currentBackgroundImage,{width:342,height:770})+') repeat fixed top center');
               $scope.$digest();
             }
           }
@@ -122,6 +122,11 @@
                   currentListLayout = event.obj.design.listLayout;
                   WidgetHome.data.design.listLayout = event.obj.design.listLayout;
                 }
+
+                if (!WidgetHome.data.design)
+                  WidgetHome.data.design = {};
+                currentListLayout = WidgetHome.data.design.listLayout = WidgetHome.data.design.listLayout || DEFAULT_LIST_LAYOUT;
+                currentItemLayout = WidgetHome.data.design.itemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
                 /**
                  * condition added to update the background image
                  */
@@ -134,10 +139,7 @@
                   currentBackgroundImage=null;
                   $('body').css('background','none');
                 }
-                if (!WidgetHome.data.design)
-                  WidgetHome.data.design = {};
-                currentListLayout = WidgetHome.data.design.listLayout = WidgetHome.data.design.listLayout || DEFAULT_LIST_LAYOUT;
-                currentItemLayout = WidgetHome.data.design.itemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
+
                 if (event.obj.content) {
                   if (!WidgetHome.data)
                     WidgetHome.data = {};

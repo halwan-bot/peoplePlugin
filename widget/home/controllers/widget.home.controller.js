@@ -45,8 +45,11 @@
                             WidgetHome.data.content.sortBy = WidgetHome.sortingOptions[0];
                         }
                         currentSortOrder = WidgetHome.data.content.sortBy;
-                        currentItemLayout = WidgetHome.data.design.itemLayout;
-                        currentListLayout = WidgetHome.data.design.listLayout;
+                        if(WidgetHome.data.design){
+                            currentItemLayout = WidgetHome.data.design.itemLayout;
+                            currentListLayout = WidgetHome.data.design.listLayout;
+                        }
+
                         $scope.$digest();
                     }
                 });

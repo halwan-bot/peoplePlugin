@@ -65,15 +65,11 @@
 
         <div class="screens clearfix">
             <div class="screen text-center layouticon pull-left">
-                <a class="border-grey border-radius-three default-background-hover"
-                   ng-hide="DesignHome.peopleInfo.design.backgroundImage" ng-click="DesignHome.addBackgroundImage()">
-                    <span class="add-icon">+</span>
+                <a class="border-grey border-radius-three default-background-hover" ng-click="DesignHome.addBackgroundImage()">
+                    <span class="add-icon" ng-hide="DesignHome.peopleInfo.design.backgroundImage">+</span>
+                    <img ng-show="DesignHome.peopleInfo.design.backgroundImage" src="{{DesignHome.peopleInfo.design.backgroundImage}}">
                 </a>
-                  <span class="imgHolder" ng-show="DesignHome.peopleInfo.design.backgroundImage">
-                    <img src="{{DesignHome.peopleInfo.design.backgroundImage}}">
-                    <span class="btn-icon btn-delete-icon btn-danger btn-close transition-third"
-                          ng-click="DesignHome.removeBackgroundImage()"></span>
-                  </span>
+                <span class="icon btn-icon btn-delete-icon btn-danger btn-close transition-third" ng-click="DesignHome.removeBackgroundImage()"></span>      
             </div>
         </div>
     </div>

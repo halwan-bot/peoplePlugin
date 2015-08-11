@@ -362,12 +362,12 @@
                  */
                 ContentHome.getTemplate = function () {
                     var templateData = [{
-                        topImage: "https://imagelibserver.s3.amazonaws.com/c1f01898-341d-11e5-9d04-02f7ca55c361/42d37810-3b6c-11e5-bae1-37c8d15edaaf.JPG",
-                        fName: "Leonardo",
-                        lName: "Dicaprio",
+                        topImage: "",
+                        fName: "",
+                        lName: "",
                         position: "",
                         deepLinkUrl: "",
-                        bodyContent: "Leonardo Wilhelm DiCaprio[2] (/dɨˈkæpri.oʊ/; born November 11, 1974) is an American actor and film producer. He has been nominated for ten Golden Globe Awards, winning two, and five Academy Awards."
+                        bodyContent: ""
                     }];
                     var csv = FormatConverter.jsonToCsv(angular.toJson(templateData), {
                         header: header
@@ -415,13 +415,14 @@
                     searchOptions.page=0;
                     ContentHome.busy=false;
                     ContentHome.items=null;
+                    value = value.trim();
                     if (value) {
                         if (value.indexOf(' ') !== -1) {
-                            fullName = value.trim().split(' ');
-                            searchOptions.filter = {"$or": [{"$json.fName": fullName[0]}, {"$json.lName": fullName[1]}]};
+                            fullName = value.split(' ');
+                            searchOptions.filter = {"$and": [{"$json.fName": {"$regex":fullName[0] } }, {"$json.lName": {"$regex":fullName[1]} }]};
                         } else {
-                            fullName = value.trim();
-                            searchOptions.filter = {"$or": [{"$json.fName": fullName}, {"$json.lName": fullName}]};
+                            fullName = value;
+                            searchOptions.filter = {"$or": [{"$json.fName": {"$regex":fullName }}, {"$json.lName": {"$regex":fullName }}]};
                         }
                     } else {
                         searchOptions.filter={"$json.fName": {"$regex": '/*'}};

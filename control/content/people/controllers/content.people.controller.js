@@ -28,6 +28,9 @@
                     data: angular.copy(_data)
                 };
 
+                /// tell widget that you are here
+                buildfire.messaging.sendMessageToWidget({event:'Add/Edit People',item:this});
+
                 /*
                  Send message to widget that this page has been opened
                  */

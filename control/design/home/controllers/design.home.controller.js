@@ -90,12 +90,17 @@
                     }
                     else if (data && data.data) {
                         DesignHome.peopleInfo = angular.copy(data.data);
-                        DesignHomeMaster = angular.copy(data.data);
-                        $scope.$digest();
+                      if(!DesignHome.peopleInfo.design.listLayout)
+                        DesignHome.peopleInfo.design.listLayout = DesignHome.layouts.listLayouts[0].name;
+                      if(!DesignHome.peopleInfo.design.itemLayout)
+                        DesignHome.peopleInfo.design.itemLayout = DesignHome.layouts.itemLayouts[0].name;
 
+                        DesignHomeMaster = angular.copy(data.data);
                     }
-                    else
-                        console.log('------------------unable to load data---------------');
+                    else{
+                      console.log('------------------unable to load data---------------');
+                    }
+                  $scope.$digest();
                 });
             }
             init();

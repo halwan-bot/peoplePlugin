@@ -458,6 +458,8 @@
                         });
                     modalInstance.result.then(function (imageInfo) {
                         if (imageInfo && ContentHome.data) {
+                          if(!ContentHome.data.content.images)
+                            ContentHome.data.content.images = [];
                             ContentHome.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
                         } else {
                             console.info('Unable to load data.')

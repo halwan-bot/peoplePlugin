@@ -35,7 +35,7 @@
                  Send message to widget that this page has been opened
                  */
                 /*if($routeParams.itemId){
-                 Buildfire.messaging.sendMessageToWidget({id : $routeParams.itemId});
+                 buildfire.messaging.sendMessageToWidget({id : $routeParams.itemId});
                  }*/
 
                 updateMasterItem(ContentPeople.item);

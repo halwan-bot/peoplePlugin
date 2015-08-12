@@ -12,10 +12,9 @@
                 LAST_NAME_A_TO_Z = 'Last Name A-Z',
                 LAST_NAME_Z_TO_A = 'Last Name Z-A',
                 _pageSize = 10,
-                _page = 0,
                 searchOptions = {
                     filter: {"$json.fName": {"$regex": '/*'}},
-                    page: _page,
+                    page: 0,
                     pageSize: _pageSize + 1 // the plus one is to check if there are any more
                 },
                 DEFAULT_LIST_LAYOUT = 'list-layout-1',
@@ -94,22 +93,23 @@
             $scope.isDefined = function (item) {
                 return item.imageUrl !== undefined && item.imageUrl !== '';
             };
+
             WidgetHome.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
                 $scope.imagesUpdated = false;
                 $scope.$digest();
                 if (event && event.tag) {
                     switch (event.tag) {
                         case TAG_NAMES.PEOPLE:
-                            var currentPage = _page;
-                            if (_page) {
-                                _pageSize = _pageSize * (_page + 1);
-                                _page = 0;
+                            var currentPage = searchOptions.page;
+                            if (searchOptions.page) {
+                                searchOptions.pageSize = searchOptions.pageSize * (searchOptions.page + 1);
+                                searchOptions.page = 0;
                             }
                             WidgetHome.busy = false;
                             WidgetHome.items = [];
                             WidgetHome.loadMore(function () {
-                                _page = currentPage;
-                                _pageSize = 10;
+                                searchOptions.page = currentPage;
+                                searchOptions.pageSize = _pageSize + 1;
                             });
                             break;
                         case TAG_NAMES.PEOPLE_INFO:
@@ -155,7 +155,6 @@
                                 if (event.obj.content.sortBy && currentSortOrder != event.obj.content.sortBy) {
                                     WidgetHome.data.content.sortBy = event.obj.content.sortBy;
                                     WidgetHome.items = [];
-                                    _page = 0;
                                     searchOptions.page = 0;
                                     WidgetHome.busy = false;
                                     WidgetHome.loadMore();
@@ -171,9 +170,9 @@
                     return;
                 }
                 WidgetHome.busy = true;
-              if (WidgetHome.data && WidgetHome.data.content.sortBy) {
-                searchOptions = getSearchOptions(WidgetHome.data.content.sortBy);
-              }
+                if (WidgetHome.data && WidgetHome.data.content.sortBy) {
+                    searchOptions = getSearchOptions(WidgetHome.data.content.sortBy);
+                }
 
                 Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                     if (err) {
@@ -199,8 +198,8 @@
              * @param height
              * @returns {null}
              */
-            WidgetHome.resizeImage=function(url,width,height){
-              return Buildfire.imageLib.resizeImage(url,{width:width,height:height});
+            WidgetHome.resizeImage = function (url, width, height) {
+                return Buildfire.imageLib.resizeImage(url, {width: width, height: height});
             };
 
             $scope.$on("$destroy", function () {

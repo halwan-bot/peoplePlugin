@@ -319,6 +319,8 @@
                                     }
                                     else {
                                         console.log('File has been imported----------------------------', data);
+                                        ContentHome.busy = false;
+                                        ContentHome.loadMore();
                                         ContentHome.data.content.rankOfLastItem = rank;
                                     }
                                 });

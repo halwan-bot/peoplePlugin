@@ -35,6 +35,10 @@
             var currentItemLayout,
                 currentListLayout, currentSortOrder, currentBackgroundImage;
 
+        buildfire.messaging.onReceivedMessage = function(msg){
+          Location.goTo("#/people/" + msg.id);
+        };
+
             var getContentPeopleInfo = function () {
                 Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {

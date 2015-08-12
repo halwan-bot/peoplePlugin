@@ -6,12 +6,13 @@
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
                 <a class="border-grey border-radius-three default-background-hover text-center">
-                    <img src="images/{{DesignHome.peopleInfo.design.listLayout}}.png">
+                    <img
+                        ng-src="images/{{DesignHome.peopleInfo.design.listLayout}}.png">
 				</a>
             </div>
             <div class="screen layoutgrid pull-right border-grey border-radius-three margin-left-zero">
                 <a ng-repeat="layout in DesignHome.layouts.listLayouts" class="layouticon border-grey border-radius-three default-background-hover text-center" ng-click="DesignHome.changeListLayout(layout.name)">
-                    <img src="images/{{layout.name}}.png">
+                    <img ng-src="images/{{layout.name}}.png">
 				</a>
 
                 <!--
@@ -35,12 +36,13 @@
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
                 <a class="border-grey border-radius-three default-background-hover text-center">
-                    <img src="images/{{DesignHome.peopleInfo.design.itemLayout}}.png">
+                    <img
+                        ng-src="images/{{DesignHome.peopleInfo.design.itemLayout}}.png">
 				</a>
             </div>
             <div class="screen layoutgrid pull-right border-grey border-radius-three margin-left-zero">
                 <a ng-repeat="layout in DesignHome.layouts.itemLayouts" class="layouticon border-grey border-radius-three default-background-hover text-center" ng-click="DesignHome.changeItemLayout(layout.name)">
-                    <img src="images/{{layout.name}}.png">
+                    <img ng-src="images/{{layout.name}}.png">
 				</a>
 
                 <!--
@@ -65,7 +67,8 @@
             <div class="screen text-center layouticon pull-left">
                 <a class="border-grey border-radius-three default-background-hover" ng-click="DesignHome.addBackgroundImage()">
                     <span class="add-icon" ng-hide="DesignHome.peopleInfo.design.backgroundImage">+</span>
-                    <img ng-show="DesignHome.peopleInfo.design.backgroundImage" src="{{DesignHome.peopleInfo.design.backgroundImage}}">
+                    <img
+                        ng-show="DesignHome.peopleInfo.design.backgroundImage" ng-src="{{DesignHome.peopleInfo.design.backgroundImage}}">
                 </a>
                 <span class="icon btn-icon btn-delete-icon btn-danger btn-close transition-third" ng-click="DesignHome.removeBackgroundImage()"></span>      
             </div>

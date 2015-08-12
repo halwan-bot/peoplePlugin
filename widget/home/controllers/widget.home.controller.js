@@ -166,11 +166,14 @@
                     $scope.$digest();
                 }
             });
-            WidgetHome.loadMore = function () {
+            WidgetHome.loadMore = function (cb) {
                 if (WidgetHome.busy) {
                     return;
                 }
                 WidgetHome.busy = true;
+              if (WidgetHome.data && WidgetHome.data.content.sortBy) {
+                searchOptions = getSearchOptions(WidgetHome.data.content.sortBy);
+              }
 
                 Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                     if (err) {
@@ -184,6 +187,7 @@
                             WidgetHome.busy = false;
                         }
                         WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
+                        cb && cb();
                         $scope.$digest();
                     }
                 });

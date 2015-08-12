@@ -99,6 +99,7 @@
                             DesignHome.peopleInfo.design.itemLayout = DesignHome.layouts.itemLayouts[0].name;
 
                         DesignHomeMaster = angular.copy(data.data);
+                        $scope.$digest();
                     }
                     else {
                         DesignHome.peopleInfo = peopleInfo;

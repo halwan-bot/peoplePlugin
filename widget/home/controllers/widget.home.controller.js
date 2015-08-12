@@ -130,12 +130,12 @@
                 /**
                  * condition added to update the background image
                  */
-                if(event.obj.design.backgroundImage && currentBackgroundImage !=event.obj.design.backgroundImage)
+                if(event.obj.design && event.obj.design.backgroundImage && currentBackgroundImage !=event.obj.design.backgroundImage)
                 {
                   currentBackgroundImage=event.obj.design.backgroundImage;
                   $('body').css('background','#010101 url('+Buildfire.imageLib.resizeImage(currentBackgroundImage,{width:342,height:770})+') repeat fixed top center');
                 }
-                else if(!event.obj.design.backgroundImage){
+                else if(event.obj.design && !event.obj.design.backgroundImage){
                   currentBackgroundImage=null;
                   $('body').css('background','none');
                 }

@@ -107,7 +107,7 @@
 						</div>
 						<div class="copy pull-right">
 							<a class="text-primary pull-left" href="#/people/{{item.id}}"><span class="title ellipsis pull-left" >{{item.data.fName+' '+item.data.lName}}</span></a>
-							<span class="title ellipsis pull-left">Plugin Type</span>
+							<span class="title ellipsis pull-left">{{item.data.bodyContent}}</span>
 							<div class="pull-right">
 								<span class="btn-icon btn-link-icon btn-primary transition-third ng-isolate-scope zeroclipboard-is-hover" ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.data.deepLinkUrl"></span>
 								<span class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="ContentHome.removeListItem($index)"></span>

@@ -36,6 +36,9 @@
                 currentListLayout, currentSortOrder, currentBackgroundImage;
 
         buildfire.messaging.onReceivedMessage = function(msg){
+          if(msg.path)
+          Location.goTo('#/');
+          else
           Location.goTo("#/people/" + msg.id);
         };
 

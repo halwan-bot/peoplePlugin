@@ -169,6 +169,9 @@
                     }
                 };
 
+              // Send message to widget to return to list layout
+              buildfire.messaging.sendMessageToWidget({path : "/"});
+
                 /**
                  * saveData(newObj, tag) used to save a new record in datastore.
                  * @param newObj is a new/modified object.

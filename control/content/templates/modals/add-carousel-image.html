@@ -25,9 +25,10 @@
             <span>Link</span>
         </div>
         <div class="main col-md-9 pull-right">
-            <div class="input-group">
-                <input type="text" class="form-control" ng-model="AddCarouselImagePopup.imageInfo.link" placeholder="http://www.buildfire.com" aria-label="...">
-                <div class="input-group-btn"  dropdown is-open="status.isopen" ng-class="{disabled : !AddCarouselImagePopup.imageInfo.link}">
+        	<input type="text" class="form-control" ng-model="AddCarouselImagePopup.imageInfo.link" placeholder="http://www.buildfire.com" aria-label="...">
+                
+				<!-- Hide this for now. It should be radio buttons. Check below.
+				<div class="input-group-btn"  dropdown is-open="status.isopen" ng-class="{disabled : !AddCarouselImagePopup.imageInfo.link}">
                     <button type="button" class="btn btn-default text-left dropdown-toggle" dropdown-toggle ng-disabled="disabled"
                             aria-expanded="true">{{AddCarouselImagePopup.selectedAction.value}} <span class="caret"></span></button>
                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -37,7 +38,23 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+				-->
+        </div>
+    </div>
+	<hr class="none">
+	<div class="item clearfix row">
+        <div class="labels col-md-3 padding-right-zero pull-left">
+            <span>Open</span>
+        </div>
+        <div class="main col-md-9 pull-right">
+           	<div class="radio radio-primary radio-inline">
+				<input id="openapp" type="radio" checked="" name="open">
+				<label for="openapp">In App</label>
+			</div>
+			<div class="radio radio-primary radio-inline">
+				<input id="openbrowser" type="radio" name="open">
+				<label for="openbrowser">In Native Browser</label>
+			</div>
         </div>
     </div>
     <hr class="none">

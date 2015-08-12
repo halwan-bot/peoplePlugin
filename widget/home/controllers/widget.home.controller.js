@@ -192,8 +192,7 @@
              * @returns {null}
              */
             WidgetHome.resizeImage=function(url,width,height){
-                var resizedUrl=Buildfire.imageLib.resizeImage(url,{width:width,height:height});
-               return resizedUrl;
+              return Buildfire.imageLib.resizeImage(url,{width:width,height:height});
             };
 
             $scope.$on("$destroy", function () {

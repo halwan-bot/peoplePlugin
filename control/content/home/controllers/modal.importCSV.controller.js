@@ -6,7 +6,7 @@
         .controller('ImportCSVPopupCtrl', ['$scope', '$modalInstance', '$csv', function ($scope, $modalInstance, FormatConverter) {
             var ImportCSVPopup = this;
             var header = ["topImage", "fName", "lName", "position", "deepLinkUrl", "bodyContent"];
-            ImportCSVPopup.ok = function (linkUrl) {
+            ImportCSVPopup.ok = function () {
                 if (ImportCSVPopup.fileData) {
                     var json = JSON.parse(FormatConverter.csvToJson(ImportCSVPopup.fileData, {header: header}));
                     var index, value;
@@ -16,7 +16,7 @@
                     $modalInstance.close(json);
                 }
                 else {
-                    $modalInstance.close(linkUrl);
+                    $modalInstance.close();
                 }
             };
             ImportCSVPopup.cancel = function () {

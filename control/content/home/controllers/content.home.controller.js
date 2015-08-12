@@ -301,8 +301,8 @@
                             size: 'sm'
                         });
                     modalInstance.result.then(function (rows) {
-                        ContentHome.loading = false;
-                        if (rows.length) {
+                        ContentHome.loading = true;
+                        if (rows && rows.length) {
                             var rank = ContentHome.data.content.rankOfLastItem || 0;
                             for (var index = 0; index < rows.length; index++) {
                                 rank += 10;
@@ -311,7 +311,6 @@
                                 rows[index].rank = rank;
                             }
                             if (validateCsv(rows)) {
-                                ContentHome.loading = true;
                                 Buildfire.datastore.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
                                     ContentHome.loading = false;
                                     if (err) {
@@ -319,8 +318,8 @@
                                     }
                                     else {
                                         console.log('File has been imported----------------------------', data);
+                                        ContentHome.data.content.rankOfLastItem = rank;
                                     }
-                                    ContentHome.data.content.rankOfLastItem = rank;
                                 });
                             } else {
                                 ContentHome.loading = false;
@@ -329,6 +328,9 @@
                                     ContentHome.csvDataInvalid = false;
                                 }, 2000)
                             }
+                        }
+                        else{
+                            ContentHome.loading = false;
                         }
                     }, function (error) {
                         ContentHome.loading = false;

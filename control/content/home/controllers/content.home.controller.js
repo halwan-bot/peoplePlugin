@@ -159,7 +159,7 @@
                     content: {
                         images: [],
                         description: '',
-                        sortBy: '',
+                        sortBy: MANUALLY,
                         rankOfLastItem: 0
                     },
                     design: {

@@ -302,7 +302,6 @@
                         });
                     modalInstance.result.then(function (rows) {
                         ContentHome.loading = true;
-                        $scope.$apply();
                         if (rows && rows.length) {
                             var rank = ContentHome.data.content.rankOfLastItem || 0;
                             for (var index = 0; index < rows.length; index++) {

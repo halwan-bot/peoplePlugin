@@ -302,6 +302,7 @@
                         });
                     modalInstance.result.then(function (rows) {
                         ContentHome.loading = true;
+                        $scope.$apply();
                         if (rows && rows.length) {
                             var rank = ContentHome.data.content.rankOfLastItem || 0;
                             for (var index = 0; index < rows.length; index++) {
@@ -313,6 +314,7 @@
                             if (validateCsv(rows)) {
                                 Buildfire.datastore.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
                                     ContentHome.loading = false;
+                                    $scope.$apply();
                                     if (err) {
                                         console.error('There was a problem while importing the file----', err);
                                     }
@@ -323,6 +325,7 @@
                                 });
                             } else {
                                 ContentHome.loading = false;
+                                $scope.$apply();
                                 ContentHome.csvDataInvalid = true;
                                 $timeout(function hideCsvDataError() {
                                     ContentHome.csvDataInvalid = false;
@@ -331,9 +334,11 @@
                         }
                         else{
                             ContentHome.loading = false;
+                            $scope.$apply();
                         }
                     }, function (error) {
                         ContentHome.loading = false;
+                        $scope.apply();
                         //do something on cancel
                     });
                 };
@@ -342,25 +347,67 @@
                  * ContentHome.exportCSV() used to export people list data to CSV
                  */
                 ContentHome.exportCSV = function () {
-                    if (ContentHome.items && ContentHome.items.length) {
-                        var persons = [];
-                        angular.forEach(angular.copy(ContentHome.items), function (value) {
-                            delete value.data.dateCreated;
-                            delete value.data.iconImage;
-                            delete value.data.socialLinks;
-                            delete value.data.rank;
-                            persons.push(value.data);
-                        });
+                    var searchoption={
+                        filter: {"$json.fName": {"$regex": '/*'}}, page:0, pageSize:50 // the plus one is to check if there are any more
+                    };
+                    getRecords(searchoption,function(err,data){
+                        if(err){
+                            console.log('Err while exporting data--------------------------------',err);
+                        }
+                        else if(data && data.length){
+                            var persons = [];
+                            angular.forEach(angular.copy(data), function (value) {
+                                delete value.data.dateCreated;
+                                delete value.data.iconImage;
+                                delete value.data.socialLinks;
+                                delete value.data.rank;
+                                persons.push(value.data);
+                            });
 
-                        var csv = FormatConverter.jsonToCsv(angular.toJson(persons), {
-                            header: header
-                        });
-                        FormatConverter.download(csv, "Export.csv");
-                    }
-                    else{
-                        ContentHome.getTemplate();
-                    }
+                            var csv = FormatConverter.jsonToCsv(angular.toJson(persons), {
+                                header: header
+                            });
+                            FormatConverter.download(csv, "Export.csv");
+                        }
+                        else{
+                            ContentHome.getTemplate();
+                        }
+                    });
                 };
+                /**
+                 * records holds the data to export the data.
+                 * @type {Array}
+                 */
+                var records=[];
+
+                /**
+                 * getRecords function get the  all items from DB
+                 * @param searchOption
+                 * @param callback
+                 */
+                function getRecords(searchOption,callback){
+                    Buildfire.datastore.search(searchOption, TAG_NAMES.PEOPLE, function (err, result) {
+                        if (err) {
+                            console.error('-----------err in getting list-------------', err);
+                            callback(err,null);
+                        }
+                        else if(result && result.length){
+                            if (result.length == searchOption.pageSize) {// to indicate there are more
+                                result.pop();
+                                searchOption.page = searchOption.page + 1;
+                                records=records ? records.concat(result) : result;
+                                getRecords(searchOption,callback);
+                            }
+                            else{
+                                records = records ? records.concat(result) : result;
+                                callback(null,records);
+                            }
+                        }
+                        else{
+                            callback(null,null);
+                        }
+                    });
+                }
 
                 /**
                  * ContentHome.getTemplate() used to download csv template

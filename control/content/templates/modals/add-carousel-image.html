@@ -10,13 +10,11 @@
         <div class="main col-md-9 pull-right">
             <div class="screens clearfix">
               <div class="screen layouticon pull-left">
-                <a class="border-grey border-radius-three default-background-hover" ng-hide="AddCarouselImagePopup.imageInfo.imageUrl" ng-click="AddCarouselImagePopup.selectImage()">
-                  <span class="add-icon">+</span>
+                <a class="border-grey border-radius-three default-background-hover text-center" ng-click="AddCarouselImagePopup.selectImage()">
+                  <span class="add-icon" ng-hide="AddCarouselImagePopup.imageInfo.imageUrl">+</span>
+                  <img ng-show="AddCarouselImagePopup.imageInfo.imageUrl" ng-src="{{AddCarouselImagePopup.imageInfo.imageUrl | getImageUrl : 82:110}}">
                 </a>
-                  <span class="imgHolder"  ng-show="AddCarouselImagePopup.imageInfo.imageUrl">
-                    <img ng-src="{{AddCarouselImagePopup.imageInfo.imageUrl | getImageUrl : 60 :40}}">
-                    <span class="btn-icon btn-delete-icon btn-danger btn-close transition-third" ng-click="AddCarouselImagePopup.removeImage()"></span>
-                  </span>
+                <span class="icon btn-icon btn-delete-icon btn-danger btn-close transition-third" ng-show="AddCarouselImagePopup.imageInfo.imageUrl" ng-click="AddCarouselImagePopup.removeImage()"></span>
               </div>
             </div>
         </div>

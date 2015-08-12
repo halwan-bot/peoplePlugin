@@ -12,7 +12,7 @@
 				<div class="d-item list-bg" ng-repeat="image in ContentHome.data.content.images">
 					<span class="icon icon-menu pull-left"></span>
 					<div class="media-holder pull-left">
-						<img ng-src="{{image.imageUrl | getImageUrl : 60 :40}}">
+						<img ng-src="{{image.imageUrl | getImageUrl : 65:40}}">
 					</div>
 					<div class="copy pull-right">
 						<span class="title ellipsis">{{image.title}}</span>
@@ -33,7 +33,10 @@
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Description</span>
         </div>
-        <div class="main col-md-9 pull-right">
+	</div>
+	<hr class="none">
+	<div class="item clearfix row">
+        <div class="main col-md-12 pull-right">
             <textarea class="form-control" ng-model="ContentHome.data.content.description" placeholder="WYSIWYG"></textarea>
         </div>
     </div>
@@ -103,10 +106,10 @@
                     <div ng-if="ContentHome.items.length" class="d-item double-line square-icon clearfix" ng-repeat="item in ContentHome.items">
 						<span class="icon icon-menu pull-left cursor-grab" aria-hidden="true" ng-if="!ContentHome.itemSortableOptions.disabled"></span>
 						<div class="media-holder pull-left">
-	                        <img ng-src="{{item.data.topImage | getImageUrl : 40 :40}}" ng-if="item.data.topImage">
+	                        <img ng-src="{{item.data.topImage | getImageUrl : 60:60}}" ng-if="item.data.topImage">
 						</div>
 						<div class="copy pull-right">
-							<a class="text-primary pull-left" href="#/people/{{item.id}}"><span class="title ellipsis pull-left" >{{item.data.fName+' '+item.data.lName}}</span></a>
+							<a class="text-primary" href="#/people/{{item.id}}"><span class="title ellipsis pull-left" >{{item.data.fName+' '+item.data.lName}}</span></a>
 							<span class="title ellipsis pull-left">{{item.data.bodyContent}}</span>
 							<div class="pull-right">
 								<span class="btn-icon btn-link-icon btn-primary transition-third ng-isolate-scope zeroclipboard-is-hover" ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.data.deepLinkUrl"></span>

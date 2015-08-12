@@ -125,3 +125,7 @@ Styles for thumbnail images of people listing
     margin: auto;
     left: 0;
 }
+
+.body-content-word-break{
+word-break: break-all;
+}

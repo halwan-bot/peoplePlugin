@@ -23,17 +23,17 @@
       ngClipProvider.setPath("//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.swf");
       $routeProvider
         .when('/', {
-          templateUrl: 'home/home.html',
+          templateUrl: 'templates/home.html',
           controllerAs: 'ContentHome',
           controller: 'ContentHomeCtrl'
         })
         .when('/people', {
-          templateUrl: 'people/people.html',
+          templateUrl: 'templates/people.html',
           controllerAs: 'ContentPeople',
           controller: 'ContentPeopleCtrl'
         })
         .when('/people/:itemId', {
-          templateUrl: 'people/people.html',
+          templateUrl: 'templates/people.html',
           controllerAs: 'ContentPeople',
           controller: 'ContentPeopleCtrl'
         })

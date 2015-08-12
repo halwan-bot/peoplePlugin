@@ -19,12 +19,12 @@
 
             $routeProvider
                 .when('/', {
-                    templateUrl: 'home/home.html',
+                    templateUrl: 'templates/home.html',
                     controllerAs: 'WidgetHome',
                     controller: 'WidgetHomeCtrl'
                 })
                 .when('/people/:id', {
-                    templateUrl: 'people/people.html',
+                    templateUrl: 'templates/people.html',
                     controllerAs: 'WidgetPeople',
                     controller: 'WidgetPeopleCtrl'
                 })

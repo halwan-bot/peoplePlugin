@@ -3,17 +3,14 @@
 <head>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../../../../styles/helper.css">
+    <link rel="stylesheet" href="../../../../../styles/helper.css">
     
     <!-- Meta -->
 	<meta charset="utf-8">
 </head>
 <div class="holder padding-zero">
-	<div class="people-plugin layout4">
-		<div class="people-banner border-bottom-grey"
-         data-ng-attr-style="background:url({{WidgetPeople.item.topImage | getImageUrl :
-         342 : 267}}) no-repeat;
-         background-position:center center; background-size:cover;">
+	<div class="people-plugin layout3">
+		<div class="people-banner border-bottom-grey">
 			<div class="people-bg padding-top-fifteen padding-bottom-fifteen clearfix">
 				<div class="people-holder clearfix">	
 					<div class="people-media text-center">
@@ -21,8 +18,8 @@
                  ng-src="{{WidgetPeople.item.topImage | getImageUrl : 140 : 140}}">
 					</div>
 					<div class="people-info text-center margin-top-fifteen col-md-12">
-						<h4><a class="text-primary">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</a></h4>
-						<h5>{{WidgetPeople.item.position}}</h5>
+						<h5 class="ellipsis text-primary"><a class="text-primary">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</a></h5>
+						<h5 class="ellipsis">{{WidgetPeople.item.position}}</h5>
             <a class="icon icon-profile"
                ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
 					</div>

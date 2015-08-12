@@ -295,7 +295,7 @@
                 ContentHome.openImportCSVDialog = function () {
                     var modalInstance = $modal
                         .open({
-                            templateUrl: 'home/modals/import-csv.html',
+                            templateUrl: 'templates/modals/import-csv.html',
                             controller: 'ImportCSVPopupCtrl',
                             controllerAs: 'ImportCSVPopup',
                             size: 'sm'
@@ -432,7 +432,7 @@
                  */
                 ContentHome.removeListItem = function (_index) {
                     var modalInstance = $modal.open({
-                        templateUrl: 'home/modals/remove-people.html',
+                        templateUrl: 'templates/modals/remove-people.html',
                         controller: 'RemovePeoplePopupCtrl',
                         controllerAs: 'RemovePeoplePopup',
                         size: 'sm',
@@ -503,7 +503,7 @@
                 ContentHome.openAddCarouselImagePopup = function () {
                     var modalInstance = $modal
                         .open({
-                            templateUrl: 'home/modals/add-carousel-image.html',
+                            templateUrl: 'templates/modals/add-carousel-image.html',
                             controller: 'AddCarouselImagePopupCtrl',
                             controllerAs: 'AddCarouselImagePopup',
                             size: 'sm'
@@ -528,7 +528,7 @@
                 ContentHome.openAddImageLinkPopup = function (_index) {
                     var modalInstance = $modal
                         .open({
-                            templateUrl: 'home/modals/add-image-link.html',
+                            templateUrl: 'templates/modals/add-image-link.html',
                             controller: 'AddImageLinkPopupCtrl',
                             controllerAs: 'AddImageLinkPopup',
                             size: 'sm'
@@ -551,7 +551,7 @@
                 ContentHome.removeCarouselImage = function ($index) {
                     var modalInstance = $modal
                         .open({
-                            templateUrl: 'home/modals/remove-image-link.html',
+                            templateUrl: 'templates/modals/remove-image-link.html',
                             controller: 'RemoveImagePopupCtrl',
                             controllerAs: 'RemoveImagePopup',
                             size: 'sm',

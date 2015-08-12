@@ -106,7 +106,7 @@
 	                        <img ng-src="{{item.data.topImage | getImageUrl : 40 :40}}" ng-if="item.data.topImage">
 						</div>
 						<div class="copy pull-right">
-							<span class="title ellipsis pull-left">{{item.data.fName+' '+item.data.lName}}</span>
+							<a class="text-primary pull-left" href="#/people/{{item.id}}"><span class="title ellipsis pull-left" >{{item.data.fName+' '+item.data.lName}}</span></a>
 							<span class="title ellipsis pull-left">Plugin Type</span>
 							<div class="pull-right">
 								<span class="btn-icon btn-link-icon btn-primary transition-third ng-isolate-scope zeroclipboard-is-hover" ng-click="ContentHome.openDeepLinkDialog()" clip-copy="item.data.deepLinkUrl"></span>

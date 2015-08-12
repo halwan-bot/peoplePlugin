@@ -71,7 +71,7 @@
                     <span class="chevron icon-chevron-down pull-right"></span>
                 </button>
                 <ul class="dropdown-menu extended" role="menu">
-                    <li ng-repeat="value in ContentHome.sortingOptions" ng-Click="ContentHome.sortPeopleBy(this.value)">
+                    <li ng-repeat="value in ContentHome.sortingOptions" ng-click="ContentHome.sortPeopleBy(this.value)">
                         <a tabindex="-1" class="transition-third">{{value}}</a>
                     </li>
                 </ul>
@@ -95,8 +95,9 @@
     </div>
     <hr>
     <div class="item clearfix">
-        <div ng-if="ContentHome.DeepLinkCopyUrl" class="alert alert-success transition-half deep-link"><span
-                class="text-center">DeepLink URL copied to clipboard.</span></div>
+        <div ng-if="ContentHome.DeepLinkCopyUrl" class="alert alert-success transition-half deep-link">
+			<span class="text-center">DeepLink URL copied to clipboard.</span>
+		</div>
         <div id="scroll-infinite" class="tab-order draggable-list-view wide-list has-btn-link border-grey border-radius-four">
             <div ng-if="ContentHome.data" infinite-scroll-distance="1" infinite-scroll="ContentHome.loadMore()" infinite-scroll-disabled="ContentHome.busy" infinite-scroll-container="'#scroll-infinite'">
                 <div ui-sortable="ContentHome.itemSortableOptions" ng-model="ContentHome.items">
@@ -104,7 +105,7 @@
 						<p class="margin-zero">No items found.</p>
 					</div>
                     <div ng-if="ContentHome.items.length" class="d-item double-line square-icon clearfix" ng-repeat="item in ContentHome.items">
-						<span class="icon icon-menu pull-left cursor-grab" aria-hidden="true" ng-if="!ContentHome.itemSortableOptions.disabled"></span>
+						<span class="icon icon-menu pull-left cursor-grab" aria-hidden="true" ng-class="{ 'disabled': ContentHome.itemSortableOptions.disabled }"></span>
 						<div class="media-holder pull-left">
 	                        <img ng-src="{{item.data.topImage | getImageUrl : 60:60}}" ng-if="item.data.topImage">
 						</div>

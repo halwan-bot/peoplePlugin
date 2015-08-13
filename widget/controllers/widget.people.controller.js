@@ -7,6 +7,8 @@
       var WidgetPeople = this;
       var currentItemLayout,
         currentListLayout;
+      var  DEFAULT_LIST_LAYOUT = 'list-layout-1',
+        DEFAULT_ITEM_LAYOUT = 'item-layout-1';
 
       /*
        Send message to Control that this page has been opened
@@ -41,8 +43,8 @@
             if (!WidgetPeople.data.content.sortBy) {
               //WidgetPeople.data.content.sortBy = WidgetPeople.sortingOptions[0];
             }
-            currentItemLayout = WidgetPeople.data.design.itemLayout;
-            currentListLayout = WidgetPeople.data.design.listLayout;
+            currentListLayout = WidgetPeople.data.design.listLayout = WidgetPeople.data.design.listLayout || DEFAULT_LIST_LAYOUT;
+            currentItemLayout = WidgetPeople.data.design.itemLayout = WidgetPeople.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
             $scope.$digest();
           }
           getPeopleDetail();

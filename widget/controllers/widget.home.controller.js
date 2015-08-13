@@ -119,6 +119,19 @@
                 $scope.imagesUpdated = false;
                 $scope.$digest();
                 if (event && event.tag) {
+                    if (!WidgetHome.data.content) {
+                        WidgetHome.data.content = {
+                            sortBy: WidgetHome.defaults.DEFAULT_SORT_OPTION
+                        }
+                    }
+                    if (!WidgetHome.data.design) {
+                        WidgetHome.data.design = {
+                            itemLayout: WidgetHome.defaults.DEFAULT_ITEM_LAYOUT,
+                            listLayout: WidgetHome.defaults.DEFAULT_LIST_LAYOUT
+                        }
+                        currentItemLayout = WidgetHome.data.design.itemLayout;
+                        currentListLayout = WidgetHome.data.design.listLayout;
+                    }
                     switch (event.tag) {
                         case TAG_NAMES.PEOPLE:
                             var currentPage = searchOptions.page;

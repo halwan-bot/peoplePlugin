@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location) {
+        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$sce', function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce) {
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -35,12 +35,12 @@
             var currentItemLayout,
                 currentListLayout, currentSortOrder, currentBackgroundImage;
 
-        buildfire.messaging.onReceivedMessage = function(msg){
-          if(msg.path)
-          Location.goTo('#/');
-          else
-          Location.goTo("#/people/" + msg.id);
-        };
+            buildfire.messaging.onReceivedMessage = function (msg) {
+                if (msg.path)
+                    Location.goTo('#/');
+                else
+                    Location.goTo("#/people/" + msg.id);
+            };
 
             var getContentPeopleInfo = function () {
                 Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
@@ -53,6 +53,8 @@
                             if (!WidgetHome.data.content.sortBy) {
                                 WidgetHome.data.content.sortBy = WidgetHome.sortingOptions[0];
                             }
+                            if (WidgetHome.data.content && WidgetHome.data.content.description)
+                                WidgetHome.data.content.description = $sce.trustAsHtml(WidgetHome.data.content.description);
                             currentSortOrder = WidgetHome.data.content.sortBy;
                             if (!WidgetHome.data.design)
                                 WidgetHome.data.design = {};
@@ -159,6 +161,9 @@
                                 } else {
                                     $scope.imagesUpdated = false;
                                 }
+                                if (WidgetHome.data.content && WidgetHome.data.content.description)
+                                    WidgetHome.data.content.description = $sce.trustAsHtml(WidgetHome.data.content.description);
+
                                 if (event.obj.content.sortBy && currentSortOrder != event.obj.content.sortBy) {
                                     WidgetHome.data.content.sortBy = event.obj.content.sortBy;
                                     WidgetHome.items = [];

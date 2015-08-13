@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location) {
+        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$sce', function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce) {
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -32,40 +32,54 @@
                 LAST_NAME_A_TO_Z,
                 LAST_NAME_Z_TO_A
             ];
+            WidgetHome.defaults = {
+                DEFAULT_LIST_LAYOUT: 'list-layout-1',
+                DEFAULT_ITEM_LAYOUT: 'item-layout-1',
+                DEFAULT_SORT_OPTION: WidgetHome.sortingOptions[0]
+            }
             var currentItemLayout,
                 currentListLayout, currentSortOrder, currentBackgroundImage;
 
-        buildfire.messaging.onReceivedMessage = function(msg){
-          if(msg.path)
-          Location.goTo('#/');
-          else
-          Location.goTo("#/people/" + msg.id);
-        };
+            buildfire.messaging.onReceivedMessage = function (msg) {
+                if (msg.path)
+                    Location.goTo('#/');
+                else
+                    Location.goTo("#/people/" + msg.id);
+            };
 
             var getContentPeopleInfo = function () {
                 Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                         return console.error('-----------err-------------', err);
                     }
-                    else {
-                        if (result) {
-                            WidgetHome.data = result.data;
-                            if (!WidgetHome.data.content.sortBy) {
-                                WidgetHome.data.content.sortBy = WidgetHome.sortingOptions[0];
+                    if (result && result.data) {
+                        WidgetHome.data = result.data;
+                        if (!WidgetHome.data.content) {
+                            WidgetHome.data.content = {
+                                sortBy: WidgetHome.defaults.DEFAULT_SORT_OPTION
                             }
-                            currentSortOrder = WidgetHome.data.content.sortBy;
-                            if (!WidgetHome.data.design)
-                                WidgetHome.data.design = {};
-                            currentListLayout = WidgetHome.data.design.listLayout = WidgetHome.data.design.listLayout || DEFAULT_LIST_LAYOUT;
-                            currentItemLayout = WidgetHome.data.design.itemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
-                            currentBackgroundImage = WidgetHome.data.design.backgroundImage;
-                            if (currentBackgroundImage)
-                                $('body').css('background', '#010101 url(' + Buildfire.imageLib.resizeImage(currentBackgroundImage, {
-                                    width: 342,
-                                    height: 770
-                                }) + ') repeat fixed top center');
-                            $scope.$digest();
                         }
+                        if (!WidgetHome.data.design) {
+                            WidgetHome.data.design = {
+                                itemLayout: WidgetHome.defaults.DEFAULT_ITEM_LAYOUT,
+                                listLayout: WidgetHome.defaults.DEFAULT_LIST_LAYOUT
+                            }
+                            currentItemLayout = WidgetHome.data.design.itemLayout;
+                            currentListLayout = WidgetHome.data.design.listLayout;
+                        }
+                        if (WidgetHome.data.content && WidgetHome.data.content.description)
+                            WidgetHome.data.content.description = $sce.trustAsHtml(WidgetHome.data.content.description);
+                        currentSortOrder = WidgetHome.data.content.sortBy;
+                        currentBackgroundImage = WidgetHome.data.design.backgroundImage;
+                        if (currentBackgroundImage)
+                            $('body').css('background', '#010101 url(' + Buildfire.imageLib.resizeImage(currentBackgroundImage, {
+                                width: 342,
+                                height: 770
+                            }) + ') repeat fixed top center');
+                        $scope.$digest();
+                    }
+                    else {
+                        throw ("Error with people plugin.")
                     }
                 });
             };
@@ -100,11 +114,27 @@
             $scope.isDefined = function (item) {
                 return item.imageUrl !== undefined && item.imageUrl !== '';
             };
-
+            WidgetHome.safeHtml = function (html) {
+                if (html)
+                    return $sce.trustAsHtml(html);
+            }
             WidgetHome.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
                 $scope.imagesUpdated = false;
                 $scope.$digest();
                 if (event && event.tag) {
+                    if (!WidgetHome.data.content) {
+                        WidgetHome.data.content = {
+                            sortBy: WidgetHome.defaults.DEFAULT_SORT_OPTION
+                        }
+                    }
+                    if (!WidgetHome.data.design) {
+                        WidgetHome.data.design = {
+                            itemLayout: WidgetHome.defaults.DEFAULT_ITEM_LAYOUT,
+                            listLayout: WidgetHome.defaults.DEFAULT_LIST_LAYOUT
+                        }
+                        currentItemLayout = WidgetHome.data.design.itemLayout;
+                        currentListLayout = WidgetHome.data.design.listLayout;
+                    }
                     switch (event.tag) {
                         case TAG_NAMES.PEOPLE:
                             var currentPage = searchOptions.page;
@@ -134,8 +164,7 @@
 
                                 if (!WidgetHome.data.design)
                                     WidgetHome.data.design = {};
-                                currentListLayout = WidgetHome.data.design.listLayout = WidgetHome.data.design.listLayout || DEFAULT_LIST_LAYOUT;
-                                currentItemLayout = WidgetHome.data.design.itemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
+                                currentItemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
                                 /**
                                  * condition added to update the background image
                                  */
@@ -159,6 +188,9 @@
                                 } else {
                                     $scope.imagesUpdated = false;
                                 }
+                                if (WidgetHome.data.content && WidgetHome.data.content.description)
+                                    WidgetHome.data.content.description = $sce.trustAsHtml(WidgetHome.data.content.description);
+
                                 if (event.obj.content.sortBy && currentSortOrder != event.obj.content.sortBy) {
                                     WidgetHome.data.content.sortBy = event.obj.content.sortBy;
                                     WidgetHome.items = [];

@@ -29,12 +29,18 @@
                     data: angular.copy(_data)
                 };
 
+                ContentPeople.bodyContentWYSIWYGOptions = {
+                    plugins: 'advlist autolink link image lists charmap print preview',
+                    skin: 'lightgray',
+                    trusted: true,
+                    theme: 'modern'
+                };
                 /*
                  Send message to widget that this page has been opened
                  */
-                if($routeParams.itemId){
-                 buildfire.messaging.sendMessageToWidget({id : $routeParams.itemId});
-                 }
+                if ($routeParams.itemId) {
+                    buildfire.messaging.sendMessageToWidget({id: $routeParams.itemId});
+                }
 
                 updateMasterItem(ContentPeople.item);
                 function updateMasterItem(item) {

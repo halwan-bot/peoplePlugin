@@ -4,7 +4,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../../../../../styles/helper.css">
-    
+
     <!-- Meta -->
 	<meta charset="utf-8">
 </head>
@@ -15,7 +15,7 @@
          342 : 267}}) no-repeat;
          background-position:center center; background-size:cover;">
 			<div class="people-bg padding-top-fifteen padding-bottom-fifteen clearfix">
-				<div class="people-holder clearfix">	
+				<div class="people-holder clearfix">
 					<div class="people-media text-center">
 						<img class="border-grey img-circle"
                  ng-src="{{WidgetPeople.item.topImage | getImageUrl : 140 : 140}}">
@@ -30,7 +30,10 @@
 			</div>
 		</div>
 		<div class="padded">
-			<p class="body-content-word-break">{{WidgetPeople.item.bodyContent}}</p>
+			<p class="body-content-word-break" ng-if='WidgetPeople.item.bodyContent'
+			   ng-bind-html='WidgetPeople.safeHtml(WidgetPeople.item.bodyContent)'></p>
+
+			<p class="body-content-word-break" ng-if='!WidgetPeople.item.bodyContent'></p>
 		</div>
 	</div>
 </div>

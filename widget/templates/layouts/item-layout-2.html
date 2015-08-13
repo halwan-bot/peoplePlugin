@@ -30,7 +30,10 @@
 			</div>
 		</div>
 		<div class="padded">
-			<p class="body-content-word-break">{{WidgetPeople.item.bodyContent}}</p>
+			<p class="body-content-word-break" ng-if="WidgetPeople.item.bodyContent"
+			   ng-bind-html='WidgetPeople.safeHtml(WidgetPeople.item.bodyContent)'></p>
+
+			<p class="body-content-word-break" ng-if="!WidgetPeople.item.bodyContent"></p>
 		</div>
 	</div>
 </div>

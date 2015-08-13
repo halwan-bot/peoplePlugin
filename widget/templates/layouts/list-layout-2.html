@@ -8,12 +8,12 @@
           <a href="{{image.link}}" data-ng-if="image.link"
              target="{{image.target}}"><img
               ng-src="{{image.imageUrl}}"></a>
-          <img data-ng-if="!image.link" ng-src="{{image.imageUrl | getImageUrl : 342 : 300}}">
+          <img data-ng-if="!image.link" ng-src="{{image.imageUrl | getImageUrl : 342 : 192}}">
         </div>
       </div>
     </div>
     <div class="padded text-left">
-      <p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
+      <p ng-bind-html='WidgetHome.data.content.description' class="margin-bottom-zero"></p>
     </div>
     <div>
       <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1"
@@ -24,14 +24,17 @@
       <div class="clearfix border-bottom-grey">
         <div class="text-center people-thumbnail-card"  ng-if="item.data.topImage">
           <img class="people-thumbnail-img-card"
-               ng-src="{{item.data.topImage | getImageUrl : 342 : 200}}">
+               ng-src="{{item.data.topImage | getImageUrl : 342 : 192}}">
         </div>
       </div>
 		<div class="padded text-left">
       <a class="text-primary" href="#/people/{{item.id}}">{{item.data.fName}}
         {{item.data.lName}}</a>
 
-      <p class="margin-bottom-zero body-content-word-break">{{item.data.bodyContent}}</p>
+            <p class="margin-bottom-zero body-content-word-break" ng-if="item.data.bodyContent"
+               ng-bind-html="WidgetHome.safeHtml(item.data.bodyContent)"></p>
+
+            <p class="margin-bottom-zero body-content-word-break" ng-if="!item.data.bodyContent"></p>
     </div>
     </span>
       </div>

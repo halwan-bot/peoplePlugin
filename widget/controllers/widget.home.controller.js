@@ -32,6 +32,11 @@
                 LAST_NAME_A_TO_Z,
                 LAST_NAME_Z_TO_A
             ];
+            WidgetHome.defaults = {
+                DEFAULT_LIST_LAYOUT: 'list-layout-1',
+                DEFAULT_ITEM_LAYOUT: 'item-layout-1',
+                DEFAULT_SORT_OPTION: WidgetHome.sortingOptions[0]
+            }
             var currentItemLayout,
                 currentListLayout, currentSortOrder, currentBackgroundImage;
 
@@ -47,27 +52,34 @@
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                         return console.error('-----------err-------------', err);
                     }
-                    else {
-                        if (result) {
-                            WidgetHome.data = result.data;
-                            if (!WidgetHome.data.content.sortBy) {
-                                WidgetHome.data.content.sortBy = WidgetHome.sortingOptions[0];
+                    if (result && result.data) {
+                        WidgetHome.data = result.data;
+                        if (!WidgetHome.data.content) {
+                            WidgetHome.data.content = {
+                                sortBy: WidgetHome.defaults.DEFAULT_SORT_OPTION
                             }
-                            if (WidgetHome.data.content && WidgetHome.data.content.description)
-                                WidgetHome.data.content.description = $sce.trustAsHtml(WidgetHome.data.content.description);
-                            currentSortOrder = WidgetHome.data.content.sortBy;
-                            if (!WidgetHome.data.design)
-                                WidgetHome.data.design = {};
-                            currentListLayout = WidgetHome.data.design.listLayout = WidgetHome.data.design.listLayout || DEFAULT_LIST_LAYOUT;
-                            currentItemLayout = WidgetHome.data.design.itemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
-                            currentBackgroundImage = WidgetHome.data.design.backgroundImage;
-                            if (currentBackgroundImage)
-                                $('body').css('background', '#010101 url(' + Buildfire.imageLib.resizeImage(currentBackgroundImage, {
-                                    width: 342,
-                                    height: 770
-                                }) + ') repeat fixed top center');
-                            $scope.$digest();
                         }
+                        if (!WidgetHome.data.design) {
+                            WidgetHome.data.design = {
+                                itemLayout: WidgetHome.defaults.DEFAULT_ITEM_LAYOUT,
+                                listLayout: WidgetHome.defaults.DEFAULT_LIST_LAYOUT
+                            }
+                            currentItemLayout = WidgetHome.data.design.itemLayout;
+                            currentListLayout = WidgetHome.data.design.listLayout;
+                        }
+                        if (WidgetHome.data.content && WidgetHome.data.content.description)
+                            WidgetHome.data.content.description = $sce.trustAsHtml(WidgetHome.data.content.description);
+                        currentSortOrder = WidgetHome.data.content.sortBy;
+                        currentBackgroundImage = WidgetHome.data.design.backgroundImage;
+                        if (currentBackgroundImage)
+                            $('body').css('background', '#010101 url(' + Buildfire.imageLib.resizeImage(currentBackgroundImage, {
+                                width: 342,
+                                height: 770
+                            }) + ') repeat fixed top center');
+                        $scope.$digest();
+                    }
+                    else {
+                        throw ("Error with people plugin.")
                     }
                 });
             };
@@ -136,8 +148,7 @@
 
                                 if (!WidgetHome.data.design)
                                     WidgetHome.data.design = {};
-                                currentListLayout = WidgetHome.data.design.listLayout = WidgetHome.data.design.listLayout || DEFAULT_LIST_LAYOUT;
-                                currentItemLayout = WidgetHome.data.design.itemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
+                                currentItemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
                                 /**
                                  * condition added to update the background image
                                  */

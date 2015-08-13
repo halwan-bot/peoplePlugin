@@ -3,7 +3,7 @@
 (function (angular, window) {
   angular
     .module('peoplePluginWidget')
-    .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams',function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams) {
+    .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce) {
       var WidgetPeople = this;
       var currentItemLayout,
         currentListLayout;
@@ -24,6 +24,8 @@
           }
           else {
             WidgetPeople.item = result.data;
+            if (WidgetPeople.item.bodyContent)
+              WidgetPeople.item.bodyContent = $sce.trustAsHtml(WidgetPeople.item.bodyContent);
             $scope.$digest();
           }
           bindOnUpdate();
@@ -56,6 +58,8 @@
               case TAG_NAMES.PEOPLE:
                 if(event.data)
                 WidgetPeople.item = event.data;
+                if (WidgetPeople.item.bodyContent)
+                  WidgetPeople.item.bodyContent = $sce.trustAsHtml(WidgetPeople.item.bodyContent);
                 break;
               case TAG_NAMES.PEOPLE_INFO:
                 if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {

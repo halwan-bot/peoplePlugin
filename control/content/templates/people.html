@@ -13,17 +13,11 @@
         <div class="main col-md-9 pull-right">
             <div class="screens clearfix">
                 <div class="screen layouticon pull-left">
-                    <a class="border-grey border-radius-three default-background-hover"
-                       ng-hide="ContentPeople.item.data.topImage" ng-click="ContentPeople.selectTopImage()">
-                      <span class="add-icon">+</span>
-                    </a>
-                  <span ng-show="ContentPeople.item.data.topImage">
-                    <img
-                        ng-src="{{ContentPeople.item.data.topImage | getImageUrl : 40 :40 :'resize'}}">
-                    <span
-                          class="btn-icon btn-delete-icon btn-danger btn-close transition-third"
-                          ng-click="ContentPeople.removeTopImage()"></span>
-                  </span>
+					<a class="border-grey border-radius-three default-background-hover text-center" ng-click="ContentPeople.selectTopImage()">
+	                  	<span class="add-icon" ng-hide="ContentPeople.item.data.topImage">+</span>
+	                  	<img ng-show="ContentPeople.item.data.topImage" ng-src="{{ContentPeople.item.data.topImage | getImageUrl : 82:110}}">
+	                </a>
+	                <span class="icon btn-icon btn-delete-icon btn-danger btn-close transition-third" ng-show="ContentPeople.item.data.topImage" ng-click="ContentPeople.removeTopImage()"></span>	                
                 </div>
             </div>
         </div>
@@ -124,8 +118,7 @@
                 <a class="btn btn-danger pull-right stretch" data-ng-click="ContentPeople.deleteItem();" href="javascript:void(0)">Delete</a>
             </div>
             <div class="col-md-6 pull-right padding-right-zero padding-left-ten">
-                <a class="btn btn-primary pull-right stretch" ng-click="ContentPeople.done()" ng-disabled="ContentPeople.unchangedData || !ContentPeople.isItemValid"
-                   href="javaScript:void(0);">Done</a>
+                <a class="btn btn-primary pull-right stretch" ng-click="ContentPeople.done()" ng-disabled="ContentPeople.unchangedData || !ContentPeople.isItemValid" href="javaScript:void(0);">Done</a>
             </div>
         </div>
     </div>

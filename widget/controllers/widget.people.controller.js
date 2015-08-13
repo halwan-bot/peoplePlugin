@@ -54,7 +54,8 @@
           if (event && event.tag) {
             switch (event.tag) {
               case TAG_NAMES.PEOPLE:
-                //update the People/Item info template in emulator
+                if(event.data)
+                WidgetPeople.item = event.data;
                 break;
               case TAG_NAMES.PEOPLE_INFO:
                 if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {

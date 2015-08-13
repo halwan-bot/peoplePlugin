@@ -3,10 +3,18 @@
 (function (angular, window) {
   angular
     .module('peoplePluginWidget')
-    .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams) {
+    .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams',function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams) {
       var WidgetPeople = this;
       var currentItemLayout,
         currentListLayout;
+
+      /*
+       Send message to Control that this page has been opened
+       */
+      if($routeParams.id){
+        buildfire.messaging.sendMessageToControl({id : $routeParams.id});
+      }
+
       var itemId = $routeParams.id;
       var getPeopleDetail = function () {
         console.log("ItemID::::::::::: ", itemId);

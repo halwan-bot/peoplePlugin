@@ -390,6 +390,7 @@
                         else {
                             ContentHome.getTemplate();
                         }
+                        records=[];
                     });
                 };
                 /**

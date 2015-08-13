@@ -11,18 +11,18 @@ body.scrollable {
     position: relative;
     overflow: auto;
     max-height: inherit !important;
-    min-height: 300px;
+    min-height: 192px;
 }
 
 .owl-stage, .owl-stage-outer {
     overflow: auto;
     max-height: 380px;
-    min-height: 300px;
+    min-height: 192px;
 }
 .plugin-slide {
     position: relative;
     max-height: 380px;
-    min-height: 300px;
+    min-height: 192px;
 }
 
 .plugin-slide img {
@@ -38,7 +38,7 @@ body.scrollable {
 .owl-item {
     float: left;
     max-height: 380px;
-    min-height: 300px;
+    min-height: 192px;
     overflow: auto;
 }
 

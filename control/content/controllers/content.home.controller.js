@@ -383,6 +383,7 @@
                         else{
                             ContentHome.getTemplate();
                         }
+                        records=[];
                     });
                 };
                 /**

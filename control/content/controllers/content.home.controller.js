@@ -323,6 +323,7 @@
                                     else {
                                         console.log('File has been imported----------------------------', data);
                                         ContentHome.busy = false;
+                                        ContentHome.items = null;
                                         ContentHome.loadMore();
                                         ContentHome.data.content.rankOfLastItem = rank;
                                     }

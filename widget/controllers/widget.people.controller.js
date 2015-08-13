@@ -3,10 +3,18 @@
 (function (angular, window) {
   angular
     .module('peoplePluginWidget')
-    .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams) {
+    .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams',function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams) {
       var WidgetPeople = this;
       var currentItemLayout,
         currentListLayout;
+
+      /*
+       Send message to Control that this page has been opened
+       */
+      if($routeParams.id){
+        buildfire.messaging.sendMessageToControl({id : $routeParams.id});
+      }
+
       var itemId = $routeParams.id;
       var getPeopleDetail = function () {
         console.log("ItemID::::::::::: ", itemId);
@@ -46,7 +54,8 @@
           if (event && event.tag) {
             switch (event.tag) {
               case TAG_NAMES.PEOPLE:
-                //update the People/Item info template in emulator
+                if(event.data)
+                WidgetPeople.item = event.data;
                 break;
               case TAG_NAMES.PEOPLE_INFO:
                 if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {

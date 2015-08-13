@@ -3,10 +3,10 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout',
-            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout) {
+        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout', 'Location',
+            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout, Location) {
                 /**
-                 * These are the options available to sort people list.
+                 * List of options available for sorting people list.
                  * */
                 var header = {
                     topImage: "Image URL",
@@ -51,6 +51,12 @@
                     }
                     return items.every(isValidItem);
                 }
+
+              // Handler to receive message from widget
+
+              buildfire.messaging.onReceivedMessage = function(msg){
+                  Location.goTo("#/people/" + msg.id);
+              };
 
                 var ContentHome = this;
 

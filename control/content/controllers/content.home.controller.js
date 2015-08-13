@@ -52,11 +52,11 @@
                     return items.every(isValidItem);
                 }
 
-              // Handler to receive message from widget
+                // Handler to receive message from widget
 
-              buildfire.messaging.onReceivedMessage = function(msg){
-                  Location.goTo("#/people/" + msg.id);
-              };
+                buildfire.messaging.onReceivedMessage = function (msg) {
+                    Location.goTo("#/people/" + msg.id);
+                };
 
                 var ContentHome = this;
 
@@ -93,6 +93,12 @@
                     LAST_NAME_Z_TO_A
                 ];
 
+                ContentHome.descriptionWYSIWYGOptions = {
+                    plugins: 'advlist autolink link image lists charmap print preview',
+                    skin: 'lightgray',
+                    trusted: true,
+                    theme: 'modern'
+                };
                 /**
                  * ContentHome.imageSortableOptions used for ui-sortable directory to drag-drop carousel images Manually.
                  * @type object
@@ -175,8 +181,8 @@
                     }
                 };
 
-              // Send message to widget to return to list layout
-              buildfire.messaging.sendMessageToWidget({path : "/"});
+                // Send message to widget to return to list layout
+                buildfire.messaging.sendMessageToWidget({path: "/"});
 
                 /**
                  * saveData(newObj, tag) used to save a new record in datastore.
@@ -184,6 +190,7 @@
                  * @param tag is a tag name or identity given to the data json during saving the record.
                  */
                 var saveData = function (newObj, tag) {
+                    console.log('------------Data to save-------', newObj);
                     if (newObj == undefined)return;
                     newObj.content.rankOfLastItem = newObj.content.rankOfLastItem || 0;
                     Buildfire.datastore.save(newObj, tag, function (err, result) {
@@ -343,7 +350,7 @@
                                 }, 2000)
                             }
                         }
-                        else{
+                        else {
                             ContentHome.loading = false;
                             $scope.$apply();
                         }
@@ -358,14 +365,14 @@
                  * ContentHome.exportCSV() used to export people list data to CSV
                  */
                 ContentHome.exportCSV = function () {
-                    var searchoption={
-                        filter: {"$json.fName": {"$regex": '/*'}}, page:0, pageSize:50 // the plus one is to check if there are any more
+                    var searchoption = {
+                        filter: {"$json.fName": {"$regex": '/*'}}, page: 0, pageSize: 50 // the plus one is to check if there are any more
                     };
-                    getRecords(searchoption,function(err,data){
-                        if(err){
-                            console.log('Err while exporting data--------------------------------',err);
+                    getRecords(searchoption, function (err, data) {
+                        if (err) {
+                            console.log('Err while exporting data--------------------------------', err);
                         }
-                        else if(data && data.length){
+                        else if (data && data.length) {
                             var persons = [];
                             angular.forEach(angular.copy(data), function (value) {
                                 delete value.data.dateCreated;
@@ -380,7 +387,7 @@
                             });
                             FormatConverter.download(csv, "Export.csv");
                         }
-                        else{
+                        else {
                             ContentHome.getTemplate();
                         }
                         records=[];
@@ -390,33 +397,33 @@
                  * records holds the data to export the data.
                  * @type {Array}
                  */
-                var records=[];
+                var records = [];
 
                 /**
                  * getRecords function get the  all items from DB
                  * @param searchOption
                  * @param callback
                  */
-                function getRecords(searchOption,callback){
+                function getRecords(searchOption, callback) {
                     Buildfire.datastore.search(searchOption, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err) {
                             console.error('-----------err in getting list-------------', err);
-                            callback(err,null);
+                            callback(err, null);
                         }
-                        else if(result && result.length){
+                        else if (result && result.length) {
                             if (result.length == searchOption.pageSize) {// to indicate there are more
                                 result.pop();
                                 searchOption.page = searchOption.page + 1;
-                                records=records ? records.concat(result) : result;
-                                getRecords(searchOption,callback);
-                            }
-                            else{
                                 records = records ? records.concat(result) : result;
-                                callback(null,records);
+                                getRecords(searchOption, callback);
+                            }
+                            else {
+                                records = records ? records.concat(result) : result;
+                                callback(null, records);
                             }
                         }
-                        else{
-                            callback(null,null);
+                        else {
+                            callback(null, null);
                         }
                     });
                 }
@@ -476,20 +483,20 @@
                  */
                 ContentHome.searchListItem = function (value) {
                     var fullName = '';
-                    searchOptions.page=0;
-                    ContentHome.busy=false;
-                    ContentHome.items=null;
+                    searchOptions.page = 0;
+                    ContentHome.busy = false;
+                    ContentHome.items = null;
                     value = value.trim();
                     if (value) {
                         if (value.indexOf(' ') !== -1) {
                             fullName = value.split(' ');
-                            searchOptions.filter = {"$and": [{"$json.fName": {"$regex":fullName[0] } }, {"$json.lName": {"$regex":fullName[1]} }]};
+                            searchOptions.filter = {"$and": [{"$json.fName": {"$regex": fullName[0]}}, {"$json.lName": {"$regex": fullName[1]}}]};
                         } else {
                             fullName = value;
-                            searchOptions.filter = {"$or": [{"$json.fName": {"$regex":fullName }}, {"$json.lName": {"$regex":fullName }}]};
+                            searchOptions.filter = {"$or": [{"$json.fName": {"$regex": fullName}}, {"$json.lName": {"$regex": fullName}}]};
                         }
                     } else {
-                        searchOptions.filter={"$json.fName": {"$regex": '/*'}};
+                        searchOptions.filter = {"$json.fName": {"$regex": '/*'}};
                     }
                     ContentHome.loadMore('search');
                 };
@@ -523,8 +530,8 @@
                         });
                     modalInstance.result.then(function (imageInfo) {
                         if (imageInfo && ContentHome.data) {
-                          if(!ContentHome.data.content.images)
-                            ContentHome.data.content.images = [];
+                            if (!ContentHome.data.content.images)
+                                ContentHome.data.content.images = [];
                             ContentHome.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
                         } else {
                             console.info('Unable to load data.')

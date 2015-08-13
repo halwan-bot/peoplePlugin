@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="padded padding-bottom-zero text-left">
-      <p class="margin-bottom-zero">{{WidgetHome.data.content.description}}</p>
+      <p ng-bind-html='WidgetHome.data.content.description' class="margin-bottom-zero"></p>
       <hr class="small">
       <div>
         <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1"

@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout', 'Location',
-            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout, Location) {
+        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout', 'Location', '$sce',
+            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout, Location, $sce) {
                 /**
                  * List of options available for sorting people list.
                  * */
@@ -92,6 +92,10 @@
                     LAST_NAME_A_TO_Z,
                     LAST_NAME_Z_TO_A
                 ];
+                ContentHome.safeHtml = function (html) {
+                    if (html)
+                        return $sce.trustAsHtml(html);
+                }
 
                 ContentHome.descriptionWYSIWYGOptions = {
                     plugins: 'advlist autolink link image lists charmap print preview',
@@ -390,7 +394,7 @@
                         else {
                             ContentHome.getTemplate();
                         }
-                        records=[];
+                        records = [];
                     });
                 };
                 /**

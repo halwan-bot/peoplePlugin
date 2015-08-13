@@ -20,7 +20,10 @@
             if ($routeParams.id) {
                 buildfire.messaging.sendMessageToControl({id: $routeParams.id});
             }
-
+            WidgetPeople.safeHtml = function (html) {
+                if (html)
+                    return $sce.trustAsHtml(html);
+            }
             var itemId = $routeParams.id;
             var getPeopleDetail = function () {
                 console.log("ItemID::::::::::: ", itemId);
@@ -30,8 +33,6 @@
                     }
                     else {
                         WidgetPeople.item = result.data;
-                        if (WidgetPeople.item.bodyContent)
-                            WidgetPeople.item.bodyContent = $sce.trustAsHtml(WidgetPeople.item.bodyContent);
                         $scope.$digest();
                     }
                     bindOnUpdate();
@@ -74,8 +75,6 @@
                             case TAG_NAMES.PEOPLE:
                                 if (event.data)
                                     WidgetPeople.item = event.data;
-                                if (WidgetPeople.item.bodyContent)
-                                    WidgetPeople.item.bodyContent = $sce.trustAsHtml(WidgetPeople.item.bodyContent);
                                 break;
                             case TAG_NAMES.PEOPLE_INFO:
                                 if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {
@@ -91,6 +90,7 @@
                     }
                 });
             }
+
             $scope.$on("$destroy", function () {
                 WidgetPeople.onUpdateFn.clear();
             });

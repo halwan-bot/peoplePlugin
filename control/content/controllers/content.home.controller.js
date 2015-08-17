@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout', 'Location', '$sce',
-            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout, Location, $sce) {
+        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout', 'Location', '$sce', 'PeopleInfo',
+            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout, Location, $sce, PeopleInfo) {
                 /**
                  * List of options available for sorting people list.
                  * */
@@ -103,6 +103,9 @@
                     trusted: true,
                     theme: 'modern'
                 };
+                ContentHome.data = PeopleInfo.data;
+
+                RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem || 0);
                 /**
                  * ContentHome.imageSortableOptions used for ui-sortable directory to drag-drop carousel images Manually.
                  * @type object
@@ -157,6 +160,7 @@
                         }
                     }
                 };
+                ContentHome.itemSortableOptions.disabled = !(ContentHome.data.content.sortBy === MANUALLY);
 
                 ContentHome.DeepLinkCopyUrl = false;
 
@@ -165,25 +169,6 @@
                  * @type {null}
                  */
                 var tmrDelayForPeopleInfo = null;
-
-                /**
-                 * Default peopleInfo data json
-                 * @type object
-                 * @private
-                 */
-                var _data = {
-                    content: {
-                        images: [],
-                        description: '',
-                        sortBy: MANUALLY,
-                        rankOfLastItem: 0
-                    },
-                    design: {
-                        listLayout: '',
-                        itemLayout: '',
-                        backgroundImage: ''
-                    }
-                };
 
                 // Send message to widget to return to list layout
                 buildfire.messaging.sendMessageToWidget({path: "/"});
@@ -267,37 +252,6 @@
                         }
                     });
                 };
-
-                /**
-                 * getContentPeopleInfo() method used to fetch peopleInfo data
-                 */
-                var getContentPeopleInfo = function () {
-                    Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
-                        if (err && err.code !== ERROR_CODE.NOT_FOUND) {
-                            console.error('-----------err-------------', err);
-                        }
-                        else if (err && err.code === ERROR_CODE.NOT_FOUND) {
-                            saveData(JSON.parse(angular.toJson(_data)), TAG_NAMES.PEOPLE_INFO);
-                        }
-                        else if (result) {
-                            ContentHome.data = result.data;
-                            ContentHome.data.content.rankOfLastItem = ContentHome.data.content.rankOfLastItem || 0;
-                            RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem);
-                            if (!ContentHome.data.content.sortBy) {
-                                ContentHome.data.content.sortBy = MANUALLY;
-                            }
-                            ContentHome.itemSortableOptions.disabled = !(ContentHome.data.content.sortBy === MANUALLY);
-                            $scope.$digest();
-                            if (tmrDelayForPeopleInfo)clearTimeout(tmrDelayForPeopleInfo);
-                        }
-                    });
-                };
-
-                /**
-                 * getContentPeopleInfo() called when controller loaded
-                 */
-                getContentPeopleInfo();
-
                 /**
                  * Used to show/hide alert message when item's deep-link copied from people list.
                  */

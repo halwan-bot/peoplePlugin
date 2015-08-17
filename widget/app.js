@@ -2,7 +2,16 @@
 
 (function (angular, buildfire) {
     angular
-        .module('peoplePluginWidget', ['ngAnimate', 'ngRoute', 'ui.bootstrap', 'ui.sortable','infinite-scroll'])
+        .module('peoplePluginWidget', [
+            'peopleEnums',
+            'peopleFilters',
+            'peopleServices',
+            'ngAnimate',
+            'ngRoute',
+            'ui.bootstrap',
+            'ui.sortable',
+            'infinite-scroll'
+        ])
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
             PEOPLE: 'people'
@@ -21,7 +30,30 @@
                 .when('/', {
                     templateUrl: 'templates/home.html',
                     controllerAs: 'WidgetHome',
-                    controller: 'WidgetHomeCtrl'
+                    controller: 'WidgetHomeCtrl',
+                    resolve: {
+                        PeopleInfo: ['$q', 'DB', 'COLLECTIONS', 'Location', function ($q, DB, COLLECTIONS, Location) {
+                            var deferred = $q.defer();
+                            var PeopleInfo = new DB(COLLECTIONS.peopleInfo);
+                            var _bootstrap = function () {
+                                Location.goToHome();
+                            }
+                            PeopleInfo.get().then(function success(result) {
+                                    if (result && result.data && result.data.content && result.data.design) {
+                                        deferred.resolve(result);
+                                    }
+                                    else {
+                                        //error in bootstrapping
+                                        _bootstrap(); //bootstrap again  _bootstrap();
+                                    }
+                                },
+                                function fail() {
+                                    Location.goToHome();
+                                }
+                            )
+                            return deferred.promise;
+                        }]
+                    }
                 })
                 .when('/people/:id', {
                     templateUrl: 'templates/people.html',

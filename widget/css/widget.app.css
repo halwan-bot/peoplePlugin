@@ -39,7 +39,7 @@ body.scrollable {
     float: left;
     max-height: 380px;
     min-height: 192px;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .owl-dot {

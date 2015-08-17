@@ -3,7 +3,7 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$sce', function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce) {
+        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$sce', 'PeopleInfo', function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce, PeopleInfo) {
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -39,7 +39,11 @@
             }
             var currentItemLayout,
                 currentListLayout, currentSortOrder, currentBackgroundImage;
-
+            WidgetHome.data = PeopleInfo.data;
+            currentSortOrder = WidgetHome.data.content.sortBy;
+            currentBackgroundImage = WidgetHome.data.design.backgroundImage;
+            currentItemLayout = WidgetHome.data.design.itemLayout;
+            currentListLayout = WidgetHome.data.design.listLayout;
             buildfire.messaging.onReceivedMessage = function (msg) {
                 if (msg.path)
                     Location.goTo('#/');
@@ -47,42 +51,6 @@
                     Location.goTo("#/people/" + msg.id);
             };
 
-            var getContentPeopleInfo = function () {
-                Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
-                    if (err && err.code !== ERROR_CODE.NOT_FOUND) {
-                        return console.error('-----------err-------------', err);
-                    }
-                    if (result && result.data) {
-                        WidgetHome.data = result.data;
-                        if (!WidgetHome.data.content) {
-                            WidgetHome.data.content = {
-                                sortBy: WidgetHome.defaults.DEFAULT_SORT_OPTION
-                            }
-                        }
-                        if (!WidgetHome.data.design) {
-                            WidgetHome.data.design = {
-                                itemLayout: WidgetHome.defaults.DEFAULT_ITEM_LAYOUT,
-                                listLayout: WidgetHome.defaults.DEFAULT_LIST_LAYOUT
-                            }
-                            currentItemLayout = WidgetHome.data.design.itemLayout;
-                            currentListLayout = WidgetHome.data.design.listLayout;
-                        }
-                        if (WidgetHome.data.content && WidgetHome.data.content.description)
-                            WidgetHome.data.content.description = $sce.trustAsHtml(WidgetHome.data.content.description);
-                        currentSortOrder = WidgetHome.data.content.sortBy;
-                        currentBackgroundImage = WidgetHome.data.design.backgroundImage;
-                        if (currentBackgroundImage)
-                            $('body').css('background', '#010101 url(' + Buildfire.imageLib.resizeImage(currentBackgroundImage, {
-                                width: 342,
-                                height: 770
-                            }) + ') repeat fixed top center');
-                        $scope.$digest();
-                    }
-                    else {
-                        throw ("Error with people plugin.")
-                    }
-                });
-            };
             var getSearchOptions = function (value) {
                 switch (value) {
                     case OLDEST_TO_NEWEST:
@@ -109,7 +77,6 @@
                 }
                 return searchOptions;
             };
-            getContentPeopleInfo();
 
             $scope.isDefined = function (item) {
                 return item.imageUrl !== undefined && item.imageUrl !== '';

@@ -17,7 +17,7 @@
 					<div class="copy pull-right">
 						<span class="title ellipsis">{{image.title}}</span>
 						<div class="pull-right">
-							<a ng-hide="image.link" onclick="alert('Opens Action Items, NOT DeepLink');" class="text-primary text">Add Action</a>											
+							<a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)" class="text-primary text">Add Action</a>
 							<span ng-click="ContentHome.removeCarouselImage($index)" class="btn-icon btn-delete-icon btn-danger"></span>
 						</div>
 					</div>

@@ -155,9 +155,6 @@
                                 } else {
                                     $scope.imagesUpdated = false;
                                 }
-                                if (WidgetHome.data.content && WidgetHome.data.content.description)
-                                    WidgetHome.data.content.description = $sce.trustAsHtml(WidgetHome.data.content.description);
-
                                 if (event.obj.content.sortBy && currentSortOrder != event.obj.content.sortBy) {
                                     WidgetHome.data.content.sortBy = event.obj.content.sortBy;
                                     WidgetHome.items = [];

@@ -103,7 +103,7 @@
                     }
                     else {
                         DesignHome.peopleInfo = peopleInfo;
-                        console.log('------------------unable to load data---------------');
+                        console.info('------------------unable to load data---------------');
                     }
                 });
             }

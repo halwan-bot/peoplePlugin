@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="padded text-left">
-      <p ng-bind-html='WidgetHome.data.content.description' class="margin-bottom-zero"></p>
+      <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)' class="margin-bottom-zero"></p>
     </div>
     <div>
       <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1"

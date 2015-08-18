@@ -25,20 +25,21 @@
                     LAST_NAME_Z_TO_A = 'Last Name Z-A',
 
                     /**
-                     * _pageSize used to specify number of records per page.
-                     * _page used to specify nextPageToken.
+                     * _limit used to specify number of records per page.
+                     * _skip used to specify nextPageToken.
                      * @type {number}
                      * @private
                      */
-                    _pageSize = 10,
-                    _page = 0,
+                    _limit = 10,
+                    _maxLimit = 19,
+                    _skip = 0,
 
                     /**
                      * SearchOptions are using for searching , sorting people and fetching people list
                      * @type object
                      */
                     searchOptions = {
-                        filter: {"$json.fName": {"$regex": '/*'}}, page: _page, pageSize: _pageSize + 1 // the plus one is to check if there are any more
+                        filter: {"$json.fName": {"$regex": '/*'}}, skip: _skip, limit: _limit + 1 // the plus one is to check if there are any more
                     };
 
                 function isValidItem(item, index, array) {
@@ -179,8 +180,8 @@
                  * @param tag is a tag name or identity given to the data json during saving the record.
                  */
                 var saveData = function (newObj, tag) {
-                    console.log('------------Data to save-------', newObj);
-                    if (newObj == undefined)return;
+                    if (newObj == undefined)
+                        return;
                     newObj.content.rankOfLastItem = newObj.content.rankOfLastItem || 0;
                     Buildfire.datastore.save(newObj, tag, function (err, result) {
                         if (err || !result) {
@@ -229,6 +230,7 @@
                 /**
                  * ContentHome.loadMore() called by infiniteScroll to implement lazy loading
                  */
+                ContentHome.noMore = false;
                 ContentHome.loadMore = function (search) {
                     if (ContentHome.busy) {
                         return;
@@ -239,17 +241,18 @@
                     }
                     Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err) {
-                            console.error('-----------err in getting list-------------', err);
+                            return console.error('-----------err in getting list-------------', err);
                         }
-                        else {
-                            if (result.length > _pageSize) {// to indicate there are more
-                                result.pop();
-                                searchOptions.page = searchOptions.page + 1;
-                                ContentHome.busy = false;
-                            }
-                            ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
-                            $scope.$digest();
+                        if (result.length <= _limit) {// to indicate there are more
+                            ContentHome.noMore = true;
+                        } else {
+                            result.pop();
+                            searchOptions.skip = searchOptions.skip + _limit + 1;
+                            ContentHome.noMore = false;
                         }
+                        ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
+                        ContentHome.busy = false;
+                        $scope.$digest();
                     });
                 };
                 /**
@@ -292,7 +295,7 @@
                                         console.error('There was a problem while importing the file----', err);
                                     }
                                     else {
-                                        console.log('File has been imported----------------------------', data);
+                                        console.info('File has been imported----------------------------');
                                         ContentHome.busy = false;
                                         ContentHome.items = null;
                                         ContentHome.loadMore();
@@ -323,33 +326,35 @@
                  * ContentHome.exportCSV() used to export people list data to CSV
                  */
                 ContentHome.exportCSV = function () {
-                    var searchoption = {
-                        filter: {"$json.fName": {"$regex": '/*'}}, page: 0, pageSize: 50 // the plus one is to check if there are any more
-                    };
-                    getRecords(searchoption, function (err, data) {
-                        if (err) {
-                            console.log('Err while exporting data--------------------------------', err);
-                        }
-                        else if (data && data.length) {
-                            var persons = [];
-                            angular.forEach(angular.copy(data), function (value) {
-                                delete value.data.dateCreated;
-                                delete value.data.iconImage;
-                                delete value.data.socialLinks;
-                                delete value.data.rank;
-                                persons.push(value.data);
-                            });
-
-                            var csv = FormatConverter.jsonToCsv(angular.toJson(persons), {
-                                header: header
-                            });
-                            FormatConverter.download(csv, "Export.csv");
-                        }
-                        else {
-                            ContentHome.getTemplate();
-                        }
-                        records = [];
-                    });
+                    getRecords({
+                            filter: {"$json.fName": {"$regex": '/*'}},
+                            skip: 0,
+                            limit: _maxLimit + 1 // the plus one is to check if there are any more
+                        },
+                        []
+                        , function (err, data) {
+                            if (err) {
+                                return console.error('Err while exporting data--------------------------------', err);
+                            }
+                            if (data && data.length) {
+                                var persons = [];
+                                angular.forEach(angular.copy(data), function (value) {
+                                    delete value.data.dateCreated;
+                                    delete value.data.iconImage;
+                                    delete value.data.socialLinks;
+                                    delete value.data.rank;
+                                    persons.push(value.data);
+                                });
+                                var csv = FormatConverter.jsonToCsv(angular.toJson(persons), {
+                                    header: header
+                                });
+                                FormatConverter.download(csv, "Export.csv");
+                            }
+                            else {
+                                ContentHome.getTemplate();
+                            }
+                            records = [];
+                        });
                 };
                 /**
                  * records holds the data to export the data.
@@ -362,26 +367,22 @@
                  * @param searchOption
                  * @param callback
                  */
-                function getRecords(searchOption, callback) {
+                function getRecords(searchOption, records, callback) {
+                    console.log("Data length", records.length);
                     Buildfire.datastore.search(searchOption, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err) {
                             console.error('-----------err in getting list-------------', err);
-                            callback(err, null);
+                            return callback(err, []);
                         }
-                        else if (result && result.length) {
-                            if (result.length == searchOption.pageSize) {// to indicate there are more
-                                result.pop();
-                                searchOption.page = searchOption.page + 1;
-                                records = records ? records.concat(result) : result;
-                                getRecords(searchOption, callback);
-                            }
-                            else {
-                                records = records ? records.concat(result) : result;
-                                callback(null, records);
-                            }
+                        if (result.length <= _maxLimit) {// to indicate there are more
+                            records = records.concat(result);
+                            return callback(null, records);
                         }
                         else {
-                            callback(null, null);
+                            result.pop();
+                            searchOption.skip = searchOption.skip + _maxLimit + 1;
+                            records = records.concat(result)
+                            return getRecords(searchOption, records, callback);
                         }
                     });
                 }
@@ -441,7 +442,7 @@
                  */
                 ContentHome.searchListItem = function (value) {
                     var fullName = '';
-                    searchOptions.page = 0;
+                    searchOptions.skip = 0;
                     ContentHome.busy = false;
                     ContentHome.items = null;
                     value = value.trim();
@@ -468,7 +469,7 @@
                         console.info('There was a problem sorting your data');
                     } else {
                         ContentHome.items = null;
-                        searchOptions.page = 0;
+                        searchOptions.skip = 0;
                         ContentHome.busy = false;
                         ContentHome.data.content.sortBy = value;
                         ContentHome.loadMore();

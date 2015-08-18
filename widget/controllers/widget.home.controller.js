@@ -11,11 +11,11 @@
                 FIRST_NAME_Z_TO_A = 'First Name Z-A',
                 LAST_NAME_A_TO_Z = 'Last Name A-Z',
                 LAST_NAME_Z_TO_A = 'Last Name Z-A',
-                _pageSize = 10,
+                _limit = 10,
                 searchOptions = {
                     filter: {"$json.fName": {"$regex": '/*'}},
-                    page: 0,
-                    pageSize: _pageSize + 1 // the plus one is to check if there are any more
+                    skip: 0,
+                    limit: _limit + 1 // the plus one is to check if there are any more
                 },
                 DEFAULT_LIST_LAYOUT = 'list-layout-1',
                 DEFAULT_ITEM_LAYOUT = 'item-layout-1';
@@ -104,16 +104,16 @@
                     }
                     switch (event.tag) {
                         case TAG_NAMES.PEOPLE:
-                            var currentPage = searchOptions.page;
-                            if (searchOptions.page) {
-                                searchOptions.pageSize = searchOptions.pageSize * (searchOptions.page + 1);
-                                searchOptions.page = 0;
+                            var currentPage = searchOptions.skip;
+                            if (searchOptions.skip) {
+                                searchOptions.limit = searchOptions.limit * (searchOptions.skip + 1);
+                                searchOptions.skip = 0;
                             }
                             WidgetHome.busy = false;
                             WidgetHome.items = [];
                             WidgetHome.loadMore(function () {
-                                searchOptions.page = currentPage;
-                                searchOptions.pageSize = _pageSize + 1;
+                                searchOptions.skip = currentPage;
+                                searchOptions.limit = _limit + 1;
                             });
                             break;
                         case TAG_NAMES.PEOPLE_INFO:
@@ -155,13 +155,10 @@
                                 } else {
                                     $scope.imagesUpdated = false;
                                 }
-                                if (WidgetHome.data.content && WidgetHome.data.content.description)
-                                    WidgetHome.data.content.description = $sce.trustAsHtml(WidgetHome.data.content.description);
-
                                 if (event.obj.content.sortBy && currentSortOrder != event.obj.content.sortBy) {
                                     WidgetHome.data.content.sortBy = event.obj.content.sortBy;
                                     WidgetHome.items = [];
-                                    searchOptions.page = 0;
+                                    searchOptions.skip = 0;
                                     WidgetHome.busy = false;
                                     WidgetHome.loadMore();
                                 }
@@ -184,17 +181,14 @@
                     if (err) {
                         return console.error('-----------err in getting list-------------', err);
                     }
-                    else {
-                        console.info('Widget ----------------------------------- load More data------------called');
-                        if (result.length > _pageSize) {// to indicate there are more
-                            result.pop();
-                            searchOptions.page = searchOptions.page + 1;
-                            WidgetHome.busy = false;
-                        }
-                        WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
-                        cb && cb();
-                        $scope.$digest();
+                    if (result.length > _limit) {// to indicate there are more
+                        result.pop();
+                        searchOptions.skip = searchOptions.skip + _limit + 1;
+                        WidgetHome.busy = false;
                     }
+                    WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
+                    cb && cb();
+                    $scope.$digest();
                 });
             };
             /**

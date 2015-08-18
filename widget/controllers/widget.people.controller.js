@@ -26,7 +26,6 @@
             }
             var itemId = $routeParams.id;
             var getPeopleDetail = function () {
-                console.log("ItemID::::::::::: ", itemId);
                 Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                         console.error('-----------Unable to load data-------------', err);

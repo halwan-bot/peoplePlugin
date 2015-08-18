@@ -179,8 +179,8 @@
                  * @param tag is a tag name or identity given to the data json during saving the record.
                  */
                 var saveData = function (newObj, tag) {
-                    console.log('------------Data to save-------', newObj);
-                    if (newObj == undefined)return;
+                    if (newObj == undefined)
+                        return;
                     newObj.content.rankOfLastItem = newObj.content.rankOfLastItem || 0;
                     Buildfire.datastore.save(newObj, tag, function (err, result) {
                         if (err || !result) {
@@ -229,6 +229,7 @@
                 /**
                  * ContentHome.loadMore() called by infiniteScroll to implement lazy loading
                  */
+                ContentHome.noMore = false;
                 ContentHome.loadMore = function (search) {
                     if (ContentHome.busy) {
                         return;
@@ -239,17 +240,18 @@
                     }
                     Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err) {
-                            console.error('-----------err in getting list-------------', err);
+                            return console.error('-----------err in getting list-------------', err);
                         }
-                        else {
-                            if (result.length > _pageSize) {// to indicate there are more
-                                result.pop();
-                                searchOptions.page = searchOptions.page + 1;
-                                ContentHome.busy = false;
-                            }
-                            ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
-                            $scope.$digest();
+                        if (result.length <= _pageSize) {// to indicate there are more
+                            ContentHome.noMore = true;
+                        } else {
+                            result.pop();
+                            searchOptions.page = searchOptions.page + 1;
+                            ContentHome.noMore = false;
                         }
+                        ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
+                        ContentHome.busy = false;
+                        $scope.$digest();
                     });
                 };
                 /**
@@ -292,7 +294,7 @@
                                         console.error('There was a problem while importing the file----', err);
                                     }
                                     else {
-                                        console.log('File has been imported----------------------------', data);
+                                        console.info('File has been imported----------------------------');
                                         ContentHome.busy = false;
                                         ContentHome.items = null;
                                         ContentHome.loadMore();
@@ -328,7 +330,7 @@
                     };
                     getRecords(searchoption, function (err, data) {
                         if (err) {
-                            console.log('Err while exporting data--------------------------------', err);
+                            console.error('Err while exporting data--------------------------------', err);
                         }
                         else if (data && data.length) {
                             var persons = [];

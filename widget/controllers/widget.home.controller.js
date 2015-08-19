@@ -104,17 +104,20 @@
                     }
                     switch (event.tag) {
                         case TAG_NAMES.PEOPLE:
-                            var currentPage = searchOptions.skip;
-                            if (searchOptions.skip) {
-                                searchOptions.limit = searchOptions.limit * (searchOptions.skip + 1);
-                                searchOptions.skip = 0;
-                            }
+                            var skip = searchOptions.skip || 0;
                             WidgetHome.busy = false;
                             WidgetHome.items = [];
-                            WidgetHome.loadMore(function () {
-                                searchOptions.skip = currentPage;
+                            if (searchOptions.skip && searchOptions.skip >= _limit) {
                                 searchOptions.limit = _limit + 1;
-                            });
+                                var times = Math.floor(searchOptions.skip / _limit);
+                                searchOptions.skip = 0;
+                                WidgetHome.loadMore(true, Math.min(times-1,0));
+                            } else {
+                                searchOptions.limit = _limit + 1;
+                                searchOptions.skip = 0;
+                                WidgetHome.loadMore();
+                            }
+
                             break;
                         case TAG_NAMES.PEOPLE_INFO:
                             if (event.obj) {
@@ -168,7 +171,8 @@
                     $scope.$digest();
                 }
             });
-            WidgetHome.loadMore = function (cb) {
+            WidgetHome.noMore = false;
+            WidgetHome.loadMore = function (multi, times) {
                 if (WidgetHome.busy) {
                     return;
                 }
@@ -176,18 +180,24 @@
                 if (WidgetHome.data && WidgetHome.data.content.sortBy) {
                     searchOptions = getSearchOptions(WidgetHome.data.content.sortBy);
                 }
-
                 Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                    console.error('-----------WidgetHome.loadMore-------------');
                     if (err) {
                         return console.error('-----------err in getting list-------------', err);
                     }
-                    if (result.length > _limit) {// to indicate there are more
+                    if (result.length <= _limit) {// to indicate there are more
+                        WidgetHome.noMore = true;
+                    } else {
                         result.pop();
-                        searchOptions.skip = searchOptions.skip + _limit + 1;
-                        WidgetHome.busy = false;
+                        searchOptions.skip = searchOptions.skip + _limit;
+                        WidgetHome.noMore = false;
                     }
                     WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
-                    cb && cb();
+                    WidgetHome.busy = false;
+                    if (multi && !WidgetHome.noMore && times) {
+                        times = times - 1;
+                        WidgetHome.loadMore(multi, times);
+                    }
                     $scope.$digest();
                 });
             };

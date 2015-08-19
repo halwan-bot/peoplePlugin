@@ -129,3 +129,7 @@ Styles for thumbnail images of people listing
 .body-content-word-break{
 word-break: break-all;
 }
+#scroll-infinite{
+    overflow-y: auto;
+    max-height: 800px;
+}

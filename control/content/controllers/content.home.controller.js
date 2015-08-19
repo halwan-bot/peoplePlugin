@@ -96,7 +96,7 @@
                 ContentHome.safeHtml = function (html) {
                     if (html)
                         return $sce.trustAsHtml(html);
-                }
+                };
 
                 ContentHome.descriptionWYSIWYGOptions = {
                     plugins: 'advlist autolink link image lists charmap print preview',
@@ -247,7 +247,7 @@
                             ContentHome.noMore = true;
                         } else {
                             result.pop();
-                            searchOptions.skip = searchOptions.skip + _limit + 1;
+                            searchOptions.skip = searchOptions.skip + _limit;
                             ContentHome.noMore = false;
                         }
                         ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
@@ -365,6 +365,7 @@
                 /**
                  * getRecords function get the  all items from DB
                  * @param searchOption
+                 * @param records
                  * @param callback
                  */
                 function getRecords(searchOption, records, callback) {
@@ -380,8 +381,8 @@
                         }
                         else {
                             result.pop();
-                            searchOption.skip = searchOption.skip + _maxLimit + 1;
-                            records = records.concat(result)
+                            searchOption.skip = searchOption.skip + _maxLimit;
+                            records = records.concat(result);
                             return getRecords(searchOption, records, callback);
                         }
                     });
@@ -524,7 +525,7 @@
                 };
 
                 /**
-                 * ContentHome.openAddImageLinkPopup($index) used to remove a carousel image
+                 * ContentHome.removeCarouselImage($index) used to remove a carousel image
                  * @param $index is the index of carousel image to be remove.
                  */
                 ContentHome.removeCarouselImage = function ($index) {

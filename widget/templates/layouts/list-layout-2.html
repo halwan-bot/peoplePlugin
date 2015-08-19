@@ -16,9 +16,10 @@
       <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)' class="margin-bottom-zero"></p>
     </div>
     <div>
-      <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1"
+      <div class="list-items" ng-if="WidgetHome.data"
+           infinite-scroll-distance="0"
            infinite-scroll="WidgetHome.loadMore()"
-           infinite-scroll-disabled="WidgetHome.busy"
+           infinite-scroll-disabled="WidgetHome.noMore"
            infinite-scroll-container="'#scroll-infinite'">
       <span ng-repeat="item in WidgetHome.items">
       <div class="clearfix border-bottom-grey">

@@ -17,9 +17,10 @@
       <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)' class="margin-bottom-zero"></p>
       <hr class="small">
       <div>
-        <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1"
+        <div class="list-items" ng-if="WidgetHome.data"
+             infinite-scroll-distance="1"
              infinite-scroll="WidgetHome.loadMore()"
-             infinite-scroll-disabled="WidgetHome.busy"
+             infinite-scroll-disabled="WidgetHome.noMore"
              infinite-scroll-container="'#scroll-infinite'">
           <div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
             <div class="media pull-left border-grey border-radius-four people-thumbnail"

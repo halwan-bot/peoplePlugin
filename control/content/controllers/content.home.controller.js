@@ -247,7 +247,7 @@
                             ContentHome.noMore = true;
                         } else {
                             result.pop();
-                            searchOptions.skip = searchOptions.skip + _limit + 1;
+                            searchOptions.skip = searchOptions.skip + _limit;
                             ContentHome.noMore = false;
                         }
                         ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
@@ -380,7 +380,7 @@
                         }
                         else {
                             result.pop();
-                            searchOption.skip = searchOption.skip + _maxLimit + 1;
+                            searchOption.skip = searchOption.skip + _maxLimit;
                             records = records.concat(result)
                             return getRecords(searchOption, records, callback);
                         }

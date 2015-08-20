@@ -17,7 +17,13 @@
 					<div class="copy pull-right">
 						<span class="title ellipsis">{{image.title}}</span>
 						<div class="pull-right">
-							<a ng-hide="image.link" ng-click="ContentHome.openAddImageLinkPopup($index)" class="text-primary text">Add Action</a>
+              <a class="text-primary text"
+                 ng-click="ContentHome.openAddImageActionPopup($index)"
+                 ng-show="!image.action">Add
+                Action</a>
+              <a class="text-primary text"
+                 ng-click="ContentHome.openEditImageActionPopup(image.action, $index)"
+                 ng-hide="!image.action">{{image.action.title}}</a>
 							<span ng-click="ContentHome.removeCarouselImage($index)" class="btn-icon btn-delete-icon btn-danger"></span>
 						</div>
 					</div>

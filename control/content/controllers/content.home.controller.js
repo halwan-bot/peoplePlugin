@@ -502,29 +502,45 @@
                 };
 
                 /**
-                 * ContentHome.openAddImageLinkPopup(_index) used to add link to carousel image
-                 * @param _index is the index of carousel image to be linked.
+                 * ContentHome.openAddImageActionPopup(index) used to add link to carousel image
+                 * @param index is the index of carousel image to be linked.
                  */
-                ContentHome.openAddImageLinkPopup = function (_index) {
-                    var modalInstance = $modal
-                        .open({
-                            templateUrl: 'templates/modals/add-image-link.html',
-                            controller: 'AddImageLinkPopupCtrl',
-                            controllerAs: 'AddImageLinkPopup',
-                            size: 'sm'
-                        });
-                    modalInstance.result.then(function (_link) {
-                        if (_link && ContentHome.data) {
-                            ContentHome.data.content.images[_index].link = _link;
-                        } else {
-                            console.info('Unable to load data.')
-                        }
-                    }, function (err) {
-                        //do something on cancel
-                    });
+                ContentHome.openAddImageActionPopup = function (index) {
+                  var options = {showIcon: false}
+                    , callback = function (error,result) {
+                      if (error) {
+                        return console.error('Error:', error);
+                      }
+                      console.log("666666666666666666666666666666", ContentHome.data.content.images[index]);
+                      if (ContentHome.data.content.images[index] && result)
+                        ContentHome.data.content.images[index].action = result;
+                      console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", ContentHome.data.content.images[index]);
+                      $scope.$digest();
+                    };
+
+                  Buildfire.actionItems.showDialog(null, options,callback);
                 };
 
-                /**
+              /**
+               * ContentHome.openEditImageActionPopup(action,index) used to add link to carousel image
+               * @param action is the action object of carousel image.
+               * @param index is the index of carousel image to be linked.
+               */
+              ContentHome.openEditImageActionPopup = function (action,index) {
+                var options = {showIcons: false};
+                var callback = function (error, result) {
+                  if (error) {
+                    return console.error('Error:', error);
+                  }
+                  if (ContentHome.data.content.images[index] && result)
+                    ContentHome.data.content.images[index].action = result;
+                  $scope.$digest();
+                };
+                Buildfire.actionItems.showDialog(action, options, callback);
+              };
+
+
+              /**
                  * ContentHome.removeCarouselImage($index) used to remove a carousel image
                  * @param $index is the index of carousel image to be remove.
                  */

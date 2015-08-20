@@ -84,7 +84,7 @@
             WidgetHome.safeHtml = function (html) {
                 if (html)
                     return $sce.trustAsHtml(html);
-            }
+            };
             WidgetHome.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
                 $scope.imagesUpdated = false;
                 $scope.$digest();

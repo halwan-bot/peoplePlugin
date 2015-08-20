@@ -12,27 +12,12 @@
         target: imageInfo.data.target ||''
       };
       EditCarouselImagePopup.index = imageInfo.index;
-      EditCarouselImagePopup.selectedAction = {name: 'same', value: "Same Window"};
-      EditCarouselImagePopup.actionMenus = [
-        {name: 'same', value: "Same Window"},
-        {name: 'new', value: "New Window"}
-      ];
       EditCarouselImagePopup.setTarget = function (action) {
         EditCarouselImagePopup.selectedAction = action;
       };
       EditCarouselImagePopup.ok = function (imageInfo,index) {
         if (!imageInfo.imageUrl) {
           return;
-        }
-        if (imageInfo.link) {
-          switch (EditCarouselImagePopup.selectedAction.name) {
-            case "new":
-              imageInfo.target = '_blank';
-              break;
-            default :
-              imageInfo.target = '_self';
-              break;
-          }
         }
         $modalInstance.close({info : imageInfo, index:index});
       };

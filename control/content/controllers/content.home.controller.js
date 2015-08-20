@@ -537,7 +537,7 @@
                 ContentHome.removeCarouselImage = function ($index) {
                     var modalInstance = $modal
                         .open({
-                            templateUrl: 'templates/modals/remove-image-link.html',
+                            templateUrl: 'templates/modals/remove-image.html',
                             controller: 'RemoveImagePopupCtrl',
                             controllerAs: 'RemoveImagePopup',
                             size: 'sm',

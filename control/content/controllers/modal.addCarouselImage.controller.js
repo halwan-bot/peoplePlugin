@@ -9,29 +9,11 @@
                 imageUrl: '',
                 title: '',
                 link: '',
-                target: ''
-            };
-            AddCarouselImagePopup.selectedAction = {name: 'same', value: "Same Window"};
-            AddCarouselImagePopup.actionMenus = [
-                {name: 'same', value: "Same Window"},
-                {name: 'new', value: "New Window"}
-            ];
-            AddCarouselImagePopup.setTarget = function (action) {
-                AddCarouselImagePopup.selectedAction = action;
+                target: '_blank'
             };
             AddCarouselImagePopup.ok = function (imageInfo) {
                 if (!imageInfo.imageUrl) {
                     return;
-                }
-                if (imageInfo.link) {
-                    switch (AddCarouselImagePopup.selectedAction.name) {
-                        case "new":
-                            imageInfo.target = '_blank';
-                            break;
-                        default :
-                            imageInfo.target = '_self';
-                            break;
-                    }
                 }
                 $modalInstance.close(imageInfo);
             };

@@ -35,11 +35,15 @@
     </div>
     <div class="main col-md-9 pull-right">
       <div class="radio radio-primary radio-inline">
-        <input id="openapp" type="radio" checked="" name="open">
+        <input id="openapp" type="radio" checked="" name="open"
+               ng-model="EditCarouselImagePopup.imageInfo.target"
+               value="_self">
         <label for="openapp">In App</label>
       </div>
       <div class="radio radio-primary radio-inline">
-        <input id="openbrowser" type="radio" name="open">
+        <input id="openbrowser" type="radio" name="open"
+               ng-model="EditCarouselImagePopup.imageInfo.target"
+               value="_blank">
         <label for="openbrowser">In Native Browser</label>
       </div>
     </div>

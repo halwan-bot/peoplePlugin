@@ -201,7 +201,12 @@
                         ContentPeople.isUpdating = false;
                     }
                     ContentPeople.unchangedData = angular.equals(_data, ContentPeople.item.data);
-                    ContentPeople.isItemValid = isValidItem(ContentPeople.item.data);
+                  // Send message to widget as soon as a new item is created with its id as a parameter
+                  if(ContentPeople.item.id){
+                    buildfire.messaging.sendMessageToWidget({id: ContentPeople.item.id});
+                  }
+
+                  ContentPeople.isItemValid = isValidItem(ContentPeople.item.data);
                     if (!ContentPeople.isUpdating && !isUnchanged(ContentPeople.item) && ContentPeople.isItemValid) {
                         tmrDelayForPeoples = setTimeout(function () {
                             if (item.id) {

@@ -501,42 +501,32 @@
                     });
                 };
 
-                /**
-                 * ContentHome.openAddImageActionPopup(index) used to add link to carousel image
-                 * @param index is the index of carousel image to be linked.
-                 */
-                ContentHome.openAddImageActionPopup = function (index) {
-                  var options = {showIcon: false}
-                    , callback = function (error,result) {
-                      if (error) {
-                        return console.error('Error:', error);
-                      }
-                      console.log("666666666666666666666666666666", ContentHome.data.content.images[index]);
-                      if (ContentHome.data.content.images[index] && result)
-                        ContentHome.data.content.images[index].action = result;
-                      console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", ContentHome.data.content.images[index]);
-                      $scope.$digest();
-                    };
-
-                  Buildfire.actionItems.showDialog(null, options,callback);
-                };
 
               /**
-               * ContentHome.openEditImageActionPopup(action,index) used to add link to carousel image
-               * @param action is the action object of carousel image.
-               * @param index is the index of carousel image to be linked.
+               *  ContentHome.openEditCarouselImagePopup() used to edit carousel images data
                */
-              ContentHome.openEditImageActionPopup = function (action,index) {
-                var options = {showIcons: false};
-                var callback = function (error, result) {
-                  if (error) {
-                    return console.error('Error:', error);
+              ContentHome.openEditCarouselImagePopup = function (index) {
+                var modalInstance = $modal
+                  .open({
+                    templateUrl: 'templates/modals/edit-carousel-image.html',
+                    controller: 'EditCarouselImagePopupCtrl',
+                    controllerAs: 'EditCarouselImagePopup',
+                    size: 'sm',
+                    resolve : {
+                      imageInfo: function () {
+                        return {data : ContentHome.data.content.images[index], index:index}
+                      }
+                    }
+                  });
+                modalInstance.result.then(function (result) {
+                  if (result && ContentHome.data) {
+                   ContentHome.data.content.images[result.index] = result.info;
+                  } else {
+                    console.info('Unable to load data.')
                   }
-                  if (ContentHome.data.content.images[index] && result)
-                    ContentHome.data.content.images[index].action = result;
-                  $scope.$digest();
-                };
-                Buildfire.actionItems.showDialog(action, options, callback);
+                }, function (err) {
+                  //do something on cancel
+                });
               };
 
 

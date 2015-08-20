@@ -501,37 +501,43 @@
                     });
                 };
 
-                /**
-                 * ContentHome.openAddImageLinkPopup(_index) used to add link to carousel image
-                 * @param _index is the index of carousel image to be linked.
-                 */
-                ContentHome.openAddImageLinkPopup = function (_index) {
-                    var modalInstance = $modal
-                        .open({
-                            templateUrl: 'templates/modals/add-image-link.html',
-                            controller: 'AddImageLinkPopupCtrl',
-                            controllerAs: 'AddImageLinkPopup',
-                            size: 'sm'
-                        });
-                    modalInstance.result.then(function (_link) {
-                        if (_link && ContentHome.data) {
-                            ContentHome.data.content.images[_index].link = _link;
-                        } else {
-                            console.info('Unable to load data.')
-                        }
-                    }, function (err) {
-                        //do something on cancel
-                    });
-                };
 
-                /**
+              /**
+               *  ContentHome.openEditCarouselImagePopup() used to edit carousel images data
+               */
+              ContentHome.openEditCarouselImagePopup = function (index) {
+                var modalInstance = $modal
+                  .open({
+                    templateUrl: 'templates/modals/edit-carousel-image.html',
+                    controller: 'EditCarouselImagePopupCtrl',
+                    controllerAs: 'EditCarouselImagePopup',
+                    size: 'sm',
+                    resolve : {
+                      imageInfo: function () {
+                        return {data : ContentHome.data.content.images[index], index:index}
+                      }
+                    }
+                  });
+                modalInstance.result.then(function (result) {
+                  if (result && ContentHome.data) {
+                   ContentHome.data.content.images[result.index] = result.info;
+                  } else {
+                    console.info('Unable to load data.')
+                  }
+                }, function (err) {
+                  //do something on cancel
+                });
+              };
+
+
+              /**
                  * ContentHome.removeCarouselImage($index) used to remove a carousel image
                  * @param $index is the index of carousel image to be remove.
                  */
                 ContentHome.removeCarouselImage = function ($index) {
                     var modalInstance = $modal
                         .open({
-                            templateUrl: 'templates/modals/remove-image-link.html',
+                            templateUrl: 'templates/modals/remove-image.html',
                             controller: 'RemoveImagePopupCtrl',
                             controllerAs: 'RemoveImagePopup',
                             size: 'sm',

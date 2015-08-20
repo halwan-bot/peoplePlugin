@@ -20,7 +20,8 @@
               <a class="text-primary text"
                  ng-click="ContentHome.openEditCarouselImagePopup($index)"><span
                   ng-show="!image.link">Add Action</span>
-                <span ng-hide="!image.link">{{image.link}}</span></a>
+                <span ng-hide="!image.link">{{image.link| truncate:
+                  13}}</span></a>
 							<span ng-click="ContentHome.removeCarouselImage($index)" class="btn-icon btn-delete-icon btn-danger"></span>
 						</div>
 					</div>

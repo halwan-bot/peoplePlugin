@@ -1,35 +1,11 @@
 <div>
     <div class="loader-pan" ng-show="ContentHome.loading"></div>
+    <div id="carousel"></div>
     <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Image Carousel</span>
-        </div>
-        <div class="main col-md-9 pull-right">
-            <div class="clearfix">
-                <a class="btn btn-success pull-left" ng-click="ContentHome.openAddCarouselImagePopup()">Add Image</a>
-            </div>
-            <div class="home carousel-items draggable-list-view margin-top-twenty border-radius-four border-grey" ui-sortable="ContentHome.imageSortableOptions" ng-model="ContentHome.data.content.images">
-				<div class="d-item list-bg" ng-repeat="image in ContentHome.data.content.images">
-					<span class="icon icon-menu pull-left"></span>
-					<div class="media-holder pull-left">
-						<img ng-src="{{image.imageUrl | getImageUrl : 60 :40}}">
-					</div>
-					<div class="copy pull-right">
-						<span class="title ellipsis">{{image.title}}</span>
-						<div class="pull-right">
-              <a class="text-primary text"
-                 ng-click="ContentHome.openEditCarouselImagePopup($index)"><span
-                  ng-show="!image.link">Add Action</span>
-                <span ng-hide="!image.link">{{image.link| truncate:
-                  13}}</span></a>
-							<span ng-click="ContentHome.removeCarouselImage($index)" class="btn-icon btn-delete-icon btn-danger"></span>
-						</div>
-					</div>
-				</div>
-				<div class="well text-center margin-bottom-zero border-none" ng-if="!ContentHome.data.content.images.length">
-					<p class="margin-zero">No items found.</p>
-				</div>
-            </div>
+      <div class="well text-center margin-bottom-zero border-none" ng-if="!ContentHome.data.content.images.length">
+        <p class="margin-zero">No items found.</p>
+      </div>
+    </div>
         </div>
     </div>
     <hr class="none">

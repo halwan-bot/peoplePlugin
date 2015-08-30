@@ -1,17 +1,7 @@
 <div class="holder padding-zero">
   <div class="people-plugin listlayout1" id="scroll-infinite">
     <div class="plugin-banner clearfix border-bottom-grey">
-      <div class="plugin-slider text-center"
-           image-carousel="{{WidgetHome.data.content.images.length}}">
-        <div class="plugin-slide item"
-             data-ng-repeat="image in WidgetHome.data.content.images | filter:isDefined">
-          <a href="{{image.link}}" data-ng-if="image.link"
-             target="{{image.target}}"><img
-              ng-src="{{image.imageUrl}}"></a>
-          <img data-ng-if="!image.link"
-               ng-src="{{image.imageUrl | getImageUrl : 342 : 192}}">
-        </div>
-      </div>
+      <div id="carousel" build-fire-carousel=""></div>
     </div>
     <div class="padded padding-bottom-zero text-left">
       <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)' class="margin-bottom-zero"></p>

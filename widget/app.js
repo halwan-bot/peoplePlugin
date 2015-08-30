@@ -90,6 +90,14 @@
             });
         }
       })
+      .directive("buildFireCarousel", ["$rootScope", function ($rootScope) {
+        return {
+          restrict: 'A',
+          link: function (scope, elem, attrs) {
+            $rootScope.$broadcast("Carousel:LOADED");
+          }
+        };
+      }])
       .run(function($rootScope,$location, Buildfire){
        /* Buildfire.messaging.onReceivedMessage = function(message){
           $location.path('/people/'+ message.id);

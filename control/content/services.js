@@ -98,7 +98,7 @@
                     }
                 });
                 return deferred.promise;
-            }
+            };
             DB.prototype.update = function (id, item) {
                 var that = this;
                 var deferred = $q.defer();
@@ -117,7 +117,7 @@
                     } else {
                         return deferred.reject(new Error(MESSAGES.ERROR.NOT_FOUND));
                     }
-                })
+                });
                 return deferred.promise;
             };
             DB.prototype.save = function (item) {
@@ -155,7 +155,7 @@
                     }
                 });
                 return deferred.promise;
-            }
+            };
             return DB;
         }])
         .factory('Utility', [function () {

@@ -93,6 +93,36 @@
                     LAST_NAME_A_TO_Z,
                     LAST_NAME_Z_TO_A
                 ];
+
+
+              // create a new instance of the buildfire carousel editor
+              var editor = new Buildfire.components.carousel.editor("#carousel");
+              // this method will be called when a new item added to the list
+              editor.onAddItems = function (items) {
+                if (!ContentHome.data.content.images)
+                  ContentHome.data.content.images = [];
+                ContentHome.data.content.images.push.apply(ContentHome.data.content.images, items);
+                $scope.$digest();
+              };
+              // this method will be called when an item deleted from the list
+              editor.onDeleteItem = function (item, index) {
+                ContentHome.data.content.images.splice(index, 1);
+                $scope.$digest();
+              };
+              // this method will be called when you edit item details
+              editor.onItemChange = function (item, index) {
+                ContentHome.data.content.images.splice(index, 1, item);
+                $scope.$digest();
+              };
+              // this method will be called when you change the order of items
+              editor.onOrderChange = function (item, oldIndex, newIndex) {
+                var temp = ContentHome.data.content.images[oldIndex];
+                ContentHome.data.content.images[oldIndex] = ContentHome.data.content.images[newIndex];
+                ContentHome.data.content.images[newIndex] = temp;
+                $scope.$digest();
+              };
+
+
                 ContentHome.safeHtml = function (html) {
                     if (html)
                         return $sce.trustAsHtml(html);
@@ -105,6 +135,10 @@
                     theme: 'modern'
                 };
                 ContentHome.data = PeopleInfo.data;
+                if (!ContentHome.data.content.images)
+                  editor.loadItems([]);
+                else
+                  editor.loadItems(ContentHome.data.content.images);
 
                 RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem || 0);
                 /**
@@ -475,84 +509,6 @@
                         ContentHome.data.content.sortBy = value;
                         ContentHome.loadMore();
                     }
-                };
-
-                /**
-                 *  ContentHome.openAddCarouselImagePopup() used to add carousel images
-                 */
-                ContentHome.openAddCarouselImagePopup = function () {
-                    var modalInstance = $modal
-                        .open({
-                            templateUrl: 'templates/modals/add-carousel-image.html',
-                            controller: 'AddCarouselImagePopupCtrl',
-                            controllerAs: 'AddCarouselImagePopup',
-                            size: 'sm'
-                        });
-                    modalInstance.result.then(function (imageInfo) {
-                        if (imageInfo && ContentHome.data) {
-                            if (!ContentHome.data.content.images)
-                                ContentHome.data.content.images = [];
-                            ContentHome.data.content.images.push(JSON.parse(angular.toJson(imageInfo)));
-                        } else {
-                            console.info('Unable to load data.')
-                        }
-                    }, function (err) {
-                        //do something on cancel
-                    });
-                };
-
-
-              /**
-               *  ContentHome.openEditCarouselImagePopup() used to edit carousel images data
-               */
-              ContentHome.openEditCarouselImagePopup = function (index) {
-                var modalInstance = $modal
-                  .open({
-                    templateUrl: 'templates/modals/edit-carousel-image.html',
-                    controller: 'EditCarouselImagePopupCtrl',
-                    controllerAs: 'EditCarouselImagePopup',
-                    size: 'sm',
-                    resolve : {
-                      imageInfo: function () {
-                        return {data : ContentHome.data.content.images[index], index:index}
-                      }
-                    }
-                  });
-                modalInstance.result.then(function (result) {
-                  if (result && ContentHome.data) {
-                   ContentHome.data.content.images[result.index] = result.info;
-                  } else {
-                    console.info('Unable to load data.')
-                  }
-                }, function (err) {
-                  //do something on cancel
-                });
-              };
-
-
-              /**
-                 * ContentHome.removeCarouselImage($index) used to remove a carousel image
-                 * @param $index is the index of carousel image to be remove.
-                 */
-                ContentHome.removeCarouselImage = function ($index) {
-                    var modalInstance = $modal
-                        .open({
-                            templateUrl: 'templates/modals/remove-image.html',
-                            controller: 'RemoveImagePopupCtrl',
-                            controllerAs: 'RemoveImagePopup',
-                            size: 'sm',
-                            resolve: {
-                                imageInfo: function () {
-                                    return ContentHome.data.content.images[$index]
-                                }
-                            }
-                        });
-                    modalInstance.result.then(function (data) {
-                        if (data)
-                            ContentHome.data.content.images.splice($index, 1);
-                    }, function (data) {
-                        //do something on cancel
-                    });
                 };
 
                 /**

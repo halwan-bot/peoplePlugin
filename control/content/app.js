@@ -11,14 +11,12 @@
             'ngRoute',
             'ui.bootstrap',
             'ui.sortable',
-            'ngClipboard',
             'infinite-scroll',
             "ui.tinymce",
             "bngCsv"])
         //injected ngRoute for routing
         //injected ui.bootstrap for angular bootstrap component
         //injected ui.sortable for manual ordering of list
-        //ngClipboard to provide copytoclipboard feature
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
             PEOPLE: 'people'
@@ -30,8 +28,7 @@
             INSERTED: 'inserted',
             UPDATED: 'updated'
         })
-        .config(['$routeProvider', 'ngClipProvider', function ($routeProvider, ngClipProvider) {
-            ngClipProvider.setPath("//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.swf");
+        .config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/', {
                     templateUrl: 'templates/home.html',

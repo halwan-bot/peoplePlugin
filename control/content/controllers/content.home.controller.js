@@ -222,7 +222,7 @@
                             console.error('------------error saveData-------', err);
                         }
                         else {
-                            RankOfLastItem.setRank(result.obj.content.rankOfLastItem);
+                            RankOfLastItem.setRank(result.data.content.rankOfLastItem);
                         }
                     });
                 };

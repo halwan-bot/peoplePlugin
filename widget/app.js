@@ -9,7 +9,6 @@
             'ngAnimate',
             'ngRoute',
             'ui.bootstrap',
-            'ui.sortable',
             'infinite-scroll'
         ])
         .constant('TAG_NAMES', {
@@ -37,7 +36,7 @@
                             var PeopleInfo = new DB(COLLECTIONS.peopleInfo);
                             var _bootstrap = function () {
                                 Location.goToHome();
-                            }
+                            };
                             PeopleInfo.get().then(function success(result) {
                                     if (result && result.data && result.data.content && result.data.design) {
                                         deferred.resolve(result);
@@ -50,7 +49,7 @@
                                 function fail() {
                                     Location.goToHome();
                                 }
-                            )
+                            );
                             return deferred.promise;
                         }]
                     }

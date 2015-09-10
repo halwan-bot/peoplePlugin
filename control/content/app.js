@@ -59,7 +59,7 @@
                                 }, function fail() {
                                     _bootstrap();
                                 })
-                            }
+                            };
                             PeopleInfo.get().then(function success(result) {
                                     if (result && result.data && result.data.content && result.data.design) {
                                         deferred.resolve(result);
@@ -72,7 +72,7 @@
                                 function fail() {
                                     Location.goToHome();
                                 }
-                            )
+                            );
                             return deferred.promise;
                         }]
                     }

@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$sce', 'PeopleInfo','$location',
-        function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce, PeopleInfo,$location) {
+        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$sce', 'PeopleInfo','$location','$rootScope',
+        function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce, PeopleInfo,$location,$rootScope) {
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -38,6 +38,8 @@
                 DEFAULT_ITEM_LAYOUT: 'item-layout-1',
                 DEFAULT_SORT_OPTION: WidgetHome.sortingOptions[0]
             };
+          //create new instance of buildfire carousel viewer
+          var view = null;
             var currentItemLayout,
                 currentListLayout, currentSortOrder, currentBackgroundImage;
             WidgetHome.data = PeopleInfo.data;
@@ -131,6 +133,16 @@
                                 if (!WidgetHome.data.design)
                                     WidgetHome.data.design = {};
                                 currentItemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
+
+                              if (currentListLayout != WidgetHome.data.design.listLayout && view && WidgetHome.data.content.images) {
+                                view._destroySlider();
+                                view = null;
+                              }
+                              else {
+                                if (view) {
+                                  view.loadItems(WidgetHome.data.content.images);
+                                }
+                              }
                                 /**
                                  * condition added to update the background image
                                  */
@@ -211,6 +223,17 @@
             $scope.$on("$destroy", function () {
                 WidgetHome.onUpdateFn.clear();
             });
+          $rootScope.$on("Carousel:LOADED", function () {
+            if (!view) {
+              view = new Buildfire.components.carousel.view("#carousel", []);
+            }
+            if (WidgetHome.data.content && WidgetHome.data.content.images) {
+              view.loadItems(WidgetHome.data.content.images);
+            } else {
+              view.loadItems([]);
+            }
+          });
+
         }])
         // Directive for adding  Image carousel on widget home page
         .directive('imageCarousel', function () {

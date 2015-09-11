@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$sce', 'PeopleInfo',
-        function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce, PeopleInfo) {
+        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$sce', 'PeopleInfo','$location',
+        function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce, PeopleInfo,$location) {
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -37,7 +37,7 @@
                 DEFAULT_LIST_LAYOUT: 'list-layout-1',
                 DEFAULT_ITEM_LAYOUT: 'item-layout-1',
                 DEFAULT_SORT_OPTION: WidgetHome.sortingOptions[0]
-            }
+            };
             var currentItemLayout,
                 currentListLayout, currentSortOrder, currentBackgroundImage;
             WidgetHome.data = PeopleInfo.data;
@@ -46,10 +46,13 @@
             currentItemLayout = WidgetHome.data.design.itemLayout;
             currentListLayout = WidgetHome.data.design.listLayout;
             buildfire.messaging.onReceivedMessage = function (msg) {
-                if (msg.path)
-                    Location.goTo('#/');
-                else
-                    Location.goTo("#/people/" + msg.id);
+              console.log(msg);
+                if (msg.path){
+                  Location.goTo('#/');
+                }
+                else{
+                  $location.path("/people/" + msg.id);
+              }
             };
 
             var getSearchOptions = function (value) {

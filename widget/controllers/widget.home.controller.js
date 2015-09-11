@@ -51,7 +51,7 @@
                   Location.goTo('#/');
                 }
                 else{
-                  $location.path("/people/" + msg.id);
+                  Location.goTo("#/people/" + msg.id);
               }
             };
 

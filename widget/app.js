@@ -99,17 +99,15 @@
       }])
       .run(['Location',function(Location){
         buildfire.messaging.onReceivedMessage = function (msg) {
-
           switch(msg.type) {
             case 'AddNewItem':
-              Location.goTo("#/people/" + msg.id);
+              Location.goTo("#/people/" + msg.id + "?stopSwitch=true");
               break;
             case 'OpenItem':
               Location.goTo("#/people/" + msg.id);
               break;
-            case 'Init':
-              Location.goTo("#/");
-              break;
+            default:
+              Location.goToHome();
           }
         };
       }]);

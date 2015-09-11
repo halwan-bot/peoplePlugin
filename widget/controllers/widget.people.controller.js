@@ -18,11 +18,11 @@
             /*
              Send message to Control that this page has been opened
              */
-            if ($routeParams.id) {
-              console.log($location.search());
-              alert("Widget people");
-                buildfire.messaging.sendMessageToControl({id: $routeParams.id, type:'OpenItem'});
-            }
+          var _searchObj = $location.search();
+          if ($routeParams.id && !_searchObj.stopSwitch) {
+            console.log($location.search());
+            buildfire.messaging.sendMessageToControl({id: $routeParams.id, type:'OpenItem'});
+          }
             WidgetPeople.safeHtml = function (html) {
                 if (html)
                     return $sce.trustAsHtml(html);

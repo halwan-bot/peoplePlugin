@@ -106,10 +106,10 @@
                         }
                         RankOfLastItem.setRank(_rankOfLastItem);
                         ContentPeople.item.id = data.id;
-                        ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: data.id});
                         _data.dateCreated = ContentPeople.item.data.dateCreated;
                         _data.rank = ContentPeople.item.data.rank;
                         updateMasterItem(ContentPeople.item);
+                      ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: data.id});
                       // Send message to widget as soon as a new item is created with its id as a parameter
                       if(ContentPeople.item.id){
                         alert("Content.people");

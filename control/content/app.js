@@ -171,9 +171,16 @@
       }
     })
     .run(['Location', function (Location) {
-      // Handler to receive message from widget
+// Handler to receive message from widget
       buildfire.messaging.onReceivedMessage = function (msg) {
-        Location.goTo("#/people/" + msg.id);
+        console.log(msg.type, window.location.href, msg.id);
+        switch(msg.type) {
+          case 'OpenItem':
+            Location.goTo("#/people/" + msg.id);
+            break;
+          default:
+            Location.goToHome();
+        }
       };
     }]);
 })(window.angular, window.buildfire);

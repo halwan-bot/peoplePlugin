@@ -39,7 +39,7 @@
                  Send message to widget that this page has been opened
                  */
                 if ($routeParams.itemId) {
-                    buildfire.messaging.sendMessageToWidget({id: $routeParams.itemId});
+                    buildfire.messaging.sendMessageToWidget({id: $routeParams.itemId, type : 'OpenItem'});
                 }
 
                 updateMasterItem(ContentPeople.item);
@@ -113,7 +113,7 @@
                       // Send message to widget as soon as a new item is created with its id as a parameter
                       if(ContentPeople.item.id){
                         alert("Content.people");
-                        buildfire.messaging.sendMessageToWidget({id: ContentPeople.item.id});
+                        buildfire.messaging.sendMessageToWidget({id: ContentPeople.item.id, type : 'AddNewItem'});
                       }
                         $scope.$digest();
                     });

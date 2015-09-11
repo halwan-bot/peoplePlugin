@@ -53,12 +53,6 @@
                     return items.every(isValidItem);
                 }
 
-                // Handler to receive message from widget
-
-                buildfire.messaging.onReceivedMessage = function (msg) {
-                  $location.path("/people/" + msg.id);
-                };
-
                 var ContentHome = this;
 
                 /**
@@ -206,7 +200,7 @@
                 var tmrDelayForPeopleInfo = null;
 
                 // Send message to widget to return to list layout
-                buildfire.messaging.sendMessageToWidget({path: "/"});
+                buildfire.messaging.sendMessageToWidget({type : 'Init'});
 
                 /**
                  * saveData(newObj, tag) used to save a new record in datastore.

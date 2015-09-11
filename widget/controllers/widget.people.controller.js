@@ -21,7 +21,7 @@
             if ($routeParams.id) {
               console.log($location.search());
               alert("Widget people");
-                buildfire.messaging.sendMessageToControl({id: $routeParams.id});
+                buildfire.messaging.sendMessageToControl({id: $routeParams.id, type:'OpenItem'});
             }
             WidgetPeople.safeHtml = function (html) {
                 if (html)

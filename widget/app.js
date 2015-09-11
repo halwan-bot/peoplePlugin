@@ -97,9 +97,20 @@
           }
         };
       }])
-      .run(function($rootScope,$location, Buildfire){
-       /* Buildfire.messaging.onReceivedMessage = function(message){
-          $location.path('/people/'+ message.id);
-        };*/
-      });
+      .run(['Location',function(Location){
+        buildfire.messaging.onReceivedMessage = function (msg) {
+
+          switch(msg.type) {
+            case 'AddNewItem':
+              Location.goTo("#/people/" + msg.id);
+              break;
+            case 'OpenItem':
+              Location.goTo("#/people/" + msg.id);
+              break;
+            case 'Init':
+              Location.goTo("#/");
+              break;
+          }
+        };
+      }]);
 })(window.angular, window.buildfire);

@@ -45,15 +45,6 @@
             currentBackgroundImage = WidgetHome.data.design.backgroundImage;
             currentItemLayout = WidgetHome.data.design.itemLayout;
             currentListLayout = WidgetHome.data.design.listLayout;
-            buildfire.messaging.onReceivedMessage = function (msg) {
-              console.log(msg);
-                if (msg.path){
-                  Location.goTo('#/');
-                }
-                else{
-                  Location.goTo("#/people/" + msg.id);
-              }
-            };
 
             var getSearchOptions = function (value) {
                 switch (value) {

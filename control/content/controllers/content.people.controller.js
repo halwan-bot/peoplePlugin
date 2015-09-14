@@ -112,7 +112,6 @@
                       ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: data.id});
                       // Send message to widget as soon as a new item is created with its id as a parameter
                       if(ContentPeople.item.id){
-                        alert("Content.people");
                         buildfire.messaging.sendMessageToWidget({id: ContentPeople.item.id, type : 'AddNewItem'});
                       }
                         $scope.$digest();

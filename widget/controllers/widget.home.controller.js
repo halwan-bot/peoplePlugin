@@ -134,15 +134,6 @@
                                     WidgetHome.data.design = {};
                                 currentItemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
 
-                              if (currentListLayout != WidgetHome.data.design.listLayout && view && WidgetHome.data.content.images) {
-                                view._destroySlider();
-                                view = null;
-                              }
-                              else {
-                                if (view) {
-                                  view.loadItems(WidgetHome.data.content.images);
-                                }
-                              }
                                 /**
                                  * condition added to update the background image
                                  */
@@ -166,6 +157,17 @@
                                 } else {
                                     $scope.imagesUpdated = false;
                                 }
+
+
+                              if (currentListLayout != WidgetHome.data.design.listLayout && view && WidgetHome.data.content.images) {
+                                view._destroySlider();
+                                view = null;
+                              }
+                              else {
+                                if (view) {
+                                  view.loadItems(WidgetHome.data.content.images);
+                                }
+                              }
                                 if (event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {
                                     WidgetHome.data.content.sortBy = event.data.content.sortBy;
                                     WidgetHome.items = [];
@@ -223,7 +225,7 @@
             $scope.$on("$destroy", function () {
                 WidgetHome.onUpdateFn.clear();
             });
-          $rootScope.$on("Carousel:LOADED", function () {
+            $rootScope.$on("Carousel:LOADED", function () {
             if (!view) {
               view = new Buildfire.components.carousel.view("#carousel", []);
             }

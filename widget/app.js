@@ -110,5 +110,9 @@
               Location.goToHome();
           }
         };
+        buildfire.deeplink.getData(function(data){
+          console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+          console.log(data);
+        });
       }]);
 })(window.angular, window.buildfire);

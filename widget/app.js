@@ -9,7 +9,6 @@
             'ngAnimate',
             'ngRoute',
             'ui.bootstrap',
-            'ui.sortable',
             'infinite-scroll'
         ])
         .constant('TAG_NAMES', {
@@ -37,7 +36,7 @@
                             var PeopleInfo = new DB(COLLECTIONS.peopleInfo);
                             var _bootstrap = function () {
                                 Location.goToHome();
-                            }
+                            };
                             PeopleInfo.get().then(function success(result) {
                                     if (result && result.data && result.data.content && result.data.design) {
                                         deferred.resolve(result);
@@ -50,7 +49,7 @@
                                 function fail() {
                                     Location.goToHome();
                                 }
-                            )
+                            );
                             return deferred.promise;
                         }]
                     }
@@ -98,9 +97,22 @@
           }
         };
       }])
-      .run(function($rootScope,$location, Buildfire){
-       /* Buildfire.messaging.onReceivedMessage = function(message){
-          $location.path('/people/'+ message.id);
-        };*/
-      });
+      .run(['Location',function(Location){
+        buildfire.messaging.onReceivedMessage = function (msg) {
+          switch(msg.type) {
+            case 'AddNewItem':
+              Location.goTo("#/people/" + msg.id + "?stopSwitch=true");
+              break;
+            case 'OpenItem':
+              Location.goTo("#/people/" + msg.id);
+              break;
+            default:
+              Location.goToHome();
+          }
+        };
+        buildfire.deeplink.getData(function(data){
+          console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+          console.log(data);
+        });
+      }]);
 })(window.angular, window.buildfire);

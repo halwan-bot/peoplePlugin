@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginContent')
-        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout', 'Location', '$sce', 'PeopleInfo',
-            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout, Location, $sce, PeopleInfo) {
+        .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout', 'Location', '$sce', 'PeopleInfo','$location',
+            function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout, Location, $sce, PeopleInfo, $location) {
                 /**
                  * List of options available for sorting people list.
                  * */
@@ -52,12 +52,6 @@
                     }
                     return items.every(isValidItem);
                 }
-
-                // Handler to receive message from widget
-
-                buildfire.messaging.onReceivedMessage = function (msg) {
-                    Location.goTo("#/people/" + msg.id);
-                };
 
                 var ContentHome = this;
 
@@ -206,7 +200,7 @@
                 var tmrDelayForPeopleInfo = null;
 
                 // Send message to widget to return to list layout
-                buildfire.messaging.sendMessageToWidget({path: "/"});
+                buildfire.messaging.sendMessageToWidget({type : 'Init'});
 
                 /**
                  * saveData(newObj, tag) used to save a new record in datastore.
@@ -222,7 +216,7 @@
                             console.error('------------error saveData-------', err);
                         }
                         else {
-                            RankOfLastItem.setRank(result.obj.content.rankOfLastItem);
+                            RankOfLastItem.setRank(result.data.content.rankOfLastItem);
                         }
                     });
                 };

@@ -3,7 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce) {
+        .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location',
+        function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce,$location) {
             var WidgetPeople = this;
             var currentItemLayout,
                 currentListLayout;
@@ -13,17 +14,19 @@
                 DEFAULT_LIST_LAYOUT: 'list-layout-1',
                 DEFAULT_ITEM_LAYOUT: 'item-layout-1',
                 DEFAULT_SORT_OPTION: "Oldest to Newest"
-            }
+            };
             /*
              Send message to Control that this page has been opened
              */
-            if ($routeParams.id) {
-                buildfire.messaging.sendMessageToControl({id: $routeParams.id});
-            }
+          var _searchObj = $location.search();
+          if ($routeParams.id && !_searchObj.stopSwitch) {
+            console.log($location.search());
+            buildfire.messaging.sendMessageToControl({id: $routeParams.id, type:'OpenItem'});
+          }
             WidgetPeople.safeHtml = function (html) {
                 if (html)
                     return $sce.trustAsHtml(html);
-            }
+            };
             var itemId = $routeParams.id;
             var getPeopleDetail = function () {
                 Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
@@ -54,7 +57,7 @@
                             WidgetPeople.data.design = {
                                 itemLayout: WidgetPeople.defaults.DEFAULT_ITEM_LAYOUT,
                                 listLayout: WidgetPeople.defaults.DEFAULT_LIST_LAYOUT
-                            }
+                            };
                             currentItemLayout = WidgetPeople.data.design.itemLayout;
                             currentListLayout = WidgetPeople.data.design.listLayout;
                         }
@@ -76,11 +79,11 @@
                                     WidgetPeople.item = event.data;
                                 break;
                             case TAG_NAMES.PEOPLE_INFO:
-                                if (event.obj.design.itemLayout && currentItemLayout != event.obj.design.itemLayout) {
-                                    WidgetPeople.data.design.itemLayout = event.obj.design.itemLayout;
-                                    currentItemLayout = event.obj.design.itemLayout;
+                                if (event.data.design.itemLayout && currentItemLayout != event.data.design.itemLayout) {
+                                    WidgetPeople.data.design.itemLayout = event.data.design.itemLayout;
+                                    currentItemLayout = event.data.design.itemLayout;
                                 }
-                                else if (event.obj.design.listLayout && currentListLayout != event.obj.design.listLayout) {
+                                else if (event.data.design.listLayout && currentListLayout != event.data.design.listLayout) {
                                     Location.goToHome();
                                 }
                                 break;

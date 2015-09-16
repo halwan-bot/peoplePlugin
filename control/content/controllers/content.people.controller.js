@@ -216,7 +216,7 @@
                             else if (!ContentPeople.isNewItemInserted) {
                                 ContentPeople.addNewItem();
                             }
-                        }, 1000);
+                        }, 100);
                     }
                 };
 

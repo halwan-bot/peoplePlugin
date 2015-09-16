@@ -39,7 +39,7 @@
                  Send message to widget that this page has been opened
                  */
                 if ($routeParams.itemId) {
-                    buildfire.messaging.sendMessageToWidget({id: $routeParams.itemId});
+                    buildfire.messaging.sendMessageToWidget({id: $routeParams.itemId, type : 'OpenItem'});
                 }
 
                 updateMasterItem(ContentPeople.item);
@@ -109,6 +109,11 @@
                         _data.dateCreated = ContentPeople.item.data.dateCreated;
                         _data.rank = ContentPeople.item.data.rank;
                         updateMasterItem(ContentPeople.item);
+                      ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: data.id});
+                      // Send message to widget as soon as a new item is created with its id as a parameter
+                      if(ContentPeople.item.id){
+                        buildfire.messaging.sendMessageToWidget({id: ContentPeople.item.id, type : 'AddNewItem'});
+                      }
                         $scope.$digest();
                     });
                 };
@@ -201,10 +206,6 @@
                         ContentPeople.isUpdating = false;
                     }
                     ContentPeople.unchangedData = angular.equals(_data, ContentPeople.item.data);
-                  // Send message to widget as soon as a new item is created with its id as a parameter
-                  if(ContentPeople.item.id){
-                    buildfire.messaging.sendMessageToWidget({id: ContentPeople.item.id});
-                  }
 
                   ContentPeople.isItemValid = isValidItem(ContentPeople.item.data);
                     if (!ContentPeople.isUpdating && !isUnchanged(ContentPeople.item) && ContentPeople.isItemValid) {

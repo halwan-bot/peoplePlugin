@@ -5,7 +5,7 @@
     </div>
     <div class="padded padding-bottom-zero text-left">
       <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)' class="margin-bottom-zero"></p>
-      <hr class="small">
+      <hr class="small" ng-if="WidgetHome.items && WidgetHome.items.length">
       <div>
         <div class="list-items" ng-if="WidgetHome.data"
              infinite-scroll-distance="1"

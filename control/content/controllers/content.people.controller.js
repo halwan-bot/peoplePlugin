@@ -98,7 +98,7 @@
                     ContentPeople.item.data.dateCreated = +new Date();
                     ContentPeople.item.data.rank = _rankOfLastItem;
 
-                    Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
+                    Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, true, function (err, data) {
                         ContentPeople.isUpdating = false;
                         if (err) {
                             ContentPeople.isNewItemInserted = false;

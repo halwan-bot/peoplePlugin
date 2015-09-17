@@ -98,7 +98,9 @@
                     ContentPeople.item.data.dateCreated = +new Date();
                     ContentPeople.item.data.rank = _rankOfLastItem;
 
-                    Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, true, function (err, data) {
+                  console.log("inserting....");
+                    Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
+                        console.log("Inserted", data.id);
                         ContentPeople.isUpdating = false;
                         if (err) {
                             ContentPeople.isNewItemInserted = false;
@@ -201,10 +203,8 @@
 
                 var tmrDelayForPeoples = null;
                 var updateItemsWithDelay = function (item) {
-                    if (tmrDelayForPeoples) {
-                        clearTimeout(tmrDelayForPeoples);
-                        ContentPeople.isUpdating = false;
-                    }
+                    clearTimeout(tmrDelayForPeoples);
+                    ContentPeople.isUpdating = false;
                     ContentPeople.unchangedData = angular.equals(_data, ContentPeople.item.data);
 
                   ContentPeople.isItemValid = isValidItem(ContentPeople.item.data);
@@ -212,11 +212,10 @@
                         tmrDelayForPeoples = setTimeout(function () {
                             if (item.id) {
                                 ContentPeople.updateItemData();
-                            }
-                            else if (!ContentPeople.isNewItemInserted) {
+                            } else if (!ContentPeople.isNewItemInserted) {
                                 ContentPeople.addNewItem();
                             }
-                        }, 100);
+                        }, 300);
                     }
                 };
 

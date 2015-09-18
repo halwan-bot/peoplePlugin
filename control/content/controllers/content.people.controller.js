@@ -141,7 +141,7 @@
                     Buildfire.actionItems.showDialog(link, options, callback);
                 };
 
-                Buildfire.datastore.onUpdate(function (event) {
+               var onUpdateFn =  Buildfire.datastore.onUpdate(function (event) {
                     if (event && event.status) {
                         switch (event.status) {
                             case STATUS_CODE.INSERTED:
@@ -222,5 +222,9 @@
                 $scope.$watch(function () {
                     return ContentPeople.item;
                 }, updateItemsWithDelay, true);
+
+              $scope.$on("$destroy", function () {
+                ContentPeople.onUpdateFn.clear();
+              });
             }]);
 })(window.angular);

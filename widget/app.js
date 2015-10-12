@@ -104,7 +104,7 @@
         }
       };
     }])
-    .run(['Location', function (Location) {
+    .run(['Location', '$location',function (Location,$location) {
       buildfire.messaging.onReceivedMessage = function (msg) {
         switch (msg.type) {
           case 'AddNewItem':
@@ -122,5 +122,12 @@
           Location.goTo("#/people/" + JSON.parse(data).id);
         }
       });
+
+      buildfire.navigation.onBackButtonClick = function () {
+        if (($location.path()!='/')) {
+          buildfire.messaging.sendMessageToControl({});
+          Location.goTo('#/');
+        }
+      };
     }]);
 })(window.angular, window.buildfire);

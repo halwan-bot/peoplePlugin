@@ -306,7 +306,7 @@
                             size: 'sm'
                         });
                     modalInstance.result.then(function (rows) {
-                        ContentHome.loading = true;
+                        Buildfire.spinner.show();
                         if (rows && rows.length) {
                             var rank = ContentHome.data.content.rankOfLastItem || 0;
                             for (var index = 0; index < rows.length; index++) {
@@ -317,7 +317,7 @@
                             }
                             if (validateCsv(rows)) {
                                 Buildfire.datastore.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
-                                    ContentHome.loading = false;
+                                  Buildfire.spinner.hide();
                                     $scope.$apply();
                                     if (err) {
                                         console.error('There was a problem while importing the file----', err);
@@ -331,7 +331,7 @@
                                     }
                                 });
                             } else {
-                                ContentHome.loading = false;
+                              Buildfire.spinner.hide();
                                 $scope.$apply();
                                 ContentHome.csvDataInvalid = true;
                                 $timeout(function hideCsvDataError() {
@@ -340,11 +340,11 @@
                             }
                         }
                         else {
-                            ContentHome.loading = false;
+                          Buildfire.spinner.hide();
                             $scope.$apply();
                         }
                     }, function (error) {
-                        ContentHome.loading = false;
+                      Buildfire.spinner.hide();
                         $scope.apply();
                         //do something on cancel
                     });

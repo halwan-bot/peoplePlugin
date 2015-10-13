@@ -52,7 +52,7 @@
                     }
                     return items.every(isValidItem);
                 }
-
+                var initialLoad = false;
                 var ContentHome = this;
 
                 /**
@@ -515,7 +515,10 @@
                             clearTimeout(tmrDelayForPeopleInfo);
                         }
                         tmrDelayForPeopleInfo = setTimeout(function () {
-                            saveData(JSON.parse(angular.toJson(infoData)), TAG_NAMES.PEOPLE_INFO);
+                            if(initialLoad) {
+                                saveData(JSON.parse(angular.toJson(infoData)), TAG_NAMES.PEOPLE_INFO);
+                            }
+                            initialLoad=true;
                         }, 500);
                     }
                 };

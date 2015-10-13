@@ -33,6 +33,7 @@
           resolve: {
             PeopleInfo: ['$q', 'DB', 'COLLECTIONS', 'Location', function ($q, DB, COLLECTIONS, Location) {
               var deferred = $q.defer();
+              var maxTry = 0;
               var PeopleInfo = new DB(COLLECTIONS.peopleInfo);
               var _bootstrap = function () {
                 Location.goToHome();
@@ -43,7 +44,13 @@
                   }
                   else {
                     //error in bootstrapping
-                    _bootstrap(); //bootstrap again  _bootstrap();
+                    //Check for infinite calling
+                    if (maxTry < 5) {
+                      maxTry++;
+                      _bootstrap(); //bootstrap again  _bootstrap();
+                    }
+                    else
+                      deferred.reject(null);
                   }
                 },
                 function fail() {
@@ -97,7 +104,7 @@
         }
       };
     }])
-    .run(['Location', function (Location) {
+    .run(['Location', '$location',function (Location,$location) {
       buildfire.messaging.onReceivedMessage = function (msg) {
         switch (msg.type) {
           case 'AddNewItem':
@@ -115,5 +122,12 @@
           Location.goTo("#/people/" + JSON.parse(data).id);
         }
       });
+
+      buildfire.navigation.onBackButtonClick = function () {
+        if (($location.path()!='/')) {
+          buildfire.messaging.sendMessageToControl({});
+          Location.goTo('#/');
+        }
+      };
     }]);
 })(window.angular, window.buildfire);

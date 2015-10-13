@@ -474,14 +474,14 @@
                     searchOptions.skip = 0;
                     ContentHome.busy = false;
                     ContentHome.items = null;
-                    value = value.trim();
                     if (value) {
+                        value = value.trim();
                         if (value.indexOf(' ') !== -1) {
                             fullName = value.split(' ');
-                            searchOptions.filter = {"$and": [{"$json.fName": {"$regex": fullName[0]}}, {"$json.lName": {"$regex": fullName[1]}}]};
+                            searchOptions.filter = {"$and": [{"$json.fName": {"$regex": fullName[0],"$options": "i"}}, {"$json.lName": {"$regex": fullName[1],"$options": "i"}}]};
                         } else {
                             fullName = value;
-                            searchOptions.filter = {"$or": [{"$json.fName": {"$regex": fullName}}, {"$json.lName": {"$regex": fullName}}]};
+                            searchOptions.filter = {"$or": [{"$json.fName": {"$regex": fullName,"$options": "i"}}, {"$json.lName": {"$regex": fullName,"$options": "i"}}]};
                         }
                     } else {
                         searchOptions.filter = {"$json.fName": {"$regex": '/*'}};

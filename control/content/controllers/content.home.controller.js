@@ -463,6 +463,11 @@
                     }, function (data) {
                         //do something on cancel
                     });
+                    setTimeout(function(){
+                        var top = $('.d-item.double-line .btn-icon.btn-delete-icon ').offset().top;
+                        var toppos = top + (_index * 20);
+                        $('.modal-dialog.modal-sm').offset({top: toppos, left: 0});
+                    }, 30);
                 };
 
                 /**

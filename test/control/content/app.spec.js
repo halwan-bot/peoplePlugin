@@ -1,6 +1,6 @@
 describe('Unit: peoplePluginContent content app', function () {
   describe('Unit: app routes', function () {
-    beforeEach(module('eventsManualPluginContent'));
+    beforeEach(module('peoplePluginContent'));
     var location, route, rootScope;
     beforeEach(inject(function (_$location_, _$route_, _$rootScope_) {
       location = _$location_;

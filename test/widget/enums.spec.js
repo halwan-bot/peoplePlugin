@@ -1,6 +1,6 @@
 describe('Unit : peopleEnums widget Enums', function () {
   var CODES, MESSAGES, EVENTS, LAYOUTS, COLLECTIONS, PATHS;
-  beforeEach(module('peoplePluginWidget'));
+  beforeEach(module('peopleEnums'));
 
   beforeEach(inject(function (_CODES_, _MESSAGES_, _EVENTS_, _COLLECTIONS_, _PATHS_) {
     CODES = _CODES_;
@@ -11,15 +11,15 @@ describe('Unit : peopleEnums widget Enums', function () {
   }));
 
   describe('Enum : CODES', function () {
-    xit('CODES should exist and be an object', function () {
+    it('CODES should exist and be an object', function () {
       expect(typeof CODES).toEqual('object');
     });
 
-    xit('CODES.NOT_FOUND should exist and equals to NOTFOUND', function () {
+    it('CODES.NOT_FOUND should exist and equals to NOTFOUND', function () {
       expect(CODES.NOT_FOUND).toEqual("NOTFOUND");
     });
 
-    xit('CODES.SUCCESS should exist and equals to SUCCESS', function () {
+    it('CODES.SUCCESS should exist and equals to SUCCESS', function () {
       expect(CODES.SUCCESS).toEqual("SUCCESS");
     });
   });

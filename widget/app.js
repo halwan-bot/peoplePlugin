@@ -18,12 +18,19 @@
     .constant('ERROR_CODE', {
       NOT_FOUND: 'NOTFOUND'
     })
-    .config(['$routeProvider', function ($routeProvider) {
+    .config(['$routeProvider', '$compileProvider', function ($routeProvider, $compileProvider) {
 
       /**
        * Disable the pull down refresh
        */
       buildfire.datastore.disableRefresh();
+
+
+      /**
+       * To make href urls safe on mobile
+       */
+      $compileProvider.aHrefSanitizationWhitelist(/^\s*(cdvfile):/);
+
 
       $routeProvider
         .when('/', {
@@ -104,7 +111,7 @@
         }
       };
     }])
-    .run(['Location', '$location',function (Location,$location) {
+    .run(['Location', '$location', function (Location, $location) {
       buildfire.messaging.onReceivedMessage = function (msg) {
         switch (msg.type) {
           case 'AddNewItem':
@@ -124,7 +131,7 @@
       });
 
       buildfire.navigation.onBackButtonClick = function () {
-        if (($location.path()!='/')) {
+        if (($location.path() != '/')) {
           buildfire.messaging.sendMessageToControl({});
           Location.goTo('#/');
         }

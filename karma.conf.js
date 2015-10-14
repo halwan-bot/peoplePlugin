@@ -29,10 +29,11 @@ module.exports = function (config) {
             './bower_components/videogular-overlay-play/vg-overlay-play.min.js',
             './bower_components/ng-videosharing-embed/build/ng-videosharing-embed.min.js',
             './test/assets/buildfire.js',
+            './test/assets/ui-tinymce.js',
             './control/design/**/*.js',
             './control/content/**/*.js',
             './widget/**/*.js',
-            './test/**/*.js',
+            'test/**/*.spec.js',
             //'http://localhost:63342/sdk/scripts/buildfire.js',
             'http://localhost:63342/sdk/plugins/pluginMediaCenterManualEntries/widget/assets/js/owl.carousel.min.js',
             'http://localhost:63342/sdk/scripts/buildfire/services/media/audioPlayer.js',
@@ -47,12 +48,8 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'widget/**/!(js)/*.js': ['coverage'],
-            'widget/*.js': ['coverage'],
-            'control/design/**/!(js)/*.js': ['coverage'],
-            'control/design/*.js': ['coverage'],
-            'control/content/**/!(js)/*.js': ['coverage'],
-            'control/content/*.js': ['coverage']
+            'control/**/!(assets|js)/*.js': ['coverage'],
+            'widget/**/*.js': ['coverage']
         },
 
         plugins: [

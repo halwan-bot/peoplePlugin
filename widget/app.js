@@ -135,6 +135,9 @@
           buildfire.messaging.sendMessageToControl({});
           Location.goTo('#/');
         }
+        else{
+          buildfire.navigation.navigateHome();
+        }
       };
     }]);
 })(window.angular, window.buildfire);

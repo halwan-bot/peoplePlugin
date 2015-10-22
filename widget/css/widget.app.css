@@ -1,5 +1,6 @@
-body.scrollable {
-    overflow: auto;
+.main_view {
+    position: relative;
+    overflow: hidden;
 }
 
 /* Styles for home page carousel - to align and style the slider items and navigation dots*/

@@ -65,3 +65,12 @@ word-break: break-all;
     overflow-y: auto;
     max-height: 800px;
 }
+
+ul li{
+    list-style: inherit !important;
+    list-style-position: inside !important;
+}
+ol li{
+    list-style: decimal !important;
+    list-style-position: inside !important;
+}

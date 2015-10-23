@@ -3,32 +3,32 @@
     <div class="plugin-banner clearfix border-bottom-grey">
         <div id="carousel" build-fire-carousel=""></div>
     </div>
-    <div class="padded text-left">
+    <div class="padded text-left text-overlay">
       <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)'
          class="margin-bottom-zero"></p>
     </div>
     <div>
-      <div class="list-items" ng-if="WidgetHome.data"
+      <div class="list-items text-overlay" ng-if="WidgetHome.data"
            infinite-scroll-distance="0"
            infinite-scroll="WidgetHome.loadMore()"
            infinite-scroll-disabled="WidgetHome.noMore"
            infinite-scroll-container="'#scroll-infinite'">
       <span ng-repeat="item in WidgetHome.items">
-      <div class="clearfix border-bottom-grey">
+      <div class="clearfix border-bottom-grey text-overlay">
         <div class="text-center people-thumbnail-card"
              ng-if="item.data.topImage">
-          <img class="people-thumbnail-img-card"
+          <img class="people-thumbnail-img-card text-overlay"
                ng-src="{{item.data.topImage | getImageUrl : 342 : 192}}">
         </div>
       </div>
-		<div class="padded text-left">
+		<div class="padded text-left text-overlay">
       <a class="text-primary" href="#/people/{{item.id}}">{{item.data.fName}}
         {{item.data.lName}}</a>
 
-      <p class="margin-bottom-zero ellipsis item-position body-content-word-break"
+      <p class="margin-bottom-zero ellipsis item-position body-content-word-break text-overlay"
          ng-if="item.data.position">{{item.data.position}}
 
-      <p class="margin-bottom-zero body-content-word-break"
+      <p class="margin-bottom-zero body-content-word-break text-overlay"
          ng-if="!item.data.bodyContent"></p>
     </div>
     </span>

@@ -1,7 +1,4 @@
-.main_view {
-    position: relative;
-    /*overflow: hidden;*/
-}
+
 
 /* Styles for home page carousel - to align and style the slider items and navigation dots*/
 .plugin-banner {
@@ -81,9 +78,12 @@ ol li{
     top: 0;
     left: 0;
     width: 100%;
+    -webkit-transform: none !important;
+    transform: none !important;
 }
 
 /* To overlay texts on background */
 .text-overlay {
-    position: relative
+    position: relative;
+    z-index: auto;
 }

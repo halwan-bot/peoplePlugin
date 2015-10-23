@@ -210,6 +210,7 @@
             });
             WidgetHome.noMore = false;
             WidgetHome.loadMore = function (multi, times) {
+                console.log("loadMore")
                 if (WidgetHome.busy) {
                     return;
                 }

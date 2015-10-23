@@ -99,6 +99,9 @@
                             DesignHome.peopleInfo.design.itemLayout = DesignHome.layouts.itemLayouts[0].name;
 
                         DesignHomeMaster = angular.copy(data.data);
+                        if (DesignHome.peopleInfo.design.backgroundImage) {
+                            background.loadbackground(DesignHome.peopleInfo.design.backgroundImage);
+                        }
                         $scope.$digest();
                     }
                     else {
@@ -107,7 +110,21 @@
                     }
                 });
             }
+            var background = new Buildfire.components.images.thumbnail("#background");
 
+            background.onChange = function (url) {
+                DesignHome.peopleInfo.design.backgroundImage = url;
+                if (!$scope.$$phase && !$scope.$root.$$phase) {
+                    $scope.$apply();
+                }
+            };
+
+            background.onDelete = function (url) {
+                DesignHome.peopleInfo.design.backgroundImage = "";
+                if (!$scope.$$phase && !$scope.$root.$$phase) {
+                    $scope.$apply();
+                }
+            };
             init();
             $scope.$watch(function () {
                 return DesignHome.peopleInfo;

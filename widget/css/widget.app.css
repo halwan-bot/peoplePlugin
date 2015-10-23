@@ -1,6 +1,6 @@
 .main_view {
     position: relative;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 /* Styles for home page carousel - to align and style the slider items and navigation dots*/
@@ -73,4 +73,17 @@ ul li{
 ol li{
     list-style: decimal !important;
     list-style-position: inside !important;
+}
+
+/*background image css class*/
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+/* To overlay texts on background */
+.text-overlay {
+    position: relative
 }

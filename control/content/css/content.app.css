@@ -258,3 +258,7 @@ top: 8px;
     border-color: #faebcc;
     color: #8a6d3b;
 }
+
+.dropdown-menu{
+    max-height: 140px !important;
+}

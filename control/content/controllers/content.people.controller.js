@@ -67,18 +67,6 @@
           Location.goToHome();
         };
 
-        /*On click button delete it removes current item from datastore*/
-        ContentPeople.deleteItem = function () {
-          var item = ContentPeople.item;
-          if (item.id) {
-            Buildfire.datastore.delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
-              if (err)
-                return;
-              Location.goToHome();
-            });
-          }
-        };
-
         ContentPeople.getItem = function (itemId) {
           Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, item) {
             if (err)

@@ -5,7 +5,7 @@
     <div class="main col-md-9 pull-right">
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
-                <a class="border-radius-three default-background-hover text-center">
+                <a class="border-radius-three default-background-hover text-center" ng-if="DesignHome.peopleInfo.design.listLayout.length">
                     <img
                         ng-src="images/{{DesignHome.peopleInfo.design.listLayout}}.png">
 				</a>
@@ -15,14 +15,6 @@
                     <img ng-src="images/{{layout.name}}.png">
 				</a>
 
-                <!--
-                <ul>
-                    <li ng-repeat="layout in DesignHome.layouts.listLayouts">
-                        <a class="layouticon border-radius-three default-background-hover"
-                           ng-click="DesignHome.changeListLayout(layout.name)">{{layout.name}}</a>
-                    </li>
-                </ul>
-                -->
             </div>
         </div>
     </div>
@@ -35,7 +27,7 @@
     <div class="main col-md-9 pull-right">
         <div class="screens clearfix">
             <div class="screen layouticon pull-left">
-                <a class="border-radius-three default-background-hover text-center">
+                <a class="border-radius-three default-background-hover text-center" ng-if="DesignHome.peopleInfo.design.itemLayout.length">
                     <img
                         ng-src="images/{{DesignHome.peopleInfo.design.itemLayout}}.png">
 				</a>
@@ -45,14 +37,6 @@
                     <img ng-src="images/{{layout.name}}.png">
 				</a>
 
-                <!--
-                <ul>
-                    <li ng-repeat="layout in DesignHome.layouts.itemLayouts">
-                        <a class="layouticon border-radius-three default-background-hover"
-                           ng-click="DesignHome.changeItemLayout(layout.name)">{{layout.name}}</a>
-                    </li>
-                </ul>
-                -->
             </div>
         </div>
     </div>

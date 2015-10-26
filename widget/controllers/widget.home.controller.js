@@ -254,6 +254,7 @@
                 WidgetHome.onUpdateFn.clear();
             });
             $rootScope.$on("Carousel:LOADED", function () {
+                view=null;
             if (!view) {
               view = new Buildfire.components.carousel.view("#carousel", []);
             }

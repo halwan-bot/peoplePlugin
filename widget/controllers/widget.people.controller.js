@@ -122,6 +122,9 @@
                                 if(event.data.design.backgroundImage){
                                     WidgetPeople.data.design.backgroundImage=event.data.design.backgroundImage;
                                 }
+                                else{
+                                    WidgetPeople.data.design.backgroundImage="";
+                                }
                                 if (event.data.design.itemLayout && currentItemLayout != event.data.design.itemLayout) {
                                     WidgetPeople.data.design.itemLayout = event.data.design.itemLayout;
                                     currentItemLayout = event.data.design.itemLayout;

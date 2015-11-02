@@ -1,7 +1,4 @@
-.main_view {
-    position: relative;
-    overflow: hidden;
-}
+
 
 /* Styles for home page carousel - to align and style the slider items and navigation dots*/
 .plugin-banner {
@@ -63,5 +60,31 @@ word-break: break-all;
 }
 #scroll-infinite{
     overflow-y: auto;
-    max-height: 800px;
+    max-height: 100%;
+    position: absolute;
+}
+
+ul li{
+    list-style: inherit !important;
+    list-style-position: inside !important;
+}
+ol li{
+    list-style: decimal !important;
+    list-style-position: inside !important;
+}
+
+/*background image css class*/
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    -webkit-transform: none !important;
+    transform: none !important;
+}
+
+/* To overlay texts on background */
+.text-overlay {
+    position: relative;
+    z-index: auto;
 }

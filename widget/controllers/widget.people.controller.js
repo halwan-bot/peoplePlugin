@@ -23,6 +23,46 @@
             console.log($location.search());
             buildfire.messaging.sendMessageToControl({id: $routeParams.id, type:'OpenItem'});
           }
+
+            /*declare the device width heights*/
+            WidgetPeople.deviceHeight = window.innerHeight;
+            WidgetPeople.deviceWidth = window.innerWidth;
+
+            /*initialize the device width heights*/
+            var initDeviceSize = function(callback) {
+                WidgetPeople.deviceHeight = window.innerHeight;
+                WidgetPeople.deviceWidth = window.innerWidth;
+                if (callback) {
+                    if (WidgetPeople.deviceWidth == 0 || WidgetPeople.deviceHeight == 0) {
+                        setTimeout(function () {
+                            initDeviceSize(callback);
+                        }, 500);
+                    } else {
+                        callback();
+                        if (!$scope.$$phase && !$scope.$root.$$phase) {
+                            $scope.$apply();
+                        }
+                    }
+                }
+            };
+
+            /*crop image on the basis of width heights*/
+            WidgetPeople.cropImage = function (url, settings) {
+                var options = {};
+                if (!url) {
+                    return "";
+                }
+                else {
+                    if (settings.height) {
+                        options.height = settings.height;
+                    }
+                    if (settings.width) {
+                        options.width = settings.width;
+                    }
+                    return Buildfire.imageLib.cropImage(url, options);
+                }
+            };
+
             WidgetPeople.safeHtml = function (html) {
                 if (html)
                     return $sce.trustAsHtml(html);
@@ -72,13 +112,19 @@
             getContentPeopleInfo();
             function bindOnUpdate() {
                 WidgetPeople.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
-                    if (event && event.tag) {
+                     if (event && event.tag) {
                         switch (event.tag) {
                             case TAG_NAMES.PEOPLE:
                                 if (event.data)
                                     WidgetPeople.item = event.data;
                                 break;
                             case TAG_NAMES.PEOPLE_INFO:
+                                if(event.data.design.backgroundImage){
+                                    WidgetPeople.data.design.backgroundImage=event.data.design.backgroundImage;
+                                }
+                                else{
+                                    WidgetPeople.data.design.backgroundImage="";
+                                }
                                 if (event.data.design.itemLayout && currentItemLayout != event.data.design.itemLayout) {
                                     WidgetPeople.data.design.itemLayout = event.data.design.itemLayout;
                                     currentItemLayout = event.data.design.itemLayout;

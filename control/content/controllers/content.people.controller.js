@@ -67,18 +67,6 @@
           Location.goToHome();
         };
 
-        /*On click button delete it removes current item from datastore*/
-        ContentPeople.deleteItem = function () {
-          var item = ContentPeople.item;
-          if (item.id) {
-            Buildfire.datastore.delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
-              if (err)
-                return;
-              Location.goToHome();
-            });
-          }
-        };
-
         ContentPeople.getItem = function (itemId) {
           Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, item) {
             if (err)
@@ -140,6 +128,9 @@
             if (error) {
               return console.error('Error:', error);
             }
+            if (result === null) {
+              return console.error('Error:Can not save data, Null record found.');
+            }
             ContentPeople.item.data.socialLinks = ContentPeople.item.data.socialLinks || [];
             ContentPeople.item.data.socialLinks.splice(index, 1, result);
             $scope.$digest();
@@ -170,18 +161,27 @@
           }
         });
 
+        var linkOptions = {"icon": "true"};
+        ContentPeople.linksSortableOptions = {
+          handle: '> .cursor-grab'
+        };
+
         ContentPeople.openAddLinkPopup = function () {
           var options = {showIcons: false};
           var callback = function (error, result) {
             if (error) {
               return console.error('Error:', error);
             }
-            if (!ContentPeople.item.data.socialLinks)
+            if (!ContentPeople.item.data.socialLinks) {
               ContentPeople.item.data.socialLinks = [];
+            }
+            if (result === null) {
+              return console.error('Error:Can not save data, Null record found.');
+            }
             ContentPeople.item.data.socialLinks.push(result);
             $scope.$digest();
           };
-          Buildfire.actionItems.showDialog(null, options, callback);
+          Buildfire.actionItems.showDialog(null, linkOptions, callback);
         };
 
         ContentPeople.removeLink = function (_index) {

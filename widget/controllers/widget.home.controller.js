@@ -75,6 +75,45 @@
                 return searchOptions;
             };
 
+            /*declare the device width heights*/
+            WidgetHome.deviceHeight = window.innerHeight;
+            WidgetHome.deviceWidth = window.innerWidth;
+
+            /*initialize the device width heights*/
+            var initDeviceSize = function(callback) {
+                WidgetHome.deviceHeight = window.innerHeight;
+                WidgetHome.deviceWidth = window.innerWidth;
+                if (callback) {
+                    if (WidgetHome.deviceWidth == 0 || WidgetHome.deviceHeight == 0) {
+                        setTimeout(function () {
+                            initDeviceSize(callback);
+                        }, 500);
+                    } else {
+                        callback();
+                        if (!$scope.$$phase && !$scope.$root.$$phase) {
+                            $scope.$apply();
+                        }
+                    }
+                }
+            };
+
+            /*crop image on the basis of width heights*/
+            WidgetHome.cropImage = function (url, settings) {
+                var options = {};
+                if (!url) {
+                    return "";
+                }
+                else {
+                    if (settings.height) {
+                        options.height = settings.height;
+                    }
+                    if (settings.width) {
+                        options.width = settings.width;
+                    }
+                    return Buildfire.imageLib.cropImage(url, options);
+                }
+            };
+
             $scope.isDefined = function (item) {
                 return item.imageUrl !== undefined && item.imageUrl !== '';
             };
@@ -87,6 +126,9 @@
                 $scope.imagesUpdated = false;
                 $scope.$digest();
                 if (event && event.tag) {
+                    if(WidgetHome.data.design) {
+                        WidgetHome.data.design = event.data.design;
+                    }
                     if (!WidgetHome.data.content) {
                         WidgetHome.data.content = {
                             sortBy: WidgetHome.defaults.DEFAULT_SORT_OPTION
@@ -134,21 +176,6 @@
                                     WidgetHome.data.design = {};
                                 currentItemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
 
-                                /**
-                                 * condition added to update the background image
-                                 */
-                                if (event.data.design && event.data.design.backgroundImage && currentBackgroundImage != event.data.design.backgroundImage) {
-                                    currentBackgroundImage = event.data.design.backgroundImage;
-                                    $('body').css('background', '#010101 url(' + Buildfire.imageLib.resizeImage(currentBackgroundImage, {
-                                        width: 342,
-                                        height: 770
-                                    }) + ') repeat fixed top center');
-                                }
-                                else if (event.data.design && !event.data.design.backgroundImage) {
-                                    currentBackgroundImage = null;
-                                    $('body').css('background', 'none');
-                                }
-
                                 if (event.data.content) {
                                     if (!WidgetHome.data)
                                         WidgetHome.data = {};
@@ -183,6 +210,7 @@
             });
             WidgetHome.noMore = false;
             WidgetHome.loadMore = function (multi, times) {
+                console.log("loadMore")
                 if (WidgetHome.busy) {
                     return;
                 }
@@ -226,6 +254,7 @@
                 WidgetHome.onUpdateFn.clear();
             });
             $rootScope.$on("Carousel:LOADED", function () {
+                view=null;
             if (!view) {
               view = new Buildfire.components.carousel.view("#carousel", []);
             }

@@ -86,6 +86,7 @@
 						<span class="icon icon-menu pull-left cursor-grab" aria-hidden="true" ng-class="{ 'disabled': ContentHome.itemSortableOptions.disabled }"></span>
 						<div class="media-holder pull-left">
 	                        <img ng-src="{{item.data.topImage | getImageUrl : 60:60}}" ng-if="item.data.topImage">
+                            <img src="placeholder/1.png" ng-if="!item.data.topImage">
 						</div>
                         <div class="copy pull-right">
                             <a class="text-primary" href="#/people/{{item.id}}"><span class="title ellipsis pull-left" >{{item.data.fName+' '+item.data.lName}}</span></a>

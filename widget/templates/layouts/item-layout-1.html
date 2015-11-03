@@ -12,9 +12,11 @@
 	<div class="people-plugin layout1">
 		<div class="plugin-banner clearfix border-bottom-grey">
 			<div class="plugin-slider text-center">
-				<div class="text-overlay">
-					<img
-              ng-src="{{WidgetPeople.item.topImage | getImageUrl : 342 : 200}}">
+				<div class="text-overlay" ng-if="WidgetPeople.item.topImage">
+					<img ng-src="{{WidgetPeople.item.topImage | getImageUrl : 342 : 200}}">
+				</div>
+				<div class="text-overlay" ng-if="!WidgetPeople.item.topImage">
+					<img src="images/16x9.png" >
 				</div>
 			</div>
 		</div>

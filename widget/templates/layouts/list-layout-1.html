@@ -18,14 +18,14 @@
               <img class="people-thumbnail-img text-overlay"
                    ng-src="{{item.data.topImage | getImageUrl : 100 : 60}}">
             </div>
-            <div class="content margin-top-ten item-position">
-              <p class="text-primary ellipsis margin-zero item-position text-overlay"><a
+            <div class="content margin-top-ten">
+              <p class="text-primary ellipsis margin-zero text-overlay"><a
                   href="#/people/{{item.id}}">{{item.data.fName}}
                 {{item.data.lName}}</a></p>
-                <p class="margin-bottom-zero ellipsis item-position body-content-word-break text-overlay"
+                <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
                    ng-if="item.data.position">{{item.data.position}}
                 </p>
-                <p class="margin-bottom-zero ellipsis item-position body-content-word-break text-overlay"
+                <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
                    ng-if="!item.data.bodyContent">
                 </p>
             </div>

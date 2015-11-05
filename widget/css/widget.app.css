@@ -1,8 +1,11 @@
 
 
-/* Styles for home page carousel - to align and style the slider items and navigation dots*/
-.plugin-banner {
-    overflow: hidden;
+/*
+* Carousel container styling
+*/
+
+#carousel {
+    overflow: hidden !important;
 }
 
 /*

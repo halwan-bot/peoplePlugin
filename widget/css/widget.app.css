@@ -1,8 +1,11 @@
 
 
-/* Styles for home page carousel - to align and style the slider items and navigation dots*/
-.plugin-banner {
-    overflow: hidden;
+/*
+* Carousel container styling
+*/
+
+#carousel {
+    overflow: hidden !important;
 }
 
 /*
@@ -12,13 +15,6 @@ Widget header styling
 .holder{
     margin-top: 0 !important;
 }
-/*
-Styles for list-layout-1*/
-
-.item-position{
-    padding-left: 10px !important;
-}
-
 
 /*
 Styles for thumbnail images of people listing

@@ -210,6 +210,7 @@
             });
             WidgetHome.noMore = false;
             WidgetHome.loadMore = function (multi, times) {
+                Buildfire.spinner.show();
                 console.log("loadMore");
                 if (WidgetHome.busy) {
                     return;
@@ -221,10 +222,12 @@
                 Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                     console.log('-----------WidgetHome.loadMore-------------');
                     if (err) {
+                        Buildfire.spinner.hide();
                         return console.error('-----------err in getting list-------------', err);
                     }
                     if (result.length <= _limit) {// to indicate there are more
                         WidgetHome.noMore = true;
+                        Buildfire.spinner.hide();
                     } else {
                         result.pop();
                         searchOptions.skip = searchOptions.skip + _limit;
@@ -236,6 +239,7 @@
                         times = times - 1;
                         WidgetHome.loadMore(multi, times);
                     }
+                    Buildfire.spinner.hide();
                     $scope.$digest();
                 });
             };

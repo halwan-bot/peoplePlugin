@@ -260,6 +260,7 @@
                  */
                 ContentHome.noMore = false;
                 ContentHome.loadMore = function (search) {
+                    Buildfire.spinner.show();
                     if (ContentHome.busy) {
                         return;
                     }
@@ -270,9 +271,11 @@
                     Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err) {
                             return console.error('-----------err in getting list-------------', err);
+                            Buildfire.spinner.hide();
                         }
                         if (result.length <= _limit) {// to indicate there are more
                             ContentHome.noMore = true;
+                            Buildfire.spinner.hide();
                         } else {
                             result.pop();
                             searchOptions.skip = searchOptions.skip + _limit;
@@ -280,6 +283,7 @@
                         }
                         ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
                         ContentHome.busy = false;
+                        Buildfire.spinner.hide();
                         $scope.$digest();
                     });
                 };

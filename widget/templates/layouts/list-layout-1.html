@@ -1,5 +1,5 @@
 <div class="holder padding-zero">
-  <div class="people-plugin listlayout1" id="scroll-infinite">
+  <div class="people-plugin listlayout1">
     <div class="plugin-banner clearfix">
       <div id="carousel" build-fire-carousel=""></div>
     </div>
@@ -9,23 +9,23 @@
       <div>
         <div class="list-items" ng-if="WidgetHome.data"
              infinite-scroll-distance="1"
+             data-infinite-container=".infinite-scroll-parent"
              infinite-scroll="WidgetHome.loadMore()"
-             infinite-scroll-disabled="WidgetHome.noMore"
-             infinite-scroll-container="'#scroll-infinite'">
+             infinite-scroll-disabled="WidgetHome.noMore">
           <div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
             <div class="media pull-left border-grey border-radius-four people-thumbnail"
                  ng-if="item.data.topImage">
               <img class="people-thumbnail-img text-overlay"
                    ng-src="{{item.data.topImage | getImageUrl : 100 : 60}}">
             </div>
-            <div class="content margin-top-ten item-position">
-              <p class="text-primary ellipsis margin-zero item-position text-overlay"><a
+            <div class="content margin-top-ten">
+              <p class="text-primary ellipsis margin-zero text-overlay"><a
                   href="#/people/{{item.id}}">{{item.data.fName}}
                 {{item.data.lName}}</a></p>
-                <p class="margin-bottom-zero ellipsis item-position body-content-word-break text-overlay"
+                <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
                    ng-if="item.data.position">{{item.data.position}}
                 </p>
-                <p class="margin-bottom-zero ellipsis item-position body-content-word-break text-overlay"
+                <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
                    ng-if="!item.data.bodyContent">
                 </p>
             </div>

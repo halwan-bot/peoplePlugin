@@ -1,6 +1,6 @@
 <div class="holder padding-zero">
 	<div class="people-plugin layout2">
-		<div class="people-banner border-bottom-grey text-overlay" ng-if="WidgetPeople.item.topImage"
+		<div class="people-banner text-overlay" ng-if="WidgetPeople.item.topImage"
          data-ng-attr-style="background:url({{WidgetPeople.item.topImage | getImageUrl :
          342 : 170}}) no-repeat; background-position:center center;
          background-size:cover;">
@@ -19,7 +19,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="people-banner border-bottom-grey text-overlay" ng-if="!WidgetPeople.item.topImage"
+		<div class="people-banner text-overlay" ng-if="!WidgetPeople.item.topImage"
 			 data-ng-attr-style="background:url({{WidgetPeople.item.topImage ||'images/16x9.png'}}) no-repeat; background-position:center center;
          background-size:cover;">
 			<div class="people-bg padding-top-fifteen padding-bottom-fifteen clearfix">

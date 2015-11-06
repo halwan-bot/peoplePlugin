@@ -210,7 +210,8 @@
             });
             WidgetHome.noMore = false;
             WidgetHome.loadMore = function (multi, times) {
-                console.log("loadMore")
+                Buildfire.spinner.show();
+                console.log("loadMore");
                 if (WidgetHome.busy) {
                     return;
                 }
@@ -221,10 +222,12 @@
                 Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                     console.log('-----------WidgetHome.loadMore-------------');
                     if (err) {
+                        Buildfire.spinner.hide();
                         return console.error('-----------err in getting list-------------', err);
                     }
                     if (result.length <= _limit) {// to indicate there are more
                         WidgetHome.noMore = true;
+                        Buildfire.spinner.hide();
                     } else {
                         result.pop();
                         searchOptions.skip = searchOptions.skip + _limit;
@@ -236,6 +239,7 @@
                         times = times - 1;
                         WidgetHome.loadMore(multi, times);
                     }
+                    Buildfire.spinner.hide();
                     $scope.$digest();
                 });
             };
@@ -264,50 +268,5 @@
               view.loadItems([]);
             }
           });
-
-        }])
-        // Directive for adding  Image carousel on widget home page
-        .directive('imageCarousel', function () {
-            return {
-                restrict: 'A',
-                link: function (scope, elem, attrs) {
-                    scope.carousel = null;
-                    scope.isCarouselInitiated = false;
-                    function initCarousel() {
-                        scope.carousel = null;
-                        setTimeout(function () {
-                            var obj = {
-                                'items': 1,
-                                'slideSpeed': 300,
-                                'dots': true,
-                                'autoplay': true
-                            };
-
-                            var totalImages = parseInt(attrs.imageCarousel, 10);
-                            if (totalImages) {
-                                if (totalImages > 1) {
-                                    obj['loop'] = true;
-                                }
-                                scope.carousel = $(elem).owlCarousel(obj);
-                                scope.isCarouselInitiated = true;
-                            }
-                            scope.$apply();
-                        }, 100);
-                    }
-
-                    initCarousel();
-
-                    scope.$watch("imagesUpdated", function (newVal, oldVal) {
-                        if (newVal) {
-                            if (scope.isCarouselInitiated) {
-                                scope.carousel.trigger("destroy.owl.carousel");
-                                scope.isCarouselInitiated = false;
-                            }
-                            $(elem).find(".owl-stage-outer").remove();
-                            initCarousel();
-                        }
-                    });
-                }
-            }
-        })
+        }]);
 })(window.angular, window);

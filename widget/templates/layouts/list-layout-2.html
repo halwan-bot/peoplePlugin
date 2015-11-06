@@ -14,18 +14,18 @@
            infinite-scroll-disabled="WidgetHome.noMore"
            infinite-scroll-container="'#scroll-infinite'">
       <span ng-repeat="item in WidgetHome.items">
-      <div class="clearfix border-bottom-grey text-overlay">
-        <div class="text-center people-thumbnail-card"
-             ng-if="item.data.topImage">
-          <img class="people-thumbnail-img-card text-overlay"
-               ng-src="{{item.data.topImage | getImageUrl : 342 : 192}}">
+      <div class="clearfix text-overlay">
+        <div class="plugin-banner clearfix" ng-if="item.data.topImage">
+          <div class="plugin-slide text-center">
+            <img ng-src="{{item.data.topImage | getImageUrl : 342 : 192}}">
+          </div>
         </div>
       </div>
 		<div class="padded text-left text-overlay">
       <a class="text-primary" href="#/people/{{item.id}}">{{item.data.fName}}
         {{item.data.lName}}</a>
 
-      <p class="margin-bottom-zero ellipsis item-position body-content-word-break text-overlay"
+      <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
          ng-if="item.data.position">{{item.data.position}}
 
       <p class="margin-bottom-zero body-content-word-break text-overlay"

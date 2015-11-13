@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location',
-        function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce,$location) {
+        .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location','$rootScope',
+        function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce,$location,$rootScope) {
             var WidgetPeople = this;
             var currentItemLayout,
                 currentListLayout;
@@ -20,10 +20,11 @@
              */
           var _searchObj = $location.search();
           if ($routeParams.id && !_searchObj.stopSwitch) {
+              $routeParams.showHome=false;
             console.log($location.search());
             buildfire.messaging.sendMessageToControl({id: $routeParams.id, type:'OpenItem'});
           }
-
+            $rootScope.showHome = false;
             /*declare the device width heights*/
             WidgetPeople.deviceHeight = window.innerHeight;
             WidgetPeople.deviceWidth = window.innerWidth;
@@ -71,9 +72,11 @@
             var getPeopleDetail = function () {
                 Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
                     if (err && err.code !== ERROR_CODE.NOT_FOUND) {
+                        $rootScope.showHome = false;
                         console.error('-----------Unable to load data-------------', err);
                     }
                     else {
+                         $rootScope.showHome = false;
                         WidgetPeople.item = result.data;
                         $scope.$digest();
                     }
@@ -112,6 +115,7 @@
             getContentPeopleInfo();
             function bindOnUpdate() {
                 WidgetPeople.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
+                    console.log("Hello--------1")
                      if (event && event.tag) {
                         switch (event.tag) {
                             case TAG_NAMES.PEOPLE:
@@ -119,6 +123,7 @@
                                     WidgetPeople.item = event.data;
                                 break;
                             case TAG_NAMES.PEOPLE_INFO:
+                                WidgetPeople.data = event.data
                                 if(event.data.design.backgroundImage){
                                     WidgetPeople.data.design.backgroundImage=event.data.design.backgroundImage;
                                 }
@@ -128,6 +133,7 @@
                                 if (event.data.design.itemLayout && currentItemLayout != event.data.design.itemLayout) {
                                     WidgetPeople.data.design.itemLayout = event.data.design.itemLayout;
                                     currentItemLayout = event.data.design.itemLayout;
+
                                 }
                                 else if (event.data.design.listLayout && currentListLayout != event.data.design.listLayout) {
                                     Location.goToHome();
@@ -141,6 +147,8 @@
 
             $scope.$on("$destroy", function () {
                 WidgetPeople.onUpdateFn.clear();
+
+                $rootScope.$broadcast('ROUTE_CHANGED', WidgetPeople.data.design.listLayout,WidgetPeople.data.design.itemLayout,WidgetPeople.data.design.backgroundImage,WidgetPeople.data);
             });
             WidgetPeople.openLinks = function (actionItems) {
                 if (actionItems && actionItems.length) {

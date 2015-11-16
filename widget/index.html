@@ -19,7 +19,7 @@
   <script src="../../../scripts/angular/angular-route.min.js"></script>
   <script src="../../../scripts/angular/angular-animate.min.js"></script>
   <script src="../../../scripts/angular/ui-bootstrap.min.js"></script>
-  <script src="js/ng-infinite-scroll.js"></script>
+  <script src="js/ng-infinite-scroll.custom.js"></script>
   <script src="app.js"></script>
   <script src="enums.js"></script>
   <script src="filters.js"></script>
@@ -29,9 +29,20 @@
   <script src="../../../scripts/angular/angular-animate.min.js"></script>
   <link rel="stylesheet" href="../../../styles/transitionAnimation.css">
 </head>
-<body class="scrollable">
+<body class="body-scroll">
 <div class="main_view">
-  <div class="content slide" ng-view=""></div>
+  <div class="slide infinite-scroll-parent">
+     <div ng-controller="WidgetHomeCtrl as WidgetHome">
+       <div class="overlay background" ng-if="WidgetHome.data.design.backgroundImage && WidgetHome.deviceWidth != 0 && WidgeHome.deviceHeight != 0">
+         <img ng-src="{{ WidgetHome.cropImage(WidgetHome.data.design.backgroundImage, {width: WidgetHome.deviceWidth, height: WidgetHome.deviceHeight}) }}">
+       </div>
+
+       <div ng-if="WidgetHome.data.design.listLayout"
+           ng-include="'templates/layouts/' + WidgetHome.data.design.listLayout + '.html'">
+      </div>
+    </div>
+  </div>
+  <div ng-view="" class="slide content" ng-hide="showHome"></div>
 </div>
 </body>
 </html>

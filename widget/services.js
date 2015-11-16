@@ -155,10 +155,24 @@
                     }
                 });
                 return deferred.promise;
+            };
+            DB.prototype.clearListener = function () {
+                var that = this;
+                var deferred = $q.defer();
+                if (typeof id == 'undefined') {
+                    return deferred.reject(new Error(MESSAGES.ERROR.ID_NOT_DEFINED));
+                }
+                onUpdateListeners.forEach(function (listner) {
+                    listner.clear();
+                });
+                onUpdateListeners = [];
+
+                return deferred.promise;
             }
             return DB;
         }])
         .factory('Utility', [function () {
 
         }])
+
 })(window.angular, window.buildfire, window.location);

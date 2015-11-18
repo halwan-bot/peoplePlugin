@@ -2,8 +2,8 @@
 (function (angular) {
   angular
     .module('peoplePluginContent')
-    .controller('ContentPeopleCtrl', ['$scope', 'Location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams', 'RankOfLastItem',
-      function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams, RankOfLastItem) {
+    .controller('ContentPeopleCtrl', ['$scope', 'Location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams', 'RankOfLastItem', '$rootScope',
+      function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams, RankOfLastItem, $rootScope) {
 
         var _rankOfLastItem = RankOfLastItem.getRank();
         var ContentPeople = this;
@@ -24,6 +24,13 @@
           bodyContent: '',
           rank: _rankOfLastItem
         };
+        //Initializing breadcrumb for current view
+        $rootScope.breadcrumbs = [{
+          'title': 'Home',
+          'link': '#/'
+        }, {
+          'title': 'People'
+        }];
 
         ContentPeople.item = {
           data: angular.copy(_data)

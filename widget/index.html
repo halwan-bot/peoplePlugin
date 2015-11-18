@@ -31,13 +31,9 @@
 </head>
 <body class="body-scroll">
 <div class="main_view">
-  <div class="slide infinite-scroll-parent">
+  <div class="slide infinite-scroll-parent" data-ng-attr-style="background:url({{ backgroundImage| cropImage:deviceWidth:deviceHeight:true}}) !important; background-size:cover;">
      <div ng-controller="WidgetHomeCtrl as WidgetHome">
-       <div class="overlay background" ng-if="WidgetHome.data.design.backgroundImage && WidgetHome.deviceWidth != 0 && WidgeHome.deviceHeight != 0">
-         <img ng-src="{{ WidgetHome.cropImage(WidgetHome.data.design.backgroundImage, {width: WidgetHome.deviceWidth, height: WidgetHome.deviceHeight}) }}">
-       </div>
-
-       <div ng-if="WidgetHome.data.design.listLayout"
+        <div ng-if="WidgetHome.data.design.listLayout"
            ng-include="'templates/layouts/' + WidgetHome.data.design.listLayout + '.html'">
       </div>
     </div>

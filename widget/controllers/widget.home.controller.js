@@ -73,13 +73,14 @@
             };
 
             /*declare the device width heights*/
-            WidgetHome.deviceHeight = window.innerHeight;
-            WidgetHome.deviceWidth = window.innerWidth;
+            $rootScope.deviceHeight = window.innerHeight;
+            $rootScope.deviceWidth = window.innerWidth;
+            $rootScope.backgroundImage = "";
 
             /*initialize the device width heights*/
             var initDeviceSize = function(callback) {
-                WidgetHome.deviceHeight = window.innerHeight;
-                WidgetHome.deviceWidth = window.innerWidth;
+                $rootScope.deviceHeight = window.innerHeight;
+                $rootScope.deviceWidth = window.innerWidth;
                 if (callback) {
                     if (WidgetHome.deviceWidth == 0 || WidgetHome.deviceHeight == 0) {
                         setTimeout(function () {
@@ -121,6 +122,11 @@
                         }
                         if(WidgetHome.data.content){
                             currentSortOrder = WidgetHome.data.content.sortBy;
+                        }
+                        if(!WidgetHome.data.design.backgroundImage){
+                            $rootScope.backgroundImage = ""
+                        }else{
+                            $rootScope.backgroundImage=WidgetHome.data.design.backgroundImage;
                         }
                     }
                     , error = function (err) {
@@ -203,7 +209,11 @@
                                 } else {
                                     $scope.imagesUpdated = false;
                                 }
-
+                                if(!event.data.design.backgroundImage){
+                                    $rootScope.backgroundImage = ""
+                                }else{
+                                    $rootScope.backgroundImage=event.data.design.backgroundImage;
+                                }
 
                                 if (currentListLayout != WidgetHome.data.design.listLayout && view && WidgetHome.data.content.images) {
                                     view._destroySlider();
@@ -225,6 +235,7 @@
                             break;
                     }
                     $scope.$digest();
+                    $rootScope.$apply();
                 }
             }
             Buildfire.datastore.onUpdate(onUpdateCallback);

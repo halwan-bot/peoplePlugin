@@ -1,47 +1,36 @@
 
 <div class="holder padding-zero">
 	<div class="people-plugin layout4">
-		<div class="people-banner text-overlay" ng-if="WidgetPeople.item.topImage"
-         data-ng-attr-style="background:url({{WidgetPeople.item.topImage | getImageUrl :
-         342 : 267}}) no-repeat;
-         background-position:center center;">
+		<div class="people-banner text-overlay" ng-if="WidgetPeople.item.topImage" data-ng-attr-style="background:url({{WidgetPeople.item.topImage | getImageUrl : 342 : 267}}) no-repeat; background-position:center center;">
 			<div class="people-bg padding-top-fifteen padding-bottom-fifteen clearfix">
 				<div class="people-holder clearfix">
 					<div class="people-media text-center">
-						<img class="border-grey img-circle text-overlay"
-                 ng-src="{{WidgetPeople.item.topImage | getImageUrl : 140 : 140}}">
+						<img class="border-grey img-circle text-overlay" ng-src="{{WidgetPeople.item.topImage | getImageUrl : 140 : 140}}">
 					</div>
 					<div class="people-info text-center margin-top-fifteen col-md-12">
-						<h4><a class="text-primary text-overlay">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</a></h4>
-						<h5>{{WidgetPeople.item.position}}</h5>
-            <a class="icon icon-profile text-overlay"
-               ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
+						<p class="text-overlay" style="color:#5f5f5f !important;">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
+						<p style="color:#5f5f5f !important;">{{WidgetPeople.item.position}}</p>
+            			<a class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="people-banner text-overlay" ng-if="!WidgetPeople.item.topImage"
-			 data-ng-attr-style="background:url({{WidgetPeople.item.topImage||'images/1x1.png'}}) no-repeat;
-         background-position:center center;">
+		<div class="people-banner text-overlay" ng-if="!WidgetPeople.item.topImage" data-ng-attr-style="background:url({{WidgetPeople.item.topImage||'images/1x1.png'}}) no-repeat; background-position:center center;">
 			<div class="people-bg padding-top-fifteen padding-bottom-fifteen clearfix">
 				<div class="people-holder clearfix">
 					<div class="people-media text-center">
-						<img class="border-grey img-circle text-overlay"
-							 ng-src="{{'images/1x1.png'}}">
+						<img class="border-grey img-circle text-overlay" ng-src="{{'images/1x1.png'}}">
 					</div>
 					<div class="people-info text-center margin-top-fifteen col-md-12">
-						<h4><a class="text-primary text-overlay">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</a></h4>
-						<h5>{{WidgetPeople.item.position}}</h5>
-						<a class="icon icon-profile text-overlay"
-						   ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
+						<p class="text-overlay" style="color:#5f5f5f !important;">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
+						<p style="color:#5f5f5f !important;">{{WidgetPeople.item.position}}</p>
+						<a class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="padded">
-			<p class="break-word text-overlay" ng-if='WidgetPeople.item.bodyContent'
-			   ng-bind-html='WidgetPeople.safeHtml(WidgetPeople.item.bodyContent)'></p>
-
+			<p class="break-word text-overlay" ng-if='WidgetPeople.item.bodyContent' ng-bind-html='WidgetPeople.safeHtml(WidgetPeople.item.bodyContent)'></p>
 			<p class="break-word text-overlay" ng-if='!WidgetPeople.item.bodyContent'></p>
 		</div>
 	</div>

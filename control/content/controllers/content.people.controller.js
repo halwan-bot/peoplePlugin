@@ -25,20 +25,17 @@
           rank: _rankOfLastItem
         };
 
+        //Initializing breadcrumb for current view
         console.log("*************");
-        buildfire.history.push('2014 Top 10', {elementToShow: '#2014Top10'});
-        console.log("^^^^^^^^^^^^^^^^^^");
+        buildfire.history.push('People', {});
+
         buildfire.history.get({pluginBreadcrumbsOnly: true}, function (err, result) {
           console.log("History............", err, result);
+          if (err)
+            $rootScope.breadcrumbs = [];
+          else
+            $rootScope.breadcrumbs = result;
         });
-
-        //Initializing breadcrumb for current view
-        $rootScope.breadcrumbs = [{
-          'title': 'Home',
-          'link': '#/'
-        }, {
-          'title': 'People'
-        }];
 
         ContentPeople.item = {
           data: angular.copy(_data)
@@ -245,6 +242,8 @@
         }, updateItemsWithDelay, true);
 
         $scope.$on("$destroy", function () {
+          console.log("^^^^^^^^^^^^^^^^^^");
+          buildfire.history.pop();
           ContentPeople.onUpdateFn.clear();
         });
       }]);

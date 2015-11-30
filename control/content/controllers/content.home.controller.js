@@ -1,6 +1,6 @@
 'use strict';
 
-(function (angular, window) {
+(function (angular, buildfire) {
   angular
     .module('peoplePluginContent')
     .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout', 'Location', '$sce', 'PeopleInfo', '$rootScope',
@@ -58,17 +58,19 @@
         var initialLoad = false;
         var ContentHome = this;
 
-        //Initializing breadcrumb for current view
-        $rootScope.breadcrumbs = [{
-          'title': 'Home',
-          'link': '#/'
-        }];
 
         /**
          * ContentHome.busy used to enable/disable infiniteScroll. if busy true it means there is not more data.
          * @type {boolean}
          */
         ContentHome.busy = false;
+
+
+        //Initializing breadcrumb for current view
+
+        console.log("+++++++++++++++++++++++");
+
+        buildfire.history.push('Home', {'link': '#/'});
 
 
         /**
@@ -563,4 +565,4 @@
         }, saveDataWithDelay, true);
 
       }])
-})(window.angular, window);
+})(window.angular, window.buildfire);

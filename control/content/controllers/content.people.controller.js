@@ -1,5 +1,5 @@
 'use strict';
-(function (angular) {
+(function (angular, buildfire) {
   angular
     .module('peoplePluginContent')
     .controller('ContentPeopleCtrl', ['$scope', 'Location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams', 'RankOfLastItem', '$rootScope',
@@ -24,6 +24,14 @@
           bodyContent: '',
           rank: _rankOfLastItem
         };
+
+        console.log("*************");
+        buildfire.history.push('2014 Top 10', {elementToShow: '#2014Top10'});
+        console.log("^^^^^^^^^^^^^^^^^^");
+        buildfire.history.get({pluginBreadcrumbsOnly: true}, function (err, result) {
+          console.log("History............", err, result);
+        });
+
         //Initializing breadcrumb for current view
         $rootScope.breadcrumbs = [{
           'title': 'Home',
@@ -240,4 +248,4 @@
           ContentPeople.onUpdateFn.clear();
         });
       }]);
-})(window.angular);
+})(window.angular, window.buildfire);

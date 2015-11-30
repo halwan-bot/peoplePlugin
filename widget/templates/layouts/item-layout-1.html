@@ -3,7 +3,7 @@
 		<div class="plugin-banner clearfix">
 			<div class="plugin-slider text-center">
 				<div class="text-overlay" ng-if="WidgetPeople.item.topImage">
-					<img ng-src="{{WidgetPeople.item.topImage | getImageUrl : 342 : 200}}">
+					<img ng-src="{{WidgetPeople.item.topImage | getImageUrl : 400 : 200}}">
 				</div>
 				<div class="text-overlay" ng-if="!WidgetPeople.item.topImage">
 					<img src="images/16x9.png" >
@@ -12,19 +12,16 @@
 		</div>
 		<div class="people-info text-left padded padding-bottom-zero clearfix ">
 			<div class="col-xs-10 padding-zero pull-left">
-				<h4 class="margin-top-zero"><a class="text-primary text-overlay">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</a></h4>
-				<h5 class="margin-bottom-zero">{{WidgetPeople.item.position}}</h5>
+				<p class="margin-zero text-overlay">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
+				<p class="margin-bottom-zero">{{WidgetPeople.item.position}}</p>
 			</div>
 			<div class="col-xs-2 padding-right-zero pull-right text-right text-overlay">
-				<a class="icon icon-profile text-overlay"
-           ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
+				<a class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
 			</div>
 		</div>
 		<div class="padded padding-top-zero">
 			<hr class="small">
-			<p class="break-word text-overlay" ng-if='WidgetPeople.item.bodyContent'
-			   ng-bind-html='WidgetPeople.safeHtml(WidgetPeople.item.bodyContent)'></p>
-
+			<p class="break-word text-overlay" ng-if='WidgetPeople.item.bodyContent' ng-bind-html='WidgetPeople.safeHtml(WidgetPeople.item.bodyContent)'></p>
 			<p class="break-word" ng-if='!WidgetPeople.item.bodyContent'></p>
 		</div>
 	</div>

@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$sce', 'PeopleInfo','$location','$rootScope',
-        function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce, PeopleInfo,$location,$rootScope) {
+        .controller('WidgetHomeCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES','COLLECTIONS', 'ERROR_CODE', "Location", '$sce','$location','$rootScope','DB',
+        function ($scope, $window, Buildfire, TAG_NAMES,COLLECTIONS, ERROR_CODE, Location, $sce, $location,$rootScope,DB) {
             var MANUALLY = 'Manually',
                 OLDEST_TO_NEWEST = 'Oldest to Newest',
                 NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -20,7 +20,7 @@
                 },
                 DEFAULT_LIST_LAYOUT = 'list-layout-1',
                 DEFAULT_ITEM_LAYOUT = 'item-layout-1';
-
+            var PeopleInfo = new DB(TAG_NAMES.PEOPLE_INFO);
             var WidgetHome = this;
             WidgetHome.data = {};
             WidgetHome.busy = false;
@@ -42,12 +42,9 @@
           var view = null;
             var currentItemLayout,
                 currentListLayout, currentSortOrder, currentBackgroundImage;
-            WidgetHome.data = PeopleInfo.data;
-            currentSortOrder = WidgetHome.data.content.sortBy;
-            currentBackgroundImage = WidgetHome.data.design.backgroundImage;
-            currentItemLayout = WidgetHome.data.design.itemLayout;
-            currentListLayout = WidgetHome.data.design.listLayout;
+            WidgetHome.data = {};
 
+            $rootScope.showHome = true;
             var getSearchOptions = function (value) {
                 switch (value) {
                     case OLDEST_TO_NEWEST:
@@ -76,13 +73,14 @@
             };
 
             /*declare the device width heights*/
-            WidgetHome.deviceHeight = window.innerHeight;
-            WidgetHome.deviceWidth = window.innerWidth;
+            $rootScope.deviceHeight = window.innerHeight;
+            $rootScope.deviceWidth = window.innerWidth;
+            $rootScope.backgroundImage = "";
 
             /*initialize the device width heights*/
             var initDeviceSize = function(callback) {
-                WidgetHome.deviceHeight = window.innerHeight;
-                WidgetHome.deviceWidth = window.innerWidth;
+                $rootScope.deviceHeight = window.innerHeight;
+                $rootScope.deviceWidth = window.innerWidth;
                 if (callback) {
                     if (WidgetHome.deviceWidth == 0 || WidgetHome.deviceHeight == 0) {
                         setTimeout(function () {
@@ -114,6 +112,32 @@
                 }
             };
 
+            var init = function () {
+                var success = function (result) {
+                        WidgetHome.data = result.data;
+                        if(WidgetHome.data.design) {
+                            currentBackgroundImage = WidgetHome.data.design.backgroundImage;
+                            currentItemLayout = WidgetHome.data.design.itemLayout;
+                            currentListLayout = WidgetHome.data.design.listLayout;
+                        }
+                        if(WidgetHome.data.content){
+                            currentSortOrder = WidgetHome.data.content.sortBy;
+                        }
+                        if(!WidgetHome.data.design.backgroundImage){
+                            $rootScope.backgroundImage = ""
+                        }else{
+                            $rootScope.backgroundImage=WidgetHome.data.design.backgroundImage;
+                        }
+                    }
+                    , error = function (err) {
+                        if (err ) {
+                            console.error('Error while getting data', err);
+                        }
+                    };
+                PeopleInfo.get(TAG_NAMES.PEOPLE_INFO).then(success, error);
+            };
+
+            init();
             $scope.isDefined = function (item) {
                 return item.imageUrl !== undefined && item.imageUrl !== '';
             };
@@ -121,8 +145,9 @@
                 if (html)
                     return $sce.trustAsHtml(html);
             };
-            WidgetHome.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
-                console.log("*******************************************", event);
+            var onUpdateCallback = function (event) {
+                 console.log("*******************************************", event);
+                console.log("Hello--------Hiome")
                 $scope.imagesUpdated = false;
                 $scope.$digest();
                 if (event && event.tag) {
@@ -164,6 +189,7 @@
                                 if (event.data.design && event.data.design.itemLayout && currentItemLayout != event.data.design.itemLayout) {
                                     if (WidgetHome.items && WidgetHome.items.length) {
                                         var id = WidgetHome.items[0].id;
+                                        $rootScope.showFeed = true;
                                         Location.goTo("#/people/" + id);
                                     }
                                 }
@@ -171,8 +197,7 @@
                                     currentListLayout = event.data.design.listLayout;
                                     WidgetHome.data.design.listLayout = event.data.design.listLayout;
                                 }
-
-                                if (!WidgetHome.data.design)
+                                 if (!WidgetHome.data.design)
                                     WidgetHome.data.design = {};
                                 currentItemLayout = WidgetHome.data.design.itemLayout || DEFAULT_ITEM_LAYOUT;
 
@@ -184,17 +209,21 @@
                                 } else {
                                     $scope.imagesUpdated = false;
                                 }
-
-
-                              if (currentListLayout != WidgetHome.data.design.listLayout && view && WidgetHome.data.content.images) {
-                                view._destroySlider();
-                                view = null;
-                              }
-                              else {
-                                if (view) {
-                                  view.loadItems(WidgetHome.data.content.images);
+                                if(!event.data.design.backgroundImage){
+                                    $rootScope.backgroundImage = ""
+                                }else{
+                                    $rootScope.backgroundImage=event.data.design.backgroundImage;
                                 }
-                              }
+
+                                if (currentListLayout != WidgetHome.data.design.listLayout && view && WidgetHome.data.content.images) {
+                                    view._destroySlider();
+                                    view = null;
+                                }
+                                else {
+                                    if (view) {
+                                        view.loadItems(WidgetHome.data.content.images);
+                                    }
+                                }
                                 if (event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {
                                     WidgetHome.data.content.sortBy = event.data.content.sortBy;
                                     WidgetHome.items = [];
@@ -206,8 +235,10 @@
                             break;
                     }
                     $scope.$digest();
+                    $rootScope.$apply();
                 }
-            });
+            }
+            Buildfire.datastore.onUpdate(onUpdateCallback);
             WidgetHome.noMore = false;
             WidgetHome.loadMore = function (multi, times) {
                 Buildfire.spinner.show();
@@ -253,7 +284,20 @@
             WidgetHome.resizeImage = function (url, width, height) {
                 return Buildfire.imageLib.resizeImage(url, {width: width, height: height});
             };
-
+            $rootScope.$on("ROUTE_CHANGED", function (e, listLayout, itemLayout, background, data) {
+                 WidgetHome.data = data
+                if (!WidgetHome.data.design)
+                    WidgetHome.data.design = {};
+                if (!WidgetHome.data.content)
+                    WidgetHome.data.content = {};
+               if (!view) {
+                    view = new Buildfire.components.carousel.view("#carousel", []);
+                }
+                if (view && WidgetHome.data.content.images) {
+                    view.loadItems(WidgetHome.data.content.images);
+                }
+                Buildfire.datastore.onUpdate(onUpdateCallback);
+            });
             $scope.$on("$destroy", function () {
                 WidgetHome.onUpdateFn.clear();
             });

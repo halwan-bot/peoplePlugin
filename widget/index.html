@@ -29,9 +29,16 @@
   <script src="../../../scripts/angular/angular-animate.min.js"></script>
   <link rel="stylesheet" href="../../../styles/transitionAnimation.css">
 </head>
-<body class="scrollable">
+<body class="body-scroll">
 <div class="main_view">
-  <div class="content slide infinite-scroll-parent" ng-view=""></div>
+  <div class="slide infinite-scroll-parent" data-ng-attr-style="background:url({{ backgroundImage| cropImage:deviceWidth:deviceHeight:true}}) !important; background-size:cover;">
+     <div ng-controller="WidgetHomeCtrl as WidgetHome">
+        <div ng-if="WidgetHome.data.design.listLayout"
+           ng-include="'templates/layouts/' + WidgetHome.data.design.listLayout + '.html'">
+      </div>
+    </div>
+  </div>
+  <div ng-view="" class="slide content" ng-hide="showHome"></div>
 </div>
 </body>
 </html>

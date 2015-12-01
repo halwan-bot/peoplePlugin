@@ -1,122 +1,148 @@
 <div>
-   <!-- <div class="item clearfix">
-        <ol class="breadcrumb">
-            <li><a href="javaScript:void(0);">Breadcrumb</a></li>
-            <li><a href="javaScript:void(0);">Breadcrumb</a></li>
-            <li class="active">Breadcrumb</li>
-        </ol>
-    </div>-->
-    <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Top Image</span>
+  <div class="item clearfix">
+    <ol class="breadcrumb">
+      <li ng-repeat="breadcrumb in breadcrumbs"><a
+          ng-href="{{breadcrumb.options.link}}"
+          ng-show="breadcrumb.options.link">{{breadcrumb.label}}
+      </a>
+        <span
+            ng-href="{{breadcrumb.options.link}}" ng-hide="breadcrumb.options.link">{{breadcrumb.label}}
+        </span></li>
+    </ol>
+  </div>
+  <div class="item clearfix row">
+    <div class="labels col-md-3 padding-right-zero pull-left">
+      <span>Top Image</span>
+    </div>
+    <div class="main col-md-9 pull-right">
+      <div class="screens clearfix">
+        <div class="screen layouticon pull-left">
+          <a class="border-grey border-radius-three default-background-hover text-center"
+             ng-click="ContentPeople.selectTopImage()">
+            <span class="add-icon"
+                  ng-hide="ContentPeople.item.data.topImage">+</span>
+            <img ng-show="ContentPeople.item.data.topImage"
+                 ng-src="{{ContentPeople.item.data.topImage | getImageUrl : 82:110}}">
+          </a>
+          <span
+              class="icon btn-icon btn-delete-icon btn-danger btn-close transition-third"
+              ng-show="ContentPeople.item.data.topImage"
+              ng-click="ContentPeople.removeTopImage()"></span>
         </div>
-        <div class="main col-md-9 pull-right">
-            <div class="screens clearfix">
-                <div class="screen layouticon pull-left">
-					<a class="border-grey border-radius-three default-background-hover text-center" ng-click="ContentPeople.selectTopImage()">
-	                  	<span class="add-icon" ng-hide="ContentPeople.item.data.topImage">+</span>
-	                  	<img ng-show="ContentPeople.item.data.topImage" ng-src="{{ContentPeople.item.data.topImage | getImageUrl : 82:110}}">
-	                </a>
-	                <span class="icon btn-icon btn-delete-icon btn-danger btn-close transition-third" ng-show="ContentPeople.item.data.topImage" ng-click="ContentPeople.removeTopImage()"></span>	                
-                </div>
+      </div>
+    </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="labels col-md-3 padding-right-zero pull-left">
+      <span>First Name</span>
+    </div>
+    <div class="main col-md-9 pull-right">
+      <input type="text" class="form-control"
+             ng-model="ContentPeople.item.data.fName" placeholder="">
+    </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="labels col-md-3 padding-right-zero pull-left">
+      <span>Last Name</span>
+    </div>
+    <div class="main col-md-9 pull-right">
+      <input type="text" class="form-control"
+             ng-model="ContentPeople.item.data.lName" placeholder="">
+    </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="labels col-md-3 padding-right-zero pull-left">
+      <span>Position</span>
+    </div>
+    <div class="main col-md-9 pull-right">
+      <input type="text" class="form-control"
+             ng-model="ContentPeople.item.data.position" placeholder="">
+    </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="labels col-md-3 padding-right-zero pull-left">
+      <span>Deep Link URL</span>
+    </div>
+    <div class="main col-md-9 pull-right">
+      <span>{{ContentPeople.item.data.deepLinkUrl}}</span>
+    </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="labels col-md-3 padding-right-zero pull-left">
+      <span>Text</span>
+    </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="main col-md-12 pull-right">
+      <textarea class="form-control"
+                ui-tinymce="ContentPeople.bodyContentWYSIWYGOptions"
+                ng-model="ContentPeople.item.data.bodyContent"
+                placeholder="WYSIWYG"></textarea>
+    </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="labels col-md-3 padding-right-zero pull-left">
+      <span>Links</span>
+    </div>
+    <div class="main col-md-9 pull-right">
+      <div class="col-md-4 row">
+        <a class="btn btn-success pull-left stretch"
+           ng-click="ContentPeople.openAddLinkPopup()">Add Link</a>
+      </div>
+    </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="main col-md-12 pull-right">
+      <div class="draggable-list-view wide-list has-btn links-list"
+           ui-sortable="ContentPeople.linksSortableOptions"
+           ng-model="ContentPeople.item.data.socialLinks">
+        <div class="d-item double-line square-icon clearfix"
+             ng-repeat="_link in ContentPeople.item.data.socialLinks">
+          <span class="icon icon-menu cursor-grab pull-left"></span>
+
+          <div class="media-holder pull-left">
+            <img src="http://www.placehold.it/50x50">
+          </div>
+          <div class="copy pull-right">
+            <div class="col-md-4 padding-zero pull-left">
+              <a class="text-primary"
+                 ng-click="ContentPeople.openEditLink(_link,$index)"><span
+                  class="title ellipsis pull-left">{{_link.title}}</span></a>
+              <span class="title ellipsis pull-left">{{_link.url}}</span>
             </div>
-        </div>
-    </div>
-    <hr class="none">
-    <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>First Name</span>
-        </div>
-        <div class="main col-md-9 pull-right">
-            <input type="text" class="form-control" ng-model="ContentPeople.item.data.fName" placeholder="">
-        </div>
-    </div>
-    <hr class="none">
-    <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Last Name</span>
-        </div>
-        <div class="main col-md-9 pull-right">
-            <input type="text" class="form-control" ng-model="ContentPeople.item.data.lName" placeholder="">
-        </div>
-    </div>
-    <hr class="none">
-    <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Position</span>
-        </div>
-        <div class="main col-md-9 pull-right">
-            <input type="text" class="form-control" ng-model="ContentPeople.item.data.position" placeholder="">
-        </div>
-    </div>
-    <hr class="none">
-    <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Deep Link URL</span>
-        </div>
-        <div class="main col-md-9 pull-right">
-            <span>{{ContentPeople.item.data.deepLinkUrl}}</span>
-        </div>
-    </div>
-    <hr class="none">
-    <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Text</span>
-        </div>
-	</div>
-	<hr class="none">
-	<div class="item clearfix row">
-        <div class="main col-md-12 pull-right">
-            <textarea class="form-control" ui-tinymce="ContentPeople.bodyContentWYSIWYGOptions" ng-model="ContentPeople.item.data.bodyContent" placeholder="WYSIWYG"></textarea>
-        </div>
-    </div>
-    <hr class="none">
-    <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Links</span>
-        </div>
-        <div class="main col-md-9 pull-right">
-            <div class="col-md-4 row">
-                <a class="btn btn-success pull-left stretch" ng-click="ContentPeople.openAddLinkPopup()">Add Link</a>
+            <div class="col-md-7 padding-right-zero pull-left">
+              <span class="content ellipsis" data-ng-if="_link.deepLinkUrl">{{_link.deepLinkUrl}}</span>
             </div>
-		</div>
-	</div>
-	<hr class="none">
-	<div class="item clearfix row">        
-		<div class="main col-md-12 pull-right">
-			<div class="draggable-list-view wide-list has-btn links-list" ui-sortable="ContentPeople.linksSortableOptions" ng-model="ContentPeople.item.data.socialLinks">
-				<div class="d-item double-line square-icon clearfix" ng-repeat="_link in ContentPeople.item.data.socialLinks">
-					<span class="icon icon-menu cursor-grab pull-left"></span>
-					<div class="media-holder pull-left">
-						<img src="http://www.placehold.it/50x50">
-					</div>
-					<div class="copy pull-right">
-						<div class="col-md-4 padding-zero pull-left">
-							<a class="text-primary" ng-click="ContentPeople.openEditLink(_link,$index)"><span class="title ellipsis pull-left">{{_link.title}}</span></a>
-							<span class="title ellipsis pull-left">{{_link.url}}</span>
-						</div>
-						<div class="col-md-7 padding-right-zero pull-left">
-							<span class="content ellipsis" data-ng-if="_link.deepLinkUrl">{{_link.deepLinkUrl}}</span>
-						</div>
-						<div class="pull-right">
-							<span class="btn-icon btn-delete-icon btn-danger transition-third" ng-click="ContentPeople.removeLink($index)"></span>
-						</div>
-					</div>
-				</div>
-				
-				<!-- Show If No Items -->
-				<div class="well text-center margin-bottom-zero border-none" ng-hide="ContentPeople.item.data.socialLinks.length">
-					<p class="margin-zero">No items found.</p>
-				</div>
-			</div>
-        </div>
-    </div>
-    <hr class="none">
-    <div class="item clearfix row">
-        <div class="main col-md-9 pull-right">
-            <div class="col-md-6 pull-right padding-right-zero padding-left-ten">
-                <a class="btn btn-primary pull-right stretch" ng-click="ContentPeople.done()" ng-disabled="ContentPeople.unchangedData || !ContentPeople.isItemValid" href="javaScript:void(0);">Done</a>
+            <div class="pull-right">
+              <span class="btn-icon btn-delete-icon btn-danger transition-third"
+                    ng-click="ContentPeople.removeLink($index)"></span>
             </div>
+          </div>
         </div>
+
+        <!-- Show If No Items -->
+        <div class="well text-center margin-bottom-zero border-none"
+             ng-hide="ContentPeople.item.data.socialLinks.length">
+          <p class="margin-zero">No items found.</p>
+        </div>
+      </div>
     </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="main col-md-9 pull-right">
+      <div class="col-md-6 pull-right padding-right-zero padding-left-ten">
+        <a class="btn btn-primary pull-right stretch"
+           ng-click="ContentPeople.done()" href="javaScript:void(0);">Done</a>
+      </div>
+    </div>
+  </div>
 </div>

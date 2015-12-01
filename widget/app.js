@@ -34,39 +34,7 @@
 
       $routeProvider
         .when('/', {
-          templateUrl: 'templates/home.html',
-          controllerAs: 'WidgetHome',
-          controller: 'WidgetHomeCtrl',
-          resolve: {
-            PeopleInfo: ['$q', 'DB', 'COLLECTIONS', 'Location', function ($q, DB, COLLECTIONS, Location) {
-              var deferred = $q.defer();
-              var maxTry = 0;
-              var PeopleInfo = new DB(COLLECTIONS.peopleInfo);
-              var _bootstrap = function () {
-                Location.goToHome();
-              };
-              PeopleInfo.get().then(function success(result) {
-                  if (result && result.data && result.data.content && result.data.design) {
-                    deferred.resolve(result);
-                  }
-                  else {
-                    //error in bootstrapping
-                    //Check for infinite calling
-                    if (maxTry < 5) {
-                      maxTry++;
-                      _bootstrap(); //bootstrap again  _bootstrap();
-                    }
-                    else
-                      deferred.reject(null);
-                  }
-                },
-                function fail() {
-                  Location.goToHome();
-                }
-              );
-              return deferred.promise;
-            }]
-          }
+            template: '<div></div>'
         })
         .when('/people/:id', {
           templateUrl: 'templates/people.html',
@@ -111,8 +79,10 @@
         }
       };
     }])
-    .run(['Location', '$location', function (Location, $location) {
+    .run(['Location', '$location','$rootScope', function (Location, $location,$rootScope) {
       buildfire.messaging.onReceivedMessage = function (msg) {
+        $rootScope.showHome = true;
+        $rootScope.showHome = false;
         switch (msg.type) {
           case 'AddNewItem':
             Location.goTo("#/people/" + msg.id + "?stopSwitch=true");
@@ -133,11 +103,23 @@
       buildfire.navigation.onBackButtonClick = function () {
         if (($location.path() != '/')) {
           buildfire.messaging.sendMessageToControl({});
+          $rootScope.showHome = true;
           Location.goTo('#/');
         }
         else{
           buildfire.navigation.navigateHome();
         }
       };
-    }]);
+    }]).filter('cropImage', [function () {
+        return function (url, width, height, noDefault) {
+          if (noDefault) {
+            if (!url)
+              return '';
+          }
+          return buildfire.imageLib.cropImage(url, {
+            width: width,
+            height: height
+          });
+        };
+      }]);;
 })(window.angular, window.buildfire);

@@ -68,9 +68,14 @@
 
         //Initializing breadcrumb for current view
 
-        console.log("+++++++++++++++++++++++");
+        /*console.log("+++++++++++++++++++++++");
 
-        buildfire.history.push('Home', {'link': '#/'});
+         buildfire.history.push('Home', {'link': '#/'});*/
+
+        $rootScope.breadcrumbs = [{
+          'label': 'Home',
+          'options': {link: '#/'}
+        }];
 
 
         /**

@@ -26,16 +26,23 @@
         };
 
         //Initializing breadcrumb for current view
-        console.log("*************");
-        buildfire.history.push('People', {});
+        /*console.log("*************");
+         buildfire.history.push('People', {});
 
-        buildfire.history.get({pluginBreadcrumbsOnly: true}, function (err, result) {
-          console.log("History............", err, result);
-          if (err)
-            $rootScope.breadcrumbs = [];
-          else
-            $rootScope.breadcrumbs = result;
-        });
+         buildfire.history.get({pluginBreadcrumbsOnly: true}, function (err, result) {
+         console.log("History............", err, result);
+         if (err)
+         $rootScope.breadcrumbs = [];
+         else
+         $rootScope.breadcrumbs = result;
+         });*/
+
+        $rootScope.breadcrumbs = [{
+          'label': 'Home',
+          'options': {link: '#/'}
+        }, {
+          'label': 'People'
+        }];
 
         ContentPeople.item = {
           data: angular.copy(_data)

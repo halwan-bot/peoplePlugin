@@ -150,7 +150,7 @@
           $scope.imagesUpdated = false;
           $scope.$digest();
           if (event && event.tag) {
-            if (WidgetHome.data.design && event.data.design) {
+            if (event.data && WidgetHome.data.design && event.data.design) {
               WidgetHome.data.design = event.data.design;
             }
             if (!WidgetHome.data.content) {

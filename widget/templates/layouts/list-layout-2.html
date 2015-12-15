@@ -5,7 +5,7 @@
     </div>
     <div class="padded text-left text-overlay">
       <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)'
-         class="margin-bottom-zero"></p>
+         class="margin-bottom-zero"  ng-if="WidgetHome.showDescription(WidgetHome.data.content.description)"></p>
     </div>
     <div>
       <div class="list-items text-overlay" ng-if="WidgetHome.data"

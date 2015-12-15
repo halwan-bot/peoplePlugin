@@ -145,6 +145,9 @@
           if (html)
             return $sce.trustAsHtml(html);
         };
+        WidgetHome.showDescription = function (description) {
+          return !((description == '<p>&nbsp;<br></p>') || (description == '<p><br data-mce-bogus="1"></p>'));
+        };
         var onUpdateCallback = function (event) {
           console.log("*******************************************", event);
           $scope.imagesUpdated = false;
@@ -236,7 +239,7 @@
             $scope.$digest();
             $rootScope.$apply();
           }
-        }
+        };
         Buildfire.datastore.onUpdate(onUpdateCallback);
         WidgetHome.noMore = false;
         WidgetHome.loadMore = function (multi, times) {

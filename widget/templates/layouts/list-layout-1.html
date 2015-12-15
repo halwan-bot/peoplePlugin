@@ -4,7 +4,10 @@
       <div id="carousel" build-fire-carousel=""></div>
     </div>
     <div class="padded padding-bottom-zero text-left text-overlay">
-      <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)' class="margin-bottom-zero text-overlay"></p>
+      <p
+          ng-if="WidgetHome.showDescription(WidgetHome.data.content.description)"
+          ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)'
+          class="margin-bottom-zero text-overlay"></p>
       <hr class="small" ng-if="WidgetHome.items && WidgetHome.items.length">
       <div>
         <div class="list-items" ng-if="WidgetHome.data"
@@ -13,8 +16,9 @@
              infinite-scroll="WidgetHome.loadMore()"
              infinite-scroll-disabled="WidgetHome.noMore">
           <div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
-            <div class="media pull-left border-grey border-radius-four people-thumbnail"
-                 ng-if="item.data.topImage">
+            <div
+                class="media pull-left border-grey border-radius-four people-thumbnail"
+                ng-if="item.data.topImage">
               <img class="people-thumbnail-img text-overlay"
                    ng-src="{{item.data.topImage | getImageUrl : 100 : 60}}">
             </div>
@@ -22,12 +26,14 @@
               <p class="text-primary ellipsis margin-zero text-overlay"><a
                   href="#/people/{{item.id}}">{{item.data.fName}}
                 {{item.data.lName}}</a></p>
-                <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
-                   ng-if="item.data.position">{{item.data.position}}
-                </p>
-                <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
-                   ng-if="!item.data.bodyContent">
-                </p>
+
+              <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
+                 ng-if="item.data.position">{{item.data.position}}
+              </p>
+
+              <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
+                 ng-if="!item.data.bodyContent">
+              </p>
             </div>
           </div>
         </div>

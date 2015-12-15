@@ -34,7 +34,7 @@
   <div class="slide infinite-scroll-parent" data-ng-attr-style="background:url({{ backgroundImage| cropImage:deviceWidth:deviceHeight:true}}) !important; background-size:cover;">
      <div ng-controller="WidgetHomeCtrl as WidgetHome">
         <div ng-if="WidgetHome.data.design.listLayout"
-           ng-include="'templates/layouts/list-layout-1.html'">
+           ng-include="'templates/layouts/' + WidgetHome.data.design.listLayout + '.html'">
       </div>
     </div>
   </div>

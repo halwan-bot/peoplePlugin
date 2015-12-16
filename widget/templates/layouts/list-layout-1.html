@@ -4,30 +4,23 @@
       <div id="carousel" build-fire-carousel=""></div>
     </div>
     <div class="padded padding-bottom-zero text-left text-overlay">
-      <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)' class="margin-bottom-zero text-overlay"></p>
-      <hr class="small" ng-if="WidgetHome.items && WidgetHome.items.length">
+      <p
+          ng-if="WidgetHome.showDescription(WidgetHome.data.content.description)"
+          ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)'
+          class="margin-bottom-zero text-overlay"></p>
+      <hr class="small" ng-if="WidgetHome.showDescription(WidgetHome.data.content.description)">
       <div>
-        <div class="list-items" ng-if="WidgetHome.data"
-             infinite-scroll-distance="1"
-             data-infinite-container=".infinite-scroll-parent"
-             infinite-scroll="WidgetHome.loadMore()"
-             infinite-scroll-disabled="WidgetHome.noMore">
+        <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1" data-infinite-container=".infinite-scroll-parent" infinite-scroll="WidgetHome.loadMore()" infinite-scroll-disabled="WidgetHome.noMore">
           <div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
-            <div class="media pull-left border-grey border-radius-four people-thumbnail"
-                 ng-if="item.data.topImage">
-              <img class="people-thumbnail-img text-overlay"
-                   ng-src="{{item.data.topImage | getImageUrl : 100 : 60}}">
+            <div class="media pull-left border-radius-four people-thumbnail margin-right-ten" ng-if="item.data.topImage">
+              <img class="people-thumbnail-img text-overlay" ng-src="{{item.data.topImage | getImageUrl : 100 : 60}}">
             </div>
-            <div class="content margin-top-ten">
-              <p class="text-primary ellipsis margin-zero text-overlay"><a
-                  href="#/people/{{item.id}}">{{item.data.fName}}
-                {{item.data.lName}}</a></p>
-                <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
-                   ng-if="item.data.position">{{item.data.position}}
-                </p>
-                <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay"
-                   ng-if="!item.data.bodyContent">
-                </p>
+            <div class="content margin-top-ten padding-left-zero" style="min-height:50px;">
+              <p class="text-primary ellipsis margin-zero text-overlay">
+				<a href="#/people/{{item.id}}">{{item.data.fName}}{{item.data.lName}}</a>
+			  </p>
+              <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay" ng-if="item.data.position">{{item.data.position}}</p>
+              <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay" ng-if="!item.data.bodyContent"></p>
             </div>
           </div>
         </div>

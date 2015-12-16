@@ -8,7 +8,7 @@
           ng-if="WidgetHome.showDescription(WidgetHome.data.content.description)"
           ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)'
           class="margin-bottom-zero text-overlay"></p>
-      <hr class="small" ng-if="WidgetHome.items && WidgetHome.items.length">
+      <hr class="small" ng-if="WidgetHome.showDescription(WidgetHome.data.content.description)">
       <div>
         <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1" data-infinite-container=".infinite-scroll-parent" infinite-scroll="WidgetHome.loadMore()" infinite-scroll-disabled="WidgetHome.noMore">
           <div class="list-item clearfix" ng-repeat="item in WidgetHome.items">

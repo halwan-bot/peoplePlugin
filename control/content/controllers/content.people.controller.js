@@ -44,6 +44,9 @@
           'label': 'People'
         }];
 
+        //Scroll current view to top when page loaded.
+        buildfire.navigation.scrollTop();
+
         ContentPeople.item = {
           data: angular.copy(_data)
         };

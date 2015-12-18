@@ -44,6 +44,9 @@
             limit: _limit + 1 // the plus one is to check if there are any more
           };
 
+        //Scroll current view to top when page loaded.
+        buildfire.navigation.scrollTop();
+
         function isValidItem(item, index, array) {
           return item.fName || item.lName;
         }
@@ -286,8 +289,8 @@
           }
           Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
             if (err) {
-              return console.error('-----------err in getting list-------------', err);
               Buildfire.spinner.hide();
+              return console.error('-----------err in getting list-------------', err);
             }
             if (result.length <= _limit) {// to indicate there are more
               ContentHome.noMore = true;
@@ -318,6 +321,9 @@
          * method to open the importCSV Dialog
          */
         ContentHome.openImportCSVDialog = function () {
+
+          buildfire.navigation.scrollTop();
+
           var modalInstance = $modal
             .open({
               templateUrl: 'templates/modals/import-csv.html',
@@ -345,14 +351,16 @@
                   else {
                     console.info('File has been imported----------------------------');
                     ContentHome.busy = false;
+                    ContentHome.noMore = false;
                     ContentHome.items = null;
+                    searchOptions.skip = 0;
                     ContentHome.loadMore();
                     ContentHome.data.content.rankOfLastItem = rank;
                   }
                 });
               } else {
                 Buildfire.spinner.hide();
-                $scope.$apply();
+                //$scope.$apply();
                 ContentHome.csvDataInvalid = true;
                 $timeout(function hideCsvDataError() {
                   ContentHome.csvDataInvalid = false;
@@ -365,7 +373,7 @@
             }
           }, function (error) {
             Buildfire.spinner.hide();
-            $scope.apply();
+           // $scope.$apply();
             //do something on cancel
           });
         };
@@ -459,6 +467,9 @@
          * @param _index tells the index of item to be deleted.
          */
         ContentHome.removeListItem = function (_index) {
+
+          buildfire.navigation.scrollTop();
+
           var modalInstance = $modal.open({
             templateUrl: 'templates/modals/remove-people.html',
             controller: 'RemovePeoplePopupCtrl',
@@ -483,11 +494,6 @@
           }, function (data) {
             //do something on cancel
           });
-          setTimeout(function () {
-            var top = $('.d-item.double-line .btn-icon.btn-delete-icon ').offset().top;
-            var toppos = top + (_index * 20);
-            $('.modal-dialog.modal-sm').offset({top: toppos, left: 0});
-          }, 30);
         };
 
         /**

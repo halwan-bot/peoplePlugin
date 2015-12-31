@@ -1,3 +1,79 @@
+/* Plugin CSS */
+.people-banner .people-media img{
+	max-width:140px;
+	max-height:140px;
+}
+.people-plugin .people-info{
+	position:relative;
+}
+.people-plugin .people-info .icon{
+	color:#09a3ee;
+	font-size:24px;
+	vertical-align:top;
+}
+.people-plugin.layout1 .people-info .icon-holder{
+	position:absolute;
+	height:24px;
+	display:inline-block;
+	top:50%;
+	margin-top:-5px;
+	right:15px;
+}
+.people-plugin.layout2 .people-banner .people-bg{
+	background:rgba(0, 0, 0, 0.8);
+	padding:35px 0 !important;
+}
+.people-plugin.layout2 .people-banner .people-holder{
+	max-width:400px;
+	margin:0 auto;
+	padding:0 15px;
+}
+.people-plugin.layout2 .people-banner .people-media{
+	float:left;
+	max-width:100px;
+}
+.people-plugin.layout2 .people-banner .people-media img{
+	max-width:100%;
+	height:auto;
+}
+.people-plugin.layout2 .people-banner .people-info{
+	float:left;
+	width:62%;
+	padding-right:0;
+	padding-top:4px;
+	text-align:left !important;
+	color:#fff;
+}
+.people-plugin.layout3 .people-banner .people-bg{
+	padding:0 !important;
+	position:relative;
+}
+.people-plugin.layout3 .people-banner .people-media{
+	width:140px;
+	position:absolute;
+	left:0;
+	top:0;
+}
+.people-plugin.layout3 .people-banner .people-media img{
+	width:100%;
+	border-radius:0;
+	border:none;
+	max-width:inherit;
+	max-height:inherit;
+}
+.people-plugin.layout3 .people-banner .people-info{
+	width:100%;
+	padding-left:155px;
+	float:left;
+	height:140px;
+	margin-top:0 !important;
+	padding-top:24px;
+	text-align:left !important;
+}
+.people-plugin.layout4 .people-banner .people-bg{
+	background:rgba(255, 255, 255, 0.9);
+}
+/* End Plugin CSS */
 
 
 /*

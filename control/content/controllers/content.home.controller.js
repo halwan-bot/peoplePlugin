@@ -351,14 +351,16 @@
                   else {
                     console.info('File has been imported----------------------------');
                     ContentHome.busy = false;
+                    ContentHome.noMore = false;
                     ContentHome.items = null;
+                    searchOptions.skip = 0;
                     ContentHome.loadMore();
                     ContentHome.data.content.rankOfLastItem = rank;
                   }
                 });
               } else {
                 Buildfire.spinner.hide();
-                $scope.$apply();
+                //$scope.$apply();
                 ContentHome.csvDataInvalid = true;
                 $timeout(function hideCsvDataError() {
                   ContentHome.csvDataInvalid = false;
@@ -371,7 +373,7 @@
             }
           }, function (error) {
             Buildfire.spinner.hide();
-            $scope.$apply();
+           // $scope.$apply();
             //do something on cancel
           });
         };

@@ -16,7 +16,7 @@
 				<p class="margin-bottom-zero">{{WidgetPeople.item.position}}</p>
 			</div>
 			<div class="col-xs-2 padding-right-zero pull-right text-right text-overlay">
-				<a class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
+				<a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
 			</div>
 		</div>
 		<div class="padded padding-top-zero">

@@ -95,6 +95,10 @@
           }
         };
 
+        /* Get People details*/
+        WidgetHome.getPeopleDetails = function(peopleId){
+          Location.goTo("#/people/" + peopleId);
+        }
         /*crop image on the basis of width heights*/
         WidgetHome.cropImage = function (url, settings) {
           var options = {};
@@ -115,6 +119,9 @@
         var init = function () {
           var success = function (result) {
               WidgetHome.data = result.data;
+                if(!WidgetHome.data.design){
+                  WidgetHome.data.design={};
+                }
               if (WidgetHome.data.design) {
                 currentBackgroundImage = WidgetHome.data.design.backgroundImage;
                 currentItemLayout = WidgetHome.data.design.itemLayout;

@@ -73,6 +73,9 @@
 .people-plugin.layout4 .people-banner .people-bg{
 	background:rgba(255, 255, 255, 0.9);
 }
+.thumbnail-slider .thumbnail-slide img{
+	max-width:100%;
+}
 /* End Plugin CSS */
 
 

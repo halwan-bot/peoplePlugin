@@ -9,7 +9,7 @@
 					<div class="people-info text-center col-md-12">
 						<p class="ellipsis text-overlay" style="color:#fff !important;">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
 						<p class="ellipsis" style="color:#fff !important;">{{WidgetPeople.item.position}}</p>
-            			<a class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
+            			<a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
 					</div>
 				</div>
 			</div>

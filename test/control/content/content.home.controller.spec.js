@@ -16,14 +16,13 @@ describe('Unit : people Plugin content.home.controller.js', function () {
     $window = _$window_;
     $timeout = _$timeout_;
     buildfire =_Buildfire_;
-    Buildfire = { };
   }));
 
   beforeEach(function () {
     ContentHome = $controller('ContentHomeCtrl', {
       $scope: $scope,
       $q: $q,
-      Buildfire: Buildfire
+      Buildfire: buildfire
     });
   });
 

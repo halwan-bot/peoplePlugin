@@ -12,7 +12,7 @@
 					<div class="people-info text-center margin-top-fifteen col-md-12">
 						<p class="ellipsis margin-top-five">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
 						<p class="ellipsis text-overlay">{{WidgetPeople.item.position}}</p>
-            			<a class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
+            			<a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
 					</div>
 				</div>
 			</div>

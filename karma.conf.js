@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Wed Aug 12 2015 15:10:36 GMT+0530 (IST)
+// Generated on Wed Jan 06 2016 17:43:31 GMT+0530 (IST)
 
 module.exports = function (config) {
     config.set({
@@ -21,35 +21,31 @@ module.exports = function (config) {
             './bower_components/angular-animate/angular-animate.min.js',
             './bower_components/angular-route/angular-route.min.js',
             './bower_components/angular-bootstrap/ui-bootstrap.min.js',
-            './bower_components/angular-ui-tinymce/src/tinymce.js',
-            './bower_components/tinymce-dist/tinymce.min.js',
-            './bower_components/angular-sanitize/angular-sanitize.min.js',
-            './bower_components/videogular/videogular.min.js',
-            './bower_components/videogular-controls/vg-controls.min.js',
-            './bower_components/videogular-overlay-play/vg-overlay-play.min.js',
-            './bower_components/ng-videosharing-embed/build/ng-videosharing-embed.min.js',
+            './bower_components/ng-file-upload/ng-file-upload.min.js',
+            './bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js',
             './test/assets/buildfire.js',
-            './test/assets/ui-tinymce.js',
             './control/design/**/*.js',
             './control/content/**/*.js',
+            './control/settings/**/*.js',
             './widget/**/*.js',
-            'test/**/*.spec.js',
-            //'http://localhost:63342/sdk/scripts/buildfire.js',
-            'http://localhost:63342/sdk/plugins/pluginMediaCenterManualEntries/widget/assets/js/owl.carousel.min.js',
-            'http://localhost:63342/sdk/scripts/buildfire/services/media/audioPlayer.js',
-            'http://localhost:63342/sdk/scripts/buildfire/components/carousel/carousel.js'
+            './test/**/*.js'
         ],
 
 
         // list of files to exclude
-        exclude: [],
+        exclude: [
+        ],
 
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'control/**/!(assets|js)/*.js': ['coverage'],
-            'widget/**/*.js': ['coverage']
+            'widget/**/!(js)/*.js': ['coverage'],
+            'widget/*.js': ['coverage'],
+            'control/content/**/!(js)/*.js': ['coverage'],
+            'control/design/**/!(js)/*.js': ['coverage'],
+            'control/content/*.js': ['coverage'],
+            'control/design/*.js': ['coverage']
         },
 
         plugins: [
@@ -58,6 +54,7 @@ module.exports = function (config) {
             'karma-junit-reporter',
             'karma-coverage'
         ],
+
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
@@ -67,6 +64,7 @@ module.exports = function (config) {
             type: 'html',
             dir: 'coverage/'
         },
+
 
         // web server port
         port: 9876,
@@ -92,6 +90,10 @@ module.exports = function (config) {
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
-        singleRun: true
+        singleRun: false,
+
+        // Concurrency level
+        // how many browser should be started simultaneous
+        concurrency: Infinity
     })
-};
+}

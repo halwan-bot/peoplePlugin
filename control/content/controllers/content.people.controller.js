@@ -96,6 +96,9 @@
             ContentPeople.item = item;
             _data.dateCreated = item.data.dateCreated;
             _data.rank = item.data.rank;
+            if(item && item.data && !item.data.deepLinkUrl) {
+                ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: item.id});
+            }
             updateMasterItem(ContentPeople.item);
             $scope.$digest();
           });

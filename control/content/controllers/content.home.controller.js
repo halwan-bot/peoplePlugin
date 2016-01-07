@@ -13,7 +13,6 @@
           fName: "First Name",
           lName: "Last Name",
           position: "Position",
-          deepLinkUrl: "Deeplink Url",
           bodyContent: "Information"
         };
         var MANUALLY = 'Manually',
@@ -309,13 +308,24 @@
         /**
          * Used to show/hide alert message when item's deep-link copied from people list.
          */
-        ContentHome.openDeepLinkDialog = function () {
+        ContentHome.openDeepLinkDialog = function (item) {
           ContentHome.DeepLinkCopyUrl = true;
+          if(item && item.data && !item.data.deepLinkUrl) {
+              item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: item.id});
+              ContentHome.updateItemData(item);
+          }
           setTimeout(function () {
             ContentHome.DeepLinkCopyUrl = false;
             $scope.$apply();
           }, 1500);
         };
+
+          ContentHome.updateItemData = function (item) {
+              Buildfire.datastore.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err, result) {
+                  if (err)
+                      return console.error('There was a problem saving your data');
+              });
+          };
 
         /**
          * method to open the importCSV Dialog
@@ -453,7 +463,6 @@
             fName: "",
             lName: "",
             position: "",
-            deepLinkUrl: "",
             bodyContent: ""
           }];
           var csv = FormatConverter.jsonToCsv(angular.toJson(templateData), {

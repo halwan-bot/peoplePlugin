@@ -73,23 +73,23 @@ describe('Unit : people Plugin widget.home.controller.js success of PeopleInfo.g
     });
 
     describe('Units: units should be Defined', function () {
-        it('Buildfire shpuld be defined and be an object', function () {
+        it('Buildfire should be defined and be an object', function () {
             expect(Buildfire).toBeDefined();
             expect(typeof Buildfire).toEqual('object');
         });
-        it('TAG_NAMES shpuld be defined and be an object', function () {
+        it('TAG_NAMES should be defined and be an object', function () {
             expect(TAG_NAMES).toBeDefined();
             expect(typeof TAG_NAMES).toEqual('object');
         });
-        it('ERROR_CODE shpuld be defined and be an object', function () {
+        it('ERROR_CODE should be defined and be an object', function () {
             expect(ERROR_CODE).toBeDefined();
             expect(typeof ERROR_CODE).toEqual('object');
         });
-        it('Location shpuld be defined and be an object', function () {
+        it('Location should be defined and be an object', function () {
             expect(Location).toBeDefined();
             expect(typeof Location).toEqual('object');
         });
-        it('$sce shpuld be defined and be an object', function () {
+        it('$sce should be defined and be an object', function () {
             expect($sce).toBeDefined();
             expect(typeof $sce).toEqual('object');
         });
@@ -103,6 +103,31 @@ describe('Unit : people Plugin widget.home.controller.js success of PeopleInfo.g
             })
         });
     });
+
+
+    describe('WidgetHome.showDescription', function () {
+
+        it('should pass if it returns true when description is not the default html', function () {
+            var description = 'a';
+            var result = WidgetHome.showDescription(description);
+            expect(result).toEqual(true);
+        });
+
+        it('should pass if it returns true when description is not the default html', function () {
+            var description = '<p>&nbsp;<br></p>';
+            var result = WidgetHome.showDescription(description);
+            expect(result).not.toEqual(true);
+        });
+    });
+
+    describe('WidgetHome.getPeopleDetails', function () {
+
+        it('should pass if it returns true when description is not the default html', function () {
+            var peopleId = 'b3458999a';
+            WidgetHome.getPeopleDetails(peopleId);
+        });
+    });
+
 });
 describe('Unit : people Plugin widget.home.controller.js error of PeopleInfo.get inside init', function () {
     var WidgetHome,

@@ -5,7 +5,7 @@
   angular
     .module('peoplePluginContent', [
       'peopleEnums',
-      'peopleFilters',
+      'peopleFiltersContent',
       'peopleServices',
       'ngAnimate',
       'ngRoute',

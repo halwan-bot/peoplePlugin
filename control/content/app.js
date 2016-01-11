@@ -95,7 +95,7 @@
         link: function (scope, element, attrs) {
           element.context.onchange = function (event) {
             var files = event.target.files; //FileList object
-            for (var i = 0; i < files.length; i++) {
+            for (var i = 0; i < files && files.length; i++) {
               var file = files[i];
               var picReader = new FileReader();
               picReader.addEventListener("load", function (event) {

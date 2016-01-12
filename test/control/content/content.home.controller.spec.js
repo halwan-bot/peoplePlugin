@@ -1,15 +1,17 @@
 describe('Unit : people Plugin content.home.controller.js', function () {
-    var ContentHome, $scope, $rootScope, $controller, $modal, TAG_NAMES, Buildfire, ERROR_CODE, Location, $sce, $location, $timeout, RankOfLastItem;
+    var ContentHome, $scope, $rootScope, $controller, $modal, SORT, TAG_NAMES, Buildfire, ERROR_CODE, Location, $sce, $location, $timeout, RankOfLastItem, q;
     beforeEach(module('peoplePluginContent'));
     var editor;
-    beforeEach(inject(function (_$rootScope_, _$controller_, _TAG_NAMES_, _ERROR_CODE_, _Location_, _RankOfLastItem_, _$sce_, _$timeout_) {
+    beforeEach(inject(function (_$rootScope_, _$controller_, _SORT_, _TAG_NAMES_, _ERROR_CODE_, _Location_, _RankOfLastItem_, _$sce_, _$timeout_, _$q_) {
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         $controller = _$controller_;
+        SORT = _SORT_;
         TAG_NAMES = _TAG_NAMES_;
         ERROR_CODE = _ERROR_CODE_;
         Location = _Location_;
         $sce = _$sce_;
+        q= _$q_;
         Buildfire = {
             spinner: {
                 show: function () {
@@ -26,8 +28,9 @@ describe('Unit : people Plugin content.home.controller.js', function () {
             },
             datastore: {}
         };
-        Buildfire.datastore = jasmine.createSpyObj('Buildfire.datastore', ['search']);
+        Buildfire.datastore = jasmine.createSpyObj('Buildfire.datastore', ['search', 'save', 'update', 'bulkInsert']);
         Buildfire.components.carousel = jasmine.createSpyObj('Buildfire.components.carousel', ['editor']);
+
         RankOfLastItem = _RankOfLastItem_;
         Buildfire.components.carousel.editor.and.callFake(function () {
             return {
@@ -36,7 +39,15 @@ describe('Unit : people Plugin content.home.controller.js', function () {
                 }
             };
         });
-        $modal = {};
+        Buildfire.datastore.search.and.callFake(function (opts, tname, cb) {
+            cb({}, null);      // error case handle
+        });
+        Buildfire.datastore.update.and.callFake(function (id, data, tName, cb) {
+            cb({}, null);     // error case handle
+        });
+        Buildfire.datastore.bulkInsert.and.callFake(function (rows, tName, cb) {
+            cb({}, null);
+        });
         $modal = jasmine.createSpyObj('$modal', ['open']);
         $timeout = _$timeout_;
     }));
@@ -47,6 +58,7 @@ describe('Unit : people Plugin content.home.controller.js', function () {
             Buildfire: Buildfire,
             FormatConverter: {},
             RankOfLastItem: RankOfLastItem,
+            SORT: SORT,
             TAG_NAMES: TAG_NAMES,
             ERROR_CODE: ERROR_CODE,
             Location: Location,
@@ -86,12 +98,27 @@ describe('Unit : people Plugin content.home.controller.js', function () {
         });
     });
 
-    describe('ContentHome.exportCSV', function () {
+    describe('ContentHome.exportCSV Error case', function () {
+
         it('Should be defined and be a function', function () {
+            ContentHome.exportCSV();
+            $rootScope.$apply();
             expect(ContentHome.exportCSV).toBeDefined();
             expect(typeof ContentHome.exportCSV).toEqual('function');
         });
     });
+    /*describe('ContentHome.exportCSV Success case', function () {
+
+        it('Should be defined and be a function', function () {
+            Buildfire.datastore.search.and.callFake(function(opts,tname,cb){
+                cb(null,[{data:{'dateCreated':'asdafsdf','iconImage':'dsafsf.png','socialLinks':[],'rank':'12'}}])
+            });
+            ContentHome.exportCSV();
+            $rootScope.$apply();
+            expect(ContentHome.exportCSV).toBeDefined();
+            expect(typeof ContentHome.exportCSV).toEqual('function');
+        });
+    });*/
 
     describe('ContentHome.safeHtml', function () {
         it('Should be defined and be a function', function () {
@@ -110,8 +137,70 @@ describe('Unit : people Plugin content.home.controller.js', function () {
             expect(ContentHome.loadMore).toBeDefined();
             expect(typeof ContentHome.loadMore).toEqual('function');
         });
-        it('ContentHome.loadMore', function () {
+        it('ContentHome.loadMore with busy value as true', function () {
+            ContentHome.busy = true;
             ContentHome.loadMore('hello');
+//            expect(result).not.toEqual('');
+        });
+        it('ContentHome.loadMore with busy value as false', function () {
+            var sortByValues = [SORT.MANUALLY, SORT.OLDEST_TO_NEWEST, SORT.NEWEST_TO_OLDEST, SORT.FIRST_NAME_A_TO_Z, SORT.FIRST_NAME_Z_TO_A, SORT.LAST_NAME_A_TO_Z, SORT.LAST_NAME_Z_TO_A];
+            ContentHome.busy = false;
+            ContentHome.searchOptions = {sort: {}};
+            sortByValues.forEach(function (value) {
+                ContentHome.data = {content: {sortBy: value}};
+                ContentHome.loadMore(false);
+                ContentHome.busy = false;
+            });
+            /*Buildfire.datastore.search.and.callFake(function () {
+
+            });*/
+//            $rootScope.$digest();
+        });
+    });
+
+    describe('ContentHome.openImportCSVDialog ', function () {
+        it('Should be defined and be a function', function () {
+            expect(ContentHome.openImportCSVDialog ).toBeDefined();
+            expect(typeof ContentHome.openImportCSVDialog ).toEqual('function');
+        });
+        it('ContentHome.openImportCSVDialog ', function () {
+
+            $modal.open.and.callFake(function () {
+                var defer = q.defer();
+                defer.resolve([{}]);
+                return ({
+                    result:defer.promise
+                });
+            });
+
+            ContentHome.openImportCSVDialog();
+            $rootScope.$digest();
+//            expect(result).not.toEqual('');
+        });
+    });
+
+    describe('ContentHome.openDeepLinkDialog ', function () {
+        it('Should be defined and be a function', function () {
+            expect(ContentHome.openDeepLinkDialog ).toBeDefined();
+            expect(typeof ContentHome.openDeepLinkDialog ).toEqual('function');
+        });
+        it('ContentHome.openDeepLinkDialog ', function () {
+            var item = {data: {deepLinkUrl: 'asdfs45445lk'}};
+            ContentHome.openDeepLinkDialog(item);
+            $rootScope.$digest();
+//            expect(result).not.toEqual('');
+        });
+    });
+
+    describe('ContentHome.updateItemData ', function () {
+        it('Should be defined and be a function', function () {
+            expect(ContentHome.updateItemData ).toBeDefined();
+            expect(typeof ContentHome.updateItemData ).toEqual('function');
+        });
+        it('ContentHome.updateItemData ', function () {
+            var item = {data: {deepLinkUrl: 'asdfs45445lk'}};
+            ContentHome.updateItemData(item);
+            $rootScope.$digest();
 //            expect(result).not.toEqual('');
         });
     });
@@ -129,7 +218,7 @@ describe('Unit : people Plugin content.home.controller.js', function () {
                         dropIndex: 1
                     }
                 }};
-            ContentHome.items = []
+            ContentHome.items = [];
             ContentHome.itemSortableOptions.stop(e,ui);
 //            expect(result).not.toEqual('');
         });

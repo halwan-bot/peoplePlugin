@@ -1,8 +1,8 @@
 describe('Unit : people Plugin content.home.controller.js', function () {
-    var ContentHome, $scope, $rootScope, $controller, $modal, TAG_NAMES, Buildfire, ERROR_CODE, Location, $sce, $location, $timeout, RankOfLastItem;
+    var ContentHome, $scope, $rootScope, $controller, $modal, TAG_NAMES, Buildfire, ERROR_CODE, Location, $sce, $location, $timeout, RankOfLastItem, q;
     beforeEach(module('peoplePluginContent'));
     var editor;
-    beforeEach(inject(function (_$rootScope_, _$controller_, _TAG_NAMES_, _ERROR_CODE_, _Location_, _RankOfLastItem_, _$sce_, _$timeout_) {
+    beforeEach(inject(function (_$rootScope_, _$controller_, _TAG_NAMES_, _ERROR_CODE_, _Location_, _RankOfLastItem_, _$sce_, _$timeout_, _$q_) {
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         $controller = _$controller_;
@@ -10,6 +10,7 @@ describe('Unit : people Plugin content.home.controller.js', function () {
         ERROR_CODE = _ERROR_CODE_;
         Location = _Location_;
         $sce = _$sce_;
+        q= _$q_;
         Buildfire = {
             spinner: {
                 show: function () {
@@ -36,9 +37,8 @@ describe('Unit : people Plugin content.home.controller.js', function () {
                 }
             };
         });
-        $modal = {};
         $modal = jasmine.createSpyObj('$modal', ['open']);
-        $timeout = _$timeout_;
+               $timeout = _$timeout_;
     }));
 
     beforeEach(function () {
@@ -88,6 +88,7 @@ describe('Unit : people Plugin content.home.controller.js', function () {
 
     describe('ContentHome.exportCSV', function () {
         it('Should be defined and be a function', function () {
+            ContentHome.exportCSV();
             expect(ContentHome.exportCSV).toBeDefined();
             expect(typeof ContentHome.exportCSV).toEqual('function');
         });
@@ -116,6 +117,27 @@ describe('Unit : people Plugin content.home.controller.js', function () {
         });
     });
 
+    describe('ContentHome.openImportCSVDialog ', function () {
+        it('Should be defined and be a function', function () {
+            expect(ContentHome.openImportCSVDialog ).toBeDefined();
+            expect(typeof ContentHome.openImportCSVDialog ).toEqual('function');
+        });
+        it('ContentHome.openImportCSVDialog ', function () {
+
+            $modal.open.and.callFake(function () {
+                var defer = q.defer();
+                defer.resolve([{}]);
+                return ({
+                    result:defer.promise
+                });
+            });
+
+            ContentHome.openImportCSVDialog();
+            $rootScope.$digest();
+//            expect(result).not.toEqual('');
+        });
+    });
+
     describe('ContentHome.itemSortableOptions.stop', function () {
         it('Should be defined and be a function', function () {
             expect(ContentHome.itemSortableOptions.stop).toBeDefined();
@@ -129,7 +151,7 @@ describe('Unit : people Plugin content.home.controller.js', function () {
                         dropIndex: 1
                     }
                 }};
-            ContentHome.items = []
+            ContentHome.items = [];
             ContentHome.itemSortableOptions.stop(e,ui);
 //            expect(result).not.toEqual('');
         });

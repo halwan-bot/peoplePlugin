@@ -28,7 +28,7 @@ describe('Unit : people Plugin content.home.controller.js', function () {
             },
             datastore: {}
         };
-        Buildfire.datastore = jasmine.createSpyObj('Buildfire.datastore', ['search', 'save']);
+        Buildfire.datastore = jasmine.createSpyObj('Buildfire.datastore', ['search', 'save', 'update', 'bulkInsert']);
         Buildfire.components.carousel = jasmine.createSpyObj('Buildfire.components.carousel', ['editor']);
 
         RankOfLastItem = _RankOfLastItem_;
@@ -39,8 +39,14 @@ describe('Unit : people Plugin content.home.controller.js', function () {
                 }
             };
         });
-        Buildfire.datastore.search.and.callFake(function(opts,tname,cb){
-            cb({}, []);      // error case handle
+        Buildfire.datastore.search.and.callFake(function (opts, tname, cb) {
+            cb({}, null);      // error case handle
+        });
+        Buildfire.datastore.update.and.callFake(function (id, data, tName, cb) {
+            cb({}, null);     // error case handle
+        });
+        Buildfire.datastore.bulkInsert.and.callFake(function (rows, tName, cb) {
+            cb({}, null);
         });
         $modal = jasmine.createSpyObj('$modal', ['open']);
         $timeout = _$timeout_;
@@ -168,6 +174,32 @@ describe('Unit : people Plugin content.home.controller.js', function () {
             });
 
             ContentHome.openImportCSVDialog();
+            $rootScope.$digest();
+//            expect(result).not.toEqual('');
+        });
+    });
+
+    describe('ContentHome.openDeepLinkDialog ', function () {
+        it('Should be defined and be a function', function () {
+            expect(ContentHome.openDeepLinkDialog ).toBeDefined();
+            expect(typeof ContentHome.openDeepLinkDialog ).toEqual('function');
+        });
+        it('ContentHome.openDeepLinkDialog ', function () {
+            var item = {data: {deepLinkUrl: 'asdfs45445lk'}};
+            ContentHome.openDeepLinkDialog(item);
+            $rootScope.$digest();
+//            expect(result).not.toEqual('');
+        });
+    });
+
+    describe('ContentHome.updateItemData ', function () {
+        it('Should be defined and be a function', function () {
+            expect(ContentHome.updateItemData ).toBeDefined();
+            expect(typeof ContentHome.updateItemData ).toEqual('function');
+        });
+        it('ContentHome.updateItemData ', function () {
+            var item = {data: {deepLinkUrl: 'asdfs45445lk'}};
+            ContentHome.updateItemData(item);
             $rootScope.$digest();
 //            expect(result).not.toEqual('');
         });

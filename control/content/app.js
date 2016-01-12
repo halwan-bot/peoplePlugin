@@ -28,6 +28,18 @@
       INSERTED: 'inserted',
       UPDATED: 'updated'
     })
+    .constant('SORT', {
+        MANUALLY: 'Manually',
+        OLDEST_TO_NEWEST: 'Oldest to Newest',
+        NEWEST_TO_OLDEST: 'Newest to Oldest',
+        FIRST_NAME_A_TO_Z: 'First Name A-Z',
+        FIRST_NAME_Z_TO_A: 'First Name Z-A',
+        LAST_NAME_A_TO_Z: 'Last Name A-Z',
+        LAST_NAME_Z_TO_A: 'Last Name Z-A',
+        _limit: 10,
+        _maxLimit: 19,
+        _skip: 0
+    })
     .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/', {

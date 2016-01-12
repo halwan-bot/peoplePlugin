@@ -1,11 +1,12 @@
 describe('Unit : people Plugin content.home.controller.js', function () {
-    var ContentHome, $scope, $rootScope, $controller, $modal, TAG_NAMES, Buildfire, ERROR_CODE, Location, $sce, $location, $timeout, RankOfLastItem, q;
+    var ContentHome, $scope, $rootScope, $controller, $modal, SORT, TAG_NAMES, Buildfire, ERROR_CODE, Location, $sce, $location, $timeout, RankOfLastItem, q;
     beforeEach(module('peoplePluginContent'));
     var editor;
-    beforeEach(inject(function (_$rootScope_, _$controller_, _TAG_NAMES_, _ERROR_CODE_, _Location_, _RankOfLastItem_, _$sce_, _$timeout_, _$q_) {
+    beforeEach(inject(function (_$rootScope_, _$controller_, _SORT_, _TAG_NAMES_, _ERROR_CODE_, _Location_, _RankOfLastItem_, _$sce_, _$timeout_, _$q_) {
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         $controller = _$controller_;
+        SORT = _SORT_;
         TAG_NAMES = _TAG_NAMES_;
         ERROR_CODE = _ERROR_CODE_;
         Location = _Location_;
@@ -47,6 +48,7 @@ describe('Unit : people Plugin content.home.controller.js', function () {
             Buildfire: Buildfire,
             FormatConverter: {},
             RankOfLastItem: RankOfLastItem,
+            SORT: SORT,
             TAG_NAMES: TAG_NAMES,
             ERROR_CODE: ERROR_CODE,
             Location: Location,
@@ -111,9 +113,24 @@ describe('Unit : people Plugin content.home.controller.js', function () {
             expect(ContentHome.loadMore).toBeDefined();
             expect(typeof ContentHome.loadMore).toEqual('function');
         });
-        it('ContentHome.loadMore', function () {
+        it('ContentHome.loadMore with busy value as true', function () {
+            ContentHome.busy = true;
             ContentHome.loadMore('hello');
 //            expect(result).not.toEqual('');
+        });
+        it('ContentHome.loadMore with busy value as false', function () {
+            var sortByValues = ['Oldest to Newest', 'Newest to Oldest', 'First Name A-Z', 'First Name Z-A', 'Last Name A-Z', 'Last Name Z-A'];
+            ContentHome.busy = false;
+            ContentHome.searchOptions = {sort: {}};
+            sortByValues.forEach(function (value) {
+                ContentHome.data = {content: {sortBy: value}};
+                ContentHome.loadMore(false);
+                ContentHome.busy = false;
+            });
+            /*Buildfire.datastore.search.and.callFake(function () {
+
+            });*/
+//            $rootScope.$digest();
         });
     });
 

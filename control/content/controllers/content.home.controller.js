@@ -227,7 +227,6 @@
          * @returns object
          */
         var getSearchOptions = function (value) {
-            console.log('inside getsearchoptions method>>>>>>>>>>>>>>>>>>>>>>>>>>>>', value, ContentHome.searchOptions);
           ContentHome.itemSortableOptions.disabled = true;
           switch (value) {
             case SORT.OLDEST_TO_NEWEST:
@@ -268,7 +267,6 @@
 
           ContentHome.busy = true;
           if (ContentHome.data && ContentHome.data.content.sortBy && !search) {
-              console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<LLLLLLL',ContentHome.data.content.sortBy);
               ContentHome.searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
           }
           Buildfire.datastore.search(ContentHome.searchOptions, TAG_NAMES.PEOPLE, function (err, result) {

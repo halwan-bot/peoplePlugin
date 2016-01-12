@@ -28,8 +28,9 @@ describe('Unit : people Plugin content.home.controller.js', function () {
             },
             datastore: {}
         };
-        Buildfire.datastore = jasmine.createSpyObj('Buildfire.datastore', ['search']);
+        Buildfire.datastore = jasmine.createSpyObj('Buildfire.datastore', ['search', 'save']);
         Buildfire.components.carousel = jasmine.createSpyObj('Buildfire.components.carousel', ['editor']);
+
         RankOfLastItem = _RankOfLastItem_;
         Buildfire.components.carousel.editor.and.callFake(function () {
             return {
@@ -38,8 +39,11 @@ describe('Unit : people Plugin content.home.controller.js', function () {
                 }
             };
         });
+        Buildfire.datastore.search.and.callFake(function(opts,tname,cb){
+            cb({}, []);      // error case handle
+        });
         $modal = jasmine.createSpyObj('$modal', ['open']);
-               $timeout = _$timeout_;
+        $timeout = _$timeout_;
     }));
 
     beforeEach(function () {
@@ -88,13 +92,27 @@ describe('Unit : people Plugin content.home.controller.js', function () {
         });
     });
 
-    describe('ContentHome.exportCSV', function () {
+    describe('ContentHome.exportCSV Error case', function () {
+
         it('Should be defined and be a function', function () {
             ContentHome.exportCSV();
+            $rootScope.$apply();
             expect(ContentHome.exportCSV).toBeDefined();
             expect(typeof ContentHome.exportCSV).toEqual('function');
         });
     });
+    /*describe('ContentHome.exportCSV Success case', function () {
+
+        it('Should be defined and be a function', function () {
+            Buildfire.datastore.search.and.callFake(function(opts,tname,cb){
+                cb(null,[{data:{'dateCreated':'asdafsdf','iconImage':'dsafsf.png','socialLinks':[],'rank':'12'}}])
+            });
+            ContentHome.exportCSV();
+            $rootScope.$apply();
+            expect(ContentHome.exportCSV).toBeDefined();
+            expect(typeof ContentHome.exportCSV).toEqual('function');
+        });
+    });*/
 
     describe('ContentHome.safeHtml', function () {
         it('Should be defined and be a function', function () {
@@ -119,7 +137,7 @@ describe('Unit : people Plugin content.home.controller.js', function () {
 //            expect(result).not.toEqual('');
         });
         it('ContentHome.loadMore with busy value as false', function () {
-            var sortByValues = ['Oldest to Newest', 'Newest to Oldest', 'First Name A-Z', 'First Name Z-A', 'Last Name A-Z', 'Last Name Z-A'];
+            var sortByValues = [SORT.MANUALLY, SORT.OLDEST_TO_NEWEST, SORT.NEWEST_TO_OLDEST, SORT.FIRST_NAME_A_TO_Z, SORT.FIRST_NAME_Z_TO_A, SORT.LAST_NAME_A_TO_Z, SORT.LAST_NAME_Z_TO_A];
             ContentHome.busy = false;
             ContentHome.searchOptions = {sort: {}};
             sortByValues.forEach(function (value) {

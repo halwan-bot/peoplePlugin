@@ -5,7 +5,7 @@
   angular
     .module('peoplePluginContent', [
       'peopleEnums',
-      'peopleFilters',
+      'peopleFiltersContent',
       'peopleServices',
       'ngAnimate',
       'ngRoute',
@@ -27,6 +27,18 @@
     .constant('STATUS_CODE', {
       INSERTED: 'inserted',
       UPDATED: 'updated'
+    })
+    .constant('SORT', {
+        MANUALLY: 'Manually',
+        OLDEST_TO_NEWEST: 'Oldest to Newest',
+        NEWEST_TO_OLDEST: 'Newest to Oldest',
+        FIRST_NAME_A_TO_Z: 'First Name A-Z',
+        FIRST_NAME_Z_TO_A: 'First Name Z-A',
+        LAST_NAME_A_TO_Z: 'Last Name A-Z',
+        LAST_NAME_Z_TO_A: 'Last Name Z-A',
+        _limit: 10,
+        _maxLimit: 19,
+        _skip: 0
     })
     .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
@@ -95,7 +107,7 @@
         link: function (scope, element, attrs) {
           element.context.onchange = function (event) {
             var files = event.target.files; //FileList object
-            for (var i = 0; i < files.length; i++) {
+            for (var i = 0; i < files && files.length; i++) {
               var file = files[i];
               var picReader = new FileReader();
               picReader.addEventListener("load", function (event) {

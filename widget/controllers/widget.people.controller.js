@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetPeopleCtrl', ['$scope', '$window', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location','$rootScope',
-        function ($scope, $window, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce,$location,$rootScope) {
+        .controller('WidgetPeopleCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location','$rootScope',
+        function ($scope, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce,$location,$rootScope) {
             var WidgetPeople = this;
             var currentItemLayout,
                 currentListLayout;

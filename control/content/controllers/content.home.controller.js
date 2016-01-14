@@ -3,8 +3,8 @@
 (function (angular, buildfire) {
   angular
     .module('peoplePluginContent')
-    .controller('ContentHomeCtrl', ['$scope', '$window', '$modal', 'Buildfire', '$csv', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout', 'Location', '$sce', 'PeopleInfo', '$rootScope',
-      function ($scope, $window, $modal, Buildfire, FormatConverter, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout, Location, $sce, PeopleInfo, $rootScope) {
+    .controller('ContentHomeCtrl', ['$scope', '$modal', 'Buildfire', '$csv', 'SORT', 'TAG_NAMES', 'ERROR_CODE', 'RankOfLastItem', '$timeout', 'Location', '$sce', 'PeopleInfo', '$rootScope',
+      function ($scope, $modal, Buildfire, FormatConverter, SORT, TAG_NAMES, ERROR_CODE, RankOfLastItem, $timeout, Location, $sce, PeopleInfo, $rootScope) {
         /**
          * List of options available for sorting people list.
          * */
@@ -13,36 +13,13 @@
           fName: "First Name",
           lName: "Last Name",
           position: "Position",
-          deepLinkUrl: "Deeplink Url",
           bodyContent: "Information"
         };
-        var MANUALLY = 'Manually',
-          OLDEST_TO_NEWEST = 'Oldest to Newest',
-          NEWEST_TO_OLDEST = 'Newest to Oldest',
-          FIRST_NAME_A_TO_Z = 'First Name A-Z',
-          FIRST_NAME_Z_TO_A = 'First Name Z-A',
-          LAST_NAME_A_TO_Z = 'Last Name A-Z',
-          LAST_NAME_Z_TO_A = 'Last Name Z-A',
-
-          /**
-           * _limit used to specify number of records per page.
-           * _skip used to specify nextPageToken.
-           * @type {number}
-           * @private
-           */
-          _limit = 10,
-          _maxLimit = 19,
-          _skip = 0,
 
           /**
            * SearchOptions are using for searching , sorting people and fetching people list
            * @type object
            */
-          searchOptions = {
-            filter: {"$json.fName": {"$regex": '/*'}},
-            skip: _skip,
-            limit: _limit + 1 // the plus one is to check if there are any more
-          };
 
         //Scroll current view to top when page loaded.
         buildfire.navigation.scrollTop();
@@ -60,7 +37,11 @@
 
         var initialLoad = false;
         var ContentHome = this;
-
+        ContentHome.searchOptions = {
+              filter: {"$json.fName": {"$regex": '/*'}},
+              skip: SORT._skip,
+              limit: SORT._limit + 1 // the plus one is to check if there are any more
+        };
 
         /**
          * ContentHome.busy used to enable/disable infiniteScroll. if busy true it means there is not more data.
@@ -98,13 +79,13 @@
          * @type {*[]}
          */
         ContentHome.sortingOptions = [
-          MANUALLY,
-          OLDEST_TO_NEWEST,
-          NEWEST_TO_OLDEST,
-          FIRST_NAME_A_TO_Z,
-          FIRST_NAME_Z_TO_A,
-          LAST_NAME_A_TO_Z,
-          LAST_NAME_Z_TO_A
+          SORT.MANUALLY,
+          SORT.OLDEST_TO_NEWEST,
+          SORT.NEWEST_TO_OLDEST,
+          SORT.FIRST_NAME_A_TO_Z,
+          SORT.FIRST_NAME_Z_TO_A,
+          SORT.LAST_NAME_A_TO_Z,
+          SORT.LAST_NAME_Z_TO_A
         ];
 
 
@@ -208,7 +189,7 @@
             }
           }
         };
-        ContentHome.itemSortableOptions.disabled = !(ContentHome.data.content.sortBy === MANUALLY);
+        ContentHome.itemSortableOptions.disabled = !(ContentHome.data.content.sortBy === SORT.MANUALLY);
 
         ContentHome.DeepLinkCopyUrl = false;
 
@@ -248,30 +229,30 @@
         var getSearchOptions = function (value) {
           ContentHome.itemSortableOptions.disabled = true;
           switch (value) {
-            case OLDEST_TO_NEWEST:
-              searchOptions.sort = {"dateCreated": 1};
+            case SORT.OLDEST_TO_NEWEST:
+              ContentHome.searchOptions.sort = {"dateCreated": 1};
               break;
-            case NEWEST_TO_OLDEST:
-              searchOptions.sort = {"dateCreated": -1};
+            case SORT.NEWEST_TO_OLDEST:
+                ContentHome.searchOptions.sort = {"dateCreated": -1};
               break;
-            case FIRST_NAME_A_TO_Z:
-              searchOptions.sort = {"fName": 1};
+            case SORT.FIRST_NAME_A_TO_Z:
+                ContentHome.searchOptions.sort = {"fName": 1};
               break;
-            case FIRST_NAME_Z_TO_A:
-              searchOptions.sort = {"fName": -1};
+            case SORT.FIRST_NAME_Z_TO_A:
+                ContentHome.searchOptions.sort = {"fName": -1};
               break;
-            case LAST_NAME_A_TO_Z:
-              searchOptions.sort = {"lName": 1};
+            case SORT.LAST_NAME_A_TO_Z:
+                ContentHome.searchOptions.sort = {"lName": 1};
               break;
-            case LAST_NAME_Z_TO_A:
-              searchOptions.sort = {"lName": -1};
+            case SORT.LAST_NAME_Z_TO_A:
+                ContentHome.searchOptions.sort = {"lName": -1};
               break;
             default :
               ContentHome.itemSortableOptions.disabled = false;
-              searchOptions.sort = {"rank": 1};
+                ContentHome.searchOptions.sort = {"rank": 1};
               break;
           }
-          return searchOptions;
+          return ContentHome.searchOptions;
         };
 
         /**
@@ -279,25 +260,26 @@
          */
         ContentHome.noMore = false;
         ContentHome.loadMore = function (search) {
-          Buildfire.spinner.show();
+            Buildfire.spinner.show();
           if (ContentHome.busy) {
             return;
           }
+
           ContentHome.busy = true;
           if (ContentHome.data && ContentHome.data.content.sortBy && !search) {
-            searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
+              ContentHome.searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
           }
-          Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+          Buildfire.datastore.search(ContentHome.searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
             if (err) {
               Buildfire.spinner.hide();
               return console.error('-----------err in getting list-------------', err);
             }
-            if (result.length <= _limit) {// to indicate there are more
+            if (result.length <= SORT._limit) {// to indicate there are more
               ContentHome.noMore = true;
               Buildfire.spinner.hide();
             } else {
               result.pop();
-              searchOptions.skip = searchOptions.skip + _limit;
+              ContentHome.searchOptions.skip = ContentHome.searchOptions.skip + SORT._limit;
               ContentHome.noMore = false;
             }
             ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
@@ -309,13 +291,24 @@
         /**
          * Used to show/hide alert message when item's deep-link copied from people list.
          */
-        ContentHome.openDeepLinkDialog = function () {
+        ContentHome.openDeepLinkDialog = function (item) {
           ContentHome.DeepLinkCopyUrl = true;
+          if(item && item.data && !item.data.deepLinkUrl) {
+              item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: item.id});
+              ContentHome.updateItemData(item);
+          }
           setTimeout(function () {
             ContentHome.DeepLinkCopyUrl = false;
             $scope.$apply();
           }, 1500);
         };
+
+          ContentHome.updateItemData = function (item) {
+              Buildfire.datastore.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err, result) {
+                  if (err)
+                      return console.error('There was a problem saving your data');
+              });
+          };
 
         /**
          * method to open the importCSV Dialog
@@ -353,7 +346,7 @@
                     ContentHome.busy = false;
                     ContentHome.noMore = false;
                     ContentHome.items = null;
-                    searchOptions.skip = 0;
+                    ContentHome.searchOptions.skip = 0;
                     ContentHome.loadMore();
                     ContentHome.data.content.rankOfLastItem = rank;
                   }
@@ -385,7 +378,7 @@
           getRecords({
               filter: {"$json.fName": {"$regex": '/*'}},
               skip: 0,
-              limit: _maxLimit + 1 // the plus one is to check if there are any more
+              limit: SORT._maxLimit + 1 // the plus one is to check if there are any more
             },
             []
             , function (err, data) {
@@ -431,13 +424,13 @@
               console.error('-----------err in getting list-------------', err);
               return callback(err, []);
             }
-            if (result.length <= _maxLimit) {// to indicate there are more
+            if (result.length <= SORT._maxLimit) {// to indicate there are more
               records = records.concat(result);
               return callback(null, records);
             }
             else {
               result.pop();
-              searchOption.skip = searchOption.skip + _maxLimit;
+              searchOption.skip = searchOption.skip + SORT._maxLimit;
               records = records.concat(result);
               return getRecords(searchOption, records, callback);
             }
@@ -453,7 +446,6 @@
             fName: "",
             lName: "",
             position: "",
-            deepLinkUrl: "",
             bodyContent: ""
           }];
           var csv = FormatConverter.jsonToCsv(angular.toJson(templateData), {
@@ -502,14 +494,14 @@
          */
         ContentHome.searchListItem = function (value) {
           var fullName = '';
-          searchOptions.skip = 0;
+          ContentHome.searchOptions.skip = 0;
           ContentHome.busy = false;
           ContentHome.items = null;
           if (value) {
             value = value.trim();
             if (value.indexOf(' ') !== -1) {
               fullName = value.split(' ');
-              searchOptions.filter = {
+              ContentHome.searchOptions.filter = {
                 "$and": [{
                   "$json.fName": {
                     "$regex": fullName[0],
@@ -519,7 +511,7 @@
               };
             } else {
               fullName = value;
-              searchOptions.filter = {
+              ContentHome.searchOptions.filter = {
                 "$or": [{
                   "$json.fName": {
                     "$regex": fullName,
@@ -529,7 +521,7 @@
               };
             }
           } else {
-            searchOptions.filter = {"$json.fName": {"$regex": '/*'}};
+            ContentHome.searchOptions.filter = {"$json.fName": {"$regex": '/*'}};
           }
           ContentHome.loadMore('search');
         };
@@ -543,7 +535,7 @@
             console.info('There was a problem sorting your data');
           } else {
             ContentHome.items = null;
-            searchOptions.skip = 0;
+            ContentHome.searchOptions.skip = 0;
             ContentHome.busy = false;
             ContentHome.data.content.sortBy = value;
             ContentHome.loadMore();

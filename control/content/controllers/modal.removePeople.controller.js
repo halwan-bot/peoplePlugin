@@ -15,4 +15,4 @@
                 $modalInstance.dismiss('No');
             };
         }])
-})(window.angular, undefined);
+})(window.angular);

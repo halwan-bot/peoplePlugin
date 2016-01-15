@@ -14,7 +14,9 @@ describe('Unit : people Plugin widget.home.controller.js success of PeopleInfo.g
 
     beforeEach(module('peoplePluginWidget', function ($provide) {
         $provide.service('Buildfire', function () {
-            this.datastore = jasmine.createSpyObj('datastore', ['get', 'onUpdate']);
+            this.datastore = jasmine.createSpyObj('datastore', ['get', 'onUpdate','search']);
+            this.imageLib=jasmine.createSpyObj('imageLib',['cropImage','resizeImage']);
+            this.spinner=jasmine.createSpyObj('spinner',['show','hide']);
             this.datastore.get.and.callFake(function (_tagName, callback) {
                 if (_tagName) {
                     callback(null, {data: {
@@ -31,13 +33,35 @@ describe('Unit : people Plugin widget.home.controller.js success of PeopleInfo.g
                     callback('Error', null);
                 }
             });
+            this.datastore.search.and.callFake(function (options,_tagName, callback) {
+                if (_tagName) {
+                    callback(null, [{data: {
+                        design: {
+                            backgroundImage: '',
+                            itemLayout: '',
+                            listLayout: ''
+                        },
+                        content: {
+                            sortBy: 'Newest'
+                        }
+                    }}]);
+                } else {
+                    callback('Error', null);
+                }
+            });
             this.datastore.onUpdate.and.callFake(function (callback) {
-                callback('Event');
+                callback({tag: 'peopleInfo', data: {design: {backgroundImage: '', itemLayout: 'layout1',listLayout:'listLayout1'},content:{sortBy:'Newest'}}});
                 return {
                     clear: function () {
                         return true
                     }
                 }
+            });
+            this.imageLib.cropImage.and.callFake(function (url,options) {
+                return url;
+            });
+            this.imageLib.resizeImage.and.callFake(function (url,options) {
+                return url;
             });
         });
     }));
@@ -70,6 +94,7 @@ describe('Unit : people Plugin widget.home.controller.js success of PeopleInfo.g
             DB: DB,
             COLLECTIONS: COLLECTIONS
         });
+        WidgetHome.items=[{id:'people1'}];
     });
 
     describe('Units: units should be Defined', function () {
@@ -125,6 +150,40 @@ describe('Unit : people Plugin widget.home.controller.js success of PeopleInfo.g
         it('should pass if it returns true when description is not the default html', function () {
             var peopleId = 'b3458999a';
             WidgetHome.getPeopleDetails(peopleId);
+        });
+    });
+    describe('WidgetHome.cropImage', function () {
+
+        it('should pass if it returns true when cropImage is not the default html', function () {
+            WidgetHome.cropImage('image.png',{height:100,width:100});
+            WidgetHome.cropImage();
+        });
+    });
+    describe('$scope.isDefined', function () {
+        it('should pass if it returns true when $scope.isDefined is not the default html', function () {
+            scope.isDefined({imageUrl:'abc.png'});
+        });
+    });
+    describe('WidgetHome.safeHtml', function () {
+        it('should pass if it returns true when WidgetHome.safeHtml is not the default html', function () {
+            WidgetHome.safeHtml('<div>Div Content</div>');
+        });
+    });
+    describe('WidgetHome.resizeImage', function () {
+        it('should pass if it returns true when WidgetHome.resizeImage is not the default html', function () {
+            WidgetHome.resizeImage('abc.png',120,120);
+        });
+    });
+    describe('WidgetHome.loadMore', function () {
+        it('should pass if it returns true when WidgetHome.loadMore is not the default html', function () {
+            WidgetHome.items=[{}];
+            WidgetHome.loadMore();
+        });
+        it('should pass if it returns true when WidgetHome.loadMore Busy Case', function () {
+            WidgetHome.busy=true;
+            WidgetHome.noMore=false;
+            $rootScope.$apply();
+            WidgetHome.loadMore({},2);
         });
     });
 

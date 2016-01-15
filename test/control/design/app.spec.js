@@ -45,7 +45,7 @@ describe('Unit: peoplePluginDesign filter', function () {
     expect(result).toEqual("http://s7obnu.cloudimage.io/s/resizenp/88x124/");
   });
 
-  it('it should pass if "getImageUrl" filter returns resized image url', function () {
+  it('it should pass if "getImageUrl" filter returns crop image url', function () {
     var result;
     result = filter('getImageUrl')('https://imagelibserver.s3.amazonaws.com/25935164-2add-11e5-9d04-02f7ca55c361/950a50c0-400a-11e5-9af5-3f5e0d725ccb.jpg', 88, 124, 'cropImage');
     expect(result).toEqual("http://s7obnu.cloudimage.io/s/crop/88x124/https://imagelibserver.s3.amazonaws.com/25935164-2add-11e5-9d04-02f7ca55c361/950a50c0-400a-11e5-9af5-3f5e0d725ccb.jpg");

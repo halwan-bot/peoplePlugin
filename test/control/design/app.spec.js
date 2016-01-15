@@ -1,4 +1,4 @@
-describe('Unit: peoplePluginDesign app', function () {
+xdescribe('Unit: peoplePluginDesign app', function () {
   describe('Unit: app routes', function () {
     beforeEach(module('peoplePluginDesign'));
     var location, route, rootScope;

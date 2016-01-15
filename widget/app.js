@@ -5,7 +5,7 @@
     .module('peoplePluginWidget', [
       'peopleEnums',
       'peopleFilters',
-      'peopleServices',
+      'peopleWidgetServices',
       'ngAnimate',
       'ngRoute',
       'ui.bootstrap',

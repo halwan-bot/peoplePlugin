@@ -3,7 +3,7 @@
 (function (angular, buildfire, location) {
     //created mediaCenterWidget module
     angular
-        .module('peopleServices', ['peopleEnums'])
+        .module('peopleWidgetServices', ['peopleEnums'])
         .provider('Buildfire', [function () {
             this.$get = function () {
                 return buildfire;

@@ -73,6 +73,49 @@
 .people-plugin.layout4 .people-banner .people-bg{
 	background:rgba(255, 255, 255, 0.9);
 }
+.thumbnail-slider .thumbnail-slide img{
+	max-width:100%;
+}
+.people-plugin .list-items .list-item:first-child::before{
+	border:none !important;
+	opacity:0;
+	display:none;
+}
+.people-plugin.listlayout1 .list-items .list-item:first-child .content{
+	padding-top:10px;
+}
+
+/* List Items */
+.list-items .list-item{
+	position:relative;
+}
+.list-items .list-item:before,
+.layout3 .list-layout .list-item:after{
+	content:'';
+	border-top:1px solid #ddd !important;
+	opacity:0.25;
+	top:0;
+	left:0;
+	width:100%;
+	position:absolute;
+}
+.layout3 .list-layout .list-item:after{
+	border-top:none !important;
+	top:inherit;
+	bottom:0;
+	border-bottom:1px solid #ddd !important;
+}
+.list-items .list-item + .list-item{
+	padding-top:10px;
+	margin-top:10px;
+}
+.list-items .list-item .media{
+	width:100px;
+}
+.list-items .list-item .content{
+	padding-left:110px;
+	width:100%;
+}
 /* End Plugin CSS */
 
 

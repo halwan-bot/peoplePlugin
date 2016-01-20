@@ -3,7 +3,7 @@
 (function (angular, buildfire, location) {
     //created mediaCenterWidget module
     angular
-        .module('peopleServices', ['peopleEnums'])
+        .module('peopleWidgetServices', ['peopleEnums'])
         .provider('Buildfire', [function () {
             this.$get = function () {
                 return buildfire;
@@ -98,7 +98,7 @@
                     }
                 });
                 return deferred.promise;
-            }
+            };
             DB.prototype.update = function (id, item) {
                 var that = this;
                 var deferred = $q.defer();
@@ -117,7 +117,7 @@
                     } else {
                         return deferred.reject(new Error(MESSAGES.ERROR.NOT_FOUND));
                     }
-                })
+                });
                 return deferred.promise;
             };
             DB.prototype.save = function (item) {
@@ -168,7 +168,7 @@
                 onUpdateListeners = [];
 
                 return deferred.promise;
-            }
+            };
             return DB;
         }])
         .factory('Utility', [function () {

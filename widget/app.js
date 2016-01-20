@@ -5,7 +5,7 @@
     .module('peoplePluginWidget', [
       'peopleEnums',
       'peopleFilters',
-      'peopleServices',
+      'peopleWidgetServices',
       'ngAnimate',
       'ngRoute',
       'ui.bootstrap',
@@ -81,8 +81,7 @@
     }])
     .run(['Location', '$location','$rootScope', function (Location, $location,$rootScope) {
       buildfire.messaging.onReceivedMessage = function (msg) {
-        $rootScope.showHome = true;
-        $rootScope.showHome = false;
+        var currentUrl=$location.$$url;
         switch (msg.type) {
           case 'AddNewItem':
             Location.goTo("#/people/" + msg.id + "?stopSwitch=true");
@@ -91,7 +90,9 @@
             Location.goTo("#/people/" + msg.id);
             break;
           default:
-            Location.goToHome();
+              if(currentUrl!='/'){
+                  Location.goToHome();
+              }
         }
       };
       buildfire.deeplink.getData(function (data) {
@@ -121,5 +122,5 @@
             height: height
           });
         };
-      }]);;
+      }]);
 })(window.angular, window.buildfire);

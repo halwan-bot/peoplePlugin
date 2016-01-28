@@ -108,7 +108,7 @@
           Location.goTo('#/');
         }
         else{
-          buildfire.navigation.navigateHome();
+            buildfire.navigation._goBackOne();
         }
       };
     }]).filter('cropImage', [function () {

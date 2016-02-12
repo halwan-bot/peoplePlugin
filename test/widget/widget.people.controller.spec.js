@@ -1,42 +1,50 @@
 describe('Unit : people Plugin widget.people.controller.js when buildfire content and design are defined', function () {
-  var WidgetPeople, scope, $rootScope, $controller, Buildfire,TAG_NAMES, ERROR_CODE, Location,$sce,$location,$routeParams;
-  beforeEach(module('peoplePluginWidget'));
+    var WidgetPeople, scope, $rootScope, $controller, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce, $location, $routeParams;
+    beforeEach(module('peoplePluginWidget'));
 
     beforeEach(module('peoplePluginWidget', function ($provide) {
         $provide.service('Buildfire', function () {
             this.datastore = jasmine.createSpyObj('datastore', ['get', 'getById', 'onUpdate']);
+            this.imageLib = jasmine.createSpyObj('imageLib', ['cropImage']);
+            this.imageLib.cropImage.and.callFake(function (url, options) {
+                return url;
+            });
             this.datastore.get.and.callFake(function (_tagName, callback) {
                 if (_tagName) {
-                    callback(null, {data: {
-                        design: {
-                            itemLayout: '',
-                            listLayout: ''
-                        },
-                        content: {
-                            sortBy: 'Newest'
+                    callback(null, {
+                        data: {
+                            design: {
+                                itemLayout: '',
+                                listLayout: ''
+                            },
+                            content: {
+                                sortBy: 'Newest'
+                            }
                         }
-                    }});
+                    });
                 } else {
                     callback('Error', null);
                 }
             });
             this.datastore.getById.and.callFake(function (_itemId, _tagName, callback) {
-                if(_itemId && _tagName) {
-                    callback(null, {data: {
-                        design: {
-                            itemLayout: '',
-                            listLayout: ''
-                        },
-                        content: {
-                            sortBy: 'Newest'
+                if (_itemId && _tagName) {
+                    callback(null, {
+                        data: {
+                            design: {
+                                itemLayout: '',
+                                listLayout: ''
+                            },
+                            content: {
+                                sortBy: 'Newest'
+                            }
                         }
-                    }});
+                    });
                 } else {
                     callback('Error', null);
                 }
             });
             this.datastore.onUpdate.and.callFake(function (callback) {
-                callback('Event');
+                callback({tag: 'peopleInfo', data: {design: {backgroundImage: 'bg.png', itemLayout: 'layout1',listLayout:'listLayout1'}}});
                 return {
                     clear: function () {
                         return true
@@ -73,6 +81,7 @@ describe('Unit : people Plugin widget.people.controller.js when buildfire conten
             $location: $location,
             $routeParams: $routeParams
         });
+        WidgetPeople.data = {content: {sortBy:'Newest'}};
     });
 
     describe('Units: units should be Defined', function () {
@@ -114,10 +123,27 @@ describe('Unit : people Plugin widget.people.controller.js when buildfire conten
             })
         });
     });
+    describe('WidgetPeople.cropImage', function () {
+
+        it('should pass if it returns true when cropImage is not the default html', function () {
+            WidgetPeople.cropImage('image.png', {height: 100, width: 100});
+            WidgetPeople.cropImage();
+        });
+    });
+    describe('WidgetPeople.safeHtml', function () {
+        it('should pass if it returns true when WidgetPeople.safeHtml is not the default html', function () {
+            WidgetPeople.safeHtml('<div>Div Content</div>');
+        });
+    });
+    describe('WidgetPeople.openLinks', function () {
+        it('should pass if it returns true when WidgetPeople.openLinks is not the default html', function () {
+            WidgetPeople.openLinks([{}]);
+        });
+    });
 });
 
 describe('Unit : people Plugin widget.people.controller.js when buildfire content not defined', function () {
-    var WidgetPeople, scope, $rootScope, $controller, Buildfire,TAG_NAMES, ERROR_CODE, Location,$sce,$location,$routeParams;
+    var WidgetPeople, scope, $rootScope, $controller, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce, $location, $routeParams;
     beforeEach(module('peoplePluginWidget'));
 
     beforeEach(module('peoplePluginWidget', function ($provide) {
@@ -125,28 +151,32 @@ describe('Unit : people Plugin widget.people.controller.js when buildfire conten
             this.datastore = jasmine.createSpyObj('datastore', ['get', 'getById', 'onUpdate']);
             this.datastore.get.and.callFake(function (_tagName, callback) {
                 if (_tagName) {
-                    callback(null, {data: {
-                        design: {
-                            itemLayout: '',
-                            listLayout: ''
-                        },
-                        content: null
-                    }});
+                    callback(null, {
+                        data: {
+                            design: {
+                                itemLayout: '',
+                                listLayout: ''
+                            },
+                            content: null
+                        }
+                    });
                 } else {
                     callback('Error', null);
                 }
             });
             this.datastore.getById.and.callFake(function (_itemId, _tagName, callback) {
-                if(_itemId && _tagName) {
-                    callback(null, {data: {
-                        design: {
-                            itemLayout: '',
-                            listLayout: ''
-                        },
-                        content: {
-                            sortBy: 'Newest'
+                if (_itemId && _tagName) {
+                    callback(null, {
+                        data: {
+                            design: {
+                                itemLayout: '',
+                                listLayout: ''
+                            },
+                            content: {
+                                sortBy: 'Newest'
+                            }
                         }
-                    }});
+                    });
                 } else {
                     callback('Error', null);
                 }
@@ -187,7 +217,7 @@ describe('Unit : people Plugin widget.people.controller.js when buildfire conten
             $sce: $sce,
             $rootScope: $rootScope,
             $location: $location,
-            $routeParams: $routeParams
+            $routeParams: {id: 'id1'}
         });
     });
 
@@ -202,7 +232,7 @@ describe('Unit : people Plugin widget.people.controller.js when buildfire conten
 });
 
 describe('Unit : people Plugin widget.people.controller.js when buildfire design not defined', function () {
-    var WidgetPeople, scope, $rootScope, $controller, Buildfire,TAG_NAMES, ERROR_CODE, Location,$sce,$location,$routeParams;
+    var WidgetPeople, scope, $rootScope, $controller, Buildfire, TAG_NAMES, ERROR_CODE, Location, $sce, $location, $routeParams;
     beforeEach(module('peoplePluginWidget'));
 
     beforeEach(module('peoplePluginWidget', function ($provide) {
@@ -210,33 +240,37 @@ describe('Unit : people Plugin widget.people.controller.js when buildfire design
             this.datastore = jasmine.createSpyObj('datastore', ['get', 'getById', 'onUpdate']);
             this.datastore.get.and.callFake(function (_tagName, callback) {
                 if (_tagName) {
-                    callback(null, {data: {
-                        design: null,
-                        content: {
-                            sortBy: 'Newest'
+                    callback(null, {
+                        data: {
+                            design: null,
+                            content: {
+                                sortBy: 'Newest'
+                            }
                         }
-                    }});
+                    });
                 } else {
                     callback('Error', null);
                 }
             });
             this.datastore.getById.and.callFake(function (_itemId, _tagName, callback) {
-                if(_itemId && _tagName) {
-                    callback(null, {data: {
-                        design: {
-                            itemLayout: '',
-                            listLayout: ''
-                        },
-                        content: {
-                            sortBy: 'Newest'
+                if (_itemId && _tagName) {
+                    callback(null, {
+                        data: {
+                            design: {
+                                itemLayout: '',
+                                listLayout: ''
+                            },
+                            content: {
+                                sortBy: 'Newest'
+                            }
                         }
-                    }});
+                    });
                 } else {
                     callback('Error', null);
                 }
             });
             this.datastore.onUpdate.and.callFake(function (callback) {
-                callback('Event');
+                callback({tag: 'people', data: {design: {backgroundImage: 'bg.png', itemLayout: 'layout1'}}});
                 return {
                     clear: function () {
                         return true

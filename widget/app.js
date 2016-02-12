@@ -5,7 +5,7 @@
     .module('peoplePluginWidget', [
       'peopleEnums',
       'peopleFilters',
-      'peopleServices',
+      'peopleWidgetServices',
       'ngAnimate',
       'ngRoute',
       'ui.bootstrap',
@@ -79,10 +79,24 @@
         }
       };
     }])
+    .directive("loadImage", [function () {
+          return {
+              restrict: 'A',
+              link: function (scope, element, attrs) {
+                  element.attr("src", "images/" + attrs.loadImage + ".png");
+
+                  var elem = $("<img>");
+                      elem[0].onload = function () {
+                          element.attr("src", attrs.finalSrc);
+                          elem.remove();
+                      };
+                      elem.attr("src", attrs.finalSrc);
+              }
+          };
+      }])
     .run(['Location', '$location','$rootScope', function (Location, $location,$rootScope) {
       buildfire.messaging.onReceivedMessage = function (msg) {
-        $rootScope.showHome = true;
-        $rootScope.showHome = false;
+        var currentUrl=$location.$$url;
         switch (msg.type) {
           case 'AddNewItem':
             Location.goTo("#/people/" + msg.id + "?stopSwitch=true");
@@ -91,7 +105,9 @@
             Location.goTo("#/people/" + msg.id);
             break;
           default:
-            Location.goToHome();
+              if(currentUrl!='/'){
+                  Location.goToHome();
+              }
         }
       };
       buildfire.deeplink.getData(function (data) {
@@ -107,7 +123,7 @@
           Location.goTo('#/');
         }
         else{
-          buildfire.navigation.navigateHome();
+            buildfire.navigation._goBackOne();
         }
       };
     }]).filter('cropImage', [function () {
@@ -121,5 +137,5 @@
             height: height
           });
         };
-      }]);;
+      }]);
 })(window.angular, window.buildfire);

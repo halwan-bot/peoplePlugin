@@ -1,5 +1,5 @@
 <div class="overlay background" ng-if="WidgetPeople.data.design.backgroundImage && WidgetPeople.deviceWidth != 0 && WidgetPeople.deviceHeight != 0">
-    <img ng-src="{{ WidgetPeople.cropImage(WidgetPeople.data.design.backgroundImage, {width: WidgetPeople.deviceWidth, height: WidgetPeople.deviceHeight}) }}">
+    <img lazy-img="{{ WidgetPeople.cropImage(WidgetPeople.data.design.backgroundImage, {width: WidgetPeople.deviceWidth, height: WidgetPeople.deviceHeight}) }}">
 </div>
 <div>
   <div ng-if="WidgetPeople.data.design.itemLayout"

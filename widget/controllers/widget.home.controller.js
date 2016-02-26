@@ -12,7 +12,7 @@
                     FIRST_NAME_Z_TO_A = 'First Name Z-A',
                     LAST_NAME_A_TO_Z = 'Last Name A-Z',
                     LAST_NAME_Z_TO_A = 'Last Name Z-A',
-                    _limit = 10,
+                    _limit = 15,
                     searchOptions = {
                         filter: {"$json.fName": {"$regex": '/*'}},
                         skip: 0,

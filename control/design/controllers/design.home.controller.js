@@ -95,19 +95,21 @@
             $scope.$watch(function () {
                 return DesignHome.peopleInfo;
             }, function (newObj) {
-                if (newObj)
+                if (!angular.equals(newObj,DesignHomeMaster)){
+                    console.log("hello data1", newObj, DesignHomeMaster)
                     Buildfire.datastore.save(DesignHome.peopleInfo, TAG_NAMES.PEOPLE_INFO, function (err, data) {
                         if (err) {
-                            console.log("hello error")
+                            console.log("hello error", err)
                             return DesignHome.peopleInfo = angular.copy(DesignHomeMaster);
                         }
-                        else if (data && data.obj) {
+                        else if (data) {
 
-                            console.log("hello data")
+                            console.log("hello data", data)
                             return DesignHomeMaster = data.obj;
                         }
                         $scope.$digest();
                     });
+                }
             }, true);
 
         }]);

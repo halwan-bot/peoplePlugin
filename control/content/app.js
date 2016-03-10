@@ -159,7 +159,7 @@
           });
       }
     })
-    .run(['Location', function (Location) {
+    .run(['Location','Buildfire', function (Location,Buildfire) {
 // Handler to receive message from widget
       buildfire.messaging.onReceivedMessage = function (msg) {
         console.log(msg.type, window.location.href, msg.id);
@@ -168,8 +168,14 @@
             Location.goTo("#/people/" + msg.id);
             break;
           default:
+            Buildfire.history.pop();
             Location.goToHome();
         }
       };
+        Buildfire.history.onPop(function(data,err){
+          if(data && data.label!='Person')
+            Location.goToHome();
+          console.log('Buildfire.history.onPop called--------------------------------------------',data,err);
+        });
     }]);
 })(window.angular, window.buildfire);

@@ -19,7 +19,7 @@
         /**
         * Breadcrumbs  related implementation
         */
-        Buildfire.history.pop();
+        buildfire.history.pop();
 
           /**
            * SearchOptions are using for searching , sorting people and fetching people list

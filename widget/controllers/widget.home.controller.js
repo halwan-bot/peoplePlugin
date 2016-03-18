@@ -315,6 +315,9 @@
                     if (view && WidgetHome.data.content.images) {
                         view.loadItems(WidgetHome.data.content.images);
                     }
+                    if(background){
+                        $rootScope.backgroundImage = background;
+                    }
                     Buildfire.datastore.onUpdate(onUpdateCallback);
                 });
                 $scope.$on("$destroy", function () {

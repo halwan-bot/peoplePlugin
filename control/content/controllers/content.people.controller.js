@@ -30,25 +30,6 @@
           rank: _rankOfLastItem
         };
 
-        //Initializing breadcrumb for current view
-        /*console.log("*************");
-         buildfire.history.push('People', {});
-
-         buildfire.history.get({pluginBreadcrumbsOnly: true}, function (err, result) {
-         console.log("History............", err, result);
-         if (err)
-         $rootScope.breadcrumbs = [];
-         else
-         $rootScope.breadcrumbs = result;
-         });*/
-
-        $rootScope.breadcrumbs = [{
-          'label': 'Home',
-          'options': {link: '#/'}
-        }, {
-          'label': 'People'
-        }];
-
         //Scroll current view to top when page loaded.
         buildfire.navigation.scrollTop();
 

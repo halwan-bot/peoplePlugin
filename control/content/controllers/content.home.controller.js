@@ -16,6 +16,11 @@
           bodyContent: "Information"
         };
 
+        /**
+        * Breadcrumbs  related implementation
+        */
+        buildfire.history.pop();
+
           /**
            * SearchOptions are using for searching , sorting people and fetching people list
            * @type object
@@ -48,18 +53,6 @@
          * @type {boolean}
          */
         ContentHome.busy = false;
-
-
-        //Initializing breadcrumb for current view
-
-        /*console.log("+++++++++++++++++++++++");
-
-         buildfire.history.push('Home', {'link': '#/'});*/
-
-        $rootScope.breadcrumbs = [{
-          'label': 'Home',
-          'options': {link: '#/'}
-        }];
 
 
         /**

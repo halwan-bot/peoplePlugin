@@ -101,6 +101,7 @@
                                 itemLayout: WidgetPeople.defaults.DEFAULT_ITEM_LAYOUT,
                                 listLayout: WidgetPeople.defaults.DEFAULT_LIST_LAYOUT
                             };
+                        }else{
                             currentItemLayout = WidgetPeople.data.design.itemLayout;
                             currentListLayout = WidgetPeople.data.design.listLayout;
                         }

@@ -119,7 +119,9 @@
           plugins: 'advlist autolink link image lists charmap print preview',
           skin: 'lightgray',
           trusted: true,
-          theme: 'modern'
+          theme: 'modern',
+          plugin_preview_width : "500",
+          plugin_preview_height : "500"
         };
         ContentHome.data = PeopleInfo.data;
         if (!ContentHome.data.content.images)

@@ -39,7 +39,7 @@
       </div>
     </div>
   </div>
-  <div ng-view="" class="slide content" ng-hide="showHome"></div>
+  <div ng-view="" class="slide content" ng-hide="showHome" data-ng-attr-style="background:url({{ backgroundImage| cropImage:deviceWidth:deviceHeight:true}}) !important; background-size:cover !important;"></div>
 </div>
 </body>
 </html>

@@ -120,6 +120,8 @@
                      if (event && event.tag) {
                         switch (event.tag) {
                             case TAG_NAMES.PEOPLE:
+                                console.log('People iNfo updated-----------------',event.data);
+                                $rootScope.$broadcast('Item_Updated',event);
                                 if (event.data)
                                     WidgetPeople.item = event.data;
                                 break;

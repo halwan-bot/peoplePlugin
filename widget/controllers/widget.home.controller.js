@@ -303,6 +303,17 @@
                         height: height
                     });
                 };
+                $rootScope.$on('Item_Updated',function(e,data){
+                    console.log('Item_Updated got--------------------------------',data);
+                    if(WidgetHome.items && data && data.id){
+                        WidgetHome.items.some(function(item){
+                            if(item.id==data.id){
+                                item.data=data.data;
+                                return true;
+                            }
+                        });
+                    }
+                });
                 $rootScope.$on("ROUTE_CHANGED", function (e, listLayout, itemLayout, background, data) {
                     WidgetHome.data = data
                     if (!WidgetHome.data.design)

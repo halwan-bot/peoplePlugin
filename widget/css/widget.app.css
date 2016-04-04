@@ -203,3 +203,7 @@ ol li{
     position: relative;
     z-index: auto;
 }
+
+.set-top-padding {
+    padding-top: 0px !important;
+}

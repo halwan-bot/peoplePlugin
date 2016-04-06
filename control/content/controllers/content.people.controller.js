@@ -193,6 +193,9 @@
             if (result === null) {
               return console.error('Error:Can not save data, Null record found.');
             }
+            if(result.action == "sendSms"){
+              result.body ="Hello. How are you? This is a test message."
+            }
             ContentPeople.item.data.socialLinks.push(result);
             $scope.$digest();
           };

@@ -79,7 +79,7 @@
         }
       };
     }])
-    .directive("loadImage", [function () {
+    .directive("loadImage", ['$rootScope', function ($rootScope) {
       return {
         restrict: 'A',
         link: function (scope, element, attrs) {
@@ -90,6 +90,11 @@
             element.attr("src", attrs.finalSrc);
             elem.remove();
           };
+
+            $rootScope.$on('Item_Updated',function(e,data) {
+                element.attr("src", data.data.topImage);
+                elem.remove();
+            });
           elem.attr("src", attrs.finalSrc);
         }
       };

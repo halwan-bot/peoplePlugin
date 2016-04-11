@@ -24,16 +24,7 @@ describe('Unit : people Plugin content.people.controller.js', function () {
                     editor: {}
                 }
             },
-            datastore: {},
-            history: {
-                push: function (label, id) {
-                },
-                onPop: function (data) {
-                },
-                pop: function () {
-
-                }
-            }
+            datastore: {}
         };
         Buildfire.datastore = jasmine.createSpyObj('Buildfire.datastore', ['search', 'onUpdate']);
         Buildfire.components.carousel = jasmine.createSpyObj('Buildfire.components.carousel', ['editor']);

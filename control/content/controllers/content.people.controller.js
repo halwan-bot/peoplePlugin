@@ -4,12 +4,6 @@
     .module('peoplePluginContent')
     .controller('ContentPeopleCtrl', ['$scope', 'Location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams', 'RankOfLastItem', '$rootScope',
       function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams, RankOfLastItem, $rootScope) {
-
-        /**
-         * Breadcrumbs  related implementation
-         */
-        Buildfire.history.push('Person', {id: 'itemId'});
-
         var _rankOfLastItem = RankOfLastItem.getRank();
         var ContentPeople = this;
         ContentPeople.isUpdating = false;
@@ -74,8 +68,6 @@
 
         /*On click button done it redirects to home*/
         ContentPeople.done = function () {
-          console.log('Done called------------------------------------------------------------------------');
-          Buildfire.history.pop();
           Location.goToHome();
         };
 
@@ -249,7 +241,6 @@
 
         $scope.$on("$destroy", function () {
           console.log("^^^^^^^^^^^^^^^^^^");
-          buildfire.history.pop();
           ContentPeople.onUpdateFn.clear();
         });
       }]);

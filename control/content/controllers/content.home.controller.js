@@ -16,11 +16,6 @@
           bodyContent: "Information"
         };
 
-        /**
-        * Breadcrumbs  related implementation
-        */
-        buildfire.history.pop();
-
           /**
            * SearchOptions are using for searching , sorting people and fetching people list
            * @type object

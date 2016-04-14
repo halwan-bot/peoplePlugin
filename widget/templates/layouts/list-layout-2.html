@@ -16,9 +16,10 @@
            data-infinite-container=".infinite-scroll-parent">
       <span ng-repeat="item in WidgetHome.items">
       <div class="clearfix text-overlay">
-        <div class="plugin-banner clearfix" ng-if="item.data.topImage">
+        <div class="plugin-banner clearfix">
           <div class="plugin-slide text-center">
-            <img load-image="239x1" data-final-src="{{item.data.topImage | getImageUrl : 400 : 192}}">
+            <img ng-if="item.data.topImage" load-image="239x1" data-final-src="{{item.data.topImage | getImageUrl : 400 : 192}}">
+            <img ng-if="!item.data.topImage" src="../../../styles/media/holder-2x1.png" >
           </div>
         </div>
       </div>

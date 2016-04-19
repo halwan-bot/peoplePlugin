@@ -2,9 +2,9 @@
 	<div class="people-plugin layout1">
 		<div class="plugin-banner clearfix">
 			<div class="plugin-slider text-center">
-				<div class="text-overlay" ng-if="WidgetPeople.item.topImage">
-					<img load-image="2x1"
-               data-final-src="{{WidgetPeople.item.topImage | getImageUrl : 400 : 200}}">
+				<div  ng-if="WidgetPeople.item.topImage"  class="text-overlay">
+					<img load-image="2x1" data-final-src="{{WidgetPeople.item.topImage | getImageUrl : 400 : 200}}">
+					<!--<img ng-if="!WidgetPeople.item.topImage" src="../../../styles/media/holder-2x1.png">-->
 				</div>
 			</div>
 		</div>

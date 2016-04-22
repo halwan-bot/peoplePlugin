@@ -15,6 +15,9 @@
                     DEFAULT_ITEM_LAYOUT: 'item-layout-1',
                     DEFAULT_SORT_OPTION: "Oldest to Newest"
                 };
+
+                buildfire.history.push('Person', { elementToShow: 'Person' });
+
                 /*
                  Send message to Control that this page has been opened
                  */

@@ -70,7 +70,6 @@
         /*On click button done it redirects to home*/
         ContentPeople.done = function () {
           console.log('Done called------------------------------------------------------------------------');
-          Buildfire.history.pop();
           Location.goToHome();
         };
 

@@ -96,7 +96,6 @@
     }])
     .run(['Location', '$location', '$rootScope', function (Location, $location, $rootScope) {
       buildfire.messaging.onReceivedMessage = function (msg) {
-        var currentUrl = $location.$$url;
         switch (msg.type) {
           case 'AddNewItem':
             Location.goTo("#/people/" + msg.id + "?stopSwitch=true");
@@ -105,9 +104,8 @@
             Location.goTo("#/people/" + msg.id);
             break;
           default:
-            if (currentUrl != '/') {
+            if ($rootScope.showFeed == false)
               Location.goToHome();
-            }
         }
       };
       buildfire.deeplink.getData(function (data) {

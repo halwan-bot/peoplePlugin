@@ -104,7 +104,7 @@
             Location.goTo("#/people/" + msg.id);
             break;
           default:
-            if ($rootScope.showFeed == false)
+            if ($rootScope.showHome == false)
               Location.goToHome();
         }
       };
@@ -127,7 +127,7 @@
 
       buildfire.history.onPop(function(data, err){
         buildfire.messaging.sendMessageToControl({});
-        $rootScope.showFeed = true;
+        $rootScope.showHome = true;
         Location.goTo('#/');
       })
 

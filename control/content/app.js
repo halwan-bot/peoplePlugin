@@ -168,7 +168,6 @@
             Location.goTo("#/people/" + msg.id);
             break;
           default:
-            Buildfire.history.pop();
             Location.goToHome();
         }
       };

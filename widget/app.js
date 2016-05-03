@@ -85,6 +85,8 @@
         link: function (scope, element, attrs) {
           element.attr("src", "../../../styles/media/holder-" + attrs.loadImage + ".gif");
 
+          var previous_src=attrs.finalSrc;
+
           var elem = $("<img>");
           elem[0].onload = function () {
             element.attr("src", attrs.finalSrc);
@@ -92,10 +94,15 @@
           };
 
             function changeSrc(info) {
+              if(previous_src!=attrs.finalSrc){
+                console.log('previous_src in loadimage is different---loaded-------------------------------------',previous_src);
                 element.attr("src", attrs.finalSrc);
                 elem.remove();
+              }
             }
             scope.$watch(function(val){
+              console.log('Val in loadimage----------------------------------------',val);
+              console.log('previous_src in loadimage----------------------------------------',previous_src);
                 return attrs.finalSrc;
             }, changeSrc, true);
           elem.attr("src", attrs.finalSrc);

@@ -74,7 +74,7 @@
 
                 /*declare the device width heights*/
                 $rootScope.deviceHeight = window.innerHeight;
-                $rootScope.deviceWidth = window.innerWidth;
+                $rootScope.deviceWidth = window.innerWidth || 320;
                 $rootScope.backgroundImage = "";
 
                 /*initialize the device width heights*/

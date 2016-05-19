@@ -4,7 +4,6 @@
     .module('peoplePluginContent')
     .controller('ContentPeopleCtrl', ['$scope', 'Location', '$modal', 'Buildfire', 'TAG_NAMES', 'STATUS_CODE', '$routeParams', 'RankOfLastItem', '$rootScope',
       function ($scope, Location, $modal, Buildfire, TAG_NAMES, STATUS_CODE, $routeParams, RankOfLastItem, $rootScope) {
-
         var _rankOfLastItem = RankOfLastItem.getRank();
         var ContentPeople = this;
         ContentPeople.isUpdating = false;
@@ -25,25 +24,6 @@
           rank: _rankOfLastItem
         };
 
-        //Initializing breadcrumb for current view
-        /*console.log("*************");
-         buildfire.history.push('People', {});
-
-         buildfire.history.get({pluginBreadcrumbsOnly: true}, function (err, result) {
-         console.log("History............", err, result);
-         if (err)
-         $rootScope.breadcrumbs = [];
-         else
-         $rootScope.breadcrumbs = result;
-         });*/
-
-        $rootScope.breadcrumbs = [{
-          'label': 'Home',
-          'options': {link: '#/'}
-        }, {
-          'label': 'People'
-        }];
-
         //Scroll current view to top when page loaded.
         buildfire.navigation.scrollTop();
 
@@ -55,7 +35,9 @@
           plugins: 'advlist autolink link image lists charmap print preview',
           skin: 'lightgray',
           trusted: true,
-          theme: 'modern'
+          theme: 'modern',
+          plugin_preview_width : "500",
+          plugin_preview_height : "500"
         };
         /*
          Send message to widget that this page has been opened
@@ -203,6 +185,9 @@
             if (result === null) {
               return console.error('Error:Can not save data, Null record found.');
             }
+            if(result.action == "sendSms"){
+              result.body ="Hello. How are you? This is a test message."
+            }
             ContentPeople.item.data.socialLinks.push(result);
             $scope.$digest();
           };
@@ -256,7 +241,6 @@
 
         $scope.$on("$destroy", function () {
           console.log("^^^^^^^^^^^^^^^^^^");
-          buildfire.history.pop();
           ContentPeople.onUpdateFn.clear();
         });
       }]);

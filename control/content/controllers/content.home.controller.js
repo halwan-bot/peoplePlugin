@@ -50,18 +50,6 @@
         ContentHome.busy = false;
 
 
-        //Initializing breadcrumb for current view
-
-        /*console.log("+++++++++++++++++++++++");
-
-         buildfire.history.push('Home', {'link': '#/'});*/
-
-        $rootScope.breadcrumbs = [{
-          'label': 'Home',
-          'options': {link: '#/'}
-        }];
-
-
         /**
          * ContentHome.items used to store the people list which fetched from server.
          * @type {null}
@@ -110,9 +98,22 @@
         };
         // this method will be called when you change the order of items
         editor.onOrderChange = function (item, oldIndex, newIndex) {
-          var temp = ContentHome.data.content.images[oldIndex];
-          ContentHome.data.content.images[oldIndex] = ContentHome.data.content.images[newIndex];
-          ContentHome.data.content.images[newIndex] = temp;
+          var items = ContentHome.data.content.images;
+
+          var tmp = items[oldIndex];
+
+          if (oldIndex < newIndex) {
+            for (var i = oldIndex + 1; i <= newIndex; i++) {
+              items[i - 1] = items[i];
+            }
+          } else {
+            for (var i = oldIndex - 1; i >= newIndex; i--) {
+              items[i + 1] = items[i];
+            }
+          }
+          items[newIndex] = tmp;
+
+          ContentHome.data.content.images = items;
           $scope.$digest();
         };
 
@@ -126,7 +127,9 @@
           plugins: 'advlist autolink link image lists charmap print preview',
           skin: 'lightgray',
           trusted: true,
-          theme: 'modern'
+          theme: 'modern',
+          plugin_preview_width : "500",
+          plugin_preview_height : "500"
         };
         ContentHome.data = PeopleInfo.data;
         if (!ContentHome.data.content.images)

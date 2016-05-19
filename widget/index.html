@@ -20,7 +20,6 @@
   <script src="../../../scripts/angular/angular-animate.min.js"></script>
   <script src="../../../scripts/angular/ui-bootstrap.min.js"></script>
   <script src="js/ng-infinite-scroll.custom.js"></script>
-  <script src="js/angular-lazy-img.js"></script>
   <script src="app.js"></script>
   <script src="enums.js"></script>
   <script src="filters.js"></script>
@@ -32,14 +31,14 @@
 </head>
 <body class="body-scroll">
 <div class="main_view">
-  <div class="slide infinite-scroll-parent" id="scrollable" data-ng-attr-style="background:url({{ backgroundImage| cropImage:deviceWidth:deviceHeight:true}}) !important; background-size:cover !important;">
+  <div class="slide infinite-scroll-parent" id="scrollable" data-ng-attr-style="background:url({{ backgroundImage| cropImage:deviceWidth:deviceHeight:true}}) !important; background-size:cover !important;" ng-show="showHome">
      <div ng-controller="WidgetHomeCtrl as WidgetHome">
         <div ng-if="WidgetHome.data.design.listLayout"
            ng-include="'templates/layouts/' + WidgetHome.data.design.listLayout + '.html'">
       </div>
     </div>
   </div>
-  <div ng-view="" class="slide content" ng-hide="showHome"></div>
+  <div ng-view="" class="slide content" ng-hide="showHome" data-ng-attr-style="background:url({{ backgroundImage| cropImage:deviceWidth:deviceHeight:true}}) !important; background-size:cover !important;"></div>
 </div>
 </body>
 </html>

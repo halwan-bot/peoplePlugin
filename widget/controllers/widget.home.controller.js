@@ -12,7 +12,7 @@
                     FIRST_NAME_Z_TO_A = 'First Name Z-A',
                     LAST_NAME_A_TO_Z = 'Last Name A-Z',
                     LAST_NAME_Z_TO_A = 'Last Name Z-A',
-                    _limit = 10,
+                    _limit = 15,
                     searchOptions = {
                         filter: {"$json.fName": {"$regex": '/*'}},
                         skip: 0,
@@ -74,7 +74,7 @@
 
                 /*declare the device width heights*/
                 $rootScope.deviceHeight = window.innerHeight;
-                $rootScope.deviceWidth = window.innerWidth;
+                $rootScope.deviceWidth = window.innerWidth || 320;
                 $rootScope.backgroundImage = "";
 
                 /*initialize the device width heights*/
@@ -143,8 +143,16 @@
                     return item.imageUrl !== undefined && item.imageUrl !== '';
                 };
                 WidgetHome.safeHtml = function (html) {
-                    if (html)
-                        return $sce.trustAsHtml(html);
+                    if (html) {
+                        var $html = $('<div />', {html: html});
+                        $html.find('iframe').each(function (index, element) {
+                            var src = element.src;
+                            console.log('element is: ', src, src.indexOf('http'));
+                            src = src && src.indexOf('file://') != -1 ? src.replace('file://', 'http://') : src;
+                            element.src = src && src.indexOf('http') != -1 ? src : 'http:' + src;
+                        });
+                        return $sce.trustAsHtml($html.html());
+                    }
                 };
                 WidgetHome.showDescription = function (description) {
                   var _retVal = false;
@@ -295,17 +303,31 @@
                         height: height
                     });
                 };
+                $rootScope.$on('Item_Updated',function(e,data){
+                    console.log('Item_Updated got--------------------------------',data);
+                    if(WidgetHome.items && data && data.id){
+                        WidgetHome.items.some(function(item){
+                            if(item.id==data.id){
+                                item.data=data.data;
+                                return true;
+                            }
+                        });
+                    }
+                });
                 $rootScope.$on("ROUTE_CHANGED", function (e, listLayout, itemLayout, background, data) {
-                    WidgetHome.data = data
+                    WidgetHome.data = data;
                     if (!WidgetHome.data.design)
                         WidgetHome.data.design = {};
                     if (!WidgetHome.data.content)
                         WidgetHome.data.content = {};
-                    if (!view) {
+                    /*if (!view) {
                         view = new Buildfire.components.carousel.view("#carousel", []);
-                    }
-                    if (view && WidgetHome.data.content.images) {
+                    }*/
+                    /*if (view && WidgetHome.data.content.images) {
                         view.loadItems(WidgetHome.data.content.images);
+                    }*/
+                    if(background){
+                        $rootScope.backgroundImage = background;
                     }
                     Buildfire.datastore.onUpdate(onUpdateCallback);
                 });

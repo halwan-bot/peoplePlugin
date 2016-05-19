@@ -1,15 +1,4 @@
 <div>
-  <div class="item clearfix">
-    <ol class="breadcrumb">
-      <li ng-repeat="breadcrumb in breadcrumbs"><a
-          ng-href="{{breadcrumb.options.link}}"
-          ng-show="breadcrumb.options.link">{{breadcrumb.label}}
-      </a>
-        <span
-            ng-href="{{breadcrumb.options.link}}" ng-hide="breadcrumb.options.link">{{breadcrumb.label}}
-        </span></li>
-    </ol>
-  </div>
   <div class="item clearfix row">
     <div class="labels col-md-3 padding-right-zero pull-left">
       <span>Top Image</span>
@@ -92,9 +81,9 @@
       <span>Links</span>
     </div>
     <div class="main col-md-9 pull-right">
-      <div class="col-md-4 row">
+      <div class="col-md-6 row">
         <a class="btn btn-success pull-left stretch"
-           ng-click="ContentPeople.openAddLinkPopup()">Add Link</a>
+           ng-click="ContentPeople.openAddLinkPopup()">Add Contact Information</a>
       </div>
     </div>
   </div>

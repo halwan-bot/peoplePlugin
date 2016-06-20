@@ -57,20 +57,32 @@
         }
       };
     }])
-    .filter('getImageUrl', function () {
-      return function (url, width, height, type) {
-        if (type == 'resize')
-          return buildfire.imageLib.resizeImage(url, {
-            width: width,
-            height: height
-          });
-        else
-          return buildfire.imageLib.cropImage(url, {
-            width: width,
-            height: height
-          });
+    .filter('getImageUrl', ['Buildfire', function (Buildfire) {
+      filter.$stateful = true;
+      function filter(url, width, height, type) {
+        var _imgUrl;
+        if (!_imgUrl) {
+          if (type == 'resize') {
+            Buildfire.imageLib.local.resizeImage(url, {
+              width: width,
+              height: height
+            }, function (err, imgUrl) {
+              _imgUrl = imgUrl;
+            });
+          } else {
+            Buildfire.imageLib.local.cropImage(url, {
+              width: width,
+              height: height
+            }, function (err, imgUrl) {
+              _imgUrl = imgUrl;
+            });
+          }
+        }
+
+        return _imgUrl;
       }
-    })
+      return filter;
+    }])
     .directive("buildFireCarousel", ["$rootScope", function ($rootScope) {
       return {
         restrict: 'A',
@@ -142,15 +154,24 @@
         }
       };
     }]).filter('cropImage', [function () {
-      return function (url, width, height, noDefault) {
-        if (noDefault) {
-          if (!url)
+      function filter (url, width, height, noDefault) {
+        var _imgUrl;
+        filter.$stateful = true;
+        if(noDefault)
+        {
+          if(!url)
             return '';
         }
-        return buildfire.imageLib.cropImage(url, {
-          width: width,
-          height: height
-        });
-      };
+        if (!_imgUrl) {
+          buildfire.imageLib.local.cropImage(url, {
+            width: width,
+            height: height
+          }, function (err, imgUrl) {
+            _imgUrl = imgUrl;
+          });
+        }
+        return _imgUrl;
+      }
+      return filter;
     }]);
 })(window.angular, window.buildfire);

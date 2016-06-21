@@ -329,6 +329,42 @@
                     if(background){
                         $rootScope.backgroundImage = background;
                     }
+                    Buildfire.datastore.onRefresh(function () {
+                        var success = function (result) {
+                              WidgetHome.data = result.data;
+                              WidgetHome.data.design = WidgetHome.data.design || {};
+                              if (WidgetHome.data.design) {
+                                  currentBackgroundImage = WidgetHome.data.design.backgroundImage;
+                                  currentItemLayout = WidgetHome.data.design.itemLayout;
+                                  currentListLayout = WidgetHome.data.design.listLayout;
+                              }
+                              if (WidgetHome.data.content) {
+                                  currentSortOrder = WidgetHome.data.content.sortBy;
+                              }
+                              if (!view) {
+                                  view = new Buildfire.components.carousel.view("#carousel", []);
+                              }
+                              if (WidgetHome.data.content && WidgetHome.data.content.images) {
+                                  view.loadItems(WidgetHome.data.content.images);
+                              } else {
+                                  view.loadItems([]);
+                              }
+                              $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
+                          }
+                          , error = function (err) {
+                              if (err) {
+                                  console.error('Error while getting data', err);
+                              }
+                          };
+
+                        PeopleInfo.get(TAG_NAMES.PEOPLE_INFO).then(success, error);
+                        WidgetHome.items = [];
+                        searchOptions.skip = 0;
+                        WidgetHome.busy = false;
+                        WidgetHome.loadMore();
+                        $scope.$digest();
+                    });
+
                     Buildfire.datastore.onUpdate(onUpdateCallback);
                 });
 

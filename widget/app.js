@@ -21,12 +21,6 @@
     .config(['$routeProvider', '$compileProvider', function ($routeProvider, $compileProvider) {
 
       /**
-       * Disable the pull down refresh
-       */
-      buildfire.datastore.disableRefresh();
-
-
-      /**
        * To make href urls safe on mobile
        */
       $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|cdvfile|file):/);

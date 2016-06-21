@@ -4,7 +4,7 @@ describe('Unit : people Plugin widget.people.controller.js when buildfire conten
 
     beforeEach(module('peoplePluginWidget', function ($provide) {
         $provide.service('Buildfire', function () {
-            this.datastore = jasmine.createSpyObj('datastore', ['get', 'getById', 'onUpdate']);
+            this.datastore = jasmine.createSpyObj('datastore', ['get', 'getById', 'onUpdate', 'onRefresh']);
             this.imageLib = jasmine.createSpyObj('imageLib', ['cropImage']);
             this.imageLib.cropImage.and.callFake(function (url, options) {
                 return url;
@@ -148,7 +148,7 @@ describe('Unit : people Plugin widget.people.controller.js when buildfire conten
 
     beforeEach(module('peoplePluginWidget', function ($provide) {
         $provide.service('Buildfire', function () {
-            this.datastore = jasmine.createSpyObj('datastore', ['get', 'getById', 'onUpdate']);
+            this.datastore = jasmine.createSpyObj('datastore', ['get', 'getById', 'onUpdate', 'onRefresh']);
             this.datastore.get.and.callFake(function (_tagName, callback) {
                 if (_tagName) {
                     callback(null, {
@@ -237,7 +237,7 @@ describe('Unit : people Plugin widget.people.controller.js when buildfire design
 
     beforeEach(module('peoplePluginWidget', function ($provide) {
         $provide.service('Buildfire', function () {
-            this.datastore = jasmine.createSpyObj('datastore', ['get', 'getById', 'onUpdate']);
+            this.datastore = jasmine.createSpyObj('datastore', ['get', 'getById', 'onUpdate', 'onRefresh']);
             this.datastore.get.and.callFake(function (_tagName, callback) {
                 if (_tagName) {
                     callback(null, {

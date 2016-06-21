@@ -14,7 +14,7 @@ describe('Unit : people Plugin widget.home.controller.js success of PeopleInfo.g
 
     beforeEach(module('peoplePluginWidget', function ($provide) {
         $provide.service('Buildfire', function () {
-            this.datastore = jasmine.createSpyObj('datastore', ['get', 'onUpdate','search']);
+            this.datastore = jasmine.createSpyObj('datastore', ['get', 'onUpdate','search', 'onRefresh']);
             this.imageLib=jasmine.createSpyObj('imageLib',['cropImage','resizeImage']);
             this.spinner=jasmine.createSpyObj('spinner',['show','hide']);
             this.datastore.get.and.callFake(function (_tagName, callback) {
@@ -204,7 +204,7 @@ describe('Unit : people Plugin widget.home.controller.js error of PeopleInfo.get
 
     beforeEach(module('peoplePluginWidget', function ($provide) {
         $provide.service('Buildfire', function () {
-            this.datastore = jasmine.createSpyObj('datastore', ['get', 'onUpdate']);
+            this.datastore = jasmine.createSpyObj('datastore', ['get', 'onUpdate', 'onRefresh']);
             this.datastore.get.and.callFake(function (_tagName, callback) {
                 callback('Error', null);
 

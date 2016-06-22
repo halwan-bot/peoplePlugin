@@ -74,7 +74,7 @@
 
                 /*declare the device width heights*/
                 $rootScope.deviceHeight = window.innerHeight;
-                $rootScope.deviceWidth = window.innerWidth;
+                $rootScope.deviceWidth = window.innerWidth || 320;
                 $rootScope.backgroundImage = "";
 
                 /*initialize the device width heights*/
@@ -315,17 +315,17 @@
                     }
                 });
                 $rootScope.$on("ROUTE_CHANGED", function (e, listLayout, itemLayout, background, data) {
-                    WidgetHome.data = data
+                    WidgetHome.data = data;
                     if (!WidgetHome.data.design)
                         WidgetHome.data.design = {};
                     if (!WidgetHome.data.content)
                         WidgetHome.data.content = {};
-                    if (!view) {
+                    /*if (!view) {
                         view = new Buildfire.components.carousel.view("#carousel", []);
-                    }
-                    if (view && WidgetHome.data.content.images) {
+                    }*/
+                    /*if (view && WidgetHome.data.content.images) {
                         view.loadItems(WidgetHome.data.content.images);
-                    }
+                    }*/
                     if(background){
                         $rootScope.backgroundImage = background;
                     }

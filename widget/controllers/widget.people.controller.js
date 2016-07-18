@@ -164,6 +164,9 @@
                         buildfire.actionItems.list(actionItems, options, callback);
                     }
                 }
+                Buildfire.datastore.onRefresh(function(){
 
+                    getPeopleDetail();
+                  });
             }])
 })(window.angular, window);

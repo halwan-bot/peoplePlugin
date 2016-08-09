@@ -16,6 +16,7 @@
                     searchOptions = {
                         filter: {"$json.fName": {"$regex": '/*'}},
                         skip: 0,
+                        sort : {"rank": 1},
                         limit: _limit + 1 // the plus one is to check if there are any more
                     },
                     DEFAULT_LIST_LAYOUT = 'list-layout-1',

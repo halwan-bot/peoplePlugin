@@ -16,6 +16,7 @@
                     searchOptions = {
                         filter: {"$json.fName": {"$regex": '/*'}},
                         skip: 0,
+                        sort : {"rank": 1},
                         limit: _limit + 1 // the plus one is to check if there are any more
                     },
                     DEFAULT_LIST_LAYOUT = 'list-layout-1',
@@ -207,7 +208,7 @@
                                     if (event.data.design && event.data.design.itemLayout && currentItemLayout != event.data.design.itemLayout) {
                                         if (WidgetHome.items && WidgetHome.items.length) {
                                             var id = WidgetHome.items[0].id;
-                                            $rootScope.showFeed = true;
+                                            $rootScope.showHome = true;
                                             Location.goTo("#/people/" + id);
                                         }
                                     }

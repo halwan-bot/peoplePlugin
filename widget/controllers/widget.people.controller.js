@@ -15,8 +15,20 @@
                     DEFAULT_ITEM_LAYOUT: 'item-layout-1',
                     DEFAULT_SORT_OPTION: "Oldest to Newest"
                 };
+                var breadCrumbFlag = true;
 
-                buildfire.history.push('Person', { elementToShow: 'Person' });
+                buildfire.history.get('pluginBreadcrumbsOnly', function (err, result) {
+                    if(result && result.length) {
+                        result.forEach(function(breadCrumb) {
+                            if(breadCrumb.label == 'Person') {
+                                breadCrumbFlag = false;
+                            }
+                        });
+                    }
+                    if(breadCrumbFlag) {
+                        buildfire.history.push('Person', { elementToShow: 'Person' });
+                    }
+                });
 
                 /*
                  Send message to Control that this page has been opened

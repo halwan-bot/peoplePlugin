@@ -16,6 +16,7 @@
                     searchOptions = {
                         filter: {"$json.fName": {"$regex": '/*'}},
                         skip: 0,
+                        sort : {"rank": 1},
                         limit: _limit + 1 // the plus one is to check if there are any more
                     },
                     DEFAULT_LIST_LAYOUT = 'list-layout-1',
@@ -74,7 +75,7 @@
 
                 /*declare the device width heights*/
                 $rootScope.deviceHeight = window.innerHeight;
-                $rootScope.deviceWidth = window.innerWidth;
+                $rootScope.deviceWidth = window.innerWidth || 320;
                 $rootScope.backgroundImage = "";
 
                 /*initialize the device width heights*/
@@ -121,6 +122,8 @@
                             WidgetHome.data = result.data;
                             WidgetHome.data.design = WidgetHome.data.design || {};
                             if (WidgetHome.data.design) {
+                                WidgetHome.data.design.itemLayout = WidgetHome.data.design.itemLayout ? WidgetHome.data.design.itemLayout : WidgetHome.defaults.DEFAULT_ITEM_LAYOUT;
+                                WidgetHome.data.design.listLayout = WidgetHome.data.design.listLayout ? WidgetHome.data.design.listLayout : WidgetHome.defaults.DEFAULT_LIST_LAYOUT;
                                 currentBackgroundImage = WidgetHome.data.design.backgroundImage;
                                 currentItemLayout = WidgetHome.data.design.itemLayout;
                                 currentListLayout = WidgetHome.data.design.listLayout;
@@ -156,7 +159,7 @@
                 };
                 WidgetHome.showDescription = function (description) {
                   var _retVal = false;
-                  description = description.trim();
+                  description = description && description.trim();
                   if(description && (description !== '<p>&nbsp;<br></p>') && (description !== '<p><br data-mce-bogus="1"></p>')) {
                     _retVal = true;
                   }
@@ -175,7 +178,7 @@
                                 sortBy: WidgetHome.defaults.DEFAULT_SORT_OPTION
                             }
                         }
-                        if (!WidgetHome.data.design) {
+                        if (!WidgetHome.data.design || !WidgetHome.data.design.itemLayout || !WidgetHome.data.design.listLayout) {
                             WidgetHome.data.design = {
                                 itemLayout: WidgetHome.defaults.DEFAULT_ITEM_LAYOUT,
                                 listLayout: WidgetHome.defaults.DEFAULT_LIST_LAYOUT
@@ -240,7 +243,7 @@
                                             view.loadItems(WidgetHome.data.content.images);
                                         }
                                     }
-                                    if (event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {
+                                    if (event && event.data && event.data.content && event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {
                                         WidgetHome.data.content.sortBy = event.data.content.sortBy;
                                         WidgetHome.items = [];
                                         searchOptions.skip = 0;
@@ -263,7 +266,7 @@
                         return;
                     }
                     WidgetHome.busy = true;
-                    if (WidgetHome.data && WidgetHome.data.content.sortBy) {
+                    if (WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.sortBy) {
                         searchOptions = getSearchOptions(WidgetHome.data.content.sortBy);
                     }
                     Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
@@ -315,25 +318,62 @@
                     }
                 });
                 $rootScope.$on("ROUTE_CHANGED", function (e, listLayout, itemLayout, background, data) {
-                    WidgetHome.data = data
+                    WidgetHome.data = data;
                     if (!WidgetHome.data.design)
                         WidgetHome.data.design = {};
                     if (!WidgetHome.data.content)
                         WidgetHome.data.content = {};
-                    if (!view) {
+                    /*if (!view) {
                         view = new Buildfire.components.carousel.view("#carousel", []);
-                    }
-                    if (view && WidgetHome.data.content.images) {
+                    }*/
+                    /*if (view && WidgetHome.data.content.images) {
                         view.loadItems(WidgetHome.data.content.images);
-                    }
+                    }*/
                     if(background){
                         $rootScope.backgroundImage = background;
                     }
+                    Buildfire.datastore.onRefresh(function () {
+                        var success = function (result) {
+                              WidgetHome.data = result.data;
+                              WidgetHome.data.design = WidgetHome.data.design || {};
+                              if (WidgetHome.data.design) {
+                                  currentBackgroundImage = WidgetHome.data.design.backgroundImage;
+                                  currentItemLayout = WidgetHome.data.design.itemLayout;
+                                  currentListLayout = WidgetHome.data.design.listLayout;
+                              }
+                              if (WidgetHome.data.content) {
+                                  currentSortOrder = WidgetHome.data.content.sortBy;
+                              }
+                              if (!view) {
+                                  view = new Buildfire.components.carousel.view("#carousel", []);
+                              }
+                              if (WidgetHome.data.content && WidgetHome.data.content.images) {
+                                  view.loadItems(WidgetHome.data.content.images);
+                              } else {
+                                  view.loadItems([]);
+                              }
+                              $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
+                          }
+                          , error = function (err) {
+                              if (err) {
+                                  console.error('Error while getting data', err);
+                              }
+                          };
+
+                        PeopleInfo.get(TAG_NAMES.PEOPLE_INFO).then(success, error);
+                        WidgetHome.items = [];
+                        searchOptions.skip = 0;
+                        WidgetHome.busy = false;
+                        WidgetHome.loadMore();
+                        $scope.$digest();
+                    });
+
                     Buildfire.datastore.onUpdate(onUpdateCallback);
                 });
-                $scope.$on("$destroy", function () {
-                    WidgetHome.onUpdateFn.clear();
-                });
+
+                //$scope.$on("$destroy", function () {
+                //    WidgetHome.onUpdateFn.clear();
+                //});
                 $rootScope.$on("Carousel:LOADED", function () {
                     view = null;
                     if (!view) {
@@ -344,6 +384,41 @@
                     } else {
                         view.loadItems([]);
                     }
+                });
+                Buildfire.datastore.onRefresh(function () {
+                    var success = function (result) {
+                          WidgetHome.data = result.data;
+                          WidgetHome.data.design = WidgetHome.data.design || {};
+                          if (WidgetHome.data.design) {
+                              currentBackgroundImage = WidgetHome.data.design.backgroundImage;
+                              currentItemLayout = WidgetHome.data.design.itemLayout;
+                              currentListLayout = WidgetHome.data.design.listLayout;
+                          }
+                          if (WidgetHome.data.content) {
+                              currentSortOrder = WidgetHome.data.content.sortBy;
+                          }
+                          if (!view) {
+                              view = new Buildfire.components.carousel.view("#carousel", []);
+                          }
+                          if (WidgetHome.data.content && WidgetHome.data.content.images) {
+                              view.loadItems(WidgetHome.data.content.images);
+                          } else {
+                              view.loadItems([]);
+                          }
+                          $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
+                      }
+                      , error = function (err) {
+                          if (err) {
+                              console.error('Error while getting data', err);
+                          }
+                      };
+
+                    PeopleInfo.get(TAG_NAMES.PEOPLE_INFO).then(success, error);
+                    WidgetHome.items = [];
+                    searchOptions.skip = 0;
+                    WidgetHome.busy = false;
+                    WidgetHome.loadMore();
+                    $scope.$digest();
                 });
             }]);
 })(window.angular, window);

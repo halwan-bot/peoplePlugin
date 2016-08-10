@@ -116,6 +116,10 @@
 	padding-left:110px;
 	width:100%;
 }
+.listlayout1 .list-items .list-item:first-child{
+	min-height:60px;
+}
+
 /* End Plugin CSS */
 
 
@@ -206,4 +210,8 @@ ol li{
 
 .set-top-padding {
     padding-top: 0px !important;
+}
+
+.text-white{
+	color: white !important;
 }

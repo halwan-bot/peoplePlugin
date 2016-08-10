@@ -2,7 +2,7 @@
     <div>
         <div class="carousel-padding-botton" id="carousel"></div>
         <div class="item clearfix row">
-            <div class="col-md-12 pull-right">
+            <div class="col-md-9 pull-right">
                 <div class="well text-center margin-bottom-zero" ng-if="!ContentHome.data.content.images.length">
                     <p class="margin-zero">No items found.</p>
                 </div>
@@ -22,7 +22,7 @@
                       ng-model="ContentHome.data.content.description" placeholder="WYSIWYG"></textarea>
         </div>
     </div>
-    <hr>
+    <hr class="none">
     <div class="item clearfix row margin-top-thirty" data-ng-show="ContentHome.csvDataInvalid">
         <div class="labels col-md-12">
             <div class="alert alert-warning">
@@ -31,6 +31,7 @@
             </div>
         </div>
     </div>
+    <hr class="none">
     <div class="item clearfix row margin-top-thirty">
         <div class="labels col-md-3 padding-right-zero pull-left">
             <span>Bulk Actions</span>
@@ -41,6 +42,7 @@
             <a class="btn btn-primary margin-left-ten" ng-click="ContentHome.getTemplate()">Get Template</a>
         </div>
     </div>
+    <hr class="none">
     <div class="item clearfix row">
         <div class="labels col-md-3 padding-right-zero pull-left">
 
@@ -51,7 +53,7 @@
     </div>
     <hr class="none">
     <div class="item clearfix row">
-        <div class="main col-md-9 pull-right padding-left-zero row">
+        <div class="main col-md-12 pull-right padding-left-zero row">
             <div class="pull-left inner-main col-md-8 padding-zero">
                 <input type="text" class="form-control" ng-model="search" placeholder="Name">
             </div>
@@ -61,17 +63,14 @@
             </div>
         </div>
     </div>
-    <hr>
+    <hr class="remove-border-margin">
     <div class="item clearfix row">
         <div class="main pull-left col-md-12 padding-left-zero">
-            <div class="col-md-4 pull-left col-md-offset-2">
-                <a class="btn btn-success pull-right stretch" href="#/people">Add New Item</a>
-            </div>
-            <div class="pull-right col-md-6 padding-zero">
-                <div class="pull-left col-md-5 margin-top-five text-right">
+            <div class="pull-left col-md-5 padding-zero">
+                <div class="pull-left col-md-4 margin-top-five">
                     <span>Sort By</span>
                 </div>
-                <div class="dropdown pull-right col-md-7 padding-zero" dropdown is-open="status.isopen">
+                <div class="dropdown pull-right col-md-8 padding-zero" dropdown is-open="status.isopen">
                     <button class="btn btn-default text-left dropdown-toggle" dropdown-toggle ng-disabled="disabled"
                             aria-expanded="true">
                         <span class="pull-left">{{ContentHome.data.content.sortBy || ContentHome.sortingOptions[0]}}</span>
@@ -85,9 +84,12 @@
                     </ul>
                 </div>
             </div>
+            <div class="col-md-4 pull-left col-md-offset-2">
+                <a class="btn btn-success pull-right stretch" href="#/people">Add New Item</a>
+            </div>
         </div>
     </div>
-    <hr>
+    <hr class="remove-border-margin">
     <div class="item clearfix">
         <div ng-if="ContentHome.DeepLinkCopyUrl" class="alert alert-success transition-half deep-link">
             <span class="text-center">DeepLink URL copied to clipboard.</span>

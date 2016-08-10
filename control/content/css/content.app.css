@@ -235,3 +235,8 @@ top: 8px;
     width: 69%;
     margin-left: 161px;
 }
+
+.remove-border-margin {
+    border-top: 1px solid #fff;
+    margin-top: 0px;
+}

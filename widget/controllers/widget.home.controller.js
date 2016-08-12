@@ -208,7 +208,7 @@
                                     if (event.data.design && event.data.design.itemLayout && currentItemLayout != event.data.design.itemLayout) {
                                         if (WidgetHome.items && WidgetHome.items.length) {
                                             var id = WidgetHome.items[0].id;
-                                            $rootScope.showFeed = true;
+                                            $rootScope.showHome = true;
                                             Location.goTo("#/people/" + id);
                                         }
                                     }

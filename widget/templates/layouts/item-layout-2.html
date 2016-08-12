@@ -1,7 +1,6 @@
 <div class="holder padding-zero">
 	<div class="people-plugin layout2">
-		<div class="people-banner text-overlay" style="min-height: 170px"
-         ng-if="WidgetPeople.item.topImage"
+		<div class="people-banner text-overlay" style="min-height: 170px" ng-if="WidgetPeople.item.topImage"
          data-ng-attr-style="background:url({{WidgetPeople.item.topImage}}) no-repeat; background-position:center center;" crop-width="342" crop-height="170" crop-type="crop">
 			<div class="people-bg padding-top-fifteen padding-bottom-fifteen clearfix">
 				<div class="people-holder clearfix">	
@@ -10,9 +9,9 @@
                  data-final-src="{{WidgetPeople.item.topImage}}" crop-width="100" crop-height="100" crop-type="crop">
 					</div>
 					<div class="people-info text-center col-md-12">
-						<p class="ellipsis text-overlay" style="color:#fff !important;">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
-						<p class="ellipsis" style="color:#fff !important;">{{WidgetPeople.item.position}}</p>
-            			<a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
+						<p class="ellipsis text-overlay whiteTheme">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
+						<p class="ellipsis whiteTheme">{{WidgetPeople.item.position}}</p>
+            			<a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay whiteTheme" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
 					</div>
 				</div>
 			</div>

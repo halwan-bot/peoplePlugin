@@ -147,6 +147,28 @@
         };
 
         /**
+         * resetManualSorting(item, items) used to fix if two or matching ranks found.
+         * @param items are the list of all items being sorted.
+         */
+        var resetManualSorting = function(items){
+          var newMaxRank = items.length;
+          for( var index = 0; index < items.length; index++ ) {
+            var item = items[index];
+            item.data.rank = index + 1;
+            Buildfire.datastore.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err) {
+              if (err) {
+                console.error('Error during fixing ranks');
+              } else {
+                if (ContentHome.data.content.rankOfLastItem < newMaxRank) {
+                  ContentHome.data.content.rankOfLastItem = newMaxRank;
+                  RankOfLastItem.setRank(newMaxRank);
+                }
+              }
+            });
+          }
+        };
+
+        /**
          * ContentHome.itemSortableOptions used for ui-sortable directory to sort people listing Manually.
          * @type object
          */
@@ -164,6 +186,10 @@
               var isRankChanged = false;
               if (next) {
                 if (prev) {
+                  if(prev.data.rank && next.data.rank && prev.data.rank == next.data.rank) {
+                    console.error('matching ranks found. resetting manual sort');
+                    resetManualSorting(ContentHome.items)
+                  }
                   draggedItem.data.rank = ((prev.data.rank || 0) + (next.data.rank || 0)) / 2;
                   isRankChanged = true;
                 } else {

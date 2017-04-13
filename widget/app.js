@@ -199,7 +199,7 @@
                 element.attr("style", 'background-color:white');
               }
               element.css({
-                'background-size': 'cover'
+                'background-size': 'cover !important'
               });
             });
             // img = $filter("cropImage")(value, $rootScope.deviceWidth, $rootScope.deviceHeight, true);
@@ -208,7 +208,7 @@
             img = "";
             element.attr("style", 'background-color:white');
             element.css({
-              'background-size': 'cover'
+              'background-size': 'cover !important'
             });
           }
         });

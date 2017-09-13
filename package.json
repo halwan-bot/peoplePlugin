@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "BuildFire Plugin to allow App Owners to include Staff/People into their app and provide contact info",
   "main": "index.js",
+  "supportSite":"http://learn.appdocumentation.com/plugin-tutorials/people-plugin-tutorial",
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
     "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"

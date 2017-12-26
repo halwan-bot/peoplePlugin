@@ -96,6 +96,47 @@
                     }
                 };
 
+               var initCarousel= function (carouselImages){
+                    var carouselContainer = document.getElementById("carousel");
+                    if (carouselImages && carouselImages.length > 0) {
+                        /*
+                         if more than one image add carousel else add image directly to the carousel container
+                         */
+                        if (carouselImages.length > 1) {
+
+                            var carousel = new buildfire.components.carousel.view({
+                                selector: carouselContainer,
+                                items: carouselImages,
+                                speed: 1000
+                            });
+
+                        } else {
+                            //add image directly to carousel container without adding the carousel lib
+                            carouselContainer.innerHTML = '';
+                            //append image tag
+                            var img = document.createElement('img');
+                            img.setAttribute("src", buildfire.imageLib.cropImage(carouselImages[0].iconUrl, {
+                                width: window.innerWidth,
+                                height: Math.ceil(9 * (window.innerWidth) / 16)
+                            }));
+                            img.alt = "Carousel Image";
+                            carouselContainer.appendChild(img);
+                            img.addEventListener("click", function () {
+                                buildfire.actionItems.execute(carouselImages[0], function (err, result) {
+                                    if (err) {
+                                        console.warn('Error openning slider action: ', err);
+                                    }
+                                });
+                            });
+                        }
+
+                        carouselContainer.classList.remove('hide');
+                    } else {
+                        carouselContainer.classList.add('hide');
+                    }
+
+                };
+
                 /* Get People details*/
                 WidgetHome.getPeopleDetails = function (peopleId) {
                     Location.goTo("#/people/" + peopleId);
@@ -344,14 +385,11 @@
                               if (WidgetHome.data.content) {
                                   currentSortOrder = WidgetHome.data.content.sortBy;
                               }
-                              if (!view) {
-                                  view = new Buildfire.components.carousel.view("#carousel", []);
-                              }
-                              if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                                  view.loadItems(WidgetHome.data.content.images);
-                              } else {
-                                  view.loadItems([]);
-                              }
+
+                            if (WidgetHome.data.content && WidgetHome.data.content.images) {
+                                initCarousel(WidgetHome.data.content.images);
+
+                            }
                               $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
                           }
                           , error = function (err) {
@@ -375,14 +413,9 @@
                 //    WidgetHome.onUpdateFn.clear();
                 //});
                 $rootScope.$on("Carousel:LOADED", function () {
-                    view = null;
-                    if (!view) {
-                        view = new Buildfire.components.carousel.view("#carousel", []);
-                    }
+
                     if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                        view.loadItems(WidgetHome.data.content.images);
-                    } else {
-                        view.loadItems([]);
+                        initCarousel(WidgetHome.data.content.images);
                     }
                 });
                 Buildfire.datastore.onRefresh(function () {
@@ -397,14 +430,9 @@
                           if (WidgetHome.data.content) {
                               currentSortOrder = WidgetHome.data.content.sortBy;
                           }
-                          if (!view) {
-                              view = new Buildfire.components.carousel.view("#carousel", []);
-                          }
-                          if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                              view.loadItems(WidgetHome.data.content.images);
-                          } else {
-                              view.loadItems([]);
-                          }
+                        if (WidgetHome.data.content && WidgetHome.data.content.images) {
+                            initCarousel(WidgetHome.data.content.images);
+                        }
                           $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
                       }
                       , error = function (err) {

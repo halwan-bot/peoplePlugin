@@ -248,9 +248,7 @@
                                         view = null;
                                     }
                                     else {
-                                        if (view) {
-                                            view.loadItems(WidgetHome.data.content.images);
-                                        }
+                                        initCarousel(WidgetHome.data.content.images);
                                     }
                                     if (event && event.data && event.data.content && event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {
                                         WidgetHome.data.content.sortBy = event.data.content.sortBy;

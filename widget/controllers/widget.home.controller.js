@@ -96,6 +96,15 @@
                     }
                 };
 
+               var initCarousel= function (carouselImages){
+                   var carouselContainer = document.getElementById("carousel");
+                   var carousel = new buildfire.components.carousel.view({
+                       selector: carouselContainer,
+                       items: carouselImages,
+                       speed: 1000
+                   });
+                };
+
                 /* Get People details*/
                 WidgetHome.getPeopleDetails = function (peopleId) {
                     Location.goTo("#/people/" + peopleId);
@@ -239,9 +248,7 @@
                                         view = null;
                                     }
                                     else {
-                                        if (view) {
-                                            view.loadItems(WidgetHome.data.content.images);
-                                        }
+                                        initCarousel(WidgetHome.data.content.images);
                                     }
                                     if (event && event.data && event.data.content && event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {
                                         WidgetHome.data.content.sortBy = event.data.content.sortBy;
@@ -344,14 +351,11 @@
                               if (WidgetHome.data.content) {
                                   currentSortOrder = WidgetHome.data.content.sortBy;
                               }
-                              if (!view) {
-                                  view = new Buildfire.components.carousel.view("#carousel", []);
-                              }
-                              if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                                  view.loadItems(WidgetHome.data.content.images);
-                              } else {
-                                  view.loadItems([]);
-                              }
+
+                            if (WidgetHome.data.content && WidgetHome.data.content.images) {
+                                initCarousel(WidgetHome.data.content.images);
+
+                            }
                               $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
                           }
                           , error = function (err) {
@@ -375,14 +379,9 @@
                 //    WidgetHome.onUpdateFn.clear();
                 //});
                 $rootScope.$on("Carousel:LOADED", function () {
-                    view = null;
-                    if (!view) {
-                        view = new Buildfire.components.carousel.view("#carousel", []);
-                    }
+
                     if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                        view.loadItems(WidgetHome.data.content.images);
-                    } else {
-                        view.loadItems([]);
+                        initCarousel(WidgetHome.data.content.images);
                     }
                 });
                 Buildfire.datastore.onRefresh(function () {
@@ -397,14 +396,9 @@
                           if (WidgetHome.data.content) {
                               currentSortOrder = WidgetHome.data.content.sortBy;
                           }
-                          if (!view) {
-                              view = new Buildfire.components.carousel.view("#carousel", []);
-                          }
-                          if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                              view.loadItems(WidgetHome.data.content.images);
-                          } else {
-                              view.loadItems([]);
-                          }
+                        if (WidgetHome.data.content && WidgetHome.data.content.images) {
+                            initCarousel(WidgetHome.data.content.images);
+                        }
                           $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
                       }
                       , error = function (err) {

@@ -85,7 +85,7 @@
                 };
                 var itemId = $routeParams.id;
                 var getPeopleDetail = function () {
-                    Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
+                    Buildfire.publicData.getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                             $rootScope.showHome = false;
                             console.error('-----------Unable to load data-------------', err);
@@ -99,7 +99,7 @@
                     });
                 };
                 var getContentPeopleInfo = function () {
-                    Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
+                    Buildfire.publicData.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
 
                         if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                             return console.error('-----------err-------------', err);
@@ -130,7 +130,7 @@
                 };
                 getContentPeopleInfo();
                 function bindOnUpdate() {
-                    WidgetPeople.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
+                    WidgetPeople.onUpdateFn = Buildfire.publicData.onUpdate(function (event) {
                         console.log("Hello--------1")
                         if (event && event.tag) {
                             switch (event.tag) {
@@ -179,7 +179,7 @@
                         buildfire.actionItems.list(actionItems, options, callback);
                     }
                 }
-                Buildfire.datastore.onRefresh(function(){
+                Buildfire.publicData.onRefresh(function(){
 
                     getPeopleDetail();
                   });

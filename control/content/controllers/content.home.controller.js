@@ -155,7 +155,7 @@
           for( var index = 0; index < items.length; index++ ) {
             var item = items[index];
             item.data.rank = index + 1;
-            Buildfire.datastore.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err) {
+            Buildfire.publicData.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err) {
               if (err) {
                 console.error('Error during fixing ranks');
               } else {
@@ -204,7 +204,7 @@
                 }
               }
               if (isRankChanged) {
-                Buildfire.datastore.update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
+                Buildfire.publicData.update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
                   if (err) {
                     console.error('Error during updating rank');
                   } else {
@@ -232,7 +232,7 @@
         buildfire.messaging.sendMessageToWidget({type: 'Init'});
 
         /**
-         * saveData(newObj, tag) used to save a new record in datastore.
+         * saveData(newObj, tag) used to save a new record in publicData.
          * @param newObj is a new/modified object.
          * @param tag is a tag name or identity given to the data json during saving the record.
          */
@@ -240,7 +240,7 @@
           if (newObj == undefined)
             return;
           newObj.content.rankOfLastItem = newObj.content.rankOfLastItem || 0;
-          Buildfire.datastore.save(newObj, tag, function (err, result) {
+          Buildfire.publicData.save(newObj, tag , function (err, result) {
             if (err || !result) {
               console.error('------------error saveData-------', err);
             }
@@ -298,7 +298,7 @@
           if (ContentHome.data && ContentHome.data.content.sortBy && !search) {
               ContentHome.searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
           }
-          Buildfire.datastore.search(ContentHome.searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+          Buildfire.publicData.search(ContentHome.searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
             if (err) {
               Buildfire.spinner.hide();
               return console.error('-----------err in getting list-------------', err);
@@ -333,7 +333,7 @@
         };
 
           ContentHome.updateItemData = function (item) {
-              Buildfire.datastore.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err, result) {
+              Buildfire.publicData.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err, result) {
                   if (err)
                       return console.error('There was a problem saving your data');
               });
@@ -364,7 +364,7 @@
                 rows[index].rank = rank;
               }
               if (validateCsv(rows)) {
-                Buildfire.datastore.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
+                Buildfire.publicData.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
                   Buildfire.spinner.hide();
                   $scope.$apply();
                   if (err) {
@@ -448,7 +448,7 @@
          */
         function getRecords(searchOption, records, callback) {
           console.log("Data length", records.length);
-          Buildfire.datastore.search(searchOption, TAG_NAMES.PEOPLE, function (err, result) {
+          Buildfire.publicData.search(searchOption, TAG_NAMES.PEOPLE, function (err, result) {
             if (err) {
               console.error('-----------err in getting list-------------', err);
               return callback(err, []);
@@ -505,7 +505,7 @@
           modalInstance.result.then(function (message) {
             if (message === 'yes') {
               var item = ContentHome.items[_index];
-              Buildfire.datastore.delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
+              Buildfire.publicData.delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
                 if (err)
                   return;
                 ContentHome.items.splice(_index, 1);

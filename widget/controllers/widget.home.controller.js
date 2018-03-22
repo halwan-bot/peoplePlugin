@@ -264,7 +264,7 @@
                         $rootScope.$apply();
                     }
                 };
-                Buildfire.datastore.onUpdate(onUpdateCallback);
+                Buildfire.publicData.onUpdate(onUpdateCallback);
                 WidgetHome.noMore = false;
                 WidgetHome.loadMore = function (multi, times) {
                     Buildfire.spinner.show();
@@ -276,7 +276,7 @@
                     if (WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.sortBy) {
                         searchOptions = getSearchOptions(WidgetHome.data.content.sortBy);
                     }
-                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                    Buildfire.publicData.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                         console.log('-----------WidgetHome.loadMore-------------');
                         if (err) {
                             Buildfire.spinner.hide();
@@ -339,7 +339,7 @@
                     if(background){
                         $rootScope.backgroundImage = background;
                     }
-                    Buildfire.datastore.onRefresh(function () {
+                    Buildfire.publicData.onRefresh(function () {
                         var success = function (result) {
                               WidgetHome.data = result.data;
                               WidgetHome.data.design = WidgetHome.data.design || {};
@@ -372,7 +372,7 @@
                         $scope.$digest();
                     });
 
-                    Buildfire.datastore.onUpdate(onUpdateCallback);
+                    Buildfire.publicData.onUpdate(onUpdateCallback);
                 });
 
                 //$scope.$on("$destroy", function () {
@@ -384,7 +384,7 @@
                         initCarousel(WidgetHome.data.content.images);
                     }
                 });
-                Buildfire.datastore.onRefresh(function () {
+                Buildfire.publicData.onRefresh(function () {
                     var success = function (result) {
                           WidgetHome.data = result.data;
                           WidgetHome.data.design = WidgetHome.data.design || {};

@@ -26,47 +26,10 @@
                     $scope.onSearchChange();
                 }
 
-                var search = debounce(function(searchOptions) {
-                    Buildfire.spinner.show();
-
-                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
-                        if (err) {
-                            Buildfire.spinner.hide();
-                            return console.error(err);
-                        }
-
-                        if (result.length <= _limit) {// to indicate there are more
-                            WidgetHome.noMore = true;
-                        } else {
-                            result.pop();
-                            searchOptions.skip = searchOptions.skip + _limit;
-                            WidgetHome.noMore = false;
-                        }
-                        WidgetHome.items = result;
-                        WidgetHome.busy = false;
-                        // if (multi && !WidgetHome.noMore && times) {
-                        //     times = times - 1;
-                        //     WidgetHome.loadMore(multi, times);
-                        // }
-
-                        Buildfire.spinner.hide();
-                        $scope.$digest();
-                    });
-                }, 500);
-
                 // listen to input changes
                 $scope.onSearchChange = function() {
-                    Buildfire.spinner.hide();
-                    var searchOptions = {
-                        filter: {
-                            $or: [
-                                { "$json.fName": { $regex: $scope.searchInput, $options: 'i' } }
-                            ]
-                        }
-                    }
-
-                    getSortOption(WidgetHome.data.content ? WidgetHome.data.content.sortBy : '', searchOptions);
-                    search(searchOptions);
+                    searchOptions.skip = 0;
+                    WidgetHome.loadMore();
                 }
 
                 $scope.onSearchSubmit = function(e) {
@@ -345,6 +308,15 @@
                     if (WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.sortBy) {
                         searchOptions = getSortOption(WidgetHome.data.content.sortBy, searchOptions);
                     }
+
+                    if ($scope.searchInput) {
+                        searchOptions.filter = {
+                            $or: [
+                                { "$json.fName": { $regex: $scope.searchInput, $options: 'i' } }
+                            ]
+                        };
+                    }
+
                     Buildfire.publicData.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                         console.log('-----------WidgetHome.loadMore-------------');
                         if (err) {
@@ -359,7 +331,13 @@
                             searchOptions.skip = searchOptions.skip + _limit;
                             WidgetHome.noMore = false;
                         }
-                        WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
+
+                        if ($scope.searchInput) {
+                            WidgetHome.items = result;
+                        } else {
+                            WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
+                        }
+
                         WidgetHome.busy = false;
                         if (multi && !WidgetHome.noMore && times) {
                             times = times - 1;

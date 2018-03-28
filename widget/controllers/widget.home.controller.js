@@ -26,10 +26,17 @@
                     $scope.onSearchChange();
                 }
 
+                var executeSearch = debounce(WidgetHome.loadMore, 500);
+
                 // listen to input changes
                 $scope.onSearchChange = function() {
+                    // Don't do anything if the search is less than 3 characters and isn't empty
+                    if ($scope.searchInput.length < 3 && $scope.searchInput.length !== 0) {
+                        return;
+                    }
+
                     searchOptions.skip = 0;
-                    WidgetHome.loadMore();
+                    executeSearch();
                 }
 
                 $scope.onSearchSubmit = function(e) {
@@ -312,7 +319,9 @@
                     if ($scope.searchInput) {
                         searchOptions.filter = {
                             $or: [
-                                { "$json.fName": { $regex: $scope.searchInput, $options: 'i' } }
+                                { "$json.fName": { $regex: $scope.searchInput, $options: 'i' } },
+                                { "$json.lName": { $regex: $scope.searchInput, $options: 'i' } },
+                                { "$json.position": { $regex: $scope.searchInput, $options: 'i' } }
                             ]
                         };
                     }

@@ -26,7 +26,9 @@
                     $scope.onSearchChange();
                 }
 
-                var executeSearch = debounce(WidgetHome.loadMore, 500);
+                var executeSearch = debounce(function() {
+                    WidgetHome.loadMore();
+                }, 500);
 
                 // listen to input changes
                 $scope.onSearchChange = function() {

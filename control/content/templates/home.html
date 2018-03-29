@@ -4,7 +4,7 @@
             <span>Database Type</span>
         </div>
         <div class="col-xs-7">
-            <select name="datastore" class="form-control">
+            <select name="datastore" class="form-control" ng-model="selectedProvider" ng-change="changeDbProvider()">
                 <option value="datastore" selected="selected">Datastore (Default)</option>
                 <option value="publicData">Public Data</option>
             </select>

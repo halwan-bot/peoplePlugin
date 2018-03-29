@@ -42,7 +42,20 @@
               skip: SORT._skip,
               limit: SORT._limit + 1 // the plus one is to check if there are any more
         };
-
+        $scope.selectedProvider = "datastore";
+        $scope.changeDbProvider= function(){
+          console.log($scope.selectedProvider);
+          Buildfire.datastore.save($scope.selectedProvider, TAG_NAMES.DB_PROVIDER, function (err, result) {
+            if (err) {
+              console.error(err);
+            }
+            else if (result) {
+              location.reload();
+            } else {
+              console.error("Db Provider not saved!");
+            }
+          });
+        };
         /**
          * ContentHome.busy used to enable/disable infiniteScroll. if busy true it means there is not more data.
          * @type {boolean}

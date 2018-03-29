@@ -42,7 +42,10 @@
               skip: SORT._skip,
               limit: SORT._limit + 1 // the plus one is to check if there are any more
         };
-
+        $scope.selectedProvider = "datastore";
+        $scope.changeDbProvider= function(){
+          console.log($scope.selectedProvider);
+        };
         /**
          * ContentHome.busy used to enable/disable infiniteScroll. if busy true it means there is not more data.
          * @type {boolean}

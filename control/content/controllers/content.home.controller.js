@@ -364,6 +364,7 @@
                 rows[index].rank = rank;
               }
               if (validateCsv(rows)) {
+                console.log(rows);
                 Buildfire.publicData.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
                   Buildfire.spinner.hide();
                   $scope.$apply();

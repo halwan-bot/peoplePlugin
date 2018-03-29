@@ -6,6 +6,12 @@
         .controller('WidgetHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'COLLECTIONS', 'ERROR_CODE', "Location", '$sce', '$rootScope', 'DB',
             function ($scope, Buildfire, TAG_NAMES, COLLECTIONS, ERROR_CODE, Location, $sce, $rootScope, DB) {
 
+                Buildfire.datastore.onUpdate(function(event) {
+                    if (event && event.tag === 'dbProvider') {
+                        location.reload();
+                    }
+                })
+
                 function debounce(func, wait, immediate) {
                   var timeout;
                   return function() {

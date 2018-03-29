@@ -42,14 +42,23 @@
               skip: SORT._skip,
               limit: SORT._limit + 1 // the plus one is to check if there are any more
         };
-        $scope.selectedProvider = "datastore";
-        $scope.changeDbProvider= function(){
-          console.log($scope.selectedProvider);
-          Buildfire.datastore.save($scope.selectedProvider, TAG_NAMES.DB_PROVIDER, function (err, result) {
+
+        var providers = {
+          datastore: 'Datastore (Default)',
+          publicData: 'Public Data'
+        };
+
+        $scope.selectedProvider = providers[getProvider()];
+
+        $scope.changeDbProvider= function(selectedProvider){
+          Buildfire.datastore.save({
+            provider: selectedProvider
+          }, TAG_NAMES.DB_PROVIDER, function (err, result) {
             if (err) {
               console.error(err);
             }
             else if (result) {
+              localStorage[getLocalStorageKey()] = selectedProvider;
               location.reload();
             } else {
               console.error("Db Provider not saved!");

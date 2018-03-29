@@ -215,3 +215,26 @@
       };
     }]);
 })(window.angular, window.buildfire);
+
+function getLocalStorageKey() {
+  return buildfire.context.instanceId + '.dbProvider';
+}
+
+function getProvider() {
+  return localStorage[getLocalStorageKey()] || 'datastore';
+}
+
+(function() {
+    buildfire.datastore.get('dbProvider', function(err, result) {
+      if (err) return console.error(err);
+      let currentProvider = getProvider();
+
+      // If we are using a provider different to the one selected, we save it
+      // to local storage and reload the plugin
+      if (currentProvider !== result.data.provider) {
+        localStorage[getLocalStorageKey()] = result.data.provider;
+        location.reload();
+      }
+
+    });
+})();

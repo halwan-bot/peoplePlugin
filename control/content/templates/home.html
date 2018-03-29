@@ -4,11 +4,21 @@
             <span>Database Type</span>
         </div>
         <div class="col-xs-7">
-            <select name="datastore" class="form-control" ng-model="selectedProvider" ng-change="changeDbProvider()">
-                <option value="datastore" selected="selected">Datastore (Default)</option>
-                <option value="publicData">Public Data</option>
-            </select>
-            <span class="note">Warning: Changing this can cause data loss.</span>
+            <div class="dropdown padding-zero" dropdown>
+                <button class="btn btn-default text-left dropdown-toggle" dropdown-toggle aria-expanded="true">
+                    <span class="pull-left">{{ selectedProvider }}</span>
+                    <span class="chevron icon-chevron-down pull-right"></span>
+                </button>
+                <ul class="dropdown-menu extended" role="menu">
+                    <li tabindex="0" ng-click="changeDbProvider('datastore')">
+                        <a class="transition-third">Datastore (Default)</a>
+                    </li>
+                    <li tabindex="1" ng-click="changeDbProvider('publicData')">
+                        <a class="transition-third">Public Data</a>
+                    </li>
+                </ul>
+                <span class="note">Warning: Changing this can cause data loss.</span>
+            </div>
         </div>
     </div>
     <hr class="none"/>

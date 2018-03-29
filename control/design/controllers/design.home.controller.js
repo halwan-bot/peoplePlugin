@@ -51,7 +51,7 @@
                         description: ""
                     }
                 };
-                Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, data) {
+                Buildfire.publicData.get(TAG_NAMES.PEOPLE_INFO, function (err, data) {
                     if (err) {
                         Console.log('------------Error in Design of People Plugin------------', err);
                     }
@@ -97,7 +97,7 @@
             }, function (newObj) {
                 if (!angular.equals(newObj,DesignHomeMaster)){
                     console.log("hello data1", newObj, DesignHomeMaster)
-                    Buildfire.datastore.save(DesignHome.peopleInfo, TAG_NAMES.PEOPLE_INFO, function (err, data) {
+                    Buildfire.publicData.save(DesignHome.peopleInfo, TAG_NAMES.PEOPLE_INFO, function (err, data) {
                         if (err) {
                             console.log("hello error", err)
                             return DesignHome.peopleInfo = angular.copy(DesignHomeMaster);

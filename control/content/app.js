@@ -196,10 +196,18 @@
         }]);
 
     angular.element(function() {
+        var defaultProvider = 'datastore';
         buildfire.datastore.get('dbProvider', function(err, result) {
-          if (err) return console.error(err);
-          window.DB_PROVIDER = result.data.provider;
-          angular.bootstrap(document, ['peoplePluginContent']);
+          try {
+              if (err) throw err;
+              window.DB_PROVIDER = result.data.provider
+                ? result.data.provider
+                : defaultProvider;
+              angular.bootstrap(document, ['peoplePluginContent']);
+            } catch (err) {
+              window.DB_PROVIDER = defaultProvider;
+              angular.bootstrap(document, ['peoplePluginContent']);
+            }
         });
     })
 

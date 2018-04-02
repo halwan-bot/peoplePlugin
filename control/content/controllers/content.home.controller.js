@@ -48,8 +48,7 @@
           publicData: 'Public Data'
         };
 
-        $scope.selectedProvider = providers[getProvider()];
-
+        $scope.selectedProvider = providers[window.DB_PROVIDER];
         $scope.changeDbProvider= function(selectedProvider){
           Buildfire.datastore.save({
             provider: selectedProvider
@@ -58,7 +57,6 @@
               console.error(err);
             }
             else if (result) {
-              localStorage[getLocalStorageKey()] = selectedProvider;
               location.reload();
             } else {
               console.error("Db Provider not saved!");

@@ -226,6 +226,10 @@
                     $scope.imagesUpdated = false;
                     $scope.$digest();
                     if (event && event.tag) {
+                        if (event.tag === 'dbProvider') {
+                            location.reload();
+                        }
+
                         if (event.data && WidgetHome.data.design && event.data.design) {
                             WidgetHome.data.design = event.data.design;
                         }

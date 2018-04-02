@@ -175,7 +175,7 @@
           for( var index = 0; index < items.length; index++ ) {
             var item = items[index];
             item.data.rank = index + 1;
-            Buildfire.publicData.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err) {
+            Buildfire[window.DB_PROVIDER].update(item.id, item.data, TAG_NAMES.PEOPLE, function (err) {
               if (err) {
                 console.error('Error during fixing ranks');
               } else {
@@ -224,7 +224,7 @@
                 }
               }
               if (isRankChanged) {
-                Buildfire.publicData.update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
+                Buildfire[window.DB_PROVIDER].update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
                   if (err) {
                     console.error('Error during updating rank');
                   } else {
@@ -260,7 +260,7 @@
           if (newObj == undefined)
             return;
           newObj.content.rankOfLastItem = newObj.content.rankOfLastItem || 0;
-          Buildfire.publicData.save(newObj, tag , function (err, result) {
+          Buildfire[window.DB_PROVIDER].save(newObj, tag , function (err, result) {
             if (err || !result) {
               console.error('------------error saveData-------', err);
             }
@@ -318,7 +318,7 @@
           if (ContentHome.data && ContentHome.data.content.sortBy && !search) {
               ContentHome.searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
           }
-          Buildfire.publicData.search(ContentHome.searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+          Buildfire[window.DB_PROVIDER].search(ContentHome.searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
             if (err) {
               Buildfire.spinner.hide();
               return console.error('-----------err in getting list-------------', err);
@@ -353,7 +353,7 @@
         };
 
           ContentHome.updateItemData = function (item) {
-              Buildfire.publicData.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err, result) {
+              Buildfire[window.DB_PROVIDER].update(item.id, item.data, TAG_NAMES.PEOPLE, function (err, result) {
                   if (err)
                       return console.error('There was a problem saving your data');
               });
@@ -385,7 +385,7 @@
               }
               if (validateCsv(rows)) {
                 console.log(rows);
-                Buildfire.publicData.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
+                Buildfire[window.DB_PROVIDER].bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
                   Buildfire.spinner.hide();
                   $scope.$apply();
                   if (err) {
@@ -469,7 +469,7 @@
          */
         function getRecords(searchOption, records, callback) {
           console.log("Data length", records.length);
-          Buildfire.publicData.search(searchOption, TAG_NAMES.PEOPLE, function (err, result) {
+          Buildfire[window.DB_PROVIDER].search(searchOption, TAG_NAMES.PEOPLE, function (err, result) {
             if (err) {
               console.error('-----------err in getting list-------------', err);
               return callback(err, []);
@@ -526,7 +526,7 @@
           modalInstance.result.then(function (message) {
             if (message === 'yes') {
               var item = ContentHome.items[_index];
-              Buildfire.publicData.delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
+              Buildfire[window.DB_PROVIDER].delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
                 if (err)
                   return;
                 ContentHome.items.splice(_index, 1);

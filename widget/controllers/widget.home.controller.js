@@ -311,7 +311,7 @@
                         $rootScope.$apply();
                     }
                 };
-                Buildfire.publicData.onUpdate(onUpdateCallback);
+                Buildfire[window.DB_PROVIDER].onUpdate(onUpdateCallback);
                 WidgetHome.noMore = false;
                 WidgetHome.loadMore = function (multi, times) {
                     Buildfire.spinner.show();
@@ -334,7 +334,7 @@
                         };
                     }
 
-                    Buildfire.publicData.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+                    Buildfire[window.DB_PROVIDER].search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                         console.log('-----------WidgetHome.loadMore-------------');
                         if (err) {
                             Buildfire.spinner.hide();
@@ -403,7 +403,7 @@
                     if(background){
                         $rootScope.backgroundImage = background;
                     }
-                    Buildfire.publicData.onRefresh(function () {
+                    Buildfire[window.DB_PROVIDER].onRefresh(function () {
                         var success = function (result) {
                               WidgetHome.data = result.data;
                               WidgetHome.data.design = WidgetHome.data.design || {};
@@ -436,7 +436,7 @@
                         $scope.$digest();
                     });
 
-                    Buildfire.publicData.onUpdate(onUpdateCallback);
+                    Buildfire[window.DB_PROVIDER].onUpdate(onUpdateCallback);
                 });
 
                 //$scope.$on("$destroy", function () {
@@ -448,7 +448,7 @@
                         initCarousel(WidgetHome.data.content.images);
                     }
                 });
-                Buildfire.publicData.onRefresh(function () {
+                Buildfire[window.DB_PROVIDER].onRefresh(function () {
                     var success = function (result) {
                           WidgetHome.data = result.data;
                           WidgetHome.data.design = WidgetHome.data.design || {};

@@ -3,16 +3,31 @@
 <head lang="en">
     <meta charset="UTF-8">
 
-	<!-- CSS
     <link href="../../../../styles/helper.css" rel="stylesheet">
-	-->
-	
-	<!-- JS
     <script src="../../../../scripts/buildfire.js"></script>
-    <script src="../../../../scripts/angular/angular.min.js"></script>
-	-->
 </head>
 <body>
-	No Settings
+  <div class="item clearfix row">
+      <div class="labels col-xs-3">
+          <span>Datastore Type</span>
+      </div>
+      <div class="col-xs-7">
+          <div class="dropdown padding-zero" dropdown>
+              <button class="btn btn-default text-left dropdown-toggle" dropdown-toggle aria-expanded="true">
+                  <span class="pull-left">Datastore</span>
+                  <span class="chevron icon-chevron-down pull-right"></span>
+              </button>
+              <ul class="dropdown-menu extended" role="menu">
+                  <li tabindex="0" ng-click="changeDbProvider('datastore')">
+                      <a class="transition-third">Datastore (Default)</a>
+                  </li>
+                  <li tabindex="1" ng-click="changeDbProvider('publicData')">
+                      <a class="transition-third">Public Data</a>
+                  </li>
+              </ul>
+              <span class="note">Warning: Changing this can cause data loss.</span>
+          </div>
+      </div>
+  </div>
 </body>
 </html>

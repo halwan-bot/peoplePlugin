@@ -159,6 +159,7 @@
                                     break;
                             }
                             $scope.$digest();
+                            buildfire.appearance.ready();
                         }
                     });
                 }

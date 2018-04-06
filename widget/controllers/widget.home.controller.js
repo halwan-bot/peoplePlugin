@@ -38,19 +38,26 @@
 
                 // listen to input changes
                 $scope.onSearchChange = function() {
+                    var isEmptySearch = ($scope.searchInput.length === 0);
+
                     // Don't do anything if the search is less than 3 characters and isn't empty
-                    if ($scope.searchInput.length < 3 && $scope.searchInput.length !== 0) {
+                    if ($scope.searchInput.length < 3 && !isEmptySearch) {
                         return;
+                    }
+
+                    //if the search is an empty search, clear out existing filtered results
+                    if(isEmptySearch) {
+                        WidgetHome.items = [];
                     }
 
                     searchOptions.skip = 0;
                     executeSearch();
-                }
+                };
 
                 $scope.onSearchSubmit = function(e) {
-                    e.preventDefault();
+                    //e.preventDefault();
                     console.log(e);
-                }
+                };
 
                 var MANUALLY = 'Manually',
                     OLDEST_TO_NEWEST = 'Oldest to Newest',
@@ -318,7 +325,7 @@
                 Buildfire[window.DB_PROVIDER].onUpdate(onUpdateCallback);
                 WidgetHome.noMore = false;
                 WidgetHome.loadMore = function (multi, times) {
-                    Buildfire.spinner.show();
+                    window.buildfire.spinner.show();
                     console.log("loadMore");
                     if (WidgetHome.busy) {
                         return;
@@ -336,17 +343,19 @@
                                 { "$json.position": { $regex: $scope.searchInput, $options: 'i' } }
                             ]
                         };
+                    }else{
+                        searchOptions.filter = {};
                     }
 
                     Buildfire[window.DB_PROVIDER].search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                         console.log('-----------WidgetHome.loadMore-------------');
                         if (err) {
-                            Buildfire.spinner.hide();
+                            window.buildfire.spinner.hide();
                             return console.error('-----------err in getting list-------------', err);
                         }
                         if (result.length <= _limit) {// to indicate there are more
                             WidgetHome.noMore = true;
-                            Buildfire.spinner.hide();
+                            window.buildfire.spinner.hide();
                         } else {
                             result.pop();
                             searchOptions.skip = searchOptions.skip + _limit;
@@ -364,7 +373,7 @@
                             times = times - 1;
                             WidgetHome.loadMore(multi, times);
                         }
-                        Buildfire.spinner.hide();
+                        window.buildfire.spinner.hide();
                         $scope.$digest();
                     });
                 };

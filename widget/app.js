@@ -144,7 +144,7 @@
         }
       });
 
-      /*buildfire.navigation.onBackButtonClick = function () {
+      buildfire.navigation.onBackButtonClick = function () {
         if (($location.path() != '/')) {
           buildfire.messaging.sendMessageToControl({});
           $rootScope.showHome = true;
@@ -153,7 +153,7 @@
         else {
           buildfire.navigation._goBackOne();
         }
-      };*/
+      };
 
       buildfire.history.onPop(function(data, err){
         buildfire.messaging.sendMessageToControl({});

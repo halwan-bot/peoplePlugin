@@ -19,7 +19,8 @@
         //injected ui.sortable for manual ordering of list
         .constant('TAG_NAMES', {
             PEOPLE_INFO: 'peopleInfo',
-            PEOPLE: 'people'
+            PEOPLE: 'people',
+            DB_PROVIDER : 'dbProvider'
         })
         .constant('ERROR_CODE', {
             NOT_FOUND: 'NOTFOUND'
@@ -193,4 +194,21 @@
                 console.log('Buildfire.history.onPop called--------------------------------------------', data, err);
             });
         }]);
+
+    angular.element(function() {
+        var defaultProvider = 'datastore';
+        buildfire.datastore.get('dbProvider', function(err, result) {
+          try {
+              if (err) throw err;
+              window.DB_PROVIDER = result.data.provider
+                ? result.data.provider
+                : defaultProvider;
+              angular.bootstrap(document, ['peoplePluginContent']);
+            } catch (err) {
+              window.DB_PROVIDER = defaultProvider;
+              angular.bootstrap(document, ['peoplePluginContent']);
+            }
+        });
+    })
+
 })(window.angular, window.buildfire);

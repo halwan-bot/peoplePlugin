@@ -43,6 +43,26 @@
               limit: SORT._limit + 1 // the plus one is to check if there are any more
         };
 
+        var providers = {
+          datastore: 'Datastore (Default)',
+          publicData: 'Public Data'
+        };
+
+        $scope.selectedProvider = providers[window.DB_PROVIDER];
+        $scope.changeDbProvider= function(selectedProvider){
+          Buildfire.datastore.save({
+            provider: selectedProvider
+          }, TAG_NAMES.DB_PROVIDER, function (err, result) {
+            if (err) {
+              console.error(err);
+            }
+            else if (result) {
+              location.reload();
+            } else {
+              console.error("Db Provider not saved!");
+            }
+          });
+        };
         /**
          * ContentHome.busy used to enable/disable infiniteScroll. if busy true it means there is not more data.
          * @type {boolean}
@@ -155,7 +175,7 @@
           for( var index = 0; index < items.length; index++ ) {
             var item = items[index];
             item.data.rank = index + 1;
-            Buildfire.datastore.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err) {
+            Buildfire[window.DB_PROVIDER].update(item.id, item.data, TAG_NAMES.PEOPLE, function (err) {
               if (err) {
                 console.error('Error during fixing ranks');
               } else {
@@ -204,7 +224,7 @@
                 }
               }
               if (isRankChanged) {
-                Buildfire.datastore.update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
+                Buildfire[window.DB_PROVIDER].update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
                   if (err) {
                     console.error('Error during updating rank');
                   } else {
@@ -232,7 +252,7 @@
         buildfire.messaging.sendMessageToWidget({type: 'Init'});
 
         /**
-         * saveData(newObj, tag) used to save a new record in datastore.
+         * saveData(newObj, tag) used to save a new record in publicData.
          * @param newObj is a new/modified object.
          * @param tag is a tag name or identity given to the data json during saving the record.
          */
@@ -240,7 +260,7 @@
           if (newObj == undefined)
             return;
           newObj.content.rankOfLastItem = newObj.content.rankOfLastItem || 0;
-          Buildfire.datastore.save(newObj, tag, function (err, result) {
+          Buildfire[window.DB_PROVIDER].save(newObj, tag , function (err, result) {
             if (err || !result) {
               console.error('------------error saveData-------', err);
             }
@@ -298,7 +318,7 @@
           if (ContentHome.data && ContentHome.data.content.sortBy && !search) {
               ContentHome.searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
           }
-          Buildfire.datastore.search(ContentHome.searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+          Buildfire[window.DB_PROVIDER].search(ContentHome.searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
             if (err) {
               Buildfire.spinner.hide();
               return console.error('-----------err in getting list-------------', err);
@@ -333,7 +353,7 @@
         };
 
           ContentHome.updateItemData = function (item) {
-              Buildfire.datastore.update(item.id, item.data, TAG_NAMES.PEOPLE, function (err, result) {
+              Buildfire[window.DB_PROVIDER].update(item.id, item.data, TAG_NAMES.PEOPLE, function (err, result) {
                   if (err)
                       return console.error('There was a problem saving your data');
               });
@@ -364,10 +384,14 @@
                 rows[index].rank = rank;
               }
               if (validateCsv(rows)) {
-                Buildfire.datastore.bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
+                console.log(rows);
+                Buildfire[window.DB_PROVIDER].bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
                   Buildfire.spinner.hide();
                   $scope.$apply();
                   if (err) {
+                    buildfire.notifications.alert('Failed to import CSV. Invalid file', function() {
+
+                    });
                     console.error('There was a problem while importing the file----', err);
                   }
                   else {
@@ -448,7 +472,7 @@
          */
         function getRecords(searchOption, records, callback) {
           console.log("Data length", records.length);
-          Buildfire.datastore.search(searchOption, TAG_NAMES.PEOPLE, function (err, result) {
+          Buildfire[window.DB_PROVIDER].search(searchOption, TAG_NAMES.PEOPLE, function (err, result) {
             if (err) {
               console.error('-----------err in getting list-------------', err);
               return callback(err, []);
@@ -505,7 +529,7 @@
           modalInstance.result.then(function (message) {
             if (message === 'yes') {
               var item = ContentHome.items[_index];
-              Buildfire.datastore.delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
+              Buildfire[window.DB_PROVIDER].delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
                 if (err)
                   return;
                 ContentHome.items.splice(_index, 1);

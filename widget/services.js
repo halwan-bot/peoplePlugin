@@ -22,7 +22,7 @@
             DB.prototype.get = function () {
                 var that = this;
                 var deferred = $q.defer();
-                Buildfire.datastore.get(that._tagName, function (err, result) {
+                Buildfire[window.DB_PROVIDER].get(that._tagName, function (err, result) {
                     if (err && err.code == CODES.NOT_FOUND) {
                         return deferred.resolve();
                     }
@@ -38,7 +38,7 @@
             DB.prototype.getById = function (id) {
                 var that = this;
                 var deferred = $q.defer();
-                Buildfire.datastore.getById(id, that._tagName, function (err, result) {
+                Buildfire[window.DB_PROVIDER].getById(id, that._tagName, function (err, result) {
                     if (err) {
                         return deferred.reject(err);
                     }
@@ -57,7 +57,7 @@
                     return deferred.reject(new Error(MESSAGES.ERROR.DATA_NOT_DEFINED));
                 }
                 if (Array.isArray(items)) {
-                    Buildfire.datastore.bulkInsert(items, that._tagName, function (err, result) {
+                    Buildfire[window.DB_PROVIDER].bulkInsert(items, that._tagName, function (err, result) {
                         if (err) {
                             return deferred.reject(err);
                         }
@@ -68,7 +68,7 @@
                         }
                     });
                 } else {
-                    Buildfire.datastore.insert(items, that._tagName, false, function (err, result) {
+                    Buildfire[window.DB_PROVIDER].insert(items, that._tagName, false, function (err, result) {
                         if (err) {
                             return deferred.reject(err);
                         }
@@ -87,7 +87,7 @@
                 if (typeof options == 'undefined') {
                     return deferred.reject(new Error(MESSAGES.ERROR.OPTION_REQUIRES));
                 }
-                Buildfire.datastore.search(options, that._tagName, function (err, result) {
+                Buildfire[window.DB_PROVIDER].search(options, that._tagName, function (err, result) {
                     if (err) {
                         return deferred.reject(err);
                     }
@@ -108,7 +108,7 @@
                 if (typeof item == 'undefined') {
                     return deferred.reject(new Error(MESSAGES.ERROR.DATA_NOT_DEFINED));
                 }
-                Buildfire.datastore.update(id, item, that._tagName, function (err, result) {
+                Buildfire[window.DB_PROVIDER].update(id, item, that._tagName, function (err, result) {
                     if (err) {
                         return deferred.reject(err);
                     }
@@ -126,7 +126,7 @@
                 if (typeof item == 'undefined') {
                     return deferred.reject(new Error(MESSAGES.ERROR.DATA_NOT_DEFINED));
                 }
-                Buildfire.datastore.save(item, that._tagName, function (err, result) {
+                Buildfire[window.DB_PROVIDER].save(item, that._tagName, function (err, result) {
                     if (err) {
                         return deferred.reject(err);
                     }
@@ -144,7 +144,7 @@
                 if (typeof id == 'undefined') {
                     return deferred.reject(new Error(MESSAGES.ERROR.ID_NOT_DEFINED));
                 }
-                Buildfire.datastore.delete(id, that._tagName, function (err, result) {
+                Buildfire[window.DB_PROVIDER].delete(id, that._tagName, function (err, result) {
                     if (err) {
                         return deferred.reject(err);
                     }

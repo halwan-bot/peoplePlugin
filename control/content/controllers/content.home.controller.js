@@ -389,6 +389,9 @@
                   Buildfire.spinner.hide();
                   $scope.$apply();
                   if (err) {
+                    buildfire.notifications.alert('Failed to import CSV. Invalid file', function() {
+
+                    });
                     console.error('There was a problem while importing the file----', err);
                   }
                   else {

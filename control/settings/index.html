@@ -20,7 +20,6 @@
         var tag = 'dbProvider';
 
         buildfire.datastore.get(tag, function(err, result) {
-
             if(result && result.data && result.data.provider){
                 var providerId = result.data.provider;
                 document.getElementById(providerId).checked = true;

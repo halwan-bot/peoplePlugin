@@ -5,6 +5,7 @@
         .module('peoplePluginWidget')
         .controller('WidgetHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'COLLECTIONS', 'ERROR_CODE', "Location", '$sce', '$rootScope', 'DB',
             function ($scope, Buildfire, TAG_NAMES, COLLECTIONS, ERROR_CODE, Location, $sce, $rootScope, DB) {
+                console.log('[DATASTORE] Currently using', window.DB_PROVIDER);
 
                 function debounce(func, wait, immediate) {
                   var timeout;
@@ -223,7 +224,7 @@
                   return _retVal;
                 };
                 var onUpdateCallback = function (event) {
-                    console.log("*******************************************", event);
+                    console.log('+++ ON UPDATE CALLBACK', window.DB_PROVIDER, event.tag, { event });
                     $scope.imagesUpdated = false;
                     $scope.$digest();
                     if (event && event.tag) {
@@ -316,8 +317,10 @@
                         $rootScope.$apply();
                     }
                 };
+
                 Buildfire.datastore.onUpdate(onUpdateCallback);
                 Buildfire.publicData.onUpdate(onUpdateCallback);
+
                 WidgetHome.noMore = false;
                 WidgetHome.loadMore = function (multi, times) {
                     window.buildfire.spinner.show();
@@ -444,11 +447,8 @@
                         $scope.$digest();
                     });
 
-                    if (Buildfire[window.DB_PROVIDER].onUpdate) {
-                        console.error('OVERWRITING ON UPDATE CALLBACK');
-                    }
-
-                    Buildfire[window.DB_PROVIDER].onUpdate(onUpdateCallback);
+                    Buildfire.datastore.onUpdate(onUpdateCallback);
+                    Buildfire.publicData.onUpdate(onUpdateCallback);
                 });
 
                 //$scope.$on("$destroy", function () {

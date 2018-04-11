@@ -620,5 +620,5 @@
           return ContentHome.data;
         }, saveDataWithDelay, true);
 
-      }])
+      }]);
 })(window.angular, window.buildfire);

@@ -21,6 +21,10 @@
                   };
                 }
 
+                var debounceLoadMore = debounce(function(){
+                    WidgetHome.loadMore();
+                }, 500);
+
                 $scope.clear = function() {
                     $scope.searchInput = "";
                     $scope.onSearchChange();
@@ -259,7 +263,8 @@
                                 } else {
                                     searchOptions.limit = _limit + 1;
                                     searchOptions.skip = 0;
-                                    WidgetHome.loadMore();
+
+                                    debounceLoadMore();
                                 }
 
                                 break;
@@ -316,8 +321,10 @@
                     }
                 };
 
-                Buildfire.datastore.onUpdate(onUpdateCallback);
-                Buildfire.publicData.onUpdate(onUpdateCallback);
+                var debounceUpdateCallback = debounce(onUpdateCallback, 500);
+
+                Buildfire.datastore.onUpdate(debounceUpdateCallback);
+                Buildfire.publicData.onUpdate(debounceUpdateCallback);
 
                 WidgetHome.noMore = false;
                 WidgetHome.loadMore = function (multi, times) {

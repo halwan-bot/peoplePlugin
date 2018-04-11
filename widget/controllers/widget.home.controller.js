@@ -6,12 +6,6 @@
         .controller('WidgetHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'COLLECTIONS', 'ERROR_CODE', "Location", '$sce', '$rootScope', 'DB',
             function ($scope, Buildfire, TAG_NAMES, COLLECTIONS, ERROR_CODE, Location, $sce, $rootScope, DB) {
 
-                Buildfire.datastore.onUpdate(function(event) {
-                    if (event && event.tag === 'dbProvider') {
-                        location.reload();
-                    }
-                })
-
                 function debounce(func, wait, immediate) {
                   var timeout;
                   return function() {
@@ -322,7 +316,8 @@
                         $rootScope.$apply();
                     }
                 };
-                Buildfire[window.DB_PROVIDER].onUpdate(onUpdateCallback);
+                Buildfire.datastore.onUpdate(onUpdateCallback);
+                Buildfire.publicData.onUpdate(onUpdateCallback);
                 WidgetHome.noMore = false;
                 WidgetHome.loadMore = function (multi, times) {
                     window.buildfire.spinner.show();
@@ -448,6 +443,10 @@
                         WidgetHome.loadMore();
                         $scope.$digest();
                     });
+
+                    if (Buildfire[window.DB_PROVIDER].onUpdate) {
+                        console.error('OVERWRITING ON UPDATE CALLBACK');
+                    }
 
                     Buildfire[window.DB_PROVIDER].onUpdate(onUpdateCallback);
                 });

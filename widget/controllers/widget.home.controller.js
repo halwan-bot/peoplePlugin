@@ -6,7 +6,6 @@
         .controller('WidgetHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'COLLECTIONS', 'ERROR_CODE', "Location", '$sce', '$rootScope', 'DB',
             function ($scope, Buildfire, TAG_NAMES, COLLECTIONS, ERROR_CODE, Location, $sce, $rootScope, DB) {
                 console.log('[DATASTORE] Currently using', window.DB_PROVIDER);
-
                 function debounce(func, wait, immediate) {
                   var timeout;
                   return function() {
@@ -228,10 +227,6 @@
                     $scope.imagesUpdated = false;
                     $scope.$digest();
                     if (event && event.tag) {
-                        if (event.tag === 'dbProvider') {
-                            location.reload();
-                        }
-
                         if (event.data && WidgetHome.data.design && event.data.design) {
                             WidgetHome.data.design = event.data.design;
                         }
@@ -249,6 +244,9 @@
                             currentListLayout = WidgetHome.data.design.listLayout;
                         }
                         switch (event.tag) {
+                            case TAG_NAMES.DB_PROVIDER:
+                                    location.reload();
+                                break;
                             case TAG_NAMES.PEOPLE:
                                 var skip = searchOptions.skip || 0;
                                 WidgetHome.busy = false;

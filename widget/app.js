@@ -13,7 +13,8 @@
     ])
     .constant('TAG_NAMES', {
       PEOPLE_INFO: 'peopleInfo',
-      PEOPLE: 'people'
+      PEOPLE: 'people',
+      DB_PROVIDER:  'dbProvider'
     })
     .constant('ERROR_CODE', {
       NOT_FOUND: 'NOTFOUND'

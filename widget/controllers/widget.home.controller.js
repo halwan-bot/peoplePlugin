@@ -365,7 +365,7 @@
                             WidgetHome.noMore = false;
                         }
 
-                        if ($scope.searchInput) {
+                        if ($scope.searchInput && searchOptions.skip <= 15) {
                             WidgetHome.items = result;
                         } else {
                             WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;

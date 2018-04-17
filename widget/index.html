@@ -30,7 +30,7 @@
 </head>
 <body class="body-scroll">
 <div class="main_view" ng-controller="WidgetHomeCtrl as WidgetHome">
-  <form class="search-form form" ng-submit="onSearchSubmit(this)" ng-if="showHome">
+  <form class="search-form form" ng-submit="onSearchSubmit(this)" ng-show="showHome">
     <div class="search-container">
       <img class="search-icon" src="search.png" alt="Search"/>
       <img ng-click="clear()" class="search-clear" src="close.png" alt="Clear"/>

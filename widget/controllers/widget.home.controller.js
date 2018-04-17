@@ -148,13 +148,17 @@
                     }
                 };
 
-               var initCarousel= function (carouselImages){
-                   var carouselContainer = document.getElementById("carousel");
-                   var carousel = new buildfire.components.carousel.view({
-                       selector: carouselContainer,
-                       items: carouselImages,
-                       speed: 1000
-                   });
+                var initCarousel = function(carouselImages) {
+                    if (!view) {
+                        view = new Buildfire.components.carousel.view("#carousel", []);
+                    }
+
+                    if(carouselImages){
+                        view.loadItems(carouselImages);
+                    }
+                    else {
+                        view.loadItems([]);
+                    }
                 };
 
                 /* Get People details*/
@@ -304,7 +308,9 @@
                                         view = null;
                                     }
                                     else {
-                                        initCarousel(WidgetHome.data.content.images);
+                                        if (view) {
+                                            view.loadItems(WidgetHome.data.content.images);
+                                        }
                                     }
                                     if (event && event.data && event.data.content && event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {
                                         WidgetHome.data.content.sortBy = event.data.content.sortBy;
@@ -410,12 +416,7 @@
                         WidgetHome.data.design = {};
                     if (!WidgetHome.data.content)
                         WidgetHome.data.content = {};
-                    /*if (!view) {
-                        view = new Buildfire.components.carousel.view("#carousel", []);
-                    }*/
-                    /*if (view && WidgetHome.data.content.images) {
-                        view.loadItems(WidgetHome.data.content.images);
-                    }*/
+
                     if(background){
                         $rootScope.backgroundImage = background;
                     }
@@ -432,11 +433,9 @@
                                   currentSortOrder = WidgetHome.data.content.sortBy;
                               }
 
-                            if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                                initCarousel(WidgetHome.data.content.images);
+                            initCarousel(WidgetHome.data.content.images);
 
-                            }
-                              $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
+                            $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
                           }
                           , error = function (err) {
                               if (err) {
@@ -460,10 +459,8 @@
                 //    WidgetHome.onUpdateFn.clear();
                 //});
                 $rootScope.$on("Carousel:LOADED", function () {
-
-                    if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                        initCarousel(WidgetHome.data.content.images);
-                    }
+                    view = null;
+                    initCarousel(WidgetHome.data.content.images);
                 });
                 Buildfire[window.DB_PROVIDER].onRefresh(function () {
                     var success = function (result) {
@@ -477,9 +474,9 @@
                           if (WidgetHome.data.content) {
                               currentSortOrder = WidgetHome.data.content.sortBy;
                           }
-                        if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                            initCarousel(WidgetHome.data.content.images);
-                        }
+
+                          initCarousel(WidgetHome.data.content.images);
+
                           $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
                       }
                       , error = function (err) {

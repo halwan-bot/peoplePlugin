@@ -27,21 +27,21 @@
   <link rel="stylesheet" href="../../../styles/transitionAnimation.css">
 </head>
 <body class="body-scroll">
-<div class="main_view">
+<div class="main_view" ng-controller="WidgetHomeCtrl as WidgetHome">
+  <form class="search-form form" ng-submit="onSearchSubmit(this)" ng-if="showHome">
+    <div class="search-container">
+      <img class="search-icon" src="search.png" alt="Search"/>
+      <img ng-click="clear()" class="search-clear" src="close.png" alt="Clear"/>
+      <input
+        class="search-box"
+        ng-change="onSearchChange()"
+        ng-model="searchInput"
+        type="text"
+        placeholder="Search" />
+    </div>
+  </form>
   <div class="slide infinite-scroll-parent" id="scrollable" data-back-img="{{ backgroundImage}}" ng-show="showHome">
-     <div ng-controller="WidgetHomeCtrl as WidgetHome">
-        <form class="form" ng-submit="onSearchSubmit(this)">
-          <div class="search-container">
-            <img class="search-icon" src="search.png" alt="Search"/>
-            <img ng-click="clear()" class="search-clear" src="close.png" alt="Clear"/>
-            <input
-              class="search-box"
-              ng-change="onSearchChange()"
-              ng-model="searchInput"
-              type="text"
-              placeholder="Search" />
-          </div>
-        </form>
+     <div>
         <div ng-if="WidgetHome.data.design.listLayout"
            ng-include="'templates/layouts/' + WidgetHome.data.design.listLayout + '.html'">
       </div>

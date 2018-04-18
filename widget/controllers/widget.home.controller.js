@@ -108,7 +108,9 @@
 
                 WidgetHome.shouldShowDescription = function() {
                     var isSearching = $scope.searchInput.length >= 3;
-                    var hasDescription = WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.description.length;
+                    var hasDescription = WidgetHome.data && WidgetHome.data.content
+                        && WidgetHome.data.content.description
+                        && WidgetHome.data.content.description.length;
                     return !isSearching && hasDescription;
                 }
 
@@ -249,6 +251,7 @@
                     console.log('+++ ON UPDATE CALLBACK', window.DB_PROVIDER, event.tag, { event });
                     $scope.imagesUpdated = false;
                     $scope.$digest();
+
                     if (event && event.tag) {
                         if (event.data && WidgetHome.data.design && event.data.design) {
                             WidgetHome.data.design = event.data.design;
@@ -323,9 +326,11 @@
                                         view = null;
                                     }
                                     else {
-                                        if (view) {
-                                            view.loadItems(WidgetHome.data.content.images);
-                                        }
+                                        var images = (WidgetHome.data.content && WidgetHome.data.content.images)
+                                            ? WidgetHome.data.content.images
+                                            : null;
+
+                                        initCarousel(images);
                                     }
                                     if (event && event.data && event.data.content && event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {
                                         WidgetHome.data.content.sortBy = event.data.content.sortBy;
@@ -469,14 +474,7 @@
                     Buildfire.datastore.onUpdate(onUpdateCallback);
                     Buildfire.publicData.onUpdate(onUpdateCallback);
                 });
-
-                //$scope.$on("$destroy", function () {
-                //    WidgetHome.onUpdateFn.clear();
-                //});
-                $rootScope.$on("Carousel:LOADED", function () {
-                    view = null;
-                    initCarousel(WidgetHome.data.content.images);
-                });
+                
                 Buildfire[window.DB_PROVIDER].onRefresh(function () {
                     var success = function (result) {
                           WidgetHome.data = result.data;

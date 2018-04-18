@@ -99,7 +99,9 @@
                 WidgetHome.data = {};
 
                 WidgetHome.shouldShowCarousel = function() {
-                    var hasImages = WidgetHome.data.content.images.length > 0;
+                    var hasImages = (WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.images)
+                        ? WidgetHome.data.content.images.length > 0
+                        : false;
                     var isSearching = $scope.searchInput.length >= 3;
                     return hasImages && !isSearching;
                 }

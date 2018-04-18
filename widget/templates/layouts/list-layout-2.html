@@ -1,12 +1,13 @@
 <div class="holder padding-zero">
   <div class="people-plugin listlayout1" >
     <div class="plugin-banner clearfix">
-        <div id="carousel" build-fire-carousel=""
+        <div ng-show="WidgetHome.shouldShowCarousel()" id="carousel" build-fire-carousel=""
              ng-style="WidgetHome.data.content.images.length > 0 ? {'min-height': (9 * deviceWidth / 16) + 'px' } : {}"></div>
     </div>
-    <div class="padded text-left text-overlay"  ng-if="WidgetHome.showDescription(WidgetHome.data.content.description)">
-      <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)'
-         class="margin-bottom-zero"></p>
+    <div class="padded text-left text-overlay" ng-show="WidgetHome.shouldShowDescription()">
+      <p
+        ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)'
+        class="margin-bottom-zero"></p>
     </div>
     <div>
       <div class="list-items text-overlay" ng-if="WidgetHome.data"

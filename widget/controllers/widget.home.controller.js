@@ -25,6 +25,7 @@
                     WidgetHome.loadMore();
                 }, 500);
 
+                $scope.searchInput = "";
                 $scope.clear = function() {
                     $scope.searchInput = "";
                     $scope.onSearchChange();
@@ -96,6 +97,18 @@
                 var currentItemLayout,
                     currentListLayout, currentSortOrder, currentBackgroundImage;
                 WidgetHome.data = {};
+
+                WidgetHome.shouldShowCarousel = function() {
+                    var hasImages = WidgetHome.data.content.images.length > 0;
+                    var isSearching = $scope.searchInput.length >= 3;
+                    return hasImages && !isSearching;
+                }
+
+                WidgetHome.shouldShowDescription = function() {
+                    var isSearching = $scope.searchInput.length >= 3;
+                    var hasDescription = WidgetHome.data.content.description.length;
+                    return !isSearching && hasDescription;
+                }
 
                 $rootScope.showHome = true;
                 var getSortOption = function (value, searchOptions) {

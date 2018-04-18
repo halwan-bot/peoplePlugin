@@ -1,4 +1,7 @@
 /* Plugin CSS */
+body {
+  -webkit-overflow-scrolling: auto !important;
+}
 .people-banner .people-media img{
 	max-width:140px;
 	max-height:140px;
@@ -221,7 +224,6 @@ ol li{
   left: 0;
   right: 0;
   z-index: 1;
-  background-color: #fff;
 }
 .infinite-scroll-parent {
   margin-top: 55px;

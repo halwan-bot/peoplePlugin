@@ -3,7 +3,7 @@
 		<div class="people-banner text-overlay" style="min-height: 170px" ng-if="WidgetPeople.item.topImage"
          data-ng-attr-style="background:url({{WidgetPeople.item.topImage}}) no-repeat; background-position:center center;" crop-width="342" crop-height="170" crop-type="crop">
 			<div class="people-bg padding-top-fifteen padding-bottom-fifteen clearfix">
-				<div class="people-holder clearfix">	
+				<div class="people-holder clearfix">
 					<div class="people-media text-center">
 						<img load-image="1x1" class="border-grey img-circle text-overlay" style="min-width: 100px;min-height: 100px"
                  data-final-src="{{WidgetPeople.item.topImage}}" crop-width="100" crop-height="100" crop-type="crop">
@@ -11,7 +11,8 @@
 					<div class="people-info text-center col-md-12">
 						<p class="ellipsis text-overlay whiteTheme">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
 						<p class="ellipsis whiteTheme">{{WidgetPeople.item.position}}</p>
-            			<a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay whiteTheme" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
+            			<!-- <a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay whiteTheme" ></a> -->
+            			<button ng-if="WidgetPeople.item.socialLinks.length" class="btn btn-primary btn-details btn-sm" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)">Details</button>
 					</div>
 				</div>
 			</div>

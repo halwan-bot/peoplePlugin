@@ -108,7 +108,7 @@
 
                 WidgetHome.shouldShowDescription = function() {
                     var isSearching = $scope.searchInput.length >= 3;
-                    var hasDescription = WidgetHome.data.content.description.length;
+                    var hasDescription = WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.description.length;
                     return !isSearching && hasDescription;
                 }
 

@@ -233,7 +233,7 @@
               } else if (!ContentPeople.isNewItemInserted) {
                 ContentPeople.addNewItem();
               }
-            }, 300);
+            }, 500);
           }
         };
 

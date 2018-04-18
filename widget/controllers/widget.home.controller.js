@@ -21,9 +21,12 @@
                   };
                 }
 
+                var minSearchLength = 2;
+
                 var debounceLoadMore = debounce(function(){
                     WidgetHome.loadMore();
                 }, 500);
+
 
                 $scope.searchInput = "";
                 $scope.clear = function() {
@@ -39,8 +42,8 @@
                 $scope.onSearchChange = function() {
                     var isEmptySearch = ($scope.searchInput.length === 0);
 
-                    // Don't do anything if the search is less than 3 characters and isn't empty
-                    if ($scope.searchInput.length < 3 && !isEmptySearch) {
+                    // Don't do anything if the search is less than minSearchLength characters and isn't empty
+                    if ($scope.searchInput.length < minSearchLength && !isEmptySearch) {
                         return;
                     }
 
@@ -102,12 +105,12 @@
                     var hasImages = (WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.images)
                         ? WidgetHome.data.content.images.length > 0
                         : false;
-                    var isSearching = $scope.searchInput.length >= 3;
+                    var isSearching = $scope.searchInput.length >= minSearchLength;
                     return hasImages && !isSearching;
                 }
 
                 WidgetHome.shouldShowDescription = function() {
-                    var isSearching = $scope.searchInput.length >= 3;
+                    var isSearching = $scope.searchInput.length >= minSearchLength;
                     var hasDescription = WidgetHome.data && WidgetHome.data.content
                         && WidgetHome.data.content.description
                         && WidgetHome.data.content.description.length;

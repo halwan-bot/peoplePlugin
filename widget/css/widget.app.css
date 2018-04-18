@@ -256,3 +256,9 @@ ol li{
 .hidden {
   display: none;
 }
+.placeholder {
+  background-color: #bdbdbd;
+  border-radius: 4px;
+  width: 100px;
+  height: 60px;
+}

@@ -92,6 +92,15 @@
                         }
                         else {
                             $rootScope.showHome = false;
+
+                            //For Zapier integrations, the socialLinks will come as a string, and not an object.
+                            if(result.data
+                                && result.data.socialLinks
+                                && typeof result.data.socialLinks === "string"){
+
+                                result.data.socialLinks = JSON.parse(result.data.socialLinks);
+                            }
+
                             WidgetPeople.item = result.data;
                             $scope.$digest();
                         }

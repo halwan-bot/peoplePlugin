@@ -83,6 +83,15 @@
             if(item && item.data && !item.data.deepLinkUrl) {
                 ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: item.id});
             }
+
+            //For Zapier integrations, the socialLinks will come as a string, and not an object.
+            if(item.data
+                && item.data.socialLinks
+                && typeof item.data.socialLinks === "string"){
+
+                item.data.socialLinks = JSON.parse(item.data.socialLinks);
+            }
+
             updateMasterItem(ContentPeople.item);
             $scope.$digest();
           });

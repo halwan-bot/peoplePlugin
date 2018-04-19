@@ -227,6 +227,7 @@ ol li{
 }
 .infinite-scroll-parent {
   margin-top: 55px;
+  padding-bottom: 55px;
 }
 .search-box {
   display: block;

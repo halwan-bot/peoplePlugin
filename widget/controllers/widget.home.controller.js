@@ -477,7 +477,16 @@
                     Buildfire.datastore.onUpdate(onUpdateCallback);
                     Buildfire.publicData.onUpdate(onUpdateCallback);
                 });
-                
+
+                $rootScope.$on("Carousel:LOADED", function () {
+                    view = null;
+                    var images = (WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.images)
+                        ? WidgetHome.data.content.images
+                        : [];
+
+                    initCarousel(images);
+                });
+
                 Buildfire[window.DB_PROVIDER].onRefresh(function () {
                     var success = function (result) {
                           WidgetHome.data = result.data;

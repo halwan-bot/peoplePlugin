@@ -93,12 +93,11 @@
                         else {
                             $rootScope.showHome = false;
 
-                            //For Zapier integrations, the socialLinks will come as a string, and not an object.
-                            if(result.data
-                                && result.data.socialLinks
-                                && typeof result.data.socialLinks === "string"){
-
-                                result.data.socialLinks = JSON.parse(result.data.socialLinks);
+                            if(result.data && result.data.socialLinks){
+                                //For Zapier integrations, the socialLinks will come as a string, and not an object.
+                                if(typeof result.data.socialLinks === "string"){
+                                    result.data.socialLinks = JSON.parse(result.data.socialLinks);
+                                }
 
                                 //For Zapier integrations, we will always receive a callNumber action, although it might be empty
                                 result.data.socialLinks.forEach(function(item, index, object){

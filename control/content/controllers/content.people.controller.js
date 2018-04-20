@@ -84,20 +84,19 @@
                 ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: item.id});
             }
 
-            //For Zapier integrations, the socialLinks will come as a string, and not an object.
-            if(item.data
-                && item.data.socialLinks
-                && typeof item.data.socialLinks === "string"){
+              if(item.data && item.data.socialLinks){
+                  //For Zapier integrations, the socialLinks will come as a string, and not an object.
+                  if(typeof item.data.socialLinks === "string"){
+                      item.data.socialLinks = JSON.parse(item.data.socialLinks);
+                  }
 
-                item.data.socialLinks = JSON.parse(item.data.socialLinks);
-
-                //For Zapier integrations, we will always receive a callNumber action, although it might be empty
-                item.data.socialLinks.forEach(function(social, index, object){
-                    if(social.action === "callNumber" && social.phoneNumber === ""){
-                        object.splice(index, 1);
-                    }
-                });
-            }
+                  //For Zapier integrations, we will always receive a callNumber action, although it might be empty
+                  item.data.socialLinks.forEach(function(item, index, object){
+                      if(item.action === "callNumber" && item.phoneNumber === ""){
+                          object.splice(index, 1);
+                      }
+                  });
+              }
 
             updateMasterItem(ContentPeople.item);
             $scope.$digest();

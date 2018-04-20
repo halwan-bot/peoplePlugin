@@ -90,6 +90,13 @@
                 && typeof item.data.socialLinks === "string"){
 
                 item.data.socialLinks = JSON.parse(item.data.socialLinks);
+
+                //For Zapier integrations, we will always receive a callNumber action, although it might be empty
+                item.data.socialLinks.forEach(function(social, index, object){
+                    if(social.action === "callNumber" && social.phoneNumber === ""){
+                        object.splice(index, 1);
+                    }
+                });
             }
 
             updateMasterItem(ContentPeople.item);

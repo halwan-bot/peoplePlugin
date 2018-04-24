@@ -74,7 +74,7 @@
         };
 
         ContentPeople.getItem = function (itemId) {
-          Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, item) {
+          Buildfire[window.DB_PROVIDER].getById(itemId, TAG_NAMES.PEOPLE, function (err, item) {
             if (err)
               throw console.error('There was a problem saving your data', err);
             ContentPeople.item = item;
@@ -83,6 +83,21 @@
             if(item && item.data && !item.data.deepLinkUrl) {
                 ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: item.id});
             }
+
+              if(item.data && item.data.socialLinks){
+                  //For Zapier integrations, the socialLinks will come as a string, and not an object.
+                  if(typeof item.data.socialLinks === "string"){
+                      item.data.socialLinks = JSON.parse(item.data.socialLinks);
+                  }
+
+                  //For Zapier integrations, we will always receive a callNumber action, although it might be empty
+                  item.data.socialLinks.forEach(function(item, index, object){
+                      if(item.action === "callNumber" && item.phoneNumber === ""){
+                          object.splice(index, 1);
+                      }
+                  });
+              }
+
             updateMasterItem(ContentPeople.item);
             $scope.$digest();
           });
@@ -99,7 +114,7 @@
           ContentPeople.item.data.rank = _rankOfLastItem;
 
           console.log("inserting....");
-          Buildfire.datastore.insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
+          Buildfire[window.DB_PROVIDER].insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
             console.log("Inserted", data.id);
             ContentPeople.isUpdating = false;
             if (err) {
@@ -124,7 +139,7 @@
         };
 
         ContentPeople.updateItemData = function () {
-          Buildfire.datastore.update(ContentPeople.item.id, ContentPeople.item.data, TAG_NAMES.PEOPLE, function (err) {
+          Buildfire[window.DB_PROVIDER].update(ContentPeople.item.id, ContentPeople.item.data, TAG_NAMES.PEOPLE, function (err) {
             ContentPeople.isUpdating = false;
             if (err)
               return console.error('There was a problem saving your data');
@@ -147,17 +162,17 @@
           Buildfire.actionItems.showDialog(link, options, callback);
         };
 
-        ContentPeople.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
+        ContentPeople.onUpdateFn = Buildfire[window.DB_PROVIDER].onUpdate(function (event) {
           if (event && event.status) {
             switch (event.status) {
               case STATUS_CODE.INSERTED:
                 console.info('Data inserted Successfully');
-                Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
+                Buildfire[window.DB_PROVIDER].get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
                   if (err) {
                     return console.error('There was a problem saving your data', err);
                   }
                   result.data.content.rankOfLastItem = _rankOfLastItem;
-                  Buildfire.datastore.save(result.data, TAG_NAMES.PEOPLE_INFO, function (err) {
+                  Buildfire[window.DB_PROVIDER].save(result.data, TAG_NAMES.PEOPLE_INFO, function (err) {
                     if (err)
                       return console.error('There was a problem saving last item rank', err);
                   });
@@ -233,7 +248,7 @@
               } else if (!ContentPeople.isNewItemInserted) {
                 ContentPeople.addNewItem();
               }
-            }, 300);
+            }, 500);
           }
         };
 

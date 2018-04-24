@@ -85,13 +85,28 @@
                 };
                 var itemId = $routeParams.id;
                 var getPeopleDetail = function () {
-                    Buildfire.datastore.getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
+                    Buildfire[window.DB_PROVIDER].getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                             $rootScope.showHome = false;
                             console.error('-----------Unable to load data-------------', err);
                         }
                         else {
                             $rootScope.showHome = false;
+
+                            if(result.data && result.data.socialLinks){
+                                //For Zapier integrations, the socialLinks will come as a string, and not an object.
+                                if(typeof result.data.socialLinks === "string"){
+                                    result.data.socialLinks = JSON.parse(result.data.socialLinks);
+                                }
+
+                                //For Zapier integrations, we will always receive a callNumber action, although it might be empty
+                                result.data.socialLinks.forEach(function(item, index, object){
+                                    if(item.action === "callNumber" && item.phoneNumber === ""){
+                                        object.splice(index, 1);
+                                    }
+                                });
+                            }
+
                             WidgetPeople.item = result.data;
                             $scope.$digest();
                         }
@@ -99,7 +114,7 @@
                     });
                 };
                 var getContentPeopleInfo = function () {
-                    Buildfire.datastore.get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
+                    Buildfire[window.DB_PROVIDER].get(TAG_NAMES.PEOPLE_INFO, function (err, result) {
 
                         if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                             return console.error('-----------err-------------', err);
@@ -130,7 +145,7 @@
                 };
                 getContentPeopleInfo();
                 function bindOnUpdate() {
-                    WidgetPeople.onUpdateFn = Buildfire.datastore.onUpdate(function (event) {
+                    WidgetPeople.onUpdateFn = Buildfire[window.DB_PROVIDER].onUpdate(function (event) {
                         console.log("Hello--------1")
                         if (event && event.tag) {
                             switch (event.tag) {
@@ -159,6 +174,7 @@
                                     break;
                             }
                             $scope.$digest();
+                            buildfire.appearance.ready();
                         }
                     });
                 }
@@ -179,7 +195,7 @@
                         buildfire.actionItems.list(actionItems, options, callback);
                     }
                 }
-                Buildfire.datastore.onRefresh(function(){
+                Buildfire[window.DB_PROVIDER].onRefresh(function(){
 
                     getPeopleDetail();
                   });

@@ -5,6 +5,62 @@
         .module('peoplePluginWidget')
         .controller('WidgetHomeCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'COLLECTIONS', 'ERROR_CODE', "Location", '$sce', '$rootScope', 'DB',
             function ($scope, Buildfire, TAG_NAMES, COLLECTIONS, ERROR_CODE, Location, $sce, $rootScope, DB) {
+                console.log('[DATASTORE] Currently using', window.DB_PROVIDER);
+                function debounce(func, wait, immediate) {
+                  var timeout;
+                  return function() {
+                    var context = this, args = arguments;
+                    var later = function() {
+                      timeout = null;
+                      if (!immediate) func.apply(context, args);
+                    };
+                    var callNow = immediate && !timeout;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                    if (callNow) func.apply(context, args);
+                  };
+                }
+
+                var minSearchLength = 2;
+
+                var debounceLoadMore = debounce(function(){
+                    WidgetHome.loadMore();
+                }, 500);
+
+
+                $scope.searchInput = "";
+                $scope.clear = function() {
+                    $scope.searchInput = "";
+                    $scope.onSearchChange();
+                }
+
+                var executeSearch = debounce(function() {
+                    WidgetHome.loadMore();
+                }, 500);
+
+                // listen to input changes
+                $scope.onSearchChange = function() {
+                    var isEmptySearch = ($scope.searchInput.length === 0);
+
+                    // Don't do anything if the search is less than minSearchLength characters and isn't empty
+                    if ($scope.searchInput.length < minSearchLength && !isEmptySearch) {
+                        return;
+                    }
+
+                    //if the search is an empty search, clear out existing filtered results
+                    if(isEmptySearch) {
+                        WidgetHome.items = [];
+                    }
+
+                    searchOptions.skip = 0;
+                    executeSearch();
+                };
+
+                $scope.onSearchSubmit = function(e) {
+                    //e.preventDefault();
+                    console.log(e);
+                };
+
                 var MANUALLY = 'Manually',
                     OLDEST_TO_NEWEST = 'Oldest to Newest',
                     NEWEST_TO_OLDEST = 'Newest to Oldest',
@@ -45,8 +101,24 @@
                     currentListLayout, currentSortOrder, currentBackgroundImage;
                 WidgetHome.data = {};
 
+                WidgetHome.shouldShowCarousel = function() {
+                    var hasImages = (WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.images)
+                        ? WidgetHome.data.content.images.length > 0
+                        : false;
+                    var isSearching = $scope.searchInput.length >= minSearchLength;
+                    return hasImages && !isSearching;
+                }
+
+                WidgetHome.shouldShowDescription = function() {
+                    var isSearching = $scope.searchInput.length >= minSearchLength;
+                    var hasDescription = WidgetHome.data && WidgetHome.data.content
+                        && WidgetHome.data.content.description
+                        && WidgetHome.data.content.description.length;
+                    return !isSearching && hasDescription;
+                }
+
                 $rootScope.showHome = true;
-                var getSearchOptions = function (value) {
+                var getSortOption = function (value, searchOptions) {
                     switch (value) {
                         case OLDEST_TO_NEWEST:
                             searchOptions.sort = {"dateCreated": 1};
@@ -93,6 +165,19 @@
                                 $scope.$apply();
                             }
                         }
+                    }
+                };
+
+                var initCarousel = function(carouselImages) {
+                    if (!view) {
+                        view = new Buildfire.components.carousel.view("#carousel", []);
+                    }
+
+                    if(carouselImages){
+                        view.loadItems(carouselImages);
+                    }
+                    else {
+                        view.loadItems([]);
                     }
                 };
 
@@ -166,9 +251,10 @@
                   return _retVal;
                 };
                 var onUpdateCallback = function (event) {
-                    console.log("*******************************************", event);
+                    console.log('+++ ON UPDATE CALLBACK', window.DB_PROVIDER, event.tag, { event });
                     $scope.imagesUpdated = false;
                     $scope.$digest();
+
                     if (event && event.tag) {
                         if (event.data && WidgetHome.data.design && event.data.design) {
                             WidgetHome.data.design = event.data.design;
@@ -187,6 +273,9 @@
                             currentListLayout = WidgetHome.data.design.listLayout;
                         }
                         switch (event.tag) {
+                            case TAG_NAMES.DB_PROVIDER:
+                                    location.reload();
+                                break;
                             case TAG_NAMES.PEOPLE:
                                 var skip = searchOptions.skip || 0;
                                 WidgetHome.busy = false;
@@ -199,7 +288,8 @@
                                 } else {
                                     searchOptions.limit = _limit + 1;
                                     searchOptions.skip = 0;
-                                    WidgetHome.loadMore();
+
+                                    debounceLoadMore();
                                 }
 
                                 break;
@@ -239,9 +329,11 @@
                                         view = null;
                                     }
                                     else {
-                                        if (view) {
-                                            view.loadItems(WidgetHome.data.content.images);
-                                        }
+                                        var images = (WidgetHome.data.content && WidgetHome.data.content.images)
+                                            ? WidgetHome.data.content.images
+                                            : null;
+
+                                        initCarousel(images);
                                     }
                                     if (event && event.data && event.data.content && event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {
                                         WidgetHome.data.content.sortBy = event.data.content.sortBy;
@@ -257,39 +349,63 @@
                         $rootScope.$apply();
                     }
                 };
-                Buildfire.datastore.onUpdate(onUpdateCallback);
+
+                var debounceUpdateCallback = debounce(onUpdateCallback, 500);
+
+                Buildfire.datastore.onUpdate(debounceUpdateCallback);
+                Buildfire.publicData.onUpdate(debounceUpdateCallback);
+
                 WidgetHome.noMore = false;
                 WidgetHome.loadMore = function (multi, times) {
-                    Buildfire.spinner.show();
+                    window.buildfire.spinner.show();
                     console.log("loadMore");
                     if (WidgetHome.busy) {
                         return;
                     }
                     WidgetHome.busy = true;
                     if (WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.sortBy) {
-                        searchOptions = getSearchOptions(WidgetHome.data.content.sortBy);
+                        searchOptions = getSortOption(WidgetHome.data.content.sortBy, searchOptions);
                     }
-                    Buildfire.datastore.search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
+
+                    if ($scope.searchInput) {
+                        searchOptions.filter = {
+                            $or: [
+                                { "$json.fName": { $regex: $scope.searchInput, $options: 'i' } },
+                                { "$json.lName": { $regex: $scope.searchInput, $options: 'i' } },
+                                { "$json.position": { $regex: $scope.searchInput, $options: 'i' } }
+                            ]
+                        };
+                    }else{
+                        searchOptions.filter = {};
+                    }
+
+                    Buildfire[window.DB_PROVIDER].search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
                         console.log('-----------WidgetHome.loadMore-------------');
                         if (err) {
-                            Buildfire.spinner.hide();
+                            window.buildfire.spinner.hide();
                             return console.error('-----------err in getting list-------------', err);
                         }
                         if (result.length <= _limit) {// to indicate there are more
                             WidgetHome.noMore = true;
-                            Buildfire.spinner.hide();
+                            window.buildfire.spinner.hide();
                         } else {
                             result.pop();
                             searchOptions.skip = searchOptions.skip + _limit;
                             WidgetHome.noMore = false;
                         }
-                        WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
+
+                        if ($scope.searchInput && searchOptions.skip <= 15) {
+                            WidgetHome.items = result;
+                        } else {
+                            WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
+                        }
+
                         WidgetHome.busy = false;
                         if (multi && !WidgetHome.noMore && times) {
                             times = times - 1;
                             WidgetHome.loadMore(multi, times);
                         }
-                        Buildfire.spinner.hide();
+                        window.buildfire.spinner.hide();
                         $scope.$digest();
                     });
                 };
@@ -323,16 +439,11 @@
                         WidgetHome.data.design = {};
                     if (!WidgetHome.data.content)
                         WidgetHome.data.content = {};
-                    /*if (!view) {
-                        view = new Buildfire.components.carousel.view("#carousel", []);
-                    }*/
-                    /*if (view && WidgetHome.data.content.images) {
-                        view.loadItems(WidgetHome.data.content.images);
-                    }*/
+
                     if(background){
                         $rootScope.backgroundImage = background;
                     }
-                    Buildfire.datastore.onRefresh(function () {
+                    Buildfire[window.DB_PROVIDER].onRefresh(function () {
                         var success = function (result) {
                               WidgetHome.data = result.data;
                               WidgetHome.data.design = WidgetHome.data.design || {};
@@ -344,15 +455,10 @@
                               if (WidgetHome.data.content) {
                                   currentSortOrder = WidgetHome.data.content.sortBy;
                               }
-                              if (!view) {
-                                  view = new Buildfire.components.carousel.view("#carousel", []);
-                              }
-                              if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                                  view.loadItems(WidgetHome.data.content.images);
-                              } else {
-                                  view.loadItems([]);
-                              }
-                              $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
+
+                            initCarousel(WidgetHome.data.content.images);
+
+                            $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
                           }
                           , error = function (err) {
                               if (err) {
@@ -369,23 +475,19 @@
                     });
 
                     Buildfire.datastore.onUpdate(onUpdateCallback);
+                    Buildfire.publicData.onUpdate(onUpdateCallback);
                 });
 
-                //$scope.$on("$destroy", function () {
-                //    WidgetHome.onUpdateFn.clear();
-                //});
                 $rootScope.$on("Carousel:LOADED", function () {
                     view = null;
-                    if (!view) {
-                        view = new Buildfire.components.carousel.view("#carousel", []);
-                    }
-                    if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                        view.loadItems(WidgetHome.data.content.images);
-                    } else {
-                        view.loadItems([]);
-                    }
+                    var images = (WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.images)
+                        ? WidgetHome.data.content.images
+                        : [];
+
+                    initCarousel(images);
                 });
-                Buildfire.datastore.onRefresh(function () {
+
+                Buildfire[window.DB_PROVIDER].onRefresh(function () {
                     var success = function (result) {
                           WidgetHome.data = result.data;
                           WidgetHome.data.design = WidgetHome.data.design || {};
@@ -397,14 +499,9 @@
                           if (WidgetHome.data.content) {
                               currentSortOrder = WidgetHome.data.content.sortBy;
                           }
-                          if (!view) {
-                              view = new Buildfire.components.carousel.view("#carousel", []);
-                          }
-                          if (WidgetHome.data.content && WidgetHome.data.content.images) {
-                              view.loadItems(WidgetHome.data.content.images);
-                          } else {
-                              view.loadItems([]);
-                          }
+
+                          initCarousel(WidgetHome.data.content.images);
+
                           $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage ? WidgetHome.data.design.backgroundImage : "";
                       }
                       , error = function (err) {

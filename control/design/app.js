@@ -46,4 +46,20 @@
 	      }
 	    });
 
+    angular.element(function() {
+        var defaultProvider = 'datastore';
+        buildfire.datastore.get('dbProvider', function(err, result) {
+          try {
+              if (err) throw err;
+              window.DB_PROVIDER = result.data.provider
+                ? result.data.provider
+                : defaultProvider;
+              angular.bootstrap(document, ['peoplePluginDesign']);
+            } catch (err) {
+              window.DB_PROVIDER = defaultProvider;
+              angular.bootstrap(document, ['peoplePluginDesign']);
+            }
+        });
+    })
+
 })(window.angular, window.buildfire);

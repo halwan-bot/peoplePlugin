@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html ng-app="peoplePluginWidget">
+<html>
 <head lang="en">
   <meta charset="UTF-8">
-
   <!-- CSS -->
   <link href="../../../styles/helper.css" rel="stylesheet">
   <link href="../../../styles/siteIcons.css" rel="stylesheet">
@@ -11,10 +10,9 @@
 
   <!-- JS -->
   <script src="../../../scripts/jquery/jquery-1.11.2.min.js"></script>
-  <script src="../../../../sdk/scripts/jquery/jquery-ui.min.js"></script>
   <script src="../../../scripts/smartcrop.js"></script>
-  <script src="../../../scripts/buildfire.js"></script>
-  <script type="text/javascript" src="../../../scripts/owlCarousel/owlCarousel.js"></script>
+  <script src="../../../scripts/buildfire.min.js"></script>
+  <script src="../../../scripts/owlCarousel/owlCarousel.js"></script>
   <script src="../../../scripts/buildfire/components/carousel/carousel.js"></script>
   <script src="../../../scripts/angular/angular.min.js"></script>
   <script src="../../../scripts/angular/angular-route.min.js"></script>
@@ -30,10 +28,22 @@
   <script src="../../../scripts/angular/angular-animate.min.js"></script>
   <link rel="stylesheet" href="../../../styles/transitionAnimation.css">
 </head>
-<body class="body-scroll">
-<div class="main_view">
+<body class="body-scroll" style="overflow-y: hidden !important">
+<div class="main_view" ng-controller="WidgetHomeCtrl as WidgetHome">
+  <form class="search-form form" ng-submit="onSearchSubmit(this)" ng-show="showHome">
+    <div class="search-container">
+      <img class="search-icon" src="search.png" alt="Search"/>
+      <img ng-click="clear()" class="search-clear" src="close.png" alt="Clear"/>
+      <input
+        class="search-box"
+        ng-change="onSearchChange()"
+        ng-model="searchInput"
+        type="text"
+        placeholder="Search" />
+    </div>
+  </form>
   <div class="slide infinite-scroll-parent" id="scrollable" data-back-img="{{ backgroundImage}}" ng-show="showHome">
-     <div ng-controller="WidgetHomeCtrl as WidgetHome">
+     <div>
         <div ng-if="WidgetHome.data.design.listLayout"
            ng-include="'templates/layouts/' + WidgetHome.data.design.listLayout + '.html'">
       </div>

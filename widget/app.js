@@ -13,7 +13,8 @@
     ])
     .constant('TAG_NAMES', {
       PEOPLE_INFO: 'peopleInfo',
-      PEOPLE: 'people'
+      PEOPLE: 'people',
+      DB_PROVIDER:  'dbProvider'
     })
     .constant('ERROR_CODE', {
       NOT_FOUND: 'NOTFOUND'
@@ -144,7 +145,7 @@
         }
       });
 
-      /*buildfire.navigation.onBackButtonClick = function () {
+      buildfire.navigation.onBackButtonClick = function () {
         if (($location.path() != '/')) {
           buildfire.messaging.sendMessageToControl({});
           $rootScope.showHome = true;
@@ -153,7 +154,7 @@
         else {
           buildfire.navigation._goBackOne();
         }
-      };*/
+      };
 
       buildfire.history.onPop(function(data, err){
         buildfire.messaging.sendMessageToControl({});
@@ -214,4 +215,20 @@
         });
       };
     }]);
+
+    angular.element(function() {
+        var defaultProvider = 'datastore';
+        buildfire.datastore.get('dbProvider', function(err, result) {
+          try {
+            if (err) throw err;
+            window.DB_PROVIDER = result.data.provider
+              ? result.data.provider
+              : defaultProvider;
+            angular.bootstrap(document, ['peoplePluginWidget']);
+          } catch (err) {
+            window.DB_PROVIDER = defaultProvider;
+            angular.bootstrap(document, ['peoplePluginWidget']);
+          }
+        });
+    })
 })(window.angular, window.buildfire);

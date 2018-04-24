@@ -16,14 +16,14 @@
             <div ng-if="item.data.topImage" class="media pull-left border-radius-four people-thumbnail margin-right-ten" ng-click="WidgetHome.getPeopleDetails(item.id)">
               <img class="people-thumbnail-img text-overlay" load-image="4x3" crop-width="100" crop-height="60" crop-type="crop" data-final-src="{{item.data.topImage}}">
             </div>
-            <div ng-if="!item.data.topImage" class="media pull-left border-radius-four people-thumbnail margin-right-ten" ng-click="WidgetHome.getPeopleDetails(item.id)">
+            <!-- <div ng-if="!item.data.topImage" class="media pull-left border-radius-four people-thumbnail margin-right-ten" ng-click="WidgetHome.getPeopleDetails(item.id)">
               <div class="people-thumbnail-img text-overlay" style="background-image: url(../../../styles/media/holder-2x1.png); background-size: cover; background-position: center;height: 60px"></div>
-            </div>
+            </div> -->
             <div class="content margin-top-ten padding-left-zero" ng-click="WidgetHome.getPeopleDetails(item.id)" style="min-height:50px;">
               <p class="text-primary ellipsis margin-zero text-overlay">
-				<a>{{item.data.fName}} {{item.data.lName}}</a>
+				<a class="person-title">{{item.data.fName}} {{item.data.lName}}</a>
 			  </p>
-              <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay" ng-if="item.data.position">{{item.data.position}}</p>
+              <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay person-position" ng-if="item.data.position">{{item.data.position}}</p>
               <p class="margin-bottom-zero ellipsis body-content-word-break text-overlay" ng-if="!item.data.bodyContent"></p>
             </div>
           </div>

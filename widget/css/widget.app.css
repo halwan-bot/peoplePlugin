@@ -265,3 +265,9 @@ ol li{
   width: 100px;
   height: 60px;
 }
+.person-title {
+  font-size: 16px;
+}
+.person-position {
+  font-size: 14px;
+}

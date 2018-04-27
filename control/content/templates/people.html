@@ -54,6 +54,19 @@
   <hr class="none">
   <div class="item clearfix row">
     <div class="labels col-md-3 padding-right-zero pull-left">
+      <span>Email</span>
+    </div>
+    <div class="main col-md-9 pull-right">
+      <input type="text" class="form-control"
+             ng-model="ContentPeople.item.data.email" placeholder="">
+      <div class="alert alert-danger" ng-show="error.emailExists">
+        Email already exists
+      </div>
+    </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="labels col-md-3 padding-right-zero pull-left">
       <span>Deep Link URL</span>
     </div>
     <div class="main col-md-9 pull-right">

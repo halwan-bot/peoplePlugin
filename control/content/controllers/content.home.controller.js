@@ -304,6 +304,55 @@
           return ContentHome.searchOptions;
         };
 
+          /*unqiueList*/
+          (function () {
+              var unqiueList = {};
+
+              $scope.validToAddItem = function (obj) {
+                  if (!ContentHome.items || ContentHome.items.length < 1) {
+                      return true;
+                  }
+                  if (window.ENABLE_UNIQUE_EMAIL && obj) {
+                      var key = obj.data && obj.data.email ? obj.data.email.toLowerCase() : null;
+                      if (unqiueList[key] || (typeof(obj.data.deleted) != "undefined" && obj.data.deleted.toString() == "true")) {
+                          return false;
+                      }
+                  }
+                  return true;
+              };
+              $scope.addToItems = function (obj) {
+                  if (window.ENABLE_UNIQUE_EMAIL && obj) {
+                      var key = obj.data && obj.data.email ? obj.data.email.toLowerCase() : null;
+                      if (unqiueList[key] || (typeof(obj.data.deleted) != "undefined" && obj.data.deleted.toString() == "true")) {
+                          return false;
+                      }
+                      if (!ContentHome.items) {
+                          ContentHome.items = [];
+                      }
+                      ContentHome.items.push(obj);
+                      if (key)
+                          unqiueList[key] = obj.id;
+                  }
+                  else{
+                      if (!ContentHome.items) {
+                          ContentHome.items = [];
+                      }
+                      ContentHome.items.push(obj);
+                  }
+                  return true;
+              };
+              $scope.addItems = function (items) {
+                  if (!ContentHome.items || ContentHome.items.length < 1) {
+                      unqiueList = {};
+                  }
+                  if (items) {
+                      for (var i = 0; i < items.length; i++) {
+                          $scope.addToItems(items[i]);
+                      }
+                  }
+              };
+          })();
+
         /**
          * ContentHome.loadMore() called by infiniteScroll to implement lazy loading
          */
@@ -318,6 +367,14 @@
           if (ContentHome.data && ContentHome.data.content.sortBy && !search) {
               ContentHome.searchOptions = getSearchOptions(ContentHome.data.content.sortBy);
           }
+
+          if (!ContentHome.searchOptions.filter['$and'])
+                ContentHome.searchOptions.filter['$and'] = [];
+          ContentHome.searchOptions.filter['$and'].push({
+              $or: [{'$json.deleted': {$exists: false}},
+                  {'$json.deleted': {$ne: 'true'}}]
+          });
+
           Buildfire[window.DB_PROVIDER].search(ContentHome.searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
             if (err) {
               Buildfire.spinner.hide();
@@ -331,7 +388,8 @@
               ContentHome.searchOptions.skip = ContentHome.searchOptions.skip + SORT._limit;
               ContentHome.noMore = false;
             }
-            ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
+            //ContentHome.items = ContentHome.items ? ContentHome.items.concat(result) : result;
+            $scope.addItems(result);
             ContentHome.busy = false;
             Buildfire.spinner.hide();
             $scope.$digest();
@@ -529,12 +587,24 @@
           modalInstance.result.then(function (message) {
             if (message === 'yes') {
               var item = ContentHome.items[_index];
-              Buildfire[window.DB_PROVIDER].delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
-                if (err)
-                  return;
-                ContentHome.items.splice(_index, 1);
-                $scope.$digest();
-              });
+                if (item.data.email && window.ENABLE_UNIQUE_EMAIL) {
+                    Buildfire[window.DB_PROVIDER].searchAndUpdate({email: item.data.email}, {$set: {deleted: true}}, TAG_NAMES.PEOPLE, function (err, result) {
+                        Buildfire[window.DB_PROVIDER].delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
+                            if (err)
+                                return;
+                            ContentHome.items.splice(_index, 1);
+                            $scope.$digest();
+                        });
+                    });
+                }
+                else{
+                    Buildfire[window.DB_PROVIDER].delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
+                        if (err)
+                            return;
+                        ContentHome.items.splice(_index, 1);
+                        $scope.$digest();
+                    });
+                }
             }
           }, function (data) {
             //do something on cancel

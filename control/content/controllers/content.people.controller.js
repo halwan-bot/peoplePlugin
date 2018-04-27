@@ -13,6 +13,7 @@
           handle: '> .cursor-grab'
         };
         var _data = {
+          email: '',
           topImage: '',
           fName: '',
           lName: '',
@@ -62,9 +63,33 @@
           return angular.equals(item, ContentPeople.masterItem);
         }
 
-        function isValidItem(item) {
-          return item.fName || item.lName;
-        }
+          function isValidItem(item, callback) {
+              if (window.ENABLE_UNIQUE_EMAIL && item.data.email) {
+                  var filter = {};
+                  filter['$and'] = [{'$json.email': item.data.email}, {
+                      $or: [{'$json.deleted': {$exists: false}},
+                          {'$json.deleted': {$ne: 'true'}}]
+                  }];
+                  Buildfire[window.DB_PROVIDER].search({filter: filter}, TAG_NAMES.PEOPLE, function (err, result) {
+                      if (result && result.length > 0) {
+                          for (var i = 0; i < result.length; i++) {
+                              if (result[i].id == item.id) {
+                                  callback(null, true);
+                                  return;
+                              }
+                          }
+                          item.data.email = '';
+                          callback('email_already_exists', true);
+                          return;
+                      }
+                      callback(null, true);
+                      return;
+                  });
+              }
+              else {
+                  callback(null, item.data.fName || item.data.lName);
+              }
+          }
 
         /*On click button done it redirects to home*/
         ContentPeople.done = function () {
@@ -235,22 +260,32 @@
         };
 
         var tmrDelayForPeoples = null;
-        var updateItemsWithDelay = function (item) {
-          clearTimeout(tmrDelayForPeoples);
-          ContentPeople.isUpdating = false;
-          ContentPeople.unchangedData = angular.equals(_data, ContentPeople.item.data);
+          var updateItemsWithDelay = function (item) {
+              clearTimeout(tmrDelayForPeoples);
+              ContentPeople.isUpdating = false;
+              ContentPeople.unchangedData = angular.equals(_data, ContentPeople.item.data);
 
-          ContentPeople.isItemValid = isValidItem(ContentPeople.item.data);
-          if (!ContentPeople.isUpdating && !isUnchanged(ContentPeople.item) && ContentPeople.isItemValid) {
-            tmrDelayForPeoples = setTimeout(function () {
-              if (item.id) {
-                ContentPeople.updateItemData();
-              } else if (!ContentPeople.isNewItemInserted) {
-                ContentPeople.addNewItem();
-              }
-            }, 500);
-          }
-        };
+              isValidItem(ContentPeople.item, function (err, isItemValid) {
+                  $scope.error = {};
+                  if (!ContentPeople.isUpdating && !isUnchanged(ContentPeople.item) && isItemValid) {
+                      tmrDelayForPeoples = setTimeout(function () {
+                          if (item.id) {
+                              ContentPeople.updateItemData();
+                          } else if (!ContentPeople.isNewItemInserted) {
+                              ContentPeople.addNewItem();
+                          }
+                      }, 500);
+                  }
+                  if (err) {
+                      if (!$scope.error)
+                          $scope.error = {};
+                      if (err == 'email_already_exists')
+                          $scope.error.emailExists = true;
+                  }
+                  if (!$scope.$$phase)
+                    $scope.$digest();
+              });
+          };
 
         $scope.$watch(function () {
           return ContentPeople.item;

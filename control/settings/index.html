@@ -18,16 +18,23 @@
     </style>
     <script>
         var tag = 'dbProvider';
+        var providerId = "datastore";
 
         buildfire.datastore.get(tag, function(err, result) {
             if(result && result.data && result.data.provider){
-                var providerId = result.data.provider;
+                providerId = result.data.provider;
                 document.getElementById(providerId).checked = true;
+            }
+            if(result && result.data && result.data.enableUniqueEmail) {
+                document.getElementById("chkEnableUniqueEmail").checked = true;
             }
         });
 
         function save(provider){
-            buildfire.datastore.save({provider: provider}, tag, function(){
+            if (provider)
+                providerId = provider;
+            var enableUniqueEmail = document.getElementById("chkEnableUniqueEmail").checked == true;
+            buildfire.datastore.save({provider: providerId, enableUniqueEmail: enableUniqueEmail}, tag, function () {
                 console.log('saving data');
             });
         }
@@ -50,6 +57,17 @@
           </div>
 
           <p class="info padding-zero">Warning: Changing this setting can result in data loss.</p>
+      </div>
+  </div>
+  <div class="item clearfix row">
+      <div class="labels col-xs-3">
+          <span>Enable Unique Email</span>
+      </div>
+      <div class="col-xs-7">
+          <div class="radio-primary radio-block">
+              <input id="chkEnableUniqueEmail" type="checkbox" onclick="save()">
+          </div>
+          <p class="info padding-zero">Warning: If checked, the email will be verified as unique when adding new person(s).</p>
       </div>
   </div>
 </body>

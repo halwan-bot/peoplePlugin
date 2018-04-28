@@ -588,10 +588,14 @@
             if (message === 'yes') {
               var item = ContentHome.items[_index];
                 if (item.data.email && window.ENABLE_UNIQUE_EMAIL) {
-                    Buildfire[window.DB_PROVIDER].searchAndUpdate({email: item.data.email}, {$set: {deleted: true}}, TAG_NAMES.PEOPLE, function (err, result) {
-                        Buildfire[window.DB_PROVIDER].delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
-                            if (err)
-                                return;
+                    Buildfire[window.DB_PROVIDER].searchAndUpdate({email: item.data.email}, {$set: {deleted: 'true'}}, TAG_NAMES.PEOPLE, function (err, result) {
+                        Buildfire[window.DB_PROVIDER].search({filter: {'$json.email': item.data.email}}, TAG_NAMES.PEOPLE, function (err, result) {
+                            if (result) {
+                                for (var i = 0; i < result.length; i++) {
+                                    Buildfire[window.DB_PROVIDER].delete(result[i].id, TAG_NAMES.PEOPLE, function (err, result) {
+                                    });
+                                }
+                            }
                             ContentHome.items.splice(_index, 1);
                             $scope.$digest();
                         });

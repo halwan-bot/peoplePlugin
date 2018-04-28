@@ -12,18 +12,19 @@
         ContentPeople.linksSortableOptions = {
           handle: '> .cursor-grab'
         };
-        var _data = {
-          email: '',
-          topImage: '',
-          fName: '',
-          lName: '',
-          position: '',
-          deepLinkUrl: '',
-          dateCreated: "",
-          socialLinks: [],
-          bodyContent: '',
-          rank: _rankOfLastItem
-        };
+          var _data = {
+              email: '',
+              topImage: '',
+              fName: '',
+              lName: '',
+              position: '',
+              deepLinkUrl: '',
+              dateCreated: "",
+              socialLinks: [],
+              bodyContent: '',
+              rank: _rankOfLastItem
+          };
+          $scope.draft_email = '';
 
         //Scroll current view to top when page loaded.
         buildfire.navigation.scrollTop();
@@ -64,9 +65,9 @@
         }
 
           function isValidItem(item, callback) {
-              if (window.ENABLE_UNIQUE_EMAIL && item.data.email) {
+              if (window.ENABLE_UNIQUE_EMAIL && $scope.draft_email) {
                   var filter = {};
-                  filter['$and'] = [{'$json.email': item.data.email}, {
+                  filter['$and'] = [{'$json.email': $scope.draft_email}, {
                       $or: [{'$json.deleted': {$exists: false}},
                           {'$json.deleted': {$ne: 'true'}}]
                   }];
@@ -78,8 +79,7 @@
                                   return;
                               }
                           }
-                          item.data.email = '';
-                          callback('email_already_exists', true);
+                          callback('email_already_exists', false);
                           return;
                       }
                       callback(null, true);
@@ -109,6 +109,10 @@
                 ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: item.id});
             }
 
+              if (item && item.data) {
+                  $scope.draft_email = item.data.email;
+              }
+
               if(item.data && item.data.socialLinks){
                   //For Zapier integrations, the socialLinks will come as a string, and not an object.
                   if(typeof item.data.socialLinks === "string"){
@@ -133,6 +137,8 @@
         }
 
         ContentPeople.addNewItem = function () {
+            if (ContentPeople.item.data)
+                ContentPeople.item.data.email = $scope.draft_email;
           ContentPeople.isNewItemInserted = true;
           _rankOfLastItem = _rankOfLastItem + 10;
           ContentPeople.item.data.dateCreated = +new Date();
@@ -164,6 +170,8 @@
         };
 
         ContentPeople.updateItemData = function () {
+            if (ContentPeople.item.data)
+                ContentPeople.item.data.email = $scope.draft_email;
           Buildfire[window.DB_PROVIDER].update(ContentPeople.item.id, ContentPeople.item.data, TAG_NAMES.PEOPLE, function (err) {
             ContentPeople.isUpdating = false;
             if (err)
@@ -267,7 +275,7 @@
 
               isValidItem(ContentPeople.item, function (err, isItemValid) {
                   $scope.error = {};
-                  if (!ContentPeople.isUpdating && !isUnchanged(ContentPeople.item) && isItemValid) {
+                  if (!ContentPeople.isUpdating && !isUnchanged(item) && isItemValid) {
                       tmrDelayForPeoples = setTimeout(function () {
                           if (item.id) {
                               ContentPeople.updateItemData();
@@ -288,7 +296,10 @@
           };
 
         $scope.$watch(function () {
-          return ContentPeople.item;
+            var item = {};
+            angular.copy(ContentPeople.item, item);
+            item.data.email = $scope.draft_email;
+            return item;
         }, updateItemsWithDelay, true);
 
         $scope.$on("$destroy", function () {

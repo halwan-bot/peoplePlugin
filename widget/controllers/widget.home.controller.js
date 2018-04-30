@@ -29,7 +29,8 @@
 
                 /*unqiueList*/
                 (function () {
-                    var unqiueList = {};
+                    var unqiueListEmail = {};
+                    var unqiueListId = {};
 
                     $scope.validToAddItem = function (obj) {
                         if (!WidgetHome.items || WidgetHome.items.length < 1) {
@@ -37,7 +38,7 @@
                         }
                         if (window.ENABLE_UNIQUE_EMAIL && obj) {
                             var key = obj.data && obj.data.email ? obj.data.email.toLowerCase() : null;
-                            if (unqiueList[key] || (typeof(obj.data.deleted) != "undefined" && obj.data.deleted.toString() == "true")) {
+                            if (unqiueListEmail[key] || (typeof(obj.data.deleted) != "undefined" && obj.data.deleted.toString() == "true")) {
                                 return false;
                             }
                         }
@@ -45,28 +46,38 @@
                     };
                     $scope.addToItems = function (obj) {
                         if (window.ENABLE_UNIQUE_EMAIL && obj) {
-                            var key = obj.data && obj.data.email ? obj.data.email.toLowerCase() : null;
-                            if (unqiueList[key] || (typeof(obj.data.deleted) != "undefined" && obj.data.deleted.toString() == "true")) {
+                            var keyEmail = obj.data && obj.data.email ? obj.data.email.toLowerCase() : null;
+                            var keyId = obj.id? obj.id : null;
+                            if (unqiueListId[keyId] || unqiueListEmail[keyEmail] || (typeof(obj.data.deleted) != "undefined" && obj.data.deleted.toString() == "true")) {
                                 return false;
                             }
                             if (!WidgetHome.items) {
                                 WidgetHome.items = [];
                             }
+                            if (keyEmail)
+                                unqiueListEmail[keyEmail] = obj.id;
+                            if (keyId)
+                                unqiueListId[keyId] = obj.id;
                             WidgetHome.items.push(obj);
-                            if (key)
-                                unqiueList[key] = obj.id;
                         }
                         else{
                             if (!WidgetHome.items) {
                                 WidgetHome.items = [];
                             }
+                            var keyId = obj.id? obj.id : null;
+                            if (unqiueListId[keyId]) {
+                                return false;
+                            }
+                            if (keyId)
+                                unqiueListId[keyId] = obj.id;
                             WidgetHome.items.push(obj);
                         }
                         return true;
                     };
                     $scope.addItems = function (items) {
                         if (!WidgetHome.items || WidgetHome.items.length < 1) {
-                            unqiueList = {};
+                            unqiueListEmail = {};
+                            unqiueListId = {};
                         }
                         if (items) {
                             for (var i = 0; i < items.length; i++) {

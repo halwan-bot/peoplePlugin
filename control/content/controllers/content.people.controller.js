@@ -303,7 +303,7 @@
         $scope.$watch(function () {
             var item = {};
             angular.copy(ContentPeople.item, item);
-            item.data.email = $scope.draft_email;
+            item.data.email = $scope.draft_email ? $scope.draft_email.toLowerCase() : '';
             return item;
         }, updateItemsWithDelay, true);
 

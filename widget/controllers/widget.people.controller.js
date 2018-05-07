@@ -194,7 +194,8 @@
                         };
                         buildfire.actionItems.list(actionItems, options, callback);
                     }
-                }
+                };
+
                 Buildfire[window.DB_PROVIDER].onRefresh(function(){
 
                     getPeopleDetail();

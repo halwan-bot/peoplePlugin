@@ -27,6 +27,65 @@
                     WidgetHome.loadMore();
                 }, 500);
 
+                /*unqiueList*/
+                (function () {
+                    var unqiueListEmail = {};
+                    var unqiueListId = {};
+
+                    $scope.validToAddItem = function (obj) {
+                        if (!WidgetHome.items || WidgetHome.items.length < 1) {
+                            return true;
+                        }
+                        if (window.ENABLE_UNIQUE_EMAIL && obj) {
+                            var key = obj.data && obj.data.email ? obj.data.email.toLowerCase() : null;
+                            if (unqiueListEmail[key] || (typeof(obj.data.deleted) != "undefined" && obj.data.deleted.toString() == "true")) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    };
+                    $scope.addToItems = function (obj) {
+                        if (window.ENABLE_UNIQUE_EMAIL && obj) {
+                            var keyEmail = obj.data && obj.data.email ? obj.data.email.toLowerCase() : null;
+                            var keyId = obj.id? obj.id : null;
+                            if (unqiueListId[keyId] || unqiueListEmail[keyEmail] || (typeof(obj.data.deleted) != "undefined" && obj.data.deleted.toString() == "true")) {
+                                return false;
+                            }
+                            if (!WidgetHome.items) {
+                                WidgetHome.items = [];
+                            }
+                            if (keyEmail)
+                                unqiueListEmail[keyEmail] = obj.id;
+                            if (keyId)
+                                unqiueListId[keyId] = obj.id;
+                            WidgetHome.items.push(obj);
+                        }
+                        else{
+                            if (!WidgetHome.items) {
+                                WidgetHome.items = [];
+                            }
+                            var keyId = obj.id? obj.id : null;
+                            if (unqiueListId[keyId]) {
+                                return false;
+                            }
+                            if (keyId)
+                                unqiueListId[keyId] = obj.id;
+                            WidgetHome.items.push(obj);
+                        }
+                        return true;
+                    };
+                    $scope.addItems = function (items) {
+                        if (!WidgetHome.items || WidgetHome.items.length < 1) {
+                            unqiueListEmail = {};
+                            unqiueListId = {};
+                        }
+                        if (items) {
+                            for (var i = 0; i < items.length; i++) {
+                                $scope.addToItems(items[i]);
+                            }
+                        }
+                    };
+                })();
 
                 $scope.searchInput = "";
                 $scope.clear = function() {
@@ -356,13 +415,14 @@
                 Buildfire.publicData.onUpdate(debounceUpdateCallback);
 
                 WidgetHome.noMore = false;
-                WidgetHome.loadMore = function (multi, times) {
+                WidgetHome.loadMore = function (multi, times, adjustment) {
                     window.buildfire.spinner.show();
                     console.log("loadMore");
                     if (WidgetHome.busy) {
                         return;
                     }
                     WidgetHome.busy = true;
+
                     if (WidgetHome.data && WidgetHome.data.content && WidgetHome.data.content.sortBy) {
                         searchOptions = getSortOption(WidgetHome.data.content.sortBy, searchOptions);
                     }
@@ -375,8 +435,28 @@
                                 { "$json.position": { $regex: $scope.searchInput, $options: 'i' } }
                             ]
                         };
+                        if (window.ENABLE_UNIQUE_EMAIL) {
+                            searchOptions.filter['$and'] = [{
+                                $or: [
+                                    {'$json.deleted': {$exists: false}},
+                                    {'$json.deleted': {$ne: 'true'}}]
+                            }];
+                        }
                     }else{
-                        searchOptions.filter = {};
+                        if (window.ENABLE_UNIQUE_EMAIL) {
+                            searchOptions.filter = {
+                                $or: [
+                                    {'$json.deleted': {$exists: false}},
+                                    {'$json.deleted': {$ne: 'true'}}]
+                            };
+                        }
+                        else{
+                            searchOptions.filter = {
+                                $or: [
+                                    {'$json.deleted': {$exists: false}},
+                                    {'$json.deleted': {$ne: 'true'}}]
+                            };
+                        }
                     }
 
                     Buildfire[window.DB_PROVIDER].search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
@@ -394,11 +474,15 @@
                             WidgetHome.noMore = false;
                         }
 
+
                         if ($scope.searchInput && searchOptions.skip <= 15) {
-                            WidgetHome.items = result;
+                            if (!adjustment)
+                                WidgetHome.items = [];
+                            //WidgetHome.items = result;
                         } else {
-                            WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
+                            //WidgetHome.items = WidgetHome.items ? WidgetHome.items.concat(result) : result;
                         }
+                        $scope.addItems(result);
 
                         WidgetHome.busy = false;
                         if (multi && !WidgetHome.noMore && times) {

@@ -11,7 +11,7 @@
           class="margin-bottom-zero text-overlay"></p>
       <hr class="small" ng-show="WidgetHome.shouldShowDescription()">
       <div>
-        <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1" data-infinite-container=".infinite-scroll-parent" infinite-scroll="WidgetHome.loadMore()" infinite-scroll-disabled="WidgetHome.noMore">
+        <div class="list-items" ng-if="WidgetHome.data" infinite-scroll-distance="1" data-infinite-container=".infinite-scroll-parent" infinite-scroll="WidgetHome.loadMore(undefined,undefined,true)" infinite-scroll-disabled="WidgetHome.noMore">
           <div class="list-item clearfix" ng-repeat="item in WidgetHome.items">
             <div ng-if="item.data.topImage" class="media pull-left border-radius-four people-thumbnail margin-right-ten" ng-click="WidgetHome.getPeopleDetails(item.id)">
               <img class="people-thumbnail-img text-overlay" load-image="4x3" crop-width="100" crop-height="60" crop-type="crop" data-final-src="{{item.data.topImage}}">

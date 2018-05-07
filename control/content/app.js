@@ -203,9 +203,13 @@
               window.DB_PROVIDER = result.data.provider
                 ? result.data.provider
                 : defaultProvider;
+
+              window.ENABLE_UNIQUE_EMAIL = result.data.enableUniqueEmail;
+
               angular.bootstrap(document, ['peoplePluginContent']);
             } catch (err) {
               window.DB_PROVIDER = defaultProvider;
+              window.ENABLE_UNIQUE_EMAIL = false;
               angular.bootstrap(document, ['peoplePluginContent']);
             }
         });

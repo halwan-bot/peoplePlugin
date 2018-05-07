@@ -12,17 +12,19 @@
         ContentPeople.linksSortableOptions = {
           handle: '> .cursor-grab'
         };
-        var _data = {
-          topImage: '',
-          fName: '',
-          lName: '',
-          position: '',
-          deepLinkUrl: '',
-          dateCreated: "",
-          socialLinks: [],
-          bodyContent: '',
-          rank: _rankOfLastItem
-        };
+          var _data = {
+              email: '',
+              topImage: '',
+              fName: '',
+              lName: '',
+              position: '',
+              deepLinkUrl: '',
+              dateCreated: "",
+              socialLinks: [],
+              bodyContent: '',
+              rank: _rankOfLastItem
+          };
+          $scope.draft_email = '';
 
         //Scroll current view to top when page loaded.
         buildfire.navigation.scrollTop();
@@ -62,9 +64,32 @@
           return angular.equals(item, ContentPeople.masterItem);
         }
 
-        function isValidItem(item) {
-          return item.fName || item.lName;
-        }
+          function isValidItem(item, lastValidationRequest, callback) {
+              if (window.ENABLE_UNIQUE_EMAIL && item.data.email) {
+                  var filter = {};
+                  filter['$and'] = [{'$json.email': item.data.email}, {
+                      $or: [{'$json.deleted': {$exists: false}},
+                          {'$json.deleted': {$ne: 'true'}}]
+                  }];
+                  Buildfire[window.DB_PROVIDER].search({filter: filter}, TAG_NAMES.PEOPLE, function (err, result) {
+                      if (result && result.length > 0) {
+                          for (var i = 0; i < result.length; i++) {
+                              if (result[i].id == item.id) {
+                                  callback(null, {isValid: true, lastValidationRequest: lastValidationRequest});
+                                  return;
+                              }
+                          }
+                          callback('email_already_exists', {isValid: false, lastValidationRequest: lastValidationRequest});
+                          return;
+                      }
+                      callback(null, {isValid: true, lastValidationRequest: lastValidationRequest});
+                      return;
+                  });
+              }
+              else {
+                  callback(null, {isValid: item.data.fName || item.data.lName, lastValidationRequest: lastValidationRequest});
+              }
+          }
 
         /*On click button done it redirects to home*/
         ContentPeople.done = function () {
@@ -83,6 +108,10 @@
             if(item && item.data && !item.data.deepLinkUrl) {
                 ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: item.id});
             }
+
+              if (item && item.data) {
+                  $scope.draft_email = item.data.email;
+              }
 
               if(item.data && item.data.socialLinks){
                   //For Zapier integrations, the socialLinks will come as a string, and not an object.
@@ -107,44 +136,48 @@
           ContentPeople.getItem($routeParams.itemId);
         }
 
-        ContentPeople.addNewItem = function () {
-          ContentPeople.isNewItemInserted = true;
-          _rankOfLastItem = _rankOfLastItem + 10;
-          ContentPeople.item.data.dateCreated = +new Date();
-          ContentPeople.item.data.rank = _rankOfLastItem;
+          ContentPeople.addNewItem = function (item) {
+              /*if (item.data)
+                  item.data.email = $scope.draft_email;*/
+              ContentPeople.isNewItemInserted = true;
+              _rankOfLastItem = _rankOfLastItem + 10;
+              item.data.dateCreated = +new Date();
+              item.data.rank = _rankOfLastItem;
 
-          console.log("inserting....");
-          Buildfire[window.DB_PROVIDER].insert(ContentPeople.item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
-            console.log("Inserted", data.id);
-            ContentPeople.isUpdating = false;
-            if (err) {
-              ContentPeople.isNewItemInserted = false;
-              return console.error('There was a problem saving your data');
-            }
-            RankOfLastItem.setRank(_rankOfLastItem);
-            ContentPeople.item.id = data.id;
-            _data.dateCreated = ContentPeople.item.data.dateCreated;
-            _data.rank = ContentPeople.item.data.rank;
-            updateMasterItem(ContentPeople.item);
-            ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: data.id});
-            // Send message to widget as soon as a new item is created with its id as a parameter
-            if (ContentPeople.item.id) {
-              buildfire.messaging.sendMessageToWidget({
-                id: ContentPeople.item.id,
-                type: 'AddNewItem'
+              console.log("inserting....");
+              Buildfire[window.DB_PROVIDER].insert(item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
+                  console.log("Inserted", data.id);
+                  if (err) {
+                      ContentPeople.isNewItemInserted = false;
+                      return console.error('There was a problem saving your data');
+                  }
+                  RankOfLastItem.setRank(_rankOfLastItem);
+                  item.id = ContentPeople.item.id = data.id;
+                  _data.dateCreated = item.data.dateCreated;
+                  _data.rank = item.data.rank;
+                  updateMasterItem(item);
+                  ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: data.id});
+                  // Send message to widget as soon as a new item is created with its id as a parameter
+                  if (ContentPeople.item.id) {
+                      buildfire.messaging.sendMessageToWidget({
+                          id: ContentPeople.item.id,
+                          type: 'AddNewItem'
+                      });
+                  }
+                  ContentPeople.isUpdating = false;
+
+                  $scope.$digest();
               });
-            }
-            $scope.$digest();
-          });
-        };
+          };
 
-        ContentPeople.updateItemData = function () {
-          Buildfire[window.DB_PROVIDER].update(ContentPeople.item.id, ContentPeople.item.data, TAG_NAMES.PEOPLE, function (err) {
-            ContentPeople.isUpdating = false;
-            if (err)
-              return console.error('There was a problem saving your data');
-          })
-        };
+          ContentPeople.updateItemData = function (item) {
+              Buildfire[window.DB_PROVIDER].update(item.id, item.data, TAG_NAMES.PEOPLE, function (err) {
+                  updateMasterItem(item);
+                  ContentPeople.isUpdating = false;
+                  if (err)
+                      return console.error('There was a problem saving your data');
+              })
+          };
 
         ContentPeople.openEditLink = function (link, index) {
           var options = {showIcons: false};
@@ -235,25 +268,43 @@
         };
 
         var tmrDelayForPeoples = null;
-        var updateItemsWithDelay = function (item) {
-          clearTimeout(tmrDelayForPeoples);
-          ContentPeople.isUpdating = false;
-          ContentPeople.unchangedData = angular.equals(_data, ContentPeople.item.data);
+          var lastUpdateRequest = null;
+          var updateItemsWithDelay = function (item) {
+              console.log(item.data.email);
+              clearTimeout(tmrDelayForPeoples);
+              if(item.id)
+                  ContentPeople.isUpdating = false;
+              ContentPeople.unchangedData = angular.equals(_data, item.data);
 
-          ContentPeople.isItemValid = isValidItem(ContentPeople.item.data);
-          if (!ContentPeople.isUpdating && !isUnchanged(ContentPeople.item) && ContentPeople.isItemValid) {
-            tmrDelayForPeoples = setTimeout(function () {
-              if (item.id) {
-                ContentPeople.updateItemData();
-              } else if (!ContentPeople.isNewItemInserted) {
-                ContentPeople.addNewItem();
-              }
-            }, 500);
-          }
-        };
+              lastUpdateRequest = new Date();
+              isValidItem(item, lastUpdateRequest, function (err, result) {
+                  $scope.error = {};
+                  if (!ContentPeople.isUpdating && !isUnchanged(item) && result.isValid && lastUpdateRequest == result.lastValidationRequest) {
+                      tmrDelayForPeoples = setTimeout(function () {
+                          console.log("inside   " + item.data.email);
+                          if (item.id) {
+                              ContentPeople.updateItemData(item);
+                          } else if (!ContentPeople.isNewItemInserted) {
+                              ContentPeople.addNewItem(item);
+                          }
+                      }, 500);
+                  }
+                  if (err) {
+                      if (!$scope.error)
+                          $scope.error = {};
+                      if (err == 'email_already_exists')
+                          $scope.error.emailExists = true;
+                  }
+                  if (!$scope.$$phase)
+                    $scope.$digest();
+              });
+          };
 
         $scope.$watch(function () {
-          return ContentPeople.item;
+            var item = {};
+            angular.copy(ContentPeople.item, item);
+            item.data.email = $scope.draft_email ? $scope.draft_email.toLowerCase() : '';
+            return item;
         }, updateItemsWithDelay, true);
 
         $scope.$on("$destroy", function () {

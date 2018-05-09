@@ -28,13 +28,22 @@
             if(result && result.data && result.data.enableUniqueEmail) {
                 document.getElementById("chkEnableUniqueEmail").checked = true;
             }
+            if(result && result.data && result.data.hideEmails) {
+                document.getElementById("chckHideEmails").checked = true;
+            }
         });
 
         function save(provider){
             if (provider)
                 providerId = provider;
             var enableUniqueEmail = document.getElementById("chkEnableUniqueEmail").checked == true;
-            buildfire.datastore.save({provider: providerId, enableUniqueEmail: enableUniqueEmail}, tag, function () {
+            var chckHideEmails = document.getElementById('chckHideEmails').checked == true;
+
+            buildfire.datastore.save({
+              provider: providerId,
+              enableUniqueEmail: enableUniqueEmail,
+              hideEmails: chckHideEmails
+            }, tag, function () {
                 console.log('saving data');
             });
         }
@@ -68,6 +77,17 @@
               <input id="chkEnableUniqueEmail" type="checkbox" onclick="save()">
           </div>
           <p class="info padding-zero">Warning: If checked, the email will be verified as unique when adding new person(s).</p>
+      </div>
+  </div>
+  <div class="item clearfix row">
+      <div class="labels col-xs-3">
+          <span>Hide emails</span>
+      </div>
+      <div class="col-xs-7">
+          <div class="radio-primary radio-block">
+              <input id="chckHideEmails" type="checkbox" onclick="save()">
+          </div>
+          <p class="info padding-zero">Warning: If checked, emails wont show even if you add any.</p>
       </div>
   </div>
 </body>

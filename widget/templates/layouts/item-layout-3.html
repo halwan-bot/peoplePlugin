@@ -14,7 +14,7 @@
                         <p class="ellipsis margin-top-five" style="font-size: 16px">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
 
                         <p class="ellipsis text-overlay">{{WidgetPeople.item.position}}</p>
-                        <p class="ellipsis text-overlay" ng-show="WidgetPeople.item.email"><a href="mailto:{{WidgetPeople.item.email}}">{{WidgetPeople.item.email}}</a></p>
+                        <p class="ellipsis text-overlay" ng-show="WidgetPeople.item.email && !WidgetPeople.hideEmail"><a href="mailto:{{WidgetPeople.item.email}}">{{WidgetPeople.item.email}}</a></p>
                         <!-- <a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay"></a> -->
                            <button ng-if="WidgetPeople.item.socialLinks.length" class="btn btn-primary btn-details btn-sm" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)">Details</button>
                     </div>

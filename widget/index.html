@@ -30,6 +30,10 @@
 </head>
 <body class="body-scroll" style="overflow-y: hidden !important">
 <div class="main_view" ng-controller="WidgetHomeCtrl as WidgetHome">
+  <div class="no-matches" ng-if="searchInput && WidgetHome.items.length <= 0">
+    <h1>NO RESULTS</h1>
+    <h2>Please try a different search query.</h2>
+  </div>
   <form class="search-form form" ng-submit="onSearchSubmit(this)" ng-show="showHome">
     <div class="search-container">
       <img class="search-icon" src="search.png" alt="Search"/>

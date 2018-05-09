@@ -79,6 +79,9 @@ body {
 .thumbnail-slider .thumbnail-slide img{
 	max-width:100%;
 }
+.people-plugin .list-items .list-item {
+  font-size: 16px;
+}
 .people-plugin .list-items .list-item:first-child::before{
 	border:none !important;
 	opacity:0;
@@ -266,10 +269,10 @@ ol li{
   height: 60px;
 }
 .person-name {
-  font-size: 16px;
+  font-size: 1em;
 }
 .person-position {
-  font-size: 12px;
+  font-size: .75em;
 }
 .no-matches {
   position: absolute;

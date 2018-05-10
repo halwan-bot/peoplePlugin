@@ -40,6 +40,7 @@
                     buildfire.messaging.sendMessageToControl({id: $routeParams.id, type: 'OpenItem'});
                 }
                 $rootScope.showHome = false;
+                WidgetPeople.hideEmail = window.HIDE_EMAILS;
                 /*declare the device width heights*/
                 WidgetPeople.deviceHeight = window.innerHeight;
                 WidgetPeople.deviceWidth = window.innerWidth;

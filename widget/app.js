@@ -226,11 +226,13 @@
               : defaultProvider;
 
               window.ENABLE_UNIQUE_EMAIL = result.data.enableUniqueEmail;
+              window.HIDE_EMAILS = result.data.hideEmails;
 
             angular.bootstrap(document, ['peoplePluginWidget']);
           } catch (err) {
             window.DB_PROVIDER = defaultProvider;
             window.ENABLE_UNIQUE_EMAIL = false;
+            window.HIDE_EMAILS = false;
             angular.bootstrap(document, ['peoplePluginWidget']);
           }
         });

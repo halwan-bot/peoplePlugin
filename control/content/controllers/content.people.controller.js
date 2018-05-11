@@ -121,7 +121,6 @@
 
                   //For Zapier integrations, we will always receive a callNumber action, although it might be empty
                   item.data.socialLinks.forEach(function(item, index, object){
-                      debugger;
                       if(item.action === "callNumber"){
                           if(item.phoneNumber === ""){
                               object.splice(index, 1);

@@ -106,6 +106,17 @@
                                         object.splice(index, 1);
                                     }
                                 });
+
+                                result.data.socialLinks.forEach(function(item, index, object){
+                                    if(item.action === "callNumber"){
+                                        if(item.phoneNumber === ""){
+                                            object.splice(index, 1);
+                                        }
+                                        else{
+                                            item.phoneNumber = item.phoneNumber.replace(/\D+/g, "");
+                                        }
+                                    }
+                                });
                             }
 
                             WidgetPeople.item = result.data;

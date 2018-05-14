@@ -12,7 +12,7 @@
 						<p class="ellipsis text-overlay whiteTheme">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
 						<p class="ellipsis whiteTheme">{{WidgetPeople.item.position}}</p>
             			<!-- <a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay whiteTheme" ></a> -->
-            			<button ng-if="WidgetPeople.item.socialLinks.length" class="btn btn-primary btn-details btn-sm" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)">Contact</button>
+            			<a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
 					</div>
 				</div>
 			</div>

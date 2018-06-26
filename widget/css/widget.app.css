@@ -118,6 +118,9 @@ body {
 .list-items .list-item .media{
 	width:100px;
 }
+.list-items .list-item .media-round{
+  width:60px;
+}
 .list-items .list-item .content{
 	padding-left:110px;
 	width:100%;
@@ -212,6 +215,12 @@ ol li{
 .text-overlay {
     position: relative;
     z-index: auto;
+}
+
+.text-overlay-round {
+    position: relative;
+    z-index: auto;
+    border-radius: 100%;
 }
 
 .set-top-padding {

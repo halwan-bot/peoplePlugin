@@ -9,7 +9,10 @@
                     name: "list-layout-1"
                 }, {
                     name: "list-layout-2"
-                }],
+                }, {
+                    name: "list-layout-3"
+                }
+            ],
                 itemLayouts: [{
                     name: "item-layout-1"
                 }, {

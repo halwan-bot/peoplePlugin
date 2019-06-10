@@ -3,19 +3,20 @@
   "version": "1.0.0",
   "description": "BuildFire Plugin to allow App Owners to include Staff/People into their app and provide contact info",
   "main": "index.js",
-  "supportSite":"http://learn.appdocumentation.com/plugin-tutorials/people-plugin-tutorial",
+  "supportSite": "http://learn.appdocumentation.com/plugin-tutorials/people-plugin-tutorial",
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
-    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
+    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS",
+    "build": "gulp build && cd .. && rm -rf peoplePlugin_release.zip && zip -r peoplePlugin_release.zip peoplePlugin_release/"
   },
   "license": "ISC",
-    "keywords": [
-        "angularjs",
-        "buildfire",
-        "testing",
-        "karma",
-        "jasmine"
-    ],
+  "keywords": [
+    "angularjs",
+    "buildfire",
+    "testing",
+    "karma",
+    "jasmine"
+  ],
   "dependencies": {
     "bower": "^1.5.3",
     "karma-cli": "^0.1.0",
@@ -23,6 +24,18 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
+    "del": "^4.1.1",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-csso": "^3.0.1",
+    "gulp-eslint": "^5.0.0",
+    "gulp-html-replace": "^1.6.2",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-minify-inline": "^1.1.0",
+    "gulp-sequence": "^1.0.0",
+    "gulp-strip-comments": "^2.5.2",
+    "gulp-uglify": "^3.0.2",
+    "gulp-util": "^3.0.8",
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.19",
     "karma-chai": "^0.1.0",

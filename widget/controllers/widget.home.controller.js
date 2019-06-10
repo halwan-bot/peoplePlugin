@@ -310,7 +310,7 @@
                   return _retVal;
                 };
                 var onUpdateCallback = function (event) {
-                    console.log('+++ ON UPDATE CALLBACK', window.DB_PROVIDER, event.tag, { event });
+                    console.log('+++ ON UPDATE CALLBACK', window.DB_PROVIDER, event.tag, event);
                     $scope.imagesUpdated = false;
                     $scope.$digest();
 

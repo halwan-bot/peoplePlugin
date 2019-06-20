@@ -31,11 +31,10 @@ const cssTasks = [
 
 cssTasks.forEach(function(task) {
   /*
-     Define a task called 'css' the recursively loops through
-     the widget and control folders, processes each CSS file and puts
-     a processes copy in the 'build' folder
-     note if the order matters you can import each css separately in the array
-
+    Define a task called 'css' the recursively loops through
+    the widget and control folders, processes each CSS file and puts
+    a processes copy in the 'build' folder
+    note if the order matters you can import each css separately in the array
      */
   gulp.task(task.name, function() {
     return (
@@ -53,28 +52,6 @@ cssTasks.forEach(function(task) {
     );
   });
 });
-
-// const widgetJSFiles = [
-//   'widget/assets/js/lodash.js',
-//   'widget/assets/js/jquery.truncate.js',
-//   'widget/assets/js/ng-videosharing-embed.min.js',
-//   'widget/assets/js/angular-sanitize.js',
-//   'widget/assets/js/videogular.js',
-//   'widget/assets/js/videogular-controls.js',
-//   'widget/assets/js/videogular-overlay-play.js',
-//   'widget/app.js',
-//   'widget/modals.js',
-//   'widget/app.services.js',
-//   'widget/enums.js',
-//   'widget/directives.js',
-//   'widget/filters.js',
-//   'widget/viewedItems.js',
-//   'widget/bookmarkHandler.js',
-//   'widget/cache.js',
-//   'widget/controllers/widget.home.controller.js',
-//   'widget/controllers/widget.media.controller.js',
-//   'widget/controllers/widget.nowplaying.controller.js'
-// ];
 
 const jsTasks = [
   { name: "widgetJS", src: "widget/**/*.js", dest: "/widget" },
@@ -183,7 +160,7 @@ gulp.task('resources', function() {
 
 gulp.task('images', function() {
   return gulp
-    .src(['**/.images/**', 'control/design/icons/**', 'control/design/layouts/**'], { base: '.' })
+    .src(['widget/*.png', '**/.images/**', 'control/design/icons/**', 'control/design/layouts/**'], { base: '.' })
     .pipe(gulp.dest(destinationFolder));
 });
 

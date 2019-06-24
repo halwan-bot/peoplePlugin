@@ -149,11 +149,8 @@
         if (($location.path() != '/')) {
           buildfire.messaging.sendMessageToControl({});
           $rootScope.showHome = true;
-          Location.goTo('#/');
         }
-        else {
-          buildfire.navigation._goBackOne();
-        }
+        buildfire.navigation._goBackOne();
       };
 
       buildfire.history.onPop(function(data, err){

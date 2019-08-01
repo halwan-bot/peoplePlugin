@@ -23,7 +23,7 @@ function releaseFolder() {
 console.log('>> Building to ', destinationFolder);
 
 const cssTasks = [
-  { name: 'widgetCSS', src: 'widget/**/*.css', dest: '/widget/styles' },
+  { name: 'widgetCSS', src: 'widget/**/*.css', dest: '/widget' },
   { name: 'controlContentCSS', src: 'control/content/**/*.css', dest: '/control/content' },
   { name: 'controlDesignCSS', src: 'control/design/**/*.css', dest: '/control/design' },
   { name: 'controlSettingsCSS', src: 'control/settings/**/*.css', dest: '/control/settings' }
@@ -138,7 +138,7 @@ gulp.task('html', function() {
       .pipe(
         htmlReplace({
           bundleJSFiles: 'scripts.min.js?v=' + new Date().getTime(),
-          bundleCSSFiles: 'styles/styles.min.css?v=' + new Date().getTime()
+          bundleCSSFiles: 'styles.min.css?v=' + new Date().getTime()
         })
       )
 

@@ -159,12 +159,6 @@
         Location.goTo('#/');
       })
 
-      var frameType = buildfire.getFrameType();
-
-      if (frameType === 'LAUNCHER_PLUGIN') {
-        buildfire.appearance.titlebar.show();
-      }
-
     }]).filter('cropImage', [function () {
       function filter (url, width, height, noDefault) {
         var _imgUrl;

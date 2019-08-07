@@ -128,7 +128,10 @@ body {
 .listlayout1 .list-items .list-item:first-child{
 	min-height:60px;
 }
-
+html[safe-area="true"] .list-items {
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: constant(safe-area-inset-bottom);
+}
 /* End Plugin CSS */
 
 

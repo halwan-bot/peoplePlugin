@@ -159,7 +159,6 @@
         Location.goTo('#/');
       })
 
-
     }]).filter('cropImage', [function () {
       function filter (url, width, height, noDefault) {
         var _imgUrl;

@@ -195,46 +195,13 @@
         ContentHome.itemSortableOptions = {
           handle: '> .cursor-grab',
           disabled: true,
-          stop: function (e, ui) {
-            var endIndex = ui.item.sortable.dropindex,
-              maxRank = 0,
-              draggedItem = ContentHome.items[endIndex];
-
-            if (draggedItem) {
-              var prev = ContentHome.items[endIndex - 1],
-                next = ContentHome.items[endIndex + 1];
-              var isRankChanged = false;
-              if (next) {
-                if (prev) {
-                  if(prev.data.rank && next.data.rank && prev.data.rank == next.data.rank) {
-                    console.error('matching ranks found. resetting manual sort');
-                    resetManualSorting(ContentHome.items)
-                  }
-                  draggedItem.data.rank = ((prev.data.rank || 0) + (next.data.rank || 0)) / 2;
-                  isRankChanged = true;
-                } else {
-                  draggedItem.data.rank = (next.data.rank || 0) / 2;
-                  isRankChanged = true;
-                }
-              } else {
-                if (prev) {
-                  draggedItem.data.rank = (((prev.data.rank || 0) * 2) + 10) / 2;
-                  maxRank = draggedItem.data.rank;
-                  isRankChanged = true;
-                }
-              }
-              if (isRankChanged) {
-                Buildfire[window.DB_PROVIDER].update(draggedItem.id, draggedItem.data, TAG_NAMES.PEOPLE, function (err) {
-                  if (err) {
-                    console.error('Error during updating rank');
-                  } else {
-                    if (ContentHome.data.content.rankOfLastItem < maxRank) {
-                      ContentHome.data.content.rankOfLastItem = maxRank;
-                      RankOfLastItem.setRank(maxRank);
-                    }
-                  }
-                })
-              }
+          stop: function () {
+            let { items } = ContentHome;
+            for (let i = 0; i < items.length; i++) {
+              const { id, data } = items[i];
+              if (i == data.rank) continue;
+              data.rank = i;
+              Buildfire[window.DB_PROVIDER].update(id, data, TAG_NAMES.PEOPLE);
             }
           }
         };

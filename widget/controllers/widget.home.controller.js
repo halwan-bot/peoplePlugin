@@ -152,7 +152,7 @@
                 WidgetHome.defaults = {
                     DEFAULT_LIST_LAYOUT: 'list-layout-1',
                     DEFAULT_ITEM_LAYOUT: 'item-layout-1',
-                    DEFAULT_SORT_OPTION: WidgetHome.sortingOptions[0]
+                    DEFAULT_SORT_OPTION: MANUALLY
                 };
                 //create new instance of buildfire carousel viewer
                 var view = null;
@@ -179,6 +179,9 @@
                 $rootScope.showHome = true;
                 var getSortOption = function (value, searchOptions) {
                     switch (value) {
+                        case MANUALLY:
+                            searchOptions.sort = {"rank": 1};
+                            break;
                         case OLDEST_TO_NEWEST:
                             searchOptions.sort = {"dateCreated": 1};
                             break;
@@ -394,7 +397,7 @@
 
                                         initCarousel(images);
                                     }
-                                    if (event && event.data && event.data.content && event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {
+                                    if (event && event.data && event.data.content && event.data.content.sortBy && currentSortOrder != event.data.content.sortBy) {                                        
                                         WidgetHome.data.content.sortBy = event.data.content.sortBy;
                                         WidgetHome.items = [];
                                         searchOptions.skip = 0;
@@ -460,7 +463,7 @@
                     }
 
                     Buildfire[window.DB_PROVIDER].search(searchOptions, TAG_NAMES.PEOPLE, function (err, result) {
-                        console.log('-----------WidgetHome.loadMore-------------');
+                        console.log('-----------WidgetHome.loadMore-------------');                        
                         if (err) {
                             window.buildfire.spinner.hide();
                             return console.error('-----------err in getting list-------------', err);

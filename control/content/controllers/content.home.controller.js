@@ -157,8 +157,8 @@
         else
           editor.loadItems(ContentHome.data.content.images);
 
-        RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem || 0);
-        /**
+        RankOfLastItem.setRank(ContentHome.data.content.rankOfLastItem || 99999);
+          /**
          * ContentHome.imageSortableOptions used for ui-sortable directory to drag-drop carousel images Manually.
          * @type object
          */

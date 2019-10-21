@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
     "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS",
-    "build": "gulp build && cd .. && rm -rf peoplePlugin_release.zip && zip -r peoplePlugin_release.zip peoplePlugin_release/"
+    "build": "cd .. && rm -rf peoplePlugin.zip && zip -r peoplePlugin.zip peoplePlugin/ -x \\*node_modules\\* \\*.git\\* \\*test\\*"
   },
   "license": "ISC",
   "keywords": [

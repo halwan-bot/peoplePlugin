@@ -13,7 +13,7 @@
                 WidgetPeople.defaults = {
                     DEFAULT_LIST_LAYOUT: 'list-layout-1',
                     DEFAULT_ITEM_LAYOUT: 'item-layout-1',
-                    DEFAULT_SORT_OPTION: "Oldest to Newest"
+                    DEFAULT_SORT_OPTION: "Manually"
                 };
                 var breadCrumbFlag = true;
 

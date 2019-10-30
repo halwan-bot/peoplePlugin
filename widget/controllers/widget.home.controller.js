@@ -21,7 +21,7 @@
                   };
                 }
 
-                var minSearchLength = 2;
+                var minSearchLength = 1;
 
                 var debounceLoadMore = debounce(function(){
                     WidgetHome.loadMore();

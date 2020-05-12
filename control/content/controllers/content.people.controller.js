@@ -33,11 +33,19 @@
           data: angular.copy(_data)
         };
 
+        function myCustomURLConverter(url, node, on_save, name) {
+          if (!/^https?:\/\//i.test(url)) {
+            return "https://" + url.replace("//", "");
+          }
+          else return url;
+        }
+
         ContentPeople.bodyContentWYSIWYGOptions = {
           plugins: 'advlist autolink link image lists charmap print preview',
           skin: 'lightgray',
           trusted: true,
           theme: 'modern',
+          urlconverter_callback : myCustomURLConverter,
           plugin_preview_width : "500",
           plugin_preview_height : "500"
         };

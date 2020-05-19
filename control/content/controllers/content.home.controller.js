@@ -12,6 +12,8 @@
           topImage: "Image URL",
           fName: "First Name",
           lName: "Last Name",
+          email: "Email",
+          phone: "Phone Number",
           position: "Position",
           bodyContent: "Information"
         };
@@ -531,6 +533,8 @@
             topImage: "",
             fName: "",
             lName: "",
+            email: "",
+            phone: "",
             position: "",
             bodyContent: ""
           }];

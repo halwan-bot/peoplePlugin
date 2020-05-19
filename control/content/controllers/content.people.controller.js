@@ -18,6 +18,7 @@
               fName: '',
               lName: '',
               position: '',
+              phone: '',
               deepLinkUrl: '',
               dateCreated: "",
               socialLinks: [],

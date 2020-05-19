@@ -15,7 +15,9 @@
 			<div class="col-xs-9 padding-zero pull-left">
 				<p class="margin-zero text-overlay" style="font-size: 16px">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
 				<p class="margin-bottom-zero">{{WidgetPeople.item.position}}</p>
-				<p class="margin-bottom-zero" ng-show="WidgetPeople.item.email && !WidgetPeople.hideEmail"><a href="mailto:{{WidgetPeople.item.email}}">{{WidgetPeople.item.email}}</a></p>
+				<p class="margin-bottom-zero" ng-show="WidgetPeople.item.email && !WidgetPeople.hideEmail"><a href="mailto:{{WidgetPeople.item.email}}">{{WidgetPeople.item.email}}</a>
+					<br><a [href]="{{'tel:'+WidgetPeople.item.phone}}">{{WidgetPeople.item.phone}}</a>
+				</p>
 			</div>
 			<div class="col-xs-3 padding-right-zero pull-right text-right text-overlay margin-top-ten">
 				<button ng-if="WidgetPeople.item.socialLinks.length" class="btn btn-primary btn-details btn-sm" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)">{{WidgetPeople.actionButtonText}}</button>

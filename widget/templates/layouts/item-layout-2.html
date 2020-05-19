@@ -29,7 +29,9 @@
 					<div class="people-info text-center col-md-12">
 						<h4 class="ellipsis text-overlay"><a class="text-white">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</a></h4>
 						<h5 class="ellipsis">{{WidgetPeople.item.position}}</h5>
-						<h5 class="ellipsis" ng-show="WidgetPeople.item.email && !WidgetPeople.hideEmail"><a href="mailto:{{WidgetPeople.item.email}}">{{WidgetPeople.item.email}}</a></h5>
+						<h5 class="ellipsis" ng-show="WidgetPeople.item.email && !WidgetPeople.hideEmail"><a href="mailto:{{WidgetPeople.item.email}}">{{WidgetPeople.item.email}}</a>
+							<br><a [href]="{{'tel:'+WidgetPeople.item.phone}}">{{WidgetPeople.item.phone}}</a>
+						</h5>
 						<!-- <a class="icon icon-profile text-white" ng-if="WidgetPeople.item.socialLinks.length" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a> -->
 						<button ng-if="WidgetPeople.item.socialLinks.length" class="btn btn-primary btn-details btn-sm" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)">Contact</button>
 					</div>

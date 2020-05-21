@@ -308,3 +308,8 @@ ol li{
   font-weight: 400;
   opacity: 0.5;
 }
+
+.btn-primary {
+  right: 10%;
+  position: absolute;
+}

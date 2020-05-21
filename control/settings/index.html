@@ -31,6 +31,11 @@
             if(result && result.data && result.data.hideEmails) {
                 document.getElementById("chckHideEmails").checked = true;
             }
+            if(result && result.data && result.data.actionButtonText) {
+                document.getElementById('actionButtonText').value = result.data.actionButtonText;
+            } else {
+                document.getElementById('actionButtonText').value = "Contact";
+            }
         });
 
         function save(provider){
@@ -38,11 +43,13 @@
                 providerId = provider;
             var enableUniqueEmail = document.getElementById("chkEnableUniqueEmail").checked == true;
             var chckHideEmails = document.getElementById('chckHideEmails').checked == true;
+            var actionBtnText = document.getElementById('actionButtonText').value;
 
             buildfire.datastore.save({
               provider: providerId,
               enableUniqueEmail: enableUniqueEmail,
-              hideEmails: chckHideEmails
+              hideEmails: chckHideEmails,
+              actionButtonText: actionBtnText
             }, tag, function () {
                 console.log('saving data');
             });
@@ -90,5 +97,14 @@
           <p class="info padding-zero">Warning: If checked, emails wont show even if you add any.</p>
       </div>
   </div>
+  <div class="item clearfix row">
+    <div class="labels col-xs-3">
+        <span>Contact Button Text</span>
+    </div>
+    <div class="col-xs-7">
+        <input type="text" class="form-control" id="actionButtonText" onchange="save()"/>
+        <p class="info padding-zero">Warning: Leaving this file empty can cause misbehavior of plugin.</p>
+    </div>
+</div>
 </body>
 </html>

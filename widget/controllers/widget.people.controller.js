@@ -42,6 +42,7 @@
                 $rootScope.showHome = false;
                 WidgetPeople.hideEmail = window.HIDE_EMAILS;
                 WidgetPeople.actionButtonText = window.ACTION_ITEM_TEXT;
+                if (!WidgetPeople.actionButtonText) WidgetPeople.actionButtonText = "Contact";
                 /*declare the device width heights*/
                 WidgetPeople.deviceHeight = window.innerHeight;
                 WidgetPeople.deviceWidth = window.innerWidth;

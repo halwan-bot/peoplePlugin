@@ -420,25 +420,54 @@
               }
               if (validateCsv(rows)) {
                 console.log(rows);
-                Buildfire[window.DB_PROVIDER].bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
-                  Buildfire.spinner.hide();
-                  $scope.$apply();
-                  if (err) {
-                    buildfire.notifications.alert('Failed to import CSV. Invalid file', function() {
+                var searchEngineInsertingFinished = false;
+                for (var i = 0; i < rows.length; i++) {
+                  var searchEngineInsert = function (counter) {
+                    buildfire.services.searchEngine.insert(
+                      {
+                        tag: TAG_NAMES.PEOPLE,
+                        title: rows[counter].fName + ' ' + rows[counter].lName,
+                        description: rows[counter].position
+                      },
+                      (err, response) => {
+                        if (err) {
+                          searchEngineInsertingFinished = true;
+                          return;
+                        }
+                        if (response && response.id) rows[counter].searchEngineDocumentId = response.id;
+                        if (counter === rows.length - 1) searchEngineInsertingFinished = true;
+                      }
+                    );
+                  }
+                  searchEngineInsert(i);
+                }
 
+                var intervalId = window.setInterval(function() {
+                  if (searchEngineInsertingFinished) {
+                    window.clearInterval(intervalId);
+                    Buildfire[window.DB_PROVIDER].bulkInsert(rows, TAG_NAMES.PEOPLE, function (err, data) {
+                      Buildfire.spinner.hide();
+                      $scope.$apply();
+                      if (err) {
+                        buildfire.notifications.alert('Failed to import CSV. Invalid file', function() {
+    
+                        });
+                        console.error('There was a problem while importing the file----', err);
+                      }
+                      else {
+                        console.info('File has been imported----------------------------');
+                        ContentHome.busy = false;
+                        ContentHome.noMore = false;
+                        ContentHome.items = null;
+                        ContentHome.searchOptions.skip = 0;
+                        ContentHome.loadMore();
+                        ContentHome.data.content.rankOfLastItem = rank;
+                      }
                     });
-                    console.error('There was a problem while importing the file----', err);
                   }
-                  else {
-                    console.info('File has been imported----------------------------');
-                    ContentHome.busy = false;
-                    ContentHome.noMore = false;
-                    ContentHome.items = null;
-                    ContentHome.searchOptions.skip = 0;
-                    ContentHome.loadMore();
-                    ContentHome.data.content.rankOfLastItem = rank;
-                  }
-                });
+                }, 1000);
+                
+                
               } else {
                 Buildfire.spinner.hide();
                 //$scope.$apply();
@@ -571,6 +600,15 @@
                         Buildfire[window.DB_PROVIDER].search({filter: {'$json.email': item.data.email}}, TAG_NAMES.PEOPLE, function (err, result) {
                             if (result) {
                                 for (var i = 0; i < result.length; i++) {
+                                    if (result[i].data && result[i].data.searchEngineDocumentId) {
+                                      buildfire.services.searchEngine.delete(
+                                        {
+                                          id: result[i].data.searchEngineDocumentId,
+                                          tag: TAG_NAMES.PEOPLE
+                                        }, 
+                                        () => {}
+                                      );
+                                    }
                                     Buildfire[window.DB_PROVIDER].delete(result[i].id, TAG_NAMES.PEOPLE, function (err, result) {
                                     });
                                 }
@@ -581,6 +619,15 @@
                     });
                 }
                 else{
+                    if (item && item.data && item.data.searchEngineDocumentId) {
+                      buildfire.services.searchEngine.delete(
+                        {
+                          id: item.data.searchEngineDocumentId,
+                          tag: TAG_NAMES.PEOPLE
+                        }, 
+                        () => {}
+                      );
+                    }
                     Buildfire[window.DB_PROVIDER].delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err)
                             return;

@@ -23,7 +23,8 @@
               dateCreated: "",
               socialLinks: [],
               bodyContent: '',
-              rank: _rankOfLastItem
+              rank: _rankOfLastItem,
+              searchEngineDocumentId: null
           };
           $scope.draft_email = '';
 
@@ -159,7 +160,9 @@
               item.data.rank = _rankOfLastItem;
 
               console.log("inserting....");
-              Buildfire[window.DB_PROVIDER].insert(item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
+              var insert = function (searchEngineDocumentId = null) {
+                item.data.searchEngineDocumentId = searchEngineDocumentId;
+                Buildfire[window.DB_PROVIDER].insert(item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
                   console.log("Inserted", data.id);
                   if (err) {
                       ContentPeople.isNewItemInserted = false;
@@ -171,6 +174,7 @@
                   _data.rank = item.data.rank;
                   updateMasterItem(item);
                   ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({id: data.id});
+                  ContentPeople.item.data.searchEngineDocumentId = searchEngineDocumentId;
                   // Send message to widget as soon as a new item is created with its id as a parameter
                   if (ContentPeople.item.id) {
                       buildfire.messaging.sendMessageToWidget({
@@ -181,7 +185,35 @@
                   ContentPeople.isUpdating = false;
 
                   $scope.$digest();
-              });
+                });
+              }
+
+              if (
+                item &&
+                item.data &&
+                (
+                  item.data.fName ||
+                  item.data.lName
+                )
+              ) {
+                const x = {
+                  tag: TAG_NAMES.PEOPLE,
+                  title: item.data.fName + ' ' + item.data.lName,
+                  description: item.data.position
+                };
+                buildfire.services.searchEngine.insert(
+                  {
+                    tag: TAG_NAMES.PEOPLE,
+                    title: item.data.fName + ' ' + item.data.lName,
+                    description: item.data.position
+                  },
+                  (err, response) => {
+                    insert(response && response.id ? response.id : null);
+                  }
+                );
+              } else {
+                insert();
+              }
           };
 
           ContentPeople.updateItemData = function (item) {
@@ -190,6 +222,24 @@
                   ContentPeople.isUpdating = false;
                   if (err)
                       return console.error('There was a problem saving your data');
+
+                  if (item && item.data && item.data.searchEngineDocumentId) {
+                    const x = {
+                      id: item.data.searchEngineDocumentId,
+                      tag: TAG_NAMES.PEOPLE,
+                      title: item.data.fName + ' ' + item.data.lName,
+                      description: item.data.position
+                    };
+                    buildfire.services.searchEngine.update(
+                      {
+                        id: item.data.searchEngineDocumentId,
+                        tag: TAG_NAMES.PEOPLE,
+                        title: item.data.fName + ' ' + item.data.lName,
+                        description: item.data.position
+                      },
+                      () => {}
+                    );
+                  }
               })
           };
 

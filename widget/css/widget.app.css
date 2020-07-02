@@ -236,7 +236,7 @@ p:empty{
   flex-shrink: 0;
 }
 .layout3 .people-info{
-  padding: 1rem;
+  padding: .5rem;
 }
 .layout3 .people-media img{
   width: 100%;

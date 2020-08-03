@@ -30,8 +30,9 @@
 					<div class="people-info text-center margin-top-fifteen col-md-12">
 						<p class="text-overlay" style="color:#5f5f5f !important; font-size: 16px !important;">{{WidgetPeople.item.fName}} {{WidgetPeople.item.lName}}</p>
 						<p style="color:#5f5f5f !important;">{{WidgetPeople.item.position}}</p>
-						<p style="color:#5f5f5f !important;" ng-show="WidgetPeople.item.email && !WidgetPeople.hideEmail"><a href="mailto:{{WidgetPeople.item.email}}">{{WidgetPeople.item.email}}</a>
-							<br><a href="{{'tel:'+WidgetPeople.item.phone}}">{{WidgetPeople.item.phone}}</a>
+						<p style="color:#5f5f5f !important;" ng-show="WidgetPeople.item.email && !WidgetPeople.hideEmail">
+							<a href="mailto:{{WidgetPeople.item.email}}" id="email">{{WidgetPeople.item.email}}</a>
+							<br><a href="{{'tel:'+WidgetPeople.item.phone}}" id="phone">{{WidgetPeople.item.phone}}</a>
 						</p>
 						<a class="icon icon-profile text-overlay" ng-if="WidgetPeople.item.socialLinks.length" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a>
 					</div>

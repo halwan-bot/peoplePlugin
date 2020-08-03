@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetPeopleCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location', '$rootScope',
-            function ($scope, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce, $location, $rootScope) {
+        .controller('WidgetPeopleCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location', '$rootScope', '$timeout',
+            function ($scope, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce, $location, $rootScope, $timeout) {
                 var WidgetPeople = this;
                 var currentItemLayout,
                     currentListLayout;
@@ -120,9 +120,18 @@
                                     }
                                 });
                             }
-
                             WidgetPeople.item = result.data;
                             $scope.$digest();
+                            $scope.$$postDigest(function() {
+                                var isiOSDevice = navigator.userAgent.match(/ipad|iphone/i);
+                                if(isiOSDevice) {
+                                    var email = angular.element(document.querySelector('#email'));
+                                    email.attr('target',"_blank");
+                                    var phone = angular.element(document.querySelector('#phone'));
+                                    phone.attr('target',"_blank");
+                                    $scope.$digest();
+                                }
+                              });
                         }
                         bindOnUpdate();
                     });

@@ -86,6 +86,12 @@
                     if (html)
                         return $sce.trustAsHtml(html);
                 };
+                WidgetPeople.sendMail = function (mail) {
+                        buildfire.actionItems.execute({action: "sendEmail", email: mail}, function(err, result) {})
+                }
+                WidgetPeople.callPhone = function (tel) {
+                    buildfire.actionItems.execute({action: "callNumber", phoneNumber: tel}, function(err, result) {})
+                }
                 var itemId = $routeParams.id;
                 var getPeopleDetail = function () {
                     Buildfire[window.DB_PROVIDER].getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
@@ -122,16 +128,6 @@
                             }
                             WidgetPeople.item = result.data;
                             $scope.$digest();
-                            $scope.$$postDigest(function() {
-                                var isiOSDevice = navigator.userAgent.match(/ipad|iphone/i);
-                                if(isiOSDevice) {
-                                    var email = angular.element(document.querySelector('#email'));
-                                    email.attr('target',"_blank");
-                                    var phone = angular.element(document.querySelector('#phone'));
-                                    phone.attr('target',"_blank");
-                                    $scope.$digest();
-                                }
-                              });
                         }
                         bindOnUpdate();
                     });

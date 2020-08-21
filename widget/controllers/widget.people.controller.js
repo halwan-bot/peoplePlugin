@@ -5,6 +5,40 @@
         .module('peoplePluginWidget')
         .controller('WidgetPeopleCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location', '$rootScope',
             function ($scope, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce, $location, $rootScope) {
+                let strings = new buildfire.services.Strings("en-us", stringsConfig);
+                buildfire.datastore.get("$bfLanguageSettings_en-us", (e, r) => {
+                    //                     data:
+                    // screenOne:
+                    // contact:
+                    // defaultValue: "Contact"
+                    // value: "Contact 2"
+                    // __proto__: Object
+                    // share:
+                    // defaultValue: "Share"
+                    if (r && r.data && r.data.screenOne) {
+
+                        let screenOne = r.data.screenOne;
+                        if (screenOne.contact) {
+                            if (screenOne.contact.value)
+                                $scope.contact = screenOne.contact.value;
+                            else {
+                                $scope.contact = screenOne.contact.defaultValue;
+                            }
+                        }
+                        if (screenOne.share) {
+                            if (screenOne.share.value)
+                                $scope.share = screenOne.share.value;
+                            else {
+                                $scope.share = screenOne.share.defaultValue;
+                            }
+                        }
+                        else {
+                            $scope.contact = "Contact";
+                            $scope.share = "Share";
+                        }
+                    }
+                    console.log(r);
+                });
                 var WidgetPeople = this;
                 var currentItemLayout,
                     currentListLayout;
@@ -18,14 +52,14 @@
                 var breadCrumbFlag = true;
 
                 buildfire.history.get('pluginBreadcrumbsOnly', function (err, result) {
-                    if(result && result.length) {
-                        result.forEach(function(breadCrumb) {
-                            if(breadCrumb.label == 'Person') {
+                    if (result && result.length) {
+                        result.forEach(function (breadCrumb) {
+                            if (breadCrumb.label == 'Person') {
                                 breadCrumbFlag = false;
                             }
                         });
                     }
-                    if(breadCrumbFlag) {
+                    if (breadCrumbFlag) {
                         buildfire.history.push('Person', { elementToShow: 'Person' });
                     }
                 });
@@ -37,7 +71,7 @@
                 if ($routeParams.id && !_searchObj.stopSwitch) {
                     $routeParams.showHome = false;
                     console.log($location.search());
-                    buildfire.messaging.sendMessageToControl({id: $routeParams.id, type: 'OpenItem'});
+                    buildfire.messaging.sendMessageToControl({ id: $routeParams.id, type: 'OpenItem' });
                 }
                 $rootScope.showHome = false;
                 WidgetPeople.hideEmail = window.HIDE_EMAILS;
@@ -96,25 +130,25 @@
                         else {
                             $rootScope.showHome = false;
 
-                            if(result.data && result.data.socialLinks){
+                            if (result.data && result.data.socialLinks) {
                                 //For Zapier integrations, the socialLinks will come as a string, and not an object.
-                                if(typeof result.data.socialLinks === "string"){
+                                if (typeof result.data.socialLinks === "string") {
                                     result.data.socialLinks = JSON.parse(result.data.socialLinks);
                                 }
 
                                 //For Zapier integrations, we will always receive a callNumber action, although it might be empty
-                                result.data.socialLinks.forEach(function(item, index, object){
-                                    if(item.action === "callNumber" && item.phoneNumber === ""){
+                                result.data.socialLinks.forEach(function (item, index, object) {
+                                    if (item.action === "callNumber" && item.phoneNumber === "") {
                                         object.splice(index, 1);
                                     }
                                 });
 
-                                result.data.socialLinks.forEach(function(item, index, object){
-                                    if(item.action === "callNumber"){
-                                        if(item.phoneNumber === ""){
+                                result.data.socialLinks.forEach(function (item, index, object) {
+                                    if (item.action === "callNumber") {
+                                        if (item.phoneNumber === "") {
                                             object.splice(index, 1);
                                         }
-                                        else{
+                                        else {
                                             item.phoneNumber = item.phoneNumber.replace(/\D+/g, "");
                                         }
                                     }
@@ -210,9 +244,9 @@
                     }
                 };
 
-                Buildfire[window.DB_PROVIDER].onRefresh(function(){
+                Buildfire[window.DB_PROVIDER].onRefresh(function () {
 
                     getPeopleDetail();
-                  });
+                });
             }])
 })(window.angular, window);

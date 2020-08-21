@@ -19,7 +19,8 @@
 					<br><a href="{{'tel:'+WidgetPeople.item.phone}}">{{WidgetPeople.item.phone}}</a>
 				</p>
 			</div>
-			<button ng-if="WidgetPeople.item.socialLinks.length" class="btn btn-primary btn-details btn-sm" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)">{{WidgetPeople.actionButtonText}}</button>
+			<button ng-if="WidgetPeople.item.socialLinks.length" class="btn btn-primary btn-details btn-sm" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)">{{contact}}</button>
+			<button ng-if="WidgetPeople.item.socialLinks.length" class="btn btn-primary btn-details btn-sm" ng-click="WidgetPeople.share(WidgetPeople.item)">{{share}}</button>
 			<!-- <a ng-if="WidgetPeople.item.socialLinks.length" class="icon icon-profile text-overlay" ng-click="WidgetPeople.openLinks(WidgetPeople.item.socialLinks)"></a> -->
 		</div>
 		<div class="padded">

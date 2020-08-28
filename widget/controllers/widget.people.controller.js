@@ -3,8 +3,8 @@
 (function (angular, window) {
     angular
         .module('peoplePluginWidget')
-        .controller('WidgetPeopleCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location', '$rootScope',
-            function ($scope, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce, $location, $rootScope) {
+        .controller('WidgetPeopleCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location', '$rootScope', '$timeout',
+            function ($scope, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce, $location, $rootScope, $timeout) {
                 // $rootScope.calledOnce = false;
                 // let strings = new buildfire.services.Strings("en-us", stringsConfig);
                 // buildfire.datastore.get("$bfLanguageSettings_en-us", (e, r) => {
@@ -139,6 +139,12 @@
                         }
                     });
                 };
+                WidgetPeople.sendMail = function (mail) {
+                        buildfire.actionItems.execute({action: "sendEmail", email: mail}, function(err, result) {})
+                }
+                WidgetPeople.callPhone = function (tel) {
+                    buildfire.actionItems.execute({action: "callNumber", phoneNumber: tel}, function(err, result) {})
+                }
                 var itemId = $routeParams.id;
                 var getPeopleDetail = function () {
 
@@ -189,7 +195,6 @@
                             } else {
                                 $scope.$digest();
                             }
-
                         }
                         bindOnUpdate();
                     });

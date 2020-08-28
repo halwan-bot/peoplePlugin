@@ -139,9 +139,14 @@
               Location.goToHome();
         }
       };
+      $rootScope.calledOnce = false;
+
       buildfire.deeplink.getData(function (data) {
-        if (data) {
-          Location.goTo("#/people/" + JSON.parse(data).id);
+        if (data && !$rootScope.calledOnce && data.id) {
+          $rootScope.calledOnce = true;
+          window.setTimeout(function() {
+              Location.goTo("#/people/" + data.id);
+          }, 0);
         }
       });
 
@@ -224,12 +229,14 @@
               window.ENABLE_UNIQUE_EMAIL = result.data.enableUniqueEmail;
               window.HIDE_EMAILS = result.data.hideEmails;
               window.ACTION_ITEM_TEXT = result.data.actionButtonText;
+              window.ENABLE_SHARE = result.data.enableShare;
             angular.bootstrap(document, ['peoplePluginWidget']);
           } catch (err) {
             window.DB_PROVIDER = defaultProvider;
             window.ENABLE_UNIQUE_EMAIL = false;
             window.HIDE_EMAILS = false;
             window.ACTION_ITEM_TEXT = "Contact";
+            window.ENABLE_SHARE = false;
             angular.bootstrap(document, ['peoplePluginWidget']);
           }
         });

@@ -5,40 +5,31 @@
         .module('peoplePluginWidget')
         .controller('WidgetPeopleCtrl', ['$scope', 'Buildfire', 'TAG_NAMES', 'ERROR_CODE', "Location", '$routeParams', '$sce', '$location', '$rootScope',
             function ($scope, Buildfire, TAG_NAMES, ERROR_CODE, Location, $routeParams, $sce, $location, $rootScope) {
-                let strings = new buildfire.services.Strings("en-us", stringsConfig);
-                buildfire.datastore.get("$bfLanguageSettings_en-us", (e, r) => {
-                    //                     data:
-                    // screenOne:
-                    // contact:
-                    // defaultValue: "Contact"
-                    // value: "Contact 2"
-                    // __proto__: Object
-                    // share:
-                    // defaultValue: "Share"
-                    if (r && r.data && r.data.screenOne) {
+                // $rootScope.calledOnce = false;
+                // let strings = new buildfire.services.Strings("en-us", stringsConfig);
+                // buildfire.datastore.get("$bfLanguageSettings_en-us", (e, r) => {
+                //     $scope.contact = "Contact";
+                //     $scope.share = "Share";
+                //     if (r && r.data && r.data.screenOne) {
 
-                        let screenOne = r.data.screenOne;
-                        if (screenOne.contact) {
-                            if (screenOne.contact.value)
-                                $scope.contact = screenOne.contact.value;
-                            else {
-                                $scope.contact = screenOne.contact.defaultValue;
-                            }
-                        }
-                        if (screenOne.share) {
-                            if (screenOne.share.value)
-                                $scope.share = screenOne.share.value;
-                            else {
-                                $scope.share = screenOne.share.defaultValue;
-                            }
-                        }
-                        else {
-                            $scope.contact = "Contact";
-                            $scope.share = "Share";
-                        }
-                    }
-                    console.log(r);
-                });
+                //         let screenOne = r.data.screenOne;
+                //         if (screenOne.contact) {
+                //             if (screenOne.contact.value)
+                //                 $scope.contact = screenOne.contact.value;
+                //             else {
+                //                 $scope.contact = screenOne.contact.defaultValue;
+                //             }
+                //         }
+                //         if (screenOne.share) {
+                //             if (screenOne.share.value)
+                //                 $scope.share = screenOne.share.value;
+                //             else {
+                //                 $scope.share = screenOne.share.defaultValue;
+                //             }
+                //         }
+                //     }
+                //     console.log(r);
+                // });
                 var WidgetPeople = this;
                 var currentItemLayout,
                     currentListLayout;
@@ -76,6 +67,7 @@
                 $rootScope.showHome = false;
                 WidgetPeople.hideEmail = window.HIDE_EMAILS;
                 WidgetPeople.actionButtonText = window.ACTION_ITEM_TEXT;
+                WidgetPeople.enableShare = window.ENABLE_SHARE;
                 if (!WidgetPeople.actionButtonText) WidgetPeople.actionButtonText = "Contact";
                 /*declare the device width heights*/
                 WidgetPeople.deviceHeight = window.innerHeight;
@@ -120,8 +112,36 @@
                     if (html)
                         return $sce.trustAsHtml(html);
                 };
+
+                WidgetPeople.share = function (item) {
+                    let link = {};
+                    link.title = item.fName + ' ' + item.lName;
+                    link.type = "website";
+                    link.description = item.position ? item.position : null;
+                    link.imageUrl = item.topImage ? item.topImage : null;
+                    link.data = {
+                        "id": $routeParams.id
+                    };
+
+                    buildfire.deeplink.generateUrl(link, function (err, result) {
+                        if (err) {
+                            console.error(err)
+                        } else {
+                            buildfire.device.share({ 
+                                subject: link.title,
+                                text: link.title,
+                                image: 'http://myImageUrl',
+                                link: result.url
+                             }, function (err,result) {
+                                if (err)
+                                    alert(err);
+                             });
+                        }
+                    });
+                };
                 var itemId = $routeParams.id;
                 var getPeopleDetail = function () {
+
                     Buildfire[window.DB_PROVIDER].getById(itemId, TAG_NAMES.PEOPLE, function (err, result) {
                         if (err && err.code !== ERROR_CODE.NOT_FOUND) {
                             $rootScope.showHome = false;
@@ -155,8 +175,21 @@
                                 });
                             }
 
-                            WidgetPeople.item = result.data;
-                            $scope.$digest();
+                            WidgetPeople.item = result.data; 
+                            //WidgetPeople.item = {"email":"nenor1995@gmail.com","topImage":"https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjQ0MDV9","fName":"Nedeljko","lName":"Ruzic","position":"Dev","phone":"+38766151304","deepLinkUrl":"appcba20875-ad8a-11e9-8fc5-06e43182e96c://plugin?dld={\"id\":\"5f2193a34f3d460651721008\"}","dateCreated":"","socialLinks":[],"bodyContent":"","rank":99999,"searchEngineDocumentId":"Jygom3MBS769KF4jtqXP"}
+                            console.log(result.data)
+                            if(Object.keys(result.data).length === 0) {
+                                Buildfire[window.DB_PROVIDER].search({'id': $routeParams.id}, TAG_NAMES.PEOPLE, function (err, result) {
+                                    console.log("SEARCH", err, result)
+                                    WidgetPeople.item = result[0].data;
+                                    //getContentPeopleInfo();
+                                    buildfire.messaging.sendMessageToControl({ id: $routeParams.id, type: 'OpenItem' });
+                                    $scope.$digest();
+                                })
+                            } else {
+                                $scope.$digest();
+                            }
+
                         }
                         bindOnUpdate();
                     });
@@ -194,7 +227,7 @@
                 getContentPeopleInfo();
                 function bindOnUpdate() {
                     WidgetPeople.onUpdateFn = Buildfire[window.DB_PROVIDER].onUpdate(function (event) {
-                        console.log("Hello--------1")
+                        console.log("Hello--------1", event)
                         if (event && event.tag) {
                             switch (event.tag) {
                                 case TAG_NAMES.PEOPLE:
@@ -202,6 +235,7 @@
                                     $rootScope.$broadcast('Item_Updated', event);
                                     if (event.data)
                                         WidgetPeople.item = event.data;
+                                    console.log(WidgetPeople.item)
                                     break;
                                 case TAG_NAMES.PEOPLE_INFO:
                                     WidgetPeople.data = event.data;
@@ -219,6 +253,10 @@
                                     else if (event.data.design.listLayout && currentListLayout != event.data.design.listLayout) {
                                         Location.goToHome();
                                     }
+                                    break;
+                                case 'dbProvider':
+                                    console.log(event)
+                                    WidgetPeople.enableShare = event.data.enableShare;
                                     break;
                             }
                             $scope.$digest();
@@ -245,8 +283,9 @@
                 };
 
                 Buildfire[window.DB_PROVIDER].onRefresh(function () {
-
+                    console.log("REFRESH")
                     getPeopleDetail();
                 });
+
             }])
 })(window.angular, window);

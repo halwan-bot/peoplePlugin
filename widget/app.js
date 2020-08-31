@@ -24,7 +24,7 @@
       /**
        * To make href urls safe on mobile
        */
-      $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|cdvfile|file|sms|tel):/);
+      $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|cdvfile|file):/);
 
 
       $routeProvider
@@ -154,8 +154,17 @@
         if (($location.path() != '/')) {
           buildfire.messaging.sendMessageToControl({});
           $rootScope.showHome = true;
+          buildfire.history.get({
+            pluginBreadcrumbsOnly: true
+          },function(err, result){
+              result.forEach(function() {
+                buildfire.history.pop();
+              });
+          });
+        } else {
+          buildfire.navigation._goBackOne();
         }
-        buildfire.navigation._goBackOne();
+        
       };
 
       buildfire.history.onPop(function(data, err){

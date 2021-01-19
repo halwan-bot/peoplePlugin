@@ -408,6 +408,8 @@
               controllerAs: 'ImportCSVPopup',
               size: 'sm'
             });
+
+
           modalInstance.result.then(function (rows) {
             Buildfire.spinner.show();
             if (rows && rows.length) {
@@ -428,7 +430,7 @@
                         title: rows[counter].fName + ' ' + rows[counter].lName,
                         description: rows[counter].position
                       },
-                      (err, response) => {
+                      async (err, response) => {
                         if (err) {
                           searchEngineInsertingFinished = true;
                           return;
@@ -441,12 +443,39 @@
                   searchEngineInsert(i);
                 }
 
+                const registerDeeplinkData = async (name, id, imageUrl) => {
+
+                  const recordData = {
+                    name,
+                    deeplinkData: { id },
+                    id,
+                    imageUrl,
+                  };
+                
+                  return new Promise((resolve, reject) => {
+                    buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
+                      if (err) {
+                        console.error(`Err${err}`);
+                        reject(err);
+                      } else {
+                        console.error("Done");
+                        resolve(result);
+                      }
+                    });
+                  });
+                };
+
                 var setDeepLinks = function (){
                   Buildfire[window.DB_PROVIDER].search({filter: {}, recordCount: true}, TAG_NAMES.PEOPLE, function(err, counter){
                     var numberOfRecords = counter.totalRecord;
                       for (let skip = 0; skip < numberOfRecords; skip += 50) {
                         Buildfire[window.DB_PROVIDER].search({filter: {}, skip, limit: 50}, TAG_NAMES.PEOPLE, function(err, res){
                           for (let i = 0; i < res.length; i += 1) { 
+    
+                            let name =  `${res[i].data.fName} ${res[i].data.lName}`
+    
+                            registerDeeplinkData(name, res[i].id, res[i].data.topImage);
+
                             if(res[i].data.searchEngineDocumentId) {
                               buildfire.services.searchEngine.update(
                                 {
@@ -634,6 +663,20 @@
                                       );
                                     }
                                     Buildfire[window.DB_PROVIDER].delete(result[i].id, TAG_NAMES.PEOPLE, function (err, result) {
+                                      let unregisterDeeplink = function(deeplinkId, callback) {
+                                          buildfire.deeplink.getDeeplink(deeplinkId, function(err, result) {
+                                                  if(err) return callback(err, null);
+                                                  if(result) {
+                                                      buildfire.appData.delete(result.id, '$$deeplinks', callback);
+                                                  } else {
+                                                      callback('no result found for this deeplink id', null);
+                                                  }
+                                              })
+                                      }
+                                      unregisterDeeplink(item.id, (err, res) => {
+                                        if(err) return console.error(err);
+                                        console.error('Deeplink deleted')
+                                      })
                                     });
                                 }
                             }
@@ -656,6 +699,22 @@
                         if (err)
                             return;
                         ContentHome.items.splice(_index, 1);
+
+                        let unregisterDeeplink = function(deeplinkId, callback) {
+                              buildfire.deeplink.getDeeplink(deeplinkId, function(err, result) {
+                                      if(err) return callback(err, null);
+                                      if(result) {
+                                          buildfire.appData.delete(result.id, '$$deeplinks', callback);
+                                      } else {
+                                          callback('no result found for this deeplink id', null);
+                                      }
+                                  })
+                          }
+                          unregisterDeeplink(item.id, (err, res) => {
+                            if(err) return console.error(err);
+                            console.error('Deeplink deleted');
+                          });
+                                    
                         $scope.$digest();
                     });
                 }

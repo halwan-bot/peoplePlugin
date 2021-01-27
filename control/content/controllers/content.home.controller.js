@@ -444,21 +444,19 @@
                 }
 
                 const registerDeeplinkData = async (name, id, imageUrl) => {
-
                   const recordData = {
                     name,
                     deeplinkData: { id },
                     id,
                     imageUrl,
                   };
-                
+
                   return new Promise((resolve, reject) => {
                     buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
                       if (err) {
-                        console.error(`Err${err}`);
+                        console.error(err);
                         reject(err);
                       } else {
-                        console.error("Done");
                         resolve(result);
                       }
                     });
@@ -675,7 +673,6 @@
                                       }
                                       unregisterDeeplink(item.id, (err, res) => {
                                         if(err) return console.error(err);
-                                        console.error('Deeplink deleted')
                                       })
                                     });
                                 }
@@ -685,38 +682,38 @@
                         });
                     });
                 }
-                else{
-                    if (item && item.data && item.data.searchEngineDocumentId) {
-                      buildfire.services.searchEngine.delete(
-                        {
-                          id: item.data.searchEngineDocumentId,
-                          tag: TAG_NAMES.PEOPLE
-                        }, 
-                        () => {}
-                      );
-                    }
-                    Buildfire[window.DB_PROVIDER].delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
-                        if (err)
-                            return;
-                        ContentHome.items.splice(_index, 1);
+                else {
+                  if (item && item.data && item.data.searchEngineDocumentId) {
+                    buildfire.services.searchEngine.delete(
+                      {
+                        id: item.data.searchEngineDocumentId,
+                        tag: TAG_NAMES.PEOPLE
+                      },
+                      () => { }
+                    );
+                  }
+                  Buildfire[window.DB_PROVIDER].delete(item.id, TAG_NAMES.PEOPLE, function (err, result) {
+                    if (err)
+                      return;
+                    ContentHome.items.splice(_index, 1);
 
-                        let unregisterDeeplink = function(deeplinkId, callback) {
-                              buildfire.deeplink.getDeeplink(deeplinkId, function(err, result) {
-                                      if(err) return callback(err, null);
-                                      if(result) {
-                                          buildfire.appData.delete(result.id, '$$deeplinks', callback);
-                                      } else {
-                                          callback('no result found for this deeplink id', null);
-                                      }
-                                  })
-                          }
-                          unregisterDeeplink(item.id, (err, res) => {
-                            if(err) return console.error(err);
-                            console.error('Deeplink deleted');
-                          });
-                                    
-                        $scope.$digest();
+                    let unregisterDeeplink = function (deeplinkId, callback) {
+                      buildfire.deeplink.getDeeplink(deeplinkId, function (err, result) {
+                        if (err) return callback(err, null);
+                        if (result) {
+                          buildfire.appData.delete(result.id, '$$deeplinks', callback);
+                        } else {
+                          callback('no result found for this deeplink id', null);
+                        }
+                      })
+                    }
+
+                    unregisterDeeplink(item.id, (err, res) => {
+                      if (err) return console.error(err);
                     });
+
+                    $scope.$digest();
+                  });
                 }
             }
           }, function (data) {

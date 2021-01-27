@@ -106,21 +106,19 @@
           console.log('Done called------------------------------------------------------------------------');
 
           const registerDeeplinkData = async (name, id, imageUrl) => {
-
             const recordData = {
               name,
               deeplinkData: { id },
               id,
               imageUrl,
             };
-          
+
             return new Promise((resolve, reject) => {
               buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
                 if (err) {
-                  console.error(`Err${err}`);
+                  console.error(err);
                   reject(err);
                 } else {
-                  console.error("Done");
                   resolve(result);
                 }
               });
@@ -382,7 +380,6 @@
         var lastUpdateRequest = null;
 
         var updateItemsWithDelay = function (item) {
-          console.error(item)
           console.log(item.data.email);
           clearTimeout(tmrDelayForPeoples);
           if (item.id)

@@ -430,7 +430,7 @@
                         title: rows[counter].fName + ' ' + rows[counter].lName,
                         description: rows[counter].position
                       },
-                      async (err, response) => {
+                      (err, response) => {
                         if (err) {
                           searchEngineInsertingFinished = true;
                           return;
@@ -443,24 +443,17 @@
                   searchEngineInsert(i);
                 }
 
-                const registerDeeplinkData = async (name, id, imageUrl) => {
+                const registerDeeplinkData = (name, id, imageUrl, callback) => {
                   const recordData = {
                     name,
                     deeplinkData: { id },
                     id,
                     imageUrl,
                   };
-
-                  return new Promise((resolve, reject) => {
                     buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
-                      if (err) {
-                        console.error(err);
-                        reject(err);
-                      } else {
-                        resolve(result);
-                      }
+                      if (err) console.error(err);
+                      callback();
                     });
-                  });
                 };
 
                 var setDeepLinks = function (){
@@ -472,20 +465,20 @@
     
                             let name =  `${res[i].data.fName} ${res[i].data.lName}`
     
-                            registerDeeplinkData(name, res[i].id, res[i].data.topImage);
-
-                            if(res[i].data.searchEngineDocumentId) {
-                              buildfire.services.searchEngine.update(
-                                {
-                                  id: res[i].data.searchEngineDocumentId,
-                                  tag: TAG_NAMES.PEOPLE,
-                                  title: res[i].data.fName || '' + ' ' + res[i].data.lName || '',
-                                  description: res[i].data.position,
-                                  data: {
-                                    id: res[i].id
-                                  }
-                                })
-                            }
+                            registerDeeplinkData(name, res[i].id, res[i].data.topImage, () => {
+                              if(res[i].data.searchEngineDocumentId) {
+                                buildfire.services.searchEngine.update(
+                                  {
+                                    id: res[i].data.searchEngineDocumentId,
+                                    tag: TAG_NAMES.PEOPLE,
+                                    title: res[i].data.fName || '' + ' ' + res[i].data.lName || '',
+                                    description: res[i].data.position,
+                                    data: {
+                                      id: res[i].id
+                                    }
+                                  });
+                              }
+                            });
                           }
                         })
                       }

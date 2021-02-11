@@ -10,6 +10,7 @@ const eslint = require('gulp-eslint');
 const gulpSequence = require('gulp-sequence');
 const minifyInline = require('gulp-minify-inline');
 const gutil = require('gulp-util');
+let babel = require("gulp-babel");
 
 const destinationFolder = releaseFolder();
 
@@ -101,7 +102,12 @@ jsTasks.forEach(function(task) {
     return (
       gulp
         .src(task.src, { base: '.' })
-
+        .pipe(
+          babel({
+            presets: ["@babel/preset-env"],
+          })
+        )
+        
         /// obfuscate and minify the JS files
         .pipe(uglify())
         .on('error', function(err) {
@@ -173,4 +179,4 @@ jsTasks.forEach(function(task) {
   buildTasksToRun.push(task.name);
 });
 
-gulp.task('build', gulpSequence('lint', 'clean', buildTasksToRun));
+gulp.task('build', gulpSequence('clean', buildTasksToRun));

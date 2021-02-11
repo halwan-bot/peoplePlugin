@@ -27,9 +27,12 @@
     "karma-coverage": "^0.5.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.13",
+    "@babel/preset-env": "^7.12.13",
     "chai": "^3.4.1",
     "del": "^4.1.1",
     "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-csso": "^3.0.1",
     "gulp-eslint": "^5.0.0",

@@ -102,10 +102,10 @@
         }
 
         /*On click button done it redirects to home*/
-        ContentPeople.done = async function () {
+        ContentPeople.done =  function () {
           console.log('Done called------------------------------------------------------------------------');
 
-          const registerDeeplinkData = async (name, id, imageUrl) => {
+          const registerDeeplinkData = (name, id, imageUrl) => {
             const recordData = {
               name,
               deeplinkData: { id },
@@ -113,21 +113,14 @@
               imageUrl,
             };
 
-            return new Promise((resolve, reject) => {
-              buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
-                if (err) {
-                  console.error(err);
-                  reject(err);
-                } else {
-                  resolve(result);
-                }
-              });
+            buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
+              if (err) console.error(err);
             });
           };
 
           let name = `${ContentPeople.item.data.fName} ${ContentPeople.item.data.lName}`;
           if (ContentPeople.item.id) {
-            await registerDeeplinkData(name, ContentPeople.item.id, ContentPeople.item.data.topImage);
+            registerDeeplinkData(name, ContentPeople.item.id, ContentPeople.item.data.topImage);
           }
             
           Buildfire.history.pop();

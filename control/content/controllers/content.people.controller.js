@@ -102,7 +102,26 @@
         }
 
         /*On click button done it redirects to home*/
-        ContentPeople.done =  function () {
+        ContentPeople.done = function () {
+          
+          const registerDeeplinkData = (name, id, imageUrl) => {	
+            const recordData = {	
+              name,	
+              deeplinkData: { id },	
+              id,	
+              imageUrl,	
+            };	
+
+            buildfire.deeplink.registerDeeplink(recordData, (err, result) => {	
+              if (err) console.error(err);	
+            });	
+          };	
+
+          let name = `${ContentPeople.item.data.fName} ${ContentPeople.item.data.lName}`;	
+          if (ContentPeople.item.id) {	
+            registerDeeplinkData(name, ContentPeople.item.id, ContentPeople.item.data.topImage);	
+          }
+
           Buildfire.history.pop();
           Location.goToHome();
         };

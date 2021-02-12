@@ -103,26 +103,6 @@
 
         /*On click button done it redirects to home*/
         ContentPeople.done =  function () {
-          console.log('Done called------------------------------------------------------------------------');
-
-          const registerDeeplinkData = (name, id, imageUrl) => {
-            const recordData = {
-              name,
-              deeplinkData: { id },
-              id,
-              imageUrl,
-            };
-
-            buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
-              if (err) console.error(err);
-            });
-          };
-
-          let name = `${ContentPeople.item.data.fName} ${ContentPeople.item.data.lName}`;
-          if (ContentPeople.item.id) {
-            registerDeeplinkData(name, ContentPeople.item.id, ContentPeople.item.data.topImage);
-          }
-            
           Buildfire.history.pop();
           Location.goToHome();
         };
@@ -190,15 +170,30 @@
           item.data.dateCreated = +new Date();
           item.data.rank = _rankOfLastItem;
 
-          console.log("inserting....");
           var insert = function (searchEngineDocument) {
             item.data.searchEngineDocumentId = searchEngineDocument ? searchEngineDocument.id : null;
             Buildfire[window.DB_PROVIDER].insert(item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
-              console.log("Inserted", data.id);
               if (err) {
                 ContentPeople.isNewItemInserted = false;
                 return console.error('There was a problem saving your data');
               }
+
+              const registerDeeplinkData = (name, id, imageUrl) => {
+                const recordData = {
+                  name,
+                  deeplinkData: { id },
+                  id,
+                  imageUrl,
+                };
+    
+                buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
+                  if (err) console.error(err);
+                });
+              };
+              
+              let name = `${data.data.fName} ${data.data.lName}`;
+  
+              registerDeeplinkData(name, data.id, data.data.topImage);
 
               RankOfLastItem.setRank(_rankOfLastItem);
               item.id = ContentPeople.item.id = data.id;
@@ -255,6 +250,24 @@
 
         ContentPeople.updateItemData = function (item) {
           Buildfire[window.DB_PROVIDER].update(item.id, item.data, TAG_NAMES.PEOPLE, function (err) {
+
+            const registerDeeplinkData = (name, id, imageUrl) => {
+              const recordData = {
+                name,
+                deeplinkData: { id },
+                id,
+                imageUrl,
+              };
+  
+              buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
+                if (err) console.error(err);
+              });
+            };
+            
+            let name = `${item.data.fName} ${item.data.lName}`;
+
+            registerDeeplinkData(name, item.id, item.data.topImage);
+
             updateMasterItem(item);
             ContentPeople.isUpdating = false;
             if (err)
@@ -373,6 +386,7 @@
         var lastUpdateRequest = null;
 
         var updateItemsWithDelay = function (item) {
+          debugger
           console.log(item.data.email);
           clearTimeout(tmrDelayForPeoples);
           if (item.id)

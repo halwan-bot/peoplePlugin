@@ -37,6 +37,19 @@
           return items.every(isValidItem);
         }
 
+        const registerDeeplinkData = (name, id, imageUrl, callback) => {
+          const recordData = {
+            name,
+            deeplinkData: { id },
+            id,
+            imageUrl,
+          };
+            buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
+              if (err) console.error(err);
+              callback();
+            });
+        };
+
         var initialLoad = false;
         var ContentHome = this;
         ContentHome.searchOptions = {
@@ -442,19 +455,6 @@
                   }
                   searchEngineInsert(i);
                 }
-
-                const registerDeeplinkData = (name, id, imageUrl, callback) => {
-                  const recordData = {
-                    name,
-                    deeplinkData: { id },
-                    id,
-                    imageUrl,
-                  };
-                    buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
-                      if (err) console.error(err);
-                      callback();
-                    });
-                };
 
                 var setDeepLinks = function (){
                   Buildfire[window.DB_PROVIDER].search({filter: {}, recordCount: true}, TAG_NAMES.PEOPLE, function(err, counter){

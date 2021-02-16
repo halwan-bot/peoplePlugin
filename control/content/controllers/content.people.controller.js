@@ -12,6 +12,7 @@
         ContentPeople.linksSortableOptions = {
           handle: '> .cursor-grab'
         };
+        
         var _data = {
           email: '',
           topImage: '',
@@ -26,7 +27,22 @@
           rank: _rankOfLastItem,
           searchEngineDocumentId: null
         };
+
         $scope.draft_email = '';
+
+        const registerDeeplinkData = (name, id, imageUrl, callback) => {	
+          const recordData = {	
+            name,	
+            deeplinkData: { id },	
+            id,	
+            imageUrl,	
+          };	
+
+          buildfire.deeplink.registerDeeplink(recordData, (err, result) => {	
+            if (err) console.error(err);	
+            if(callback) callback();
+          });	
+        };	
 
         //Scroll current view to top when page loaded.
         buildfire.navigation.scrollTop();
@@ -102,28 +118,21 @@
         }
 
         /*On click button done it redirects to home*/
-        ContentPeople.done = function () {
-          
-          const registerDeeplinkData = (name, id, imageUrl) => {	
-            const recordData = {	
-              name,	
-              deeplinkData: { id },	
-              id,	
-              imageUrl,	
-            };	
+        ContentPeople.done = function () {          
+          if (ContentPeople.item && ContentPeople.item.id && ContentPeople.item.data) {	
+            $scope.savingPerson = true;
+            if (!$scope.$$phase) $scope.$digest();
 
-            buildfire.deeplink.registerDeeplink(recordData, (err, result) => {	
-              if (err) console.error(err);	
+            let name = `${ContentPeople.item.data.fName} ${ContentPeople.item.data.lName}`;
+            registerDeeplinkData(name, ContentPeople.item.id, ContentPeople.item.data.topImage, () => {
+              $scope.savingPerson = false;
+              if (!$scope.$$phase) $scope.$digest();
+
+              Buildfire.history.pop();
+              Location.goToHome();
             });	
-          };	
-
-          let name = `${ContentPeople.item.data.fName} ${ContentPeople.item.data.lName}`;	
-          if (ContentPeople.item.id) {	
-            registerDeeplinkData(name, ContentPeople.item.id, ContentPeople.item.data.topImage);	
           }
 
-          Buildfire.history.pop();
-          Location.goToHome();
         };
 
         ContentPeople.getItem = function (itemId) {
@@ -189,53 +198,48 @@
           item.data.dateCreated = +new Date();
           item.data.rank = _rankOfLastItem;
 
+          $scope.savingPerson = true;
+          if (!$scope.$$phase) $scope.$digest();
+
           var insert = function (searchEngineDocument) {
             item.data.searchEngineDocumentId = searchEngineDocument ? searchEngineDocument.id : null;
             Buildfire[window.DB_PROVIDER].insert(item.data, TAG_NAMES.PEOPLE, false, function (err, data) {
               if (err) {
                 ContentPeople.isNewItemInserted = false;
+                $scope.savingPerson = false;
+                if (!$scope.$$phase) $scope.$digest();
                 return console.error('There was a problem saving your data');
               }
 
-              const registerDeeplinkData = (name, id, imageUrl) => {
-                const recordData = {
-                  name,
-                  deeplinkData: { id },
-                  id,
-                  imageUrl,
-                };
-    
-                buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
-                  if (err) console.error(err);
-                });
-              };
-              
               let name = `${data.data.fName} ${data.data.lName}`;
   
-              registerDeeplinkData(name, data.id, data.data.topImage);
+              registerDeeplinkData(name, data.id, data.data.topImage, () => {
+                RankOfLastItem.setRank(_rankOfLastItem);
+                item.id = ContentPeople.item.id = data.id;
+                _data.dateCreated = item.data.dateCreated;
+                _data.rank = item.data.rank;
+                updateMasterItem(item);
+                ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({ id: data.id });
+                buildfire.services.searchEngine.update({
+                  ...searchEngineDocument, 
+                  tag: TAG_NAMES.PEOPLE,
+                  data: {id: data.id }
+                }, () => {
+                  ContentPeople.item.data.searchEngineDocumentId = searchEngineDocument ? searchEngineDocument.id : null;
+                  // Send message to widget as soon as a new item is created with its id as a parameter
+                  if (ContentPeople.item.id) {
+                    buildfire.messaging.sendMessageToWidget({
+                      id: ContentPeople.item.id,
+                      type: 'AddNewItem'
+                    });
+                  }
+                  ContentPeople.isUpdating = false;
 
-              RankOfLastItem.setRank(_rankOfLastItem);
-              item.id = ContentPeople.item.id = data.id;
-              _data.dateCreated = item.data.dateCreated;
-              _data.rank = item.data.rank;
-              updateMasterItem(item);
-              ContentPeople.item.data.deepLinkUrl = Buildfire.deeplink.createLink({ id: data.id });
-              buildfire.services.searchEngine.update({
-                ...searchEngineDocument, 
-                tag: TAG_NAMES.PEOPLE,
-                data: {id: data.id }
-              },);
-              ContentPeople.item.data.searchEngineDocumentId = searchEngineDocument ? searchEngineDocument.id : null;
-              // Send message to widget as soon as a new item is created with its id as a parameter
-              if (ContentPeople.item.id) {
-                buildfire.messaging.sendMessageToWidget({
-                  id: ContentPeople.item.id,
-                  type: 'AddNewItem'
+                  $scope.savingPerson = false;
+
+                  if (!$scope.$$phase) $scope.$digest();
                 });
-              }
-              ContentPeople.isUpdating = false;
-
-              $scope.$digest();
+              });
             });
           }
 
@@ -259,6 +263,10 @@
                 description: item.data.position
               },
               (err, response) => {
+                if (err) {
+                  $scope.savingPerson = false;
+                  if (!$scope.$$phase) $scope.$digest();
+                }
                 insert(response);
               }
             );
@@ -268,48 +276,43 @@
         };
 
         ContentPeople.updateItemData = function (item) {
+          $scope.savingPerson = true;
+          if (!$scope.$$phase) $scope.$digest();
+
           Buildfire[window.DB_PROVIDER].update(item.id, item.data, TAG_NAMES.PEOPLE, function (err) {
 
-            const registerDeeplinkData = (name, id, imageUrl) => {
-              const recordData = {
-                name,
-                deeplinkData: { id },
-                id,
-                imageUrl,
-              };
-  
-              buildfire.deeplink.registerDeeplink(recordData, (err, result) => {
-                if (err) console.error(err);
-              });
-            };
-            
             let name = `${item.data.fName} ${item.data.lName}`;
 
-            registerDeeplinkData(name, item.id, item.data.topImage);
+            registerDeeplinkData(name, item.id, item.data.topImage, () => {
+              updateMasterItem(item);
+              ContentPeople.isUpdating = false;
+              if (err) {
+                $scope.savingPerson = false;
+                if (!$scope.$$phase) $scope.$digest();
+                return console.error('There was a problem saving your data');
+              }
 
-            updateMasterItem(item);
-            ContentPeople.isUpdating = false;
-            if (err)
-              return console.error('There was a problem saving your data');
-
-            if (item && item.data && item.data.searchEngineDocumentId) {
-              const x = {
-                id: item.data.searchEngineDocumentId,
-                tag: TAG_NAMES.PEOPLE,
-                title: item.data.fName + ' ' + item.data.lName,
-                description: item.data.position
-              };
-              buildfire.services.searchEngine.update(
-                {
+              if (item && item.data && item.data.searchEngineDocumentId) {
+                const x = {
                   id: item.data.searchEngineDocumentId,
                   tag: TAG_NAMES.PEOPLE,
                   title: item.data.fName + ' ' + item.data.lName,
-                  description: item.data.position,
-                  data: { id: item.id }
-                },
-                () => { }
-              );
-            }
+                  description: item.data.position
+                };
+                buildfire.services.searchEngine.update(
+                  {
+                    id: item.data.searchEngineDocumentId,
+                    tag: TAG_NAMES.PEOPLE,
+                    title: item.data.fName + ' ' + item.data.lName,
+                    description: item.data.position,
+                    data: { id: item.id }
+                  },
+                  () => { }
+                );
+              }
+              $scope.savingPerson = false;
+              if (!$scope.$$phase) $scope.$digest();
+            });
           })
         };
 
@@ -405,7 +408,6 @@
         var lastUpdateRequest = null;
 
         var updateItemsWithDelay = function (item) {
-          debugger
           console.log(item.data.email);
           clearTimeout(tmrDelayForPeoples);
           if (item.id)
